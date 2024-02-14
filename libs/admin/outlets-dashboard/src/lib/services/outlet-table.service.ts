@@ -24,6 +24,12 @@ export class OutletTableService extends ApiService {
     );
   }
 
+  getAllCategories(menuIds: string) {
+    return this.get(
+      `/api/v1/menus/items/categories?entityState=ACTIVE&menuIds=${menuIds}`
+    );
+  }
+
   exportCSV(entityId, config): Observable<any> {
     return this.get(`/api/v1/outlets/export/${config.queryObj}`);
   }

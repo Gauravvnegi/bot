@@ -413,53 +413,8 @@ export const dineInReservationResponse = {
 export const reservationTabFilters = [
   {
     label: 'Popular',
-    value: 'popular',
+    value: 'POPULAR',
     isSelected: true,
-  },
-  {
-    label: 'Burger',
-    value: 'burger',
-    isSelected: false,
-  },
-  {
-    label: 'Dessert',
-    value: 'dessert',
-    isSelected: false,
-  },
-  {
-    label: 'Beverages',
-    value: 'beverages',
-    isSelected: false,
-  },
-  {
-    label: 'Pizza',
-    value: 'pizza',
-    isSelected: false,
-  },
-  {
-    label: 'Biryani',
-    value: 'biryani',
-    isSelected: false,
-  },
-  {
-    label: 'Breads',
-    value: 'breads',
-    isSelected: false,
-  },
-  {
-    label: 'Chinense',
-    value: 'chinese',
-    isSelected: false,
-  },
-  {
-    label: 'Indian',
-    value: 'indian',
-    isSelected: false,
-  },
-  {
-    label: 'Italian',
-    value: 'italian',
-    isSelected: false,
   },
 ];
 

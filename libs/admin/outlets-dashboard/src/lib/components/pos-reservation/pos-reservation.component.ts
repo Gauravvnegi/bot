@@ -15,7 +15,6 @@ import {
 import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
 import { Menu } from 'libs/admin/all-outlets/src/lib/types/outlet';
 import { Subscription } from 'rxjs';
-import { reservationTabFilters } from '../../constants/data-table';
 import {
   MealPreferences,
   OrderTypes,
@@ -31,6 +30,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { OutletTableService } from '../../services/outlet-table.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
+import { reservationTabFilters } from '../../constants/data-table';
 
 @Component({
   selector: 'hospitality-bot-pos-reservation',
@@ -125,6 +125,7 @@ export class PosReservationComponent implements OnInit {
   }
 
   getMenus() {
+    this.listenForMenuChanges();
     this.loadingMenuItems = true;
     this.$subscription.add(
       this.outletService.getMenuList(this.entityId).subscribe((res) => {
@@ -137,6 +138,7 @@ export class PosReservationComponent implements OnInit {
           this.menuOptions.forEach((item) => {
             this.getMenuItems(item.id);
           });
+          this.getCategories();
           if (!this.menuOptions.length) this.loadingMenuItems = false;
         }
       })
@@ -187,6 +189,27 @@ export class PosReservationComponent implements OnInit {
       ]),
     };
     return config;
+  }
+
+  listenForMenuChanges() {
+    this.orderInfoControls.menu.valueChanges.subscribe((res) => {
+      if (res?.length) this.getCategories();
+    });
+  }
+
+  getCategories() {
+    const menuIds = this.orderInfoControls.menu.value.join(',');
+    this.outletTableService.getAllCategories(menuIds).subscribe((res) => {
+      if (res) {
+        this.tabFilters.push(
+          ...res?.map((item: { name: string; id: string }) => ({
+            label: item.name,
+            value: item.id,
+            isSelected: false,
+          }))
+        );
+      }
+    });
   }
 
   getGuestConfig() {
@@ -249,6 +272,8 @@ export class PosReservationComponent implements OnInit {
       };
     }
   }
+
+  selectedTab(index: number) {}
 
   checkOrderType(isAddress: boolean = false) {
     const selectedOrderType = this.orderInfoControls.orderType.value;

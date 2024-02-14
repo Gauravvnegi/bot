@@ -114,22 +114,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
   @Input() guestId: string;
   @Input() bookingNumber: string;
   bookingFG: FormGroup;
-  checkInOptions: MenuItem[] = [
-    {
-      label: 'Generate Link',
-      command: () => {
-        this.activateAndgenerateJourney('CHECKIN');
-      },
-    },
-  ];
+  checkInOptions: MenuItem[] = [];
 
-  checkOutOptions: MenuItem[] = [
-    {
-      label: 'Generate Link',
-      command: () => this.activateAndgenerateJourney('CHECKOUT'),
-      disabled: !this.isPrintRate,
-    },
-  ];
+  checkOutOptions: MenuItem[] = [];
 
   //sidebar configuration
   @ViewChild('sideBar', { read: ViewContainerRef })
@@ -298,6 +285,22 @@ export class DetailsComponent implements OnInit, OnDestroy {
               response?.paymentSummary?.printRate !== undefined
                 ? response?.paymentSummary?.printRate
                 : true;
+            this.checkInOptions = [
+              {
+                label: 'Generate Link',
+                command: () => {
+                  this.activateAndgenerateJourney('CHECKIN');
+                },
+                disabled: !this.isPrintRate,
+              },
+            ];
+            this.checkOutOptions = [
+              {
+                label: 'Generate Link',
+                command: () => this.activateAndgenerateJourney('CHECKOUT'),
+                disabled: !this.isPrintRate,
+              },
+            ];
             if (initGuestDetails) {
               this.bookingNumber = response.number;
               this.guestId = response.guestDetails.primaryGuest.id;

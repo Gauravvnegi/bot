@@ -55,20 +55,61 @@
           placeholder: 'Search by Dish Name or Code'
         }"
       ></hospitality-bot-search>
-      <hospitality-bot-multi-select
-        class="one-fourth-width"
-        controlName="tableNumber"
-        [options]="areaList"
-        label="Table No./Area"
-        [props]="{
-          placeholder: 'Select Table No.'
-        }"
-        [settings]="{
-          showChips: false,
-          maxSelectedLabels: 1
-        }"
-      ></hospitality-bot-multi-select>
+      <ng-container *ngIf="!checkOrderType()">
+        <hospitality-bot-quick-select
+          class="one-fourth-width"
+          controlName="guest"
+          label="Guest"
+          [inputType]="'select'"
+          [props]="{
+            showChips: false,
+            isAsync: true,
+            placeholder: 'Select',
+            createPrompt: '+ Add New Guest',
+            selectedOption: selectedGuest,
+            createType: 'sidebar'
+          }"
+          [apiConfig]="{
+            apiEndPoint: '/api/v1/members',
+            dataModel: {
+              key: 'records',
+              values: {
+                label: ['firstName', 'lastName'],
+                value: 'id'
+              }
+            },
+            queryParams: getGuestConfig(),
+            searchAPIEndPoint: '/api/v1/search/members',
+            searchModel: {
+              response: true,
+              values: {
+                label: ['firstName', 'lastName'],
+                value: 'id'
+              }
+            },
+            searchQueryParams: { type: 'GUEST,NON_RESIDENT_GUEST' }
+          }"
+          [paginationConfig]="{
+            isPagination: true
+          }"
+          (clickedOption)="guestChange($event)"
+          [initItems]="true"
+        ></hospitality-bot-quick-select
+      ></ng-container>
       <ng-container *ngIf="checkOrderType()">
+        <hospitality-bot-multi-select
+          class="one-fourth-width"
+          controlName="tableNumber"
+          [options]="areaList"
+          label="Table No./Area"
+          [props]="{
+            placeholder: 'Select Table No.'
+          }"
+          [settings]="{
+            showChips: false,
+            maxSelectedLabels: 1
+          }"
+        ></hospitality-bot-multi-select>
         <hospitality-bot-select
           class="one-fifth-width"
           controlName="staff"
@@ -139,6 +180,7 @@
   <div class="tab-header">
     <hospitality-bot-custom-tab-header
       [listItems]="tabFilters"
+      (selectedTabChange)="selectedTab($event)"
     ></hospitality-bot-custom-tab-header>
   </div>
 

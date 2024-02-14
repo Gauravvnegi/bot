@@ -93,7 +93,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
     this.entityId = event.entityId[0];
     this.tabFilterIdx = 0;
     this.initTableValue();
-}
+  }
 
   /**
    * @function listenForGlobalFilters To listen to global filters
@@ -280,7 +280,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
             `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           );
         },
-        () => {},
+        this.handleError,
         this.handleFinal
       )
     );

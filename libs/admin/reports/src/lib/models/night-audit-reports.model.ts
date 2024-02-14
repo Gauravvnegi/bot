@@ -186,8 +186,16 @@ export class NightAuditRevenueReport
       isHeader: true,
     } as any);
 
-    const revenueListData = value?.auditData;
+    let revenueListData = value?.auditData;
     let totalRevenueAmount = 0;
+    const roomRevenueExcludingTax =
+      revenueListData['roomRevenue'] - revenueListData['totalTax'];
+
+    revenueListData = {
+      ...revenueListData,
+      roomRevenueExcludingTax,
+    } as any;
+
     revenueListData
       ? revenueListRows.forEach((row) => {
           totalRevenueAmount += revenueListData[row?.name] ?? 0;
@@ -224,7 +232,7 @@ export class NightAuditRevenueReport
           this.records.push({
             firstCol: data.description,
             secondCol: data.quantity,
-            thirdCol: toCurrency(null),
+            thirdCol: toCurrency(data?.totalTaxAmount + data?.amount),
             fourthCol: toCurrency(data?.totalTaxAmount),
             fifthCol: toCurrency(data?.amount),
           });
@@ -248,7 +256,7 @@ export class NightAuditRevenueReport
           this.records.push({
             firstCol: ' ',
             secondCol: convertToNormalCase(key),
-            thirdCol: data,
+            thirdCol: toCurrency(data),
             fourthCol: ' ',
             fifthCol: ' ',
           });
@@ -260,10 +268,10 @@ export class NightAuditRevenueReport
 }
 
 const revenueListRows = [
-  { label: 'Room Revenue(Excluding Tax)', name: 'roomRevenue' },
-  { label: 'Cancellation Charge', name: 'cancellationCharge' },
+  { label: 'Room Revenue(Excluding Tax)', name: 'roomRevenueExcludingTax' },
+  { label: 'Cancellation Charge', name: 'canceledReservationAmount' },
   { label: 'No Shows Revenue', name: 'noShowReservationAmount' },
-  { label: 'Add Ons', name: 'addOns' },
+  { label: 'Add Ons', name: 'inclusionOrAddOn' },
 ];
 
 const empty = {

@@ -1,26 +1,26 @@
-import { Chip, EntityState, FlagType } from '@hospitality-bot/admin/shared';
+import { FlagType } from '@hospitality-bot/admin/shared';
 
 export const kotStatusDetails: Record<
   string,
   { label: string; type: FlagType; color: string }
 > = {
   '5mins': {
-    label: 'Crossed 5Mins',
+    label: 'Between 5-10min',
     type: 'active',
     color: '#FEB30B',
   },
   '10mins': {
-    label: 'Crossed 10Mins',
+    label: 'Between 10-15min',
     type: 'completed',
     color: '#FF9F40',
   },
   '15mins': {
-    label: 'Crossed 15Mins',
+    label: 'Between 15-20min',
     type: 'failed',
     color: '#F43636',
   },
   '20mins': {
-    label: 'Crossed 20Mins',
+    label: 'Above 20min',
     type: 'draft',
     color: '#F43636',
   },

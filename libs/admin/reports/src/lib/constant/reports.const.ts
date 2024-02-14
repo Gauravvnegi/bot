@@ -210,7 +210,7 @@ export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
   guestComplaintReport: GuestComplaintReport,
   guestEscalationComplaintReport: GuestEscalationComplaintReport,
   houseCountReport: HouseCountReport,
-  nightAuditOperation: undefined,
+  nightAuditOperation: undefined, //to be implemented
 };
 
 function getColsArray(colsData: ColsData): Cols[] {
@@ -337,7 +337,7 @@ export const reportFiltersMapping: Record<
   advanceDepositPayment: ['fromDate', 'toDate'],
   expressCheckIn: ['fromDate', 'toDate'],
   revParRoomReport: ['month'],
-  nightAuditRevenue: ['fromDate', 'toDate'],
+  nightAuditRevenue: ['date'],
   promoCodeReport: ['fromDate', 'toDate'],
   addWithdrawalFundReport: ['fromDate', 'toDate'],
   rateVariation: ['fromDate', 'toDate'],

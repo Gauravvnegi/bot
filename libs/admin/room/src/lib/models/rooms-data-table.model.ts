@@ -143,10 +143,10 @@ export class RoomType {
       input.originalPrice ??
       input.pricingDetails?.base;
     this.currency = input.currency ?? '';
-    this.ratePlans = input.ratePlans.map((item) => ({
+    this.ratePlans = input?.ratePlans?.map((item) => ({
       ...item,
       basePrice: input?.pricingDetails?.base ?? 0,
-    }));
+    })) ?? [];
     this.maxAdult = input?.occupancyDetails?.maxAdult ?? 0;
     this.isBaseRoomType = input.isBaseRoomType ?? false;
     this.pricingDetails = new PricingDetails().deserialize(input);

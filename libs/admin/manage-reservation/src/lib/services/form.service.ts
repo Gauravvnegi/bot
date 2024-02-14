@@ -9,26 +9,20 @@ import {
   SourceData,
 } from '../types/forms.types';
 import { ReservationForm, ReservationInformation } from '../constants/form';
-import { ManageReservationService } from './manage-reservation.service';
-import { Option, QueryConfig, openModal } from '@hospitality-bot/admin/shared';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { Option, QueryConfig } from '@hospitality-bot/admin/shared';
+import { AbstractControl } from '@angular/forms';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { RoomTypeOption } from '../constants/reservation';
 import { ReservationCurrentStatus } from '../models/reservations.model';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 import { ManualOffer } from '../components/form-components/booking-summary/booking-summary.component';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { AddRefundComponent } from 'libs/admin/invoice/src/lib/components/add-refund/add-refund.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FormService {
-  constructor(
-    public manageReservationService: ManageReservationService,
-    public dialogService: DialogService
-  ) {}
+  constructor() {}
   dateDifference = new BehaviorSubject(1);
 
   disableBtn: boolean = false;
@@ -66,49 +60,6 @@ export class FormService {
 
   updateRateImprovement(control: AbstractControl) {
     if (control) control.patchValue(true, { emitEvent: false });
-  }
-
-  rateImprovement(
-    data: RoomReservationFormData,
-    entityId: string,
-    reservationId: string,
-    onUpdate?: (data?: RoomReservationFormData) => void
-  ) {
-    this.manageReservationService
-      .rateImprovement(entityId, reservationId, data)
-      .subscribe((res) => {
-        if (res?.chargedAmount > 0) {
-          let modalRef: DynamicDialogRef;
-          const modalData: Partial<AddRefundComponent> = {
-            heading: 'Update Reservation',
-            isReservationPopup: true,
-            chargedAmount: res.chargedAmount,
-          };
-          modalRef = openModal({
-            config: {
-              width: '40%',
-              styleClass: 'confirm-dialog',
-              data: modalData,
-            },
-            component: AddRefundComponent,
-            dialogService: this.dialogService,
-          });
-
-          modalRef.onClose.subscribe(
-            (res: { chargedAmount: number; remarks: string }) => {
-              if (res) {
-                onUpdate({
-                  chargedAmount: res?.chargedAmount,
-                  remarks: res?.remarks,
-                  ...data,
-                });
-              }
-            }
-          );
-        } else {
-          onUpdate({ chargedAmount: res?.chargedAmount, ...data });
-        }
-      });
   }
 
   initSourceData(

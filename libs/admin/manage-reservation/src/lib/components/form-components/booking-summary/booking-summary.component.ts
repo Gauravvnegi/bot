@@ -38,6 +38,7 @@ import {
 } from '../../../types/forms.types';
 import { ReservationType } from '../../../constants/reservation-table';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { AddRefundComponent } from 'libs/admin/invoice/src/lib/components/add-refund/add-refund.component';
 @Component({
   selector: 'hospitality-bot-booking-summary',
   templateUrl: './booking-summary.component.html',
@@ -162,17 +163,54 @@ export class BookingSummaryComponent implements OnInit {
         this.openCancelPopup(data, id, type);
       } else {
         this.inputControls.rateImprovement.value
-          ? this.formService.rateImprovement(
-              data,
-              this.entityId,
-              this.reservationId,
-              (formData: RoomReservationFormData) => {
-                this.updateReservation(formData, type);
-              }
-            )
+          ? this.rateImprovement(data)
           : this.updateReservation(data, type);
       }
     } else this.createReservation(data, id, type);
+  }
+
+  rateImprovement(data: RoomReservationFormData) {
+    this.manageReservationService
+      .rateImprovement(this.entityId, this.reservationId, data)
+      .subscribe((res) => {
+        if (res?.chargedAmount > 0) {
+          let modalRef: DynamicDialogRef;
+          const modalData: Partial<AddRefundComponent> = {
+            heading: 'Update Reservation',
+            isReservationPopup: true,
+            chargedAmount: res.chargedAmount,
+          };
+          modalRef = openModal({
+            config: {
+              width: '40%',
+              styleClass: 'confirm-dialog',
+              data: modalData,
+            },
+            component: AddRefundComponent,
+            dialogService: this.dialogService,
+          });
+
+          modalRef.onClose.subscribe(
+            (res: { chargedAmount: number; remarks: string }) => {
+              if (res) {
+                this.updateReservation(
+                  {
+                    chargedAmount: res?.chargedAmount,
+                    remarks: res?.remarks,
+                    ...data,
+                  },
+                  'ROOM_TYPE'
+                );
+              }
+            }
+          );
+        } else {
+          this.updateReservation(
+            { chargedAmount: res?.chargedAmount, ...data },
+            'ROOM_TYPE'
+          );
+        }
+      });
   }
 
   createReservation(

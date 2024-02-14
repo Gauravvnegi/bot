@@ -21,6 +21,7 @@ import {
   ModuleNames,
   Option,
   manageMaskZIndex,
+  openModal,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import {
@@ -47,6 +48,8 @@ import { ManualOffer } from 'libs/admin/manage-reservation/src/lib/components/fo
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 import { RoomReservationFormData } from 'libs/admin/manage-reservation/src/lib/types/forms.types';
 import { ReservationType } from 'libs/admin/manage-reservation/src/lib/constants/reservation-table';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { AddRefundComponent } from 'libs/admin/invoice/src/lib/components/add-refund/add-refund.component';
 
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',
@@ -115,7 +118,6 @@ export class QuickReservationFormComponent implements OnInit {
       const val = value[key];
       this[key] = val;
     }
-
     if (this.defaultRoomType) this.initDetails();
   }
 
@@ -128,7 +130,8 @@ export class QuickReservationFormComponent implements OnInit {
     protected routesConfigService: RoutesConfigService,
     public bookingDetailService: BookingDetailService,
     private compiler: Compiler,
-    private resolver: ComponentFactoryResolver
+    private resolver: ComponentFactoryResolver,
+    public dialogService: DialogService
   ) {
     this.formService.resetData();
     this.initForm();
@@ -500,16 +503,50 @@ export class QuickReservationFormComponent implements OnInit {
 
     if (this.reservationId) {
       this.inputControls.rateImprovement.value
-        ? this.formService.rateImprovement(
-            data,
-            this.entityId,
-            this.reservationId,
-            (formData: RoomReservationFormData) => {
-              this.updateReservation(formData);
-            }
-          )
+        ? this.rateImprovement(data)
         : this.updateReservation(data);
     } else this.createReservation(data);
+  }
+
+  rateImprovement(data: RoomReservationFormData) {
+    this.manageReservationService
+      .rateImprovement(this.entityId, this.reservationId, data)
+      .subscribe((res) => {
+        if (res?.chargedAmount > 0) {
+          let modalRef: DynamicDialogRef;
+          const modalData: Partial<AddRefundComponent> = {
+            heading: 'Update Reservation',
+            isReservationPopup: true,
+            chargedAmount: res.chargedAmount,
+          };
+          modalRef = openModal({
+            config: {
+              width: '40%',
+              styleClass: 'confirm-dialog',
+              data: modalData,
+            },
+            component: AddRefundComponent,
+            dialogService: this.dialogService,
+          });
+
+          modalRef.onClose.subscribe(
+            (res: { chargedAmount: number; remarks: string }) => {
+              if (res) {
+                this.updateReservation({
+                  chargedAmount: res?.chargedAmount,
+                  remarks: res?.remarks,
+                  ...data,
+                });
+              }
+            }
+          );
+        } else {
+          this.updateReservation({
+            chargedAmount: res?.chargedAmount,
+            ...data,
+          });
+        }
+      });
   }
 
   createReservation(data: any): void {

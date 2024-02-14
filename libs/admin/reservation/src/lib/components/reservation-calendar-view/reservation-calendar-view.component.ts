@@ -633,7 +633,7 @@ export class ReservationCalendarViewComponent implements OnInit {
     this.formProps = {
       reservationId: id,
       room:
-        roomType.data.values.find((value) => value.id === id)?.rowValue ??
+        roomType.data.values.find((value) => value.id === id && id)?.rowValue ??
         event.rowValue,
       roomType: roomType,
       date: event?.colValue,

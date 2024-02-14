@@ -6,7 +6,10 @@ import {
 } from '@hospitality-bot/admin/core/theme';
 import { Subscription } from 'rxjs';
 import { HotelDetailService } from '../../../../../shared/src/lib/services/hotel-detail.service';
-import { EntityTabFilterResponse } from '@hospitality-bot/admin/shared';
+import {
+  EntityConfig,
+  EntityTabFilterResponse,
+} from '@hospitality-bot/admin/shared';
 import {
   Branch,
   EntityTabFilterConfig,
@@ -36,6 +39,8 @@ export class EntityTabFilterComponent implements OnInit {
   isAllOutletSelected = true;
   previousDateRange = {};
   isFirstTime = true;
+
+  @Input() entityFilterType: 'HOTEL' | 'ENTITY' | 'BOTH' = 'BOTH';
 
   @Input() set config(configData: EntityTabFilterConfig) {
     for (const key in configData) {
@@ -226,6 +231,12 @@ export class EntityTabFilterComponent implements OnInit {
         );
       }
     });
+
+    if (this.entityFilterType !== 'BOTH') {
+      this.tabFilterItems = this.tabFilterItems.filter(
+        (item) => item.category === this.entityFilterType
+      );
+    }
   }
 
   /**
@@ -236,7 +247,7 @@ export class EntityTabFilterComponent implements OnInit {
    * @returns tab item
    */
 
-  getTabItem(item, type: FeedbackType) {
+  getTabItem(item: EntityConfig | Branch, type: FeedbackType): TabItem {
     return {
       label: item.name,
       content: '',
@@ -245,6 +256,7 @@ export class EntityTabFilterComponent implements OnInit {
       chips: [],
       type: type,
       outletType: item.type,
+      category: item.category,
     };
   }
 
@@ -274,3 +286,14 @@ export class EntityTabFilterComponent implements OnInit {
     });
   }
 }
+
+export type TabItem = {
+  label: string;
+  content: string;
+  value: string;
+  disabled: boolean;
+  chips: [];
+  type: string;
+  outletType: string; //SPA , BANQUET , RESTAURANT
+  category: string; //OUTLET , HOTEL
+};

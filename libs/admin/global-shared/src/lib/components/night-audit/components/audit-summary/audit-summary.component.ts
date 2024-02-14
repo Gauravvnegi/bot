@@ -129,6 +129,9 @@ export class AuditSummaryComponent implements OnInit {
                   },
                   dialogService: this.dialogService,
                 });
+                dialogRef.onClose.subscribe((res) => {
+                  this.indexChange.emit(this.activeIndex + 1);
+                });
               } else {
                 loadTable();
               }

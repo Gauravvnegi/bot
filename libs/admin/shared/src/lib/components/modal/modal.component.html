@@ -49,6 +49,7 @@
     </div>
     <hospitality-bot-text-area
       *ngIf="isRemarks"
+      [ngStyle]="{ 'margin-top': isReservation ? '20px' : '0px' }"
       controlName="remarks"
       label="Remarks"
       [props]="{

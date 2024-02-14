@@ -24,7 +24,6 @@ export class KotCardComponent implements OnInit {
     this.subscription = interval(1000).subscribe(() => {
       if (this._config.status === 'PREPARING') this._config.getTime();
     });
-    debugger;
   }
 
   ngOnInit(): void {}

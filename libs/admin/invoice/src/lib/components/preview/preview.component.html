@@ -29,8 +29,7 @@
         "
         [openNewWindow]="true"
         [items]="invoiceButtons"
-        [isLoading]="loadingPdf"
-        [disabled]="failedToLoad"
+        [disabled]="failedToLoad || loadingPdf || loadingInvoiceGenerate"
       ></hospitality-bot-tiered-menu-button>
 
       <!-- <p-splitButton

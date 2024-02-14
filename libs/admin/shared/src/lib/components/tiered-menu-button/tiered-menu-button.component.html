@@ -7,9 +7,12 @@
     <span
       class="label"
       [ngClass]="{ disabled: disabled }"
-      (click)="labelClickedAction()"
+      (click)="!disabled && labelClickedAction()"
       >{{ label }}</span
-    ><span class="icon" (click)="splitButton && onToggle($event)" title="Expand"
+    ><span
+      class="icon"
+      (click)="!disabled && splitButton && onToggle($event)"
+      title="Expand"
       ><i [ngClass]="'pi pi-chevron-down'"></i
     ></span>
   </div>

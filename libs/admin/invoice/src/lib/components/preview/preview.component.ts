@@ -31,6 +31,8 @@ export class PreviewComponent implements OnInit {
   isCheckIn = false;
   isCheckedOut = false;
   entityId: string;
+  loadingInvoiceGenerate: boolean = false;
+
   // items = [
   //   {
   //     label: 'Generate Proforma',
@@ -55,7 +57,7 @@ export class PreviewComponent implements OnInit {
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     const { navRoutes, title } = invoiceRoutes['previewInvoice'];
-    this.entityId =  this.globalFilterService.entityId;
+    this.entityId = this.globalFilterService.entityId;
     this.navRoutes = navRoutes;
     this.pageTitle = title;
     this.reservationId = id;
@@ -124,6 +126,8 @@ export class PreviewComponent implements OnInit {
   }
 
   handleGenerateInvoice() {
+    this.loadingInvoiceGenerate = true;
+    debugger;
     this.invoiceService.generateInvoice(this.reservationId).subscribe(
       (res) => {
         this.snackbarService.openSnackBarAsText(
@@ -136,7 +140,10 @@ export class PreviewComponent implements OnInit {
         this.isInvoiceGenerated = true;
         this.getPreviewUrl();
       },
-      () => {}
+      (error) => (this.loadingInvoiceGenerate = false),
+      () => {
+        this.loadingInvoiceGenerate = false;
+      }
     );
   }
 
@@ -165,12 +172,16 @@ export class PreviewComponent implements OnInit {
   }
 
   handleCheckout() {
-    this.formService.manualCheckout(this.reservationId, () => {
-      this.isCheckedOut = true;
-      this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
-        panelClass: 'success',
-      });
-    }, this.entityId);
+    this.formService.manualCheckout(
+      this.reservationId,
+      () => {
+        this.isCheckedOut = true;
+        this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
+          panelClass: 'success',
+        });
+      },
+      this.entityId
+    );
     // this.reservationService
     //   .manualCheckout(this.reservationId)
     //   .subscribe((res) => {

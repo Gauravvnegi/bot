@@ -347,13 +347,14 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       // first time adding subscription
       this.nightAuditCheckListener();
 
-      this.nightAuditCheck();
+      if (this.isAuditSubscribed) {
+        this.nightAuditCheck();
 
-      if (this.isAuditSubscribed)
         setInterval(() => {
           //every 15 minute, we will check
           this.nightAuditCheck();
         }, 15 * 60 * 1000);
+      }
     }
   }
 

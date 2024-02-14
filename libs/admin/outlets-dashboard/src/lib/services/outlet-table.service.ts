@@ -5,6 +5,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { dineInReservationResponse } from '../constants/data-table';
 import { CreateOrderData, CreateReservationData } from '../types/form';
+import { ReservationTableListResponse } from '../types/reservation-table';
+import { QueryConfig } from '@hospitality-bot/admin/shared';
 
 @Injectable()
 export class OutletTableService extends ApiService {
@@ -49,9 +51,10 @@ export class OutletTableService extends ApiService {
     return this.post(`/api/v1/booking?type=OUTLET`, data);
   }
 
-  getTableReservations(entityId: string) {
-    return this.get(
-      `/api/v1/entity/${entityId}/order?order=DESC&includeKot=true&raw=true`
-    );
+  getTableReservations(
+    entityId: string,
+    config: QueryConfig
+  ): Observable<ReservationTableListResponse> {
+    return this.get(`/api/v1/entity/${entityId}/order${config.params}`);
   }
 }

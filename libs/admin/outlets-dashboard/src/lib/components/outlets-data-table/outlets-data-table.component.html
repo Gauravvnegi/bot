@@ -177,13 +177,6 @@
               </div>
             </td>
             <td>
-              <div class="center-align">
-                <div class="primary-text">
-                  {{ rowData?.paymentMethod || '--' }}
-                </div>
-              </div>
-            </td>
-            <td>
               <div class="center-align" *ngIf="rowData.totalAmount">
                 <div class="primary-text txtSize">
                   <span
@@ -195,6 +188,13 @@
                     >{{ rowData?.totalDueAmount | currency: 'INR' }}</span
                   >
                   /{{ rowData?.totalAmount | currency: 'INR' }}
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="center-align">
+                <div class="primary-text">
+                  {{ rowData?.paymentMethod || '--' }}
                 </div>
               </div>
             </td>

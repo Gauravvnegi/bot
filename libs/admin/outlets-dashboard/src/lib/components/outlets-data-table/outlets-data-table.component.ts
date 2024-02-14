@@ -10,6 +10,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  QueryConfig,
   manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
 import { LazyLoadEvent } from 'primeng/api';
@@ -107,11 +108,29 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     );
   }
 
+  /**
+   * @function getQueryConfig to configuration
+   */
+  getQueryConfig(): QueryConfig {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          order: 'DESC',
+          includeKot: true,
+          raw: true,
+          offset: this.first,
+          limit: this.rowsPerPage,
+        },
+      ]),
+    };
+    return config;
+  }
+
   initTableReservations() {
     this.loading = true;
     this.$subscription.add(
       this.outletService
-        .getTableReservations(this.entityId)
+        .getTableReservations(this.entityId, this.getQueryConfig())
         .subscribe((res) => {
           const data = new OutletReservationTableList().deserialize(res);
           this.values = data.reservationData;

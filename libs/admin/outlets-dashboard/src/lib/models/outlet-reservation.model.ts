@@ -85,7 +85,9 @@ export class OutletReservationTableList {
   entityTypeCounts: EntityState<string>;
   total: number;
   deserialize(input: ReservationTableListResponse) {
-    this.reservationData = (input?.records ?? []).map((item) =>
+    const reservationsWithReservation =
+      input?.records.filter((item) => item.reservation) ?? [];
+    this.reservationData = reservationsWithReservation.map((item) =>
       new OutletReservationTable().deserialize(item)
     );
     this.entityTypeCounts = input.entityTypeCounts;
@@ -110,12 +112,12 @@ export class OutletReservationTable {
 
   deserialize(input: ReservationTableResponse) {
     this.area = 'A1';
-    this.bookingNumber = input?.number;
-    this.date = input?.reservation.from;
+    this.bookingNumber = input?.reservation?.reservationNumber;
+    this.date = input?.reservation?.from;
     // this.time = input?.reservation.;
     // this.paymentMethod = ;
-    this.totalAmount = input?.pricingDetails.totalAmount;
-    this.totalDueAmount = input.pricingDetails.totalDueAmount;
+    this.totalAmount = input?.pricingDetails?.totalAmount;
+    this.totalDueAmount = input.pricingDetails?.totalDueAmount;
     this.nextStates = ['DRAFT'];
     const { firstName, lastName } = input?.guest || {};
     this.guestName = firstName
@@ -123,8 +125,9 @@ export class OutletReservationTable {
         ? `${firstName} ${lastName}`
         : firstName
       : lastName || '';
-    this.reservationStatus = input?.reservation.status;
-    this.tableNumber = input?.reservation.tableNumberOrRoomNumber;
+    this.reservationStatus = input?.reservation?.status;
+    this.tableNumber = input?.reservation?.tableNumberOrRoomNumber;
+    this.paymentMethod = 'CASH';
     return this;
   }
 }

@@ -209,7 +209,6 @@ export class GuestDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.values = [];
           this.loading = false;
         }
       )

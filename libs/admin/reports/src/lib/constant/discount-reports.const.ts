@@ -43,38 +43,38 @@ export const discountAllowanceReportCols: Partial<ColsData<
     isSortDisabled: true,
     isSearchDisabled: true,
   },
-  allowance: {
-    header: 'Allowance',
+  // allowance: {
+  //   header: 'Allowance',
+  //   isSortDisabled: true,
+  //   isSearchDisabled: true,
+  // },
+  // total: {
+  //   header: 'Net Total',
+  //   isSortDisabled: true,
+  //   isSearchDisabled: true,
+  // },
+};
+
+export const promoCodeReportCols: ColsData<PromoCodeReportData> = {
+  promoCode: {
+    header: 'Promo Code',
     isSortDisabled: true,
-    isSearchDisabled: true,
   },
-  total: {
-    header: 'Net Total',
+  discount: {
+    header: 'Discount',
+    isSortDisabled: true,
+  },
+  redemptions: {
+    header: 'Redemptions',
+    isSortDisabled: true,
+  },
+  totalNights: {
+    header: 'Total Nights',
+    isSortDisabled: true,
+  },
+  totalRevenueEarned: {
+    header: 'Total Revenue Earned',
     isSortDisabled: true,
     isSearchDisabled: true,
   },
 };
-
-export const promoCodeReportCols: ColsData<PromoCodeReportData> = {
-         promoCode: {
-           header: 'Promo Code',
-           isSortDisabled: true,
-         },
-         discount: {
-           header: 'Discount',
-           isSortDisabled: true,
-         },
-         redemptions: {
-           header: 'Redemptions',
-           isSortDisabled: true,
-         },
-         totalNights: {
-           header: 'Total Nights',
-           isSortDisabled: true,
-         },
-         totalRevenueEarned: {
-           header: 'Total Revenue Earned',
-           isSortDisabled: true,
-           isSearchDisabled: true,
-         },
-       };

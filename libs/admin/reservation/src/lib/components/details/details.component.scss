@@ -478,7 +478,7 @@ mat-option {
   position: absolute;
   top: 62px;
   right: 10px;
-  height: 87%;
+  height: calc(100vh - 290px);
   z-index: 1;
   background-color: $white;
   overflow-y: auto;

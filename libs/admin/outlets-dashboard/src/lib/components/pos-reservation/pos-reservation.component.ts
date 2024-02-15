@@ -60,13 +60,14 @@ export class PosReservationComponent implements OnInit {
   sendFeedback: boolean = false;
   emailInvoice: boolean = false;
   printInvoice: boolean = false;
-
   loadingMenuItems: boolean = false;
+  isPopular = true;
 
   searchApi: string;
   selectedPreference: MealPreferences = MealPreferences.ALL;
 
   areaList: Option[] = [];
+  selectedCategories: string[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -135,25 +136,22 @@ export class PosReservationComponent implements OnInit {
             this.menuOptions.map((item) => item.value),
             { emitEvent: false }
           );
-          this.menuOptions.forEach((item) => {
-            this.getMenuItems(item.id);
-          });
           this.getCategories();
+          this.getMenuItems();
           if (!this.menuOptions.length) this.loadingMenuItems = false;
         }
       })
     );
   }
 
-  getMenuItems(menuId: string) {
+  getMenuItems() {
     this.$subscription.add(
-      this.outletService
-        .getMenuItems(this.getQueryConfig(menuId), this.entityId)
+      this.outletTableService
+        .getFilteredMenuItems(this.getQueryConfig())
         .subscribe(
           (res) => {
             const menuItems = new MenuItemList().deserialize(res).records;
-            if (menuItems.length)
-              this.cardData = [...this.cardData, ...menuItems];
+            if (menuItems.length) this.cardData = menuItems;
           },
           (error) => (this.loadingMenuItems = false),
           () => (this.loadingMenuItems = false)
@@ -161,13 +159,18 @@ export class PosReservationComponent implements OnInit {
     );
   }
 
-  getQueryConfig(id: string): QueryConfig {
+  getQueryConfig(): QueryConfig {
+    const menuIds = this.orderInfoControls.menu.value.join(',');
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.globalQueries,
         {
           entityState: 'ACTIVE',
-          menuId: id,
+          menuIds: menuIds,
+          popular: this.isPopular,
+          mealPreferences: this.selectedPreference,
+          categories: this.selectedCategories.length
+            ? this.selectedCategories
+            : null,
         },
       ]),
     };
@@ -201,12 +204,12 @@ export class PosReservationComponent implements OnInit {
     const menuIds = this.orderInfoControls.menu.value.join(',');
     this.outletTableService.getAllCategories(menuIds).subscribe((res) => {
       if (res) {
-        this.tabFilters.push(
-          ...res?.map((item: { name: string; id: string }) => ({
+        this.tabFilters = [{ name: 'Popular', id: 'POPULAR' }, ...res]?.map(
+          (item: { name: string; id: string }) => ({
             label: item.name,
             value: item.id,
-            isSelected: false,
-          }))
+            isSelected: item?.id === 'POPULAR',
+          })
         );
       }
     });
@@ -273,7 +276,12 @@ export class PosReservationComponent implements OnInit {
     }
   }
 
-  selectedTab(index: number) {}
+  selectedTab(selectedCategory: string) {
+    this.isPopular = selectedCategory === 'POPULAR' ? true : null;
+    this.selectedCategories =
+      selectedCategory === 'POPULAR' ? [] : [selectedCategory];
+    this.getMenuItems();
+  }
 
   checkOrderType(isAddress: boolean = false) {
     const selectedOrderType = this.orderInfoControls.orderType.value;
@@ -315,6 +323,7 @@ export class PosReservationComponent implements OnInit {
   }
 
   close() {
+    this.selectedCategories = [];
     this.formService.resetData();
     this.onCloseSidebar.emit();
   }
@@ -325,6 +334,7 @@ export class PosReservationComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.formService.resetData();
     this.$subscription.unsubscribe();
   }
 }

@@ -73,6 +73,7 @@ export type Filter<T extends string, K extends string> = {
   chips?: Chip<K>[];
   iconClass?: string;
   iconSrc?: string;
+  isSelected?: boolean;
 };
 
 export type Status = {

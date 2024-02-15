@@ -247,7 +247,8 @@
           </p>
           <div
             *ngIf="
-              ['CHECKIN'].includes(detailsData.currentJourneyDetails.journey)
+              ['CHECKIN'].includes(detailsData.currentJourneyDetails.journey) ||
+              ['PRECHECKIN'].includes(detailsData.currentJourneyDetails.journey)
             "
           >
             <!-- He can only take action and write remarks if its a checkin day only.-->

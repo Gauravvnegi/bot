@@ -11,7 +11,6 @@ import {
   BaseDatatableComponent as BaseDatableComponent,
   BookingDetailService,
   EntitySubType,
-  EntityType,
   ModuleNames,
   Option,
   QueryConfig,
@@ -29,9 +28,7 @@ import {
   ReservationStatusType,
   ReservationTableValue,
   ReservationType,
-  RestaurantMenuOptions,
   hotelCols,
-  outletCols,
   reservationStatusDetails,
   title,
 } from '../../constants/reservation-table';
@@ -48,9 +45,7 @@ import {
   RoomReservationResponse,
 } from '../../types/response.type';
 import { FormService } from '../../services/form.service';
-import { SelectedEntity } from '../../types/reservation.type';
 import { InvoiceService } from 'libs/admin/invoice/src/lib/services/invoice.service';
-import { distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
 import { tableTypes } from 'libs/admin/dashboard/src/lib/constants/cols';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -72,18 +67,12 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   selectedTab: ReservationTableValue = ReservationTableValue.ALL;
 
-  selectedEntity: SelectedEntity;
-
   reservationLists!: ReservationList;
 
   $subscription = new Subscription();
-  $selectedEntitySubscription = new Subscription();
 
   globalQueries = [];
   configData: BookingConfig;
-
-  isAllTabFilterRequired: boolean = true;
-  isSelectedEntityChanged = false;
 
   menuOptions: Option[] = MenuOptions;
 
@@ -93,8 +82,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   showCalendarView = false;
 
   roomReservationList: RoomReservationResponse[] = [];
-
-  private cancelRequests$ = new Subject<void>();
 
   constructor(
     public fb: FormBuilder,
@@ -118,7 +105,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.tableName = title;
     this.listenForGlobalFilters();
     this.checkReservationSubscription();
-    this.listenForSelectedEntityChange();
+    this.initDetails();
     this.toggleCalendarView();
   }
 
@@ -158,50 +145,15 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    */
   listenForGlobalFilters(): void {
     this.entityId = this.globalFilterService.entityId;
-    let previousDateRange = {};
     this.globalFilterService.globalFilter$.subscribe((data) => {
       this.globalQueries = [...data['dateRange'].queryValue];
-      if (
-        JSON.stringify(data.dateRange) !== JSON.stringify(previousDateRange)
-      ) {
-        if (!this.isSelectedEntityChanged && this.selectedEntity) {
-          this.initTableValue();
-        }
-      }
-      previousDateRange = { ...data.dateRange };
+      this.initTableValue();
     });
   }
 
   loadData(event: LazyLoadEvent): void {
     this.formService.selectedTab = this.selectedTab;
-    if (!this.isSelectedEntityChanged && this.selectedEntity) {
-      this.initTableValue();
-    }
-  }
-
-  listenForSelectedEntityChange() {
-    this.$selectedEntitySubscription.add(
-      this.formService.selectedEntity
-        .pipe(
-          distinctUntilChanged((prev, curr) => prev?.id === curr?.id), // Compare subType property for changes
-          tap((res) => {
-            if (res) this.selectedEntity = res;
-          })
-        )
-        .subscribe((res) => {
-          if (res) {
-            this.cancelRequests$.next();
-            this.isSelectedEntityChanged = true; // Since we only get here when selectedEntity has changed
-            // this.resetTableValues();
-            this.initDetails(this.selectedEntity);
-            this.initTableValue();
-            if (this.selectedEntity?.subType !== 'ROOM_TYPE') {
-              this.selectedTableType = 'table';
-              this.tableFG.patchValue({ tableType: 'table' });
-            }
-          }
-        })
-    );
+    this.initTableValue();
   }
 
   /**
@@ -212,11 +164,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.manageReservationService
       .getReservationItems<ReservationListResponse>(
         this.getQueryConfig(),
-        this.selectedEntity.id
-      )
-      .pipe(
-        //to cancel api call between using take until
-        takeUntil(this.cancelRequests$)
+        this.entityId
       )
       .subscribe(
         (res) => {
@@ -224,11 +172,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           this.reservationLists = new ReservationList().deserialize(res);
           this.roomReservationList = res?.records;
           this.values = this.reservationLists.reservationData;
-          // const statusDetails =
-          //   this.selectedEntity.type === EntityType.HOTEL
-          //     ? reservationStatusDetails
-          //     : outletReservationStatusDetails;
-
           this.initFilters(
             this.reservationLists.entityTypeCounts,
             this.reservationLists.entityStateCounts,
@@ -243,23 +186,15 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         },
         () => {
           this.loading = false;
-          this.isSelectedEntityChanged = false;
         }
       );
   }
 
-  initDetails(selectedEntity: SelectedEntity) {
+  initDetails() {
     this.selectedTab = ReservationTableValue.ALL;
-    if (selectedEntity.subType === EntitySubType.ROOM_TYPE) {
-      this.cols = hotelCols;
-      this.menuOptions = HotelMenuOptions;
-    } else {
-      this.cols = outletCols;
-      this.menuOptions = MenuOptions;
-      if (selectedEntity.subType === EntitySubType.RESTAURANT) {
-        this.menuOptions = RestaurantMenuOptions;
-      }
-    }
+    this.isAllTabFilterRequired = true;
+    this.cols = hotelCols;
+    this.menuOptions = HotelMenuOptions;
   }
 
   /**
@@ -295,8 +230,8 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
                 subModuleName: ModuleNames.INVOICE,
                 additionalPath: reservationData.id,
                 queryParams: {
-                  entityId: this.selectedEntity.id,
-                  type: this.selectedEntity.subType,
+                  entityId: this.entityId,
+                  type: EntitySubType.ROOM_TYPE,
                 },
               });
             modalRef.close();
@@ -330,17 +265,13 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     reservationData: RoomReservation,
     additionalData?: any
   ) {
-    let bookingType =
-      this.selectedEntity.type === EntityType.HOTEL
-        ? EntitySubType.ROOM_TYPE
-        : EntityType.OUTLET;
     this.loading = true;
     this.$subscription.add(
       this.manageReservationService
         .updateBookingStatus(
           reservationData.id,
-          this.selectedEntity.id,
-          bookingType,
+          this.entityId,
+          EntitySubType.ROOM_TYPE,
           {
             reservationType: status,
             remarks: additionalData?.remarks,
@@ -371,7 +302,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.routesConfigService.navigate({
       additionalPath: `${manageReservationRoutes.editReservation.route}/${id}`,
       queryParams: {
-        entityId: this.selectedEntity.id,
+        entityId: this.entityId,
       },
     });
   }
@@ -392,13 +323,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         ...this.globalQueries,
         ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         {
-          type:
-            this.selectedEntity.subType === EntitySubType.ROOM_TYPE
-              ? EntitySubType.ROOM_TYPE
-              : EntityType.OUTLET,
-          ...(this.selectedEntity.subType !== EntitySubType.ROOM_TYPE && {
-            outletType: this.selectedEntity.subType,
-          }),
+          type: EntitySubType.ROOM_TYPE,
           entityType: this.selectedTab,
           offset: this.first,
           limit: this.rowsPerPage,
@@ -418,8 +343,8 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           subModuleName: ModuleNames.INVOICE,
           additionalPath: rowData.id,
           queryParams: {
-            entityId: this.selectedEntity.id,
-            type: this.selectedEntity.subType,
+            entityId: this.entityId,
+            type: EntitySubType.ROOM_TYPE,
           },
         });
         break;
@@ -483,7 +408,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.routesConfigService.navigate({
       additionalPath: `${manageReservationRoutes.addReservation.route}`,
       queryParams: {
-        entityId: this.selectedEntity.id,
+        entityId: this.entityId,
       },
     });
   }
@@ -543,8 +468,5 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
-    this.$selectedEntitySubscription.unsubscribe();
-    // this.destroy$.next();
-    // this.destroy$.complete();
   }
 }

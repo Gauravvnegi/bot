@@ -30,7 +30,7 @@ import { BaseReservationComponent } from '../../../../../reservation/src/lib/com
 import { ReservationType } from '../../constants/reservation-table';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { Subject } from 'rxjs';
-import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import { GlobalFilterService, RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 import { ReservationForm } from '../../constants/form';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ManualOffer } from '../form-components/booking-summary/booking-summary.component';
@@ -74,13 +74,15 @@ export class AddReservationComponent extends BaseReservationComponent
     protected formService: FormService,
     protected hotelDetailService: HotelDetailService,
     protected routesConfigService: RoutesConfigService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private globalFilterService: GlobalFilterService
   ) {
     super(activatedRoute, hotelDetailService, formService, routesConfigService);
     this.initForm();
   }
 
   ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId
     this.initDetails();
     if (this.reservationId) this.getReservationDetails();
     this.initFormData();
@@ -90,7 +92,6 @@ export class AddReservationComponent extends BaseReservationComponent
   initDetails() {
     this.listenFormServiceChanges();
     this.reservationTypes = roomReservationTypes;
-    this.bookingType = EntitySubType.ROOM_TYPE;
   }
 
   listenRouteData() {
@@ -232,7 +233,7 @@ export class AddReservationComponent extends BaseReservationComponent
     this.loadSummary = true;
     this.$subscription.add(
       this.manageReservationService
-        .getReservationDataById(this.reservationId, this.selectedEntity.id)
+        .getReservationDataById(this.reservationId, this.entityId)
         .subscribe(
           (response: RoomReservationResponse) => {
             this.reservationFormData = new ReservationFormData().deserialize(
@@ -333,7 +334,7 @@ export class AddReservationComponent extends BaseReservationComponent
     if (roomTypeIds.length) {
       this.$subscription.add(
         this.manageReservationService
-          .getOfferByRoomType(this.selectedEntity.id, config)
+          .getOfferByRoomType(this.entityId, config)
           .pipe(
             //to cancel api call between using take until
             takeUntil(this.cancelOfferRequests$)
@@ -375,7 +376,7 @@ export class AddReservationComponent extends BaseReservationComponent
       this.loadSummary = true;
       this.$subscription.add(
         this.manageReservationService
-          .getSummaryData(this.selectedEntity.id, this.getFormData(), {
+          .getSummaryData(this.entityId, this.getFormData(), {
             params: `?type=${EntitySubType.ROOM_TYPE}`,
           })
           .pipe(

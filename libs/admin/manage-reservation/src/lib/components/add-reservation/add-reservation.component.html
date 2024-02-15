@@ -13,7 +13,6 @@
       <hospitality-bot-booking-info
         [props]="{
           reservationTypes: reservationTypes,
-          bookingType: bookingType,
           expandAccordion: expandAccordion,
           reservationId: reservationId,
           disabledForm: disabledForm
@@ -28,7 +27,7 @@
           (listenChanges)="listenForFormChanges()"
           [itemValues]="roomTypeValues"
           [bookingConfig]="{
-            entityId: selectedEntity.id,
+            entityId: entityId,
             isDraftBooking: isDraftBooking,
             reservationId: reservationId,
             isRouteData: isRouteData,
@@ -71,7 +70,6 @@
         [disabledForm]="disabledForm"
         [loadSummary]="loadSummary"
         [bookingInfo]="{
-          bookingType: bookingType,
           occupancyDetails: occupancyDetails,
           externalBooking: isExternalBooking,
           offerResponse: offerResponse

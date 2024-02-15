@@ -5,10 +5,7 @@
     <ng-container *ngIf="!loadSummary; else loader">
       <div class="container">
         <div class="bk-summary_header">
-          <div
-            class="bk-summary_subheading"
-            *ngIf="bookingType === 'ROOM_TYPE' && summaryData?.bookingItems"
-          >
+          <div class="bk-summary_subheading" *ngIf="summaryData?.bookingItems">
             {{ (summaryData?.bookingItems)[0]?.roomTypeLabel }}
             <span
               class="room-count"
@@ -27,11 +24,7 @@
         <div class="bk-summary_roomInfo">
           <ng-content *ngIf="!displayBookingOffer"></ng-content>
         </div>
-        <ng-container
-          *ngIf="
-            bookingType === 'ROOM_TYPE' && summaryData?.bookingItems.length
-          "
-        >
+        <ng-container *ngIf="summaryData?.bookingItems.length">
           <ng-container
             [ngTemplateOutlet]="summaryTemplate"
             [ngTemplateOutletContext]="{
@@ -40,7 +33,7 @@
           >
           </ng-container>
         </ng-container>
-        <div class="view-details-btn" *ngIf="bookingType === 'ROOM_TYPE'">
+        <div class="view-details-btn">
           <hospitality-bot-button
             class="btn"
             *ngIf="summaryData?.bookingItems.length > 1"
@@ -50,7 +43,7 @@
             minWidth="0px"
           ></hospitality-bot-button>
         </div>
-        <ng-container *ngIf="bookingType === 'ROOM_TYPE' && detailsView">
+        <ng-container *ngIf="detailsView">
           <ng-container
             *ngFor="
               let bookingItem of summaryData?.bookingItems;
@@ -67,26 +60,9 @@
             </ng-container>
           </ng-container>
         </ng-container>
-        <ng-container *ngIf="bookingType !== 'ROOM_TYPE'">
-          <ng-container
-            [ngTemplateOutlet]="outletSummaryTemplate"
-            [ngTemplateOutletContext]="{
-              summaryData: summaryData
-            }"
-          >
-          </ng-container>
-        </ng-container>
         <!-- when there is no summary -->
-        <ng-container
-          *ngIf="
-            bookingType === 'ROOM_TYPE' && !summaryData?.bookingItems.length
-          "
-        >
+        <ng-container *ngIf="!summaryData?.bookingItems.length">
           <ng-container [ngTemplateOutlet]="summaryTemplate"> </ng-container>
-        </ng-container>
-        <ng-container *ngIf="bookingType !== 'ROOM_TYPE' && !summaryData">
-          <ng-container [ngTemplateOutlet]="outletSummaryTemplate">
-          </ng-container>
         </ng-container>
         <p
           class="bk-summary_priceInfo_perNight"
@@ -202,36 +178,6 @@
   </ng-template>
 </ng-template>
 
-<ng-template #outletSummaryTemplate let-summaryData="summaryData">
-  <p class="bk-summary_priceInfo_person">
-    <span class="bk-summary_priceInfo_perNight_label">
-      For
-      {{ summaryData?.adultCount }}
-      Adults
-    </span>
-    <span class="bk-summary_priceInfo_perNight_amount">
-      {{ summaryData?.roomCharges | currency: 'INR' }}
-    </span>
-  </p>
-  <p class="bk-summary_priceInfo_taxFair">
-    <span class="bk-summary_priceInfo_perNight_label">Total Taxes & Fees</span>
-    <span
-      class="bk-summary_priceInfo_perNight_amount"
-      *ngIf="summaryData?.taxAndFees"
-      >+{{ summaryData?.taxAndFees | currency: 'INR' }}</span
-    >
-  </p>
-  <p
-    class="bk-summary_priceInfo_perNight"
-    *ngIf="summaryData?.miscellaneousCharges"
-  >
-    <span class="bk-summary_priceInfo_perNight_label">Total Misc. Charges</span>
-    <span class="bk-summary_priceInfo_perNight_amount"
-      >+{{ summaryData.miscellaneousCharges | currency: 'INR' }}</span
-    >
-  </p>
-</ng-template>
-
 <ng-template #summaryTemplate let-index="index" let-bookingItem="bookingItem">
   <p *ngIf="index !== undefined" class="divider"></p>
   <div class="bk-summary_priceInfo">
@@ -239,10 +185,7 @@
       {{ bookingItem?.roomTypeLabel }}
       <span class="room-count"> x{{ bookingItem?.roomCount }} </span>
     </div>
-    <div
-      class="bk-summary_offerInfo"
-      *ngIf="bookingType === 'ROOM_TYPE' && index === undefined"
-    >
+    <div class="bk-summary_offerInfo" *ngIf="index === undefined">
       <ng-container
         *ngIf="
           inputControls?.offerId.value && selectedOffer?.name;
@@ -361,9 +304,7 @@
     >
       <span class="bk-summary_priceInfo_perNight_label">Total Allowance</span>
       <span class="bk-summary_priceInfo_perNight_amount"
-        >-{{
-          summaryData?.allowance | currency: 'INR'
-        }}</span
+        >-{{ summaryData?.allowance | currency: 'INR' }}</span
       >
     </p>
     <p

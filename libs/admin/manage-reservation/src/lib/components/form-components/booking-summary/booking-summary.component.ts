@@ -57,7 +57,6 @@ export class BookingSummaryComponent implements OnInit {
   dateDifference: number = 1;
 
   heading = '';
-  bookingType: EntitySubType;
   outletId = '';
   externalBooking = false;
   offerResponse: ManualOffer;
@@ -135,29 +134,16 @@ export class BookingSummaryComponent implements OnInit {
       );
       return;
     }
-    let data: any;
 
-    const id =
-      this.bookingType === EntitySubType.ROOM_TYPE
-        ? this.entityId
-        : this.outletId;
-    const type =
-      this.bookingType === EntitySubType.ROOM_TYPE
-        ? EntitySubType.ROOM_TYPE
-        : EntityType.OUTLET;
-    if (this.bookingType === EntitySubType.ROOM_TYPE)
-      data = this.formService.mapRoomReservationData(
-        this.parentFormGroup.getRawValue(),
-        id,
-        'full',
-        this.summaryData.totalAmount,
-        this.offerResponse
-      );
-    else
-      data = this.formService.mapOutletReservationData(
-        this.parentFormGroup.getRawValue(),
-        this.bookingType
-      );
+    const id = this.entityId;
+    const type = EntitySubType.ROOM_TYPE;
+    const data = this.formService.mapRoomReservationData(
+      this.parentFormGroup.getRawValue(),
+      id,
+      'full',
+      this.summaryData.totalAmount,
+      this.offerResponse
+    );
     if (this.reservationId) {
       if (data.reservationType === ReservationType.CANCELED) {
         this.openCancelPopup(data, id, type);
@@ -437,7 +423,6 @@ export class BookingSummaryComponent implements OnInit {
 }
 
 type BookingSummaryInfo = {
-  bookingType: string;
   outletId?: string;
   heading: string;
   occupancyDetails?: OccupancyDetails;

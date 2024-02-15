@@ -20,13 +20,12 @@
   </div>
 
   <div class="action-wrapper" *ngIf="!showCalendarView">
-    <div class="pull-right" *ngIf="selectedEntity.subType === 'ROOM_TYPE'">
+    <div class="pull-right">
       <label
         class="type-label"
         *ngFor="let option of tableTypes"
         [ngClass]="{
-          disabled: !subscriptionPlanService.show()
-            .isCalenderView
+          disabled: !subscriptionPlanService.show().isCalenderView
         }"
       >
         <input
@@ -48,7 +47,9 @@
     <hospitality-bot-button
       label="+ Create Reservation"
       (onClick)="createReservation()"
-      [disabled]="!subscriptionPlanService.show().isPermissionToCreateReservation"
+      [disabled]="
+        !subscriptionPlanService.show().isPermissionToCreateReservation
+      "
     ></hospitality-bot-button>
     <hospitality-bot-export-list
       *ngIf="tableFG?.get('tableType').value !== 'calendar'"
@@ -145,15 +146,7 @@
             </div>
           </div>
         </td>
-        <td *ngIf="selectedEntity.subType !== 'ROOM_TYPE'">
-          <div class="primary-text">
-            <div>{{ this.selectedEntity.label }}</div>
-          </div>
-          <div class="secondary-text">
-            {{ this.selectedEntity.subType }}
-          </div>
-        </td>
-        <td *ngIf="selectedEntity.subType === 'ROOM_TYPE'">
+        <td>
           <div
             class="multi-cell-content"
             *ngIf="rowData?.roomType; else emptyCell"
@@ -212,29 +205,13 @@
             </div>
           </div>
         </td>
-
-        <td *ngIf="selectedEntity.subType !== 'ROOM_TYPE'">
-          <div class="center-align">
-            <div class="primary-text txtSize">
-              {{ rowData?.from | date: 'dd/MM/yy' }}
-            </div>
-            <div class="secondary-text">
-              {{ rowData?.from | date: 'HH:mm' }}
-            </div>
-          </div>
-        </td>
-        <td *ngIf="selectedEntity.subType === 'ROOM_TYPE'">
+        <td>
           <div class="center-align">
             <div class="primary-text txtSize">
               {{ rowData?.from | date: 'dd/MM/yy' }}-{{
                 rowData?.to | date: 'dd/MM/yy'
               }}
             </div>
-            <!-- <div class="secondary-text">
-            {{ rowData?.from | date: 'HH:mm' }}-{{
-              rowData?.to | date: 'HH:mm'
-            }}
-          </div> -->
           </div>
         </td>
         <td>

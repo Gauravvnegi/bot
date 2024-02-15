@@ -16,79 +16,34 @@
 <ng-template #bookingInfo>
   <ng-container [formGroup]="parentFormGroup">
     <ng-container formGroupName="reservationInformation">
-      <ng-container *ngIf="bookingType === 'ROOM_TYPE'">
-        <hospitality-bot-date
-          [ngClass]="isQuickReservation ? 'custom-width' : 'half-width'"
-          controlName="from"
-          label="Check-In Date"
-          [settings]="{
-            enableTime: false
-          }"
-          [props]="{
-            placeholder: 'DD/MM/YY'
-          }"
-          [minDate]="today"
-          [maxDate]="maxDate"
-          [disabled]="disabledForm || isCheckedIn"
-        ></hospitality-bot-date>
-        <hospitality-bot-date
-          [ngClass]="isQuickReservation ? 'custom-width' : 'half-width'"
-          controlName="to"
-          label="Check-Out Date"
-          [settings]="{
-            enableTime: false
-          }"
-          [props]="{
-            placeholder: 'DD/MM/YY'
-          }"
-          [minDate]="minToDate"
-          [maxDate]="maxDate"
-          [disabled]="disabledForm || isCheckedOut"
-        ></hospitality-bot-date>
-      </ng-container>
-      <ng-container *ngIf="bookingType === 'VENUE'">
-        <div class="half-width type-wrapper">
-          <hospitality-bot-date
-            [ngClass]="isQuickReservation ? 'custom-width' : 'half-width'"
-            controlName="from"
-            label="Reservation Date & Time"
-            [settings]="{
-              enableTime: true
-            }"
-            [props]="{
-              placeholder: 'From'
-            }"
-            [minDate]="startMinDate"
-          ></hospitality-bot-date>
-          <hospitality-bot-date
-            label="date"
-            [ngClass]="isQuickReservation ? 'custom-width' : 'half-width'"
-            class="to-date"
-            controlName="to"
-            [settings]="{
-              enableTime: true
-            }"
-            [props]="{
-              placeholder: 'To'
-            }"
-            [minDate]="endMinDate"
-          ></hospitality-bot-date>
-        </div>
-      </ng-container>
-      <ng-container
-        *ngIf="bookingType !== 'ROOM_TYPE' && bookingType !== 'VENUE'"
-      >
-        <hospitality-bot-date
-          [ngClass]="isQuickReservation ? 'custom-width' : 'half-width'"
-          controlName="dateAndTime"
-          label="Booking Date and Time"
-          [settings]="{
-            enableTime: true,
-            dateValue: startMinDate
-          }"
-          [minDate]="startMinDate"
-        ></hospitality-bot-date>
-      </ng-container>
+      <hospitality-bot-date
+        [ngClass]="isQuickReservation ? 'custom-width' : 'half-width'"
+        controlName="from"
+        label="Check-In Date"
+        [settings]="{
+          enableTime: false
+        }"
+        [props]="{
+          placeholder: 'DD/MM/YY'
+        }"
+        [minDate]="today"
+        [maxDate]="maxDate"
+        [disabled]="disabledForm || isCheckedIn"
+      ></hospitality-bot-date>
+      <hospitality-bot-date
+        [ngClass]="isQuickReservation ? 'custom-width' : 'half-width'"
+        controlName="to"
+        label="Check-Out Date"
+        [settings]="{
+          enableTime: false
+        }"
+        [props]="{
+          placeholder: 'DD/MM/YY'
+        }"
+        [minDate]="minToDate"
+        [maxDate]="maxDate"
+        [disabled]="disabledForm || isCheckedOut"
+      ></hospitality-bot-date>
       <hospitality-bot-select
         *ngIf="reservationTypes.length"
         [ngClass]="isQuickReservation ? 'custom-width' : 'half-width'"
@@ -247,15 +202,6 @@
         [options]="configData?.marketSegment"
         [props]="{ placeholder: 'Select' }"
       ></hospitality-bot-select>
-      <ng-container *ngIf="bookingType === 'VENUE'">
-        <hospitality-bot-select
-          [ngClass]="isQuickReservation ? 'custom-width' : 'half-width'"
-          controlName="eventType"
-          label="Event Types"
-          [options]="eventTypes"
-          [props]="{ placeholder: 'Select' }"
-        ></hospitality-bot-select>
-      </ng-container>
       <ng-content></ng-content>
     </ng-container>
   </ng-container>

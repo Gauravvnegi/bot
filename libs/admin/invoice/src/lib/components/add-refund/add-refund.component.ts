@@ -51,6 +51,10 @@ export class AddRefundComponent implements OnInit {
   }
 
   handleApply() {
+    if (this.userForm.invalid) {
+      this.userForm.markAllAsTouched();
+      return;
+    }
     !this.isReservationPopup
       ? this.dialogRef.close({
           refundAmount: +this.userForm.get('refundAmount').value,

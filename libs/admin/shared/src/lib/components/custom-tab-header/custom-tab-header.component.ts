@@ -10,7 +10,7 @@ import {
   ElementRef,
 } from '@angular/core';
 import { Filter } from '../../types/table.type';
-import { filters } from '../../constants/datatable';
+
 @Component({
   selector: 'hospitality-bot-custom-tab-header',
   templateUrl: './custom-tab-header.component.html',
@@ -51,7 +51,7 @@ export class CustomTabHeaderComponent implements OnInit {
   selectTab(index: number): void {
     if (!this.listItems[index]?.disabled) {
       this.selectedIndex = index;
-      this.selectedTabChange.emit({ index });
+      this.selectedTabChange.emit(this.listItems[index].value);
     }
   }
 

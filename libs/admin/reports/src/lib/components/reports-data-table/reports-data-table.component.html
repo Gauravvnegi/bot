@@ -174,10 +174,7 @@
         ></p-tableCheckbox>
       </td>
       <td
-        guest-details-sidebar
-        [bookingId]="rowData?.id"
-        [guestId]="rowData?.guestId"
-        [isTextDecoration]="false"
+        (click)="onRowClick(rowData)"
         *ngFor="let column of columns"
         [class]="getStyle(rowData)"
       >

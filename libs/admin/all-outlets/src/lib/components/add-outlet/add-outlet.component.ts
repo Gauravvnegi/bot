@@ -336,7 +336,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         this.outletId,
 
         {
-          params: `?type=SERVICE&serviceType=${serviceType}&pagination=false`,
+          params: `?type=SERVICE&serviceType=${serviceType}&pagination=false&visibilitySource=ADMIN_PANEL`,
         }
       )
       .subscribe(

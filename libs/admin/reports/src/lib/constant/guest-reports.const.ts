@@ -11,6 +11,11 @@ import { ColsData } from '../types/reports.types';
 export const guestComplaintReportDataCols: Partial<ColsData<
   GuestComplaintReportData
 >> = {
+  roomType: {
+    header: 'Room / Room Type',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
   guestName: {
     header: 'Guest Name',
     isSortDisabled: true,
@@ -53,20 +58,20 @@ export const guestComplaintReportDataCols: Partial<ColsData<
   },
 };
 export const guestEscalationComplaintReportCols: Partial<ColsData<
-  GuestEscalationComplaintReportData
->> = {
-  ...guestComplaintReportDataCols,
-  escalationLevel: {
-    header: 'Escalation Level',
-    isSortDisabled: true,
-    isSearchDisabled: true,
-  },
-  frequency: {
-    header: 'Frequency',
-    isSortDisabled: true,
-    isSearchDisabled: true,
-  },
-};
+         GuestEscalationComplaintReportData
+       >> = {
+         ...guestComplaintReportDataCols,
+         escalationLevel: {
+           header: 'Escalation Level',
+           isSortDisabled: true,
+           isSearchDisabled: true,
+         },
+         escalatedTo: {
+           header: 'Escalated To',
+           isSortDisabled: true,
+           isSearchDisabled: true,
+         },
+       };
 
 export const guestHistoryCols: ColsData<GuestHistoryData> = {
   guestName: {

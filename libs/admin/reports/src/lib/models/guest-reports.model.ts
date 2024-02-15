@@ -183,6 +183,8 @@ export class GuestEscalationComplaintReport
       value &&
       value.map((item) => {
         return {
+          complaintId: item?.reservationJobId,
+          roomType: `${item.roomNo ?? ''} - ${item?.roomType ?? ''}`,
           guestName: item?.guestName,
           serviceItem: item?.itemName,
           complaint: item?.description.length ? item?.description : undefined,
@@ -193,7 +195,7 @@ export class GuestEscalationComplaintReport
           sla: item?.sla,
           jobDuration: item?.jobDuration,
           escalationLevel: item?.level,
-          frequency: undefined,
+          escalatedTo: item?.recipientName ? item?.recipientName : undefined,
         };
       });
     return this;
@@ -211,7 +213,10 @@ export class GuestComplaintReport
       value &&
       value.map((item) => {
         return {
-          guestId: item?.guestDetails?.primaryGuest?.id,
+          complaintId: item?.id,
+          roomType: `${item.rooms[0]?.roomNumber ?? ''} - ${
+            item?.rooms[0].type ?? ''
+          }`,
           guestName: getFullName(
             item?.guestDetails?.primaryGuest?.firstName,
             item?.guestDetails?.primaryGuest?.lastName

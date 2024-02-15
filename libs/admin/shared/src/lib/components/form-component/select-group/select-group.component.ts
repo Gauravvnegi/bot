@@ -15,9 +15,9 @@ export class SelectGroupComponent extends FormComponent implements OnInit {
   @Input() isAllOption: boolean = false;
 
   @Input() set options(input: Option[]) {
-    this.initInputControl();
     const selectedValue = [];
     this.menuOptions = input;
+
     this.defaultOptions = input?.map((item) => {
       if (item?.isSelected) selectedValue.push(item.value);
       return {
@@ -26,7 +26,10 @@ export class SelectGroupComponent extends FormComponent implements OnInit {
       };
     });
 
-    this.inputControl.patchValue(selectedValue, { emitEvent: false });
+    if (this.fieldType === 'checkbox') {
+      this.initInputControl();
+      this.inputControl.patchValue(selectedValue, { emitEvent: false });
+    }
   }
 
   constructor(public controlContainer: ControlContainer) {

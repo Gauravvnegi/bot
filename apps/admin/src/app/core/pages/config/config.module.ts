@@ -168,7 +168,7 @@ export const subModuleConfig: Partial<Record<ModuleNames, any>> = {
     import('@hospitality-bot/admin/finance').then((m) => m.AdminFinanceModule),
 
   // Pos
-  [ModuleNames.POS_DASHBOARD]: () =>
+  [ModuleNames.SMART_SERVE_DASHBOARD]: () =>
     import('@hospitality-bot/admin/outlets-dashboard').then(
       (m) => m.AdminOutletsDashboardModule
     ),

@@ -5,7 +5,7 @@ export enum TabsType {
 }
 export enum ChipType {
   seated = 'seated',
-  watchlist = 'watchlist',
+  waitlist = 'waitlist',
 }
 
 export type OutletGuest = {

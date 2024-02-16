@@ -59,3 +59,16 @@
 .subtitle-padding {
   padding-right: 50px !important;
 }
+
+.save-cta {
+  position: absolute;
+  bottom: 0.8em;
+  right: 0.8em;
+  font-size: 0.8em;
+  color: $border-color;
+  .input-btn {
+    text-decoration: none;
+    cursor: pointer;
+    color: $primary-cta;
+  }
+}

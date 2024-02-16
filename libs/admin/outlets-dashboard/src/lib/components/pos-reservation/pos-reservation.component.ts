@@ -42,6 +42,7 @@ export class PosReservationComponent implements OnInit {
   entityId: string;
   data: PosConfig;
   userForm: FormGroup;
+  checkboxForm: FormGroup;
   @Output() onCloseSidebar = new EventEmitter();
 
   mealPreferences = ['ALL', ...mealPreferences];
@@ -57,9 +58,6 @@ export class PosReservationComponent implements OnInit {
   tabFilters: Filter<string, string>[] = reservationTabFilters;
   $subscription = new Subscription();
 
-  sendFeedback: boolean = false;
-  emailInvoice: boolean = false;
-  printInvoice: boolean = false;
   loadingMenuItems: boolean = false;
   isPopular = true;
 
@@ -105,6 +103,12 @@ export class PosReservationComponent implements OnInit {
         paymentRecieved: [null],
         transactionId: [''],
       }),
+    });
+
+    this.checkboxForm = this.fb.group({
+      sendFeedback: [false],
+      emailInvoice: [false],
+      printInvoice: [false],
     });
   }
 
@@ -287,12 +291,6 @@ export class PosReservationComponent implements OnInit {
     const selectedOrderType = this.orderInfoControls.orderType.value;
     return selectedOrderType === OrderTypes.DINE_IN;
   }
-
-  onSendFeedback(event: HTMLInputElement) {}
-
-  onEmailInvoice(event: HTMLInputElement) {}
-
-  onPrintInvoice(event: HTMLInputElement) {}
 
   clearSearch() {}
 

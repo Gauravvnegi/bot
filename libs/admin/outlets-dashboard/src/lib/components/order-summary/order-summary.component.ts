@@ -6,7 +6,6 @@ import {
   ControlContainer,
   FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
 } from '@angular/forms';
 import { OutletTableService } from '../../services/outlet-table.service';
@@ -23,7 +22,6 @@ import { KotItemsForm, MenuForm } from '../../types/form';
 })
 export class OrderSummaryComponent implements OnInit {
   selectedItems: MenuItem[] = [];
-  kotList: string[] = ['item'];
 
   readonly mealPreferenceConfig = mealPreferenceConfig;
 
@@ -39,6 +37,8 @@ export class OrderSummaryComponent implements OnInit {
   itemOffers: Option[] = [];
 
   totalAmount: number = 0;
+  viewOffer = false;
+  totalItemUnits = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -98,19 +98,27 @@ export class OrderSummaryComponent implements OnInit {
     this.itemFormArray.push(itemFormGroup);
   }
 
+  /**
+   * Decrement unit of the selected menu item
+   */
   decrementQuantity(itemControl: Controls) {
     itemControl
       .get('unit')
       .patchValue(itemControl.value.unit - 1, { emitEvent: false });
+    itemControl.value.unit && this.totalItemUnits--;
     this.totalAmount = this.totalAmount - itemControl.get('price').value;
     itemControl.value.unit === 0 &&
       this.formService.removeItemFromSelectedItems(itemControl.value.id);
   }
 
+  /**
+   * Increment unit of the selected menu item
+   */
   incrementQuantity(itemControl: Controls) {
     itemControl
       .get('unit')
       .patchValue(itemControl.value.unit + 1, { emitEvent: false });
+    this.totalItemUnits++;
     this.totalAmount = this.totalAmount + itemControl.get('price').value;
   }
 
@@ -135,30 +143,34 @@ export class OrderSummaryComponent implements OnInit {
   }
 
   listenForItemsChange() {
-    this.formService.selectedMenuItems.subscribe((res) => {
-      if (res) {
-        this.selectedItems = res;
-        const existingIds = this.itemFormArray.value.map((item) => item.id);
-        const newItems = res.filter((item) => !existingIds.includes(item.id));
-        const removedItems = this.itemFormArray.controls.filter(
-          (control, index) => !res.some((item) => item.id === control.value.id)
-        );
-        this.totalAmount = this.selectedItems.reduce(
-          (total, currentItem) => total + currentItem.dineInPrice,
-          0
-        );
-        if (newItems.length > 0 || removedItems.length > 0) {
-          newItems.forEach((newItem) => {
-            this.createNewItemFields(newItem);
-          });
+    this.$subscription.add(
+      this.formService.selectedMenuItems.subscribe((res) => {
+        if (res) {
+          this.selectedItems = res;
+          const existingIds = this.itemFormArray.value.map((item) => item.id);
+          const newItems = res.filter((item) => !existingIds.includes(item.id));
+          const removedItems = this.itemFormArray.controls.filter(
+            (control) => !res.some((item) => item.id === control.value.id)
+          );
+          this.totalAmount = this.selectedItems.reduce(
+            (total, currentItem) => total + currentItem.dineInPrice,
+            0
+          );
+          if (newItems.length > 0 || removedItems.length > 0) {
+            newItems.forEach((newItem) => {
+              this.totalItemUnits++;
+              this.createNewItemFields(newItem);
+            });
 
-          removedItems.forEach((removedItem) => {
-            const index = this.itemFormArray.controls.indexOf(removedItem);
-            this.removeItemFields(index);
-          });
+            removedItems.forEach((removedItem) => {
+              this.totalItemUnits--;
+              const index = this.itemFormArray.controls.indexOf(removedItem);
+              this.removeItemFields(index);
+            });
+          }
         }
-      }
-    });
+      })
+    );
   }
 
   removeItemFields(index: number) {
@@ -169,8 +181,10 @@ export class OrderSummaryComponent implements OnInit {
     this.formService.removeItemFromSelectedItems();
   }
 
-  cancelOrder() {}
-
+  /**
+   * Toggles the control visibility in item and
+   * kot controls for instruction and offer inputs
+   */
   toggleControlVisibility(
     type: 'Instruction' | 'Offer' | 'ItemInstruction',
     index: number,

@@ -42,6 +42,11 @@
         subtitle
       }}</ng-container>
     </small>
+    <small *ngIf="viewButton" class="save-cta">
+      <a class="input-btn" type="submit" (click)="onSaveText.emit()">
+        {{ buttonText }}
+      </a>
+    </small>
     <ng-template #strikeText>
       <del>{{ subtitle }}</del>
     </ng-template>

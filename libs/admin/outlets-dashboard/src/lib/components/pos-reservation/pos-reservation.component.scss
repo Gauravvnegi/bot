@@ -167,7 +167,7 @@
   .checkbox {
     padding: 5px 15px 0px;
     @include flex-justify-align-center;
-    .checkbox-label {
+    .checkbox-field {
       padding: 0 15px 0 10px;
       @include light-vsm-text;
     }
@@ -183,4 +183,13 @@
   height: 65vh;
   width: 100%;
   @include flex-justify-align-center;
+}
+
+:host ::ng-deep .empty-table {
+  width: 100%;
+  .wrapper {
+    .wrapper__standard {
+      width: unset;
+    }
+  }
 }

@@ -227,37 +227,22 @@
 </div>
 
 <div class="btn-wrapper">
-  <div class="checkbox">
-    <input
-      #feedbackCheckbox
-      type="checkbox"
-      [checked]="sendFeedback"
-      (change)="onSendFeedback($event.target)"
-    />
-    <label
-      class="checkbox-label"
-      (click)="feedbackCheckbox.click()"
-      for="checkbox"
-      >Send Feedback</label
-    >
-    <input
-      #emailCheckbox
-      type="checkbox"
-      [checked]="emailInvoice"
-      (change)="onEmailInvoice($event.target)"
-    />
-    <label class="checkbox-label" (click)="emailCheckbox.click()" for="checkbox"
-      >Email Invoice</label
-    >
-    <input
-      #printCheckbox
-      type="checkbox"
-      [checked]="printInvoice"
-      (change)="onPrintInvoice($event.target)"
-    />
-    <label class="checkbox-label" (click)="printCheckbox.click()" for="checkbox"
-      >Print Invoice</label
-    >
+  <div class="checkbox" [formGroup]="checkboxForm">
+    <hospitality-bot-checkbox
+      class="checkbox-field"
+      label="Send Feedback"
+      controlName="sendFeedback"
+    ></hospitality-bot-checkbox>
+    <hospitality-bot-checkbox
+      class="checkbox-field"
+      label="Email Invoice"
+      controlName="emailInvoice"
+    ></hospitality-bot-checkbox>
+    <hospitality-bot-checkbox
+      class="checkbox-field"
+      label="Print Invoice"
+      controlName="printInvoice"
+    ></hospitality-bot-checkbox>
   </div>
   <div class="buttons">
     <hospitality-bot-button
@@ -301,6 +286,7 @@
 
 <ng-template #emptyCardView>
   <hospitality-bot-empty-table
+    class="empty-table"
     [content]="{
       description: 'No Menu Items',
       imageSrc: 'assets/images/empty-table-package.png'

@@ -87,7 +87,7 @@ export const seatedCards: GuestCard[] = [
   // Add more items as needed
 ];
 
-export const watchListCards: GuestCard[] = [
+export const waitListCards: GuestCard[] = [
   {
     tableNo: 'T001',
     orderNo: 'O123',
@@ -193,8 +193,8 @@ export const seatedChips: Option<ChipType>[] = [
     value: ChipType.seated,
   },
   {
-    label: 'Watchlist',
-    value: ChipType.watchlist,
+    label: 'Waitlist',
+    value: ChipType.waitlist,
   },
 ];
 

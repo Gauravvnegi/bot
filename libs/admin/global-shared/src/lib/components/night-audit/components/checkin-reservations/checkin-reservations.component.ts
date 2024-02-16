@@ -32,6 +32,7 @@ import {
 } from '../../constants/checked-in-reservation.table';
 import { CheckedInReservation } from '../../models/night-audit.model';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'hospitality-bot-checkin-reservations',
@@ -109,6 +110,7 @@ export class CheckinReservationsComponent implements OnInit {
           : '',
       ],
       isRemarks: ['CANCELED', 'NOSHOW'].includes(status),
+      remarksValidators: [Validators.required],
     };
     const actions = [
       {
@@ -131,6 +133,7 @@ export class CheckinReservationsComponent implements OnInit {
       },
       {
         label: 'Yes',
+        type: 'SUCCESS',
         onClick: (modelData) => {
           dialogRef.close();
           this.updateStatus(event, modelData);

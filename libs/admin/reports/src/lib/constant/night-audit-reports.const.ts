@@ -53,7 +53,7 @@ export const auditRoomDetailsReportRows = [
   {
     label: 'Today`s Cancellation',
     noOfRooms: 'cancelledReservationForToday',
-    noOfGuests: undefined,
+    noOfGuests: 'cancellationRoomGuest',
   },
   {
     label: 'Today`s Complimentary Rooms',

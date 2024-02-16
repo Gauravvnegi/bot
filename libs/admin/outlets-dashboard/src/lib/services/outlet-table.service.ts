@@ -5,14 +5,24 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { dineInReservationResponse } from '../constants/data-table';
 import { CreateOrderData, CreateReservationData } from '../types/form';
-import { ReservationTableListResponse } from '../types/reservation-table';
+import {
+  ReservationTableListResponse,
+  ReservationTableResponse,
+} from '../types/reservation-table';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 
 @Injectable()
 export class OutletTableService extends ApiService {
   public selectedEntity = new BehaviorSubject<SelectedEntity>(null);
 
-  getReservations(entityId): Observable<any> {
+  getOrderById(
+    entityId: string,
+    orderId: string
+  ): Observable<ReservationTableResponse> {
+    return this.get(`/api/v1/entity/${entityId}/order/${orderId}`);
+  }
+
+  getReservations(entityId: string): Observable<any> {
     return this.get(`/api/v1/entity/${entityId}/inventory?type=ROOM_TYPE`).pipe(
       map((res) => {
         return dineInReservationResponse;
@@ -28,7 +38,7 @@ export class OutletTableService extends ApiService {
 
   getAllCategories(menuIds: string) {
     return this.get(
-      `/api/v1/menus/items/categories?entityState=ACTIVE&menuIds=${menuIds}`
+      `/api/v1/menus/categories?entityState=ACTIVE&menuIds=${menuIds}`
     );
   }
 
@@ -56,5 +66,9 @@ export class OutletTableService extends ApiService {
     config: QueryConfig
   ): Observable<ReservationTableListResponse> {
     return this.get(`/api/v1/entity/${entityId}/order${config.params}`);
+  }
+
+  getFilteredMenuItems(config: QueryConfig) {
+    return this.get(`/api/v1/menus/items${config?.params}`);
   }
 }

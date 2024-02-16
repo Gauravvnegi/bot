@@ -1,6 +1,8 @@
 import { EntityState, EntitySubType } from '@hospitality-bot/admin/shared';
 import { KotItemsResponse, OutletPricingDetails } from './form';
 import { OutletGuest } from './guest.type';
+import { OrderTypes } from './menu-order';
+import { MenuItemResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
 
 export type ReservationTableListResponse = {
   total: number;
@@ -12,21 +14,21 @@ export type ReservationTableResponse = {
   id: string;
   number: string;
   status: ReservationStatus;
-  type: OrderMethod;
+  type: OrderTypes;
   reservationId: string;
   items: {
     id: string;
     amount: number;
     description: string;
-    remarks: string;
+    remarks?: string;
     transactionType: string;
     unit: number;
     type: string;
     currency: string;
     itemId: string;
-    kotId: string;
+    kotId?: string;
     parentItem: string;
-    menuItem: MenuItemResponse;
+    menuItem?: MenuItemResponse;
   }[];
   entityId: string;
   createdBy: string;
@@ -34,29 +36,10 @@ export type ReservationTableResponse = {
     containerCharge: number;
     allowance: number;
   };
-  kots: Omit<KotItemsResponse, 'items'> & { menuItems: MenuItemResponse }[];
+  kots: (Omit<KotItemsResponse, 'items'> & { menuItems: MenuItemResponse })[];
   guest: OutletGuest;
   reservation: PosReservationResponse;
   source: 'Offline';
-};
-
-export type MenuItemResponse = {
-  id: string;
-  name: string;
-  imageUrl: string;
-  description: string;
-  popular: boolean;
-  mealPreference: string;
-  category: string;
-  type: string;
-  preparationTime: number;
-  quantity: number;
-  unit: string;
-  dineInPrice: number;
-  deliveryPrice: number;
-  hsnCode: string;
-  entityId: string;
-  status: boolean;
 };
 
 export type PosReservationResponse = {
@@ -94,8 +77,6 @@ export type ReservationStatus =
   | 'RUNNING_TABLE'
   | 'PRINTED_TABLE'
   | 'DRAFT';
-
-export type OrderMethod = 'DELIVERY' | 'DINE_IN' | 'PICKUP';
 
 export type PaymentStatus = 'PAID' | 'UNPAID';
 

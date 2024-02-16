@@ -36,6 +36,9 @@ export type MenuItemsResponse = {
   status: boolean;
   type: string;
   unit: string;
+  code?: string;
+  imageUrl?: string;
+  popular?: boolean;
 };
 
 export type CategoriesResponse = {

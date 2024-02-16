@@ -12,7 +12,7 @@ import {
   seatedCards,
   seatedChips,
   seatedTabGroup,
-  watchListCards,
+  waitListCards,
 } from '../../constants/guest-list.const';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GuestCard } from '../guest-card/guest-card.component';
@@ -31,7 +31,7 @@ export class GuestListComponent implements OnInit {
   readonly seatedChips: Option<ChipType>[] = seatedChips;
   readonly seatedTabGroup: Option<TabsType>[] = seatedTabGroup;
   seatedGuestList: GuestCard[] = [...seatedCards];
-  watchListGuestList: GuestCard[] = [...watchListCards];
+  waitListGuestList: GuestCard[] = [...waitListCards];
 
   useForm: FormGroup;
   @Output() onClose = new EventEmitter<boolean>();
@@ -78,13 +78,13 @@ export class GuestListComponent implements OnInit {
      * filtration------
      */
     let constCards =
-      activeChip == this.chipEnum.seated ? seatedCards : watchListCards;
+      activeChip == this.chipEnum.seated ? seatedCards : waitListCards;
 
     if (
       activeTab == TabsType.resident ||
       activeTab == TabsType['non-resident']
     ) {
-      this.watchListGuestList = constCards.filter(
+      this.waitListGuestList = constCards.filter(
         (item) => item.type === activeTab
       );
       this.seatedGuestList = constCards.filter(
@@ -92,7 +92,7 @@ export class GuestListComponent implements OnInit {
       );
     } else {
       this.seatedGuestList = [...constCards];
-      this.watchListGuestList = [...constCards];
+      this.waitListGuestList = [...constCards];
     }
   }
 
@@ -124,11 +124,11 @@ export class GuestListComponent implements OnInit {
     const activeTab = this.useForm.get('tab').value;
 
     let constCards =
-      activeChip == this.chipEnum.seated ? seatedCards : watchListCards;
+      activeChip == this.chipEnum.seated ? seatedCards : waitListCards;
 
     if (event) {
       const isAll = activeTab == this.tabEnum.all;
-      this.watchListGuestList = constCards.filter(
+      this.waitListGuestList = constCards.filter(
         (item) =>
           item.name.toLocaleLowerCase().includes(event.toLocaleLowerCase()) &&
           (isAll || item.type === activeTab)
@@ -147,7 +147,7 @@ export class GuestListComponent implements OnInit {
   }
 
   get guestList() {
-    return this.isSeated ? this.seatedGuestList : this.watchListGuestList;
+    return this.isSeated ? this.seatedGuestList : this.waitListGuestList;
   }
 
   close() {

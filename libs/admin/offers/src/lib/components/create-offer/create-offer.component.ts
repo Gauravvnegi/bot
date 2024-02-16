@@ -273,15 +273,14 @@ export class CreateOfferComponent implements OnInit {
                     (item) => item.type === ServiceTypeOptionValue.PAID
                   );
                 }
-
                 let data =
                   currentList?.map((item) => {
                     let price =
                       item.rate ??
                       item.discountedPrice ??
                       item.originalPrice ??
-                      item?.deliveryPrice ??
-                      item?.dineInPrice;
+                      item?.dineInPrice ??
+                      item?.deliveryPrice;
                     return {
                       label: `${item.name} ${
                         price ? `[${item?.currency ?? 'INR'} ${price}]` : ''
@@ -453,8 +452,8 @@ export class CreateOfferComponent implements OnInit {
                 }`,
                 value: item.id,
                 price: item?.dineInPrice || item?.deliveryPrice,
-                type: item?.type,
-                category: item?.category,
+                type: 'MENU_ITEM',
+                category: 'MENU_ITEM',
               })),
               ...subPackages?.map((item) => ({
                 label: `${item.name} ${

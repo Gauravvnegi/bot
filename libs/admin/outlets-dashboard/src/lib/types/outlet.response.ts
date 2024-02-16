@@ -1,10 +1,10 @@
 import { EntityState } from '@hospitality-bot/admin/shared';
 import {
   ReservationStatus,
-  OrderMethod,
   PaymentStatus,
   TableStatus,
 } from './reservation-table';
+import { OrderTypes } from './menu-order';
 
 export type OutletReservationListResponse = {
   reservationData: OutletReservationResponse[];
@@ -22,7 +22,7 @@ export type OutletReservationResponse = {
   preparationTime: string;
   paymentStatus: PaymentStatus;
   numberOfItems: number;
-  orderMethod: OrderMethod;
+  orderMethod: OrderTypes;
   reservationStatus: ReservationStatus;
   invoiceId: string;
   tableNumber: string;

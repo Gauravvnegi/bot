@@ -177,21 +177,18 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
 
   handleMenuClick(value: string, rowData: OutletReservation) {}
 
-  editReservation(id: string) {}
+  editReservation(id: string) {
+    this.addNewOrder(id);
+  }
 
-  addNewOrder() {
+  addNewOrder(id?: string) {
     this.sidebarVisible = true;
     const factory = this.resolver.resolveComponentFactory(
       PosReservationComponent
     );
     const sidebarData = {
       isSidebar: true,
-      data: {
-        tableName: 'G01',
-        area: 'Garden',
-        invoiceId: '3294093',
-        entityId: this.entityId,
-      },
+      orderId: id,
     };
     this.sidebarSlide.clear();
     const componentRef = this.sidebarSlide.createComponent(factory);

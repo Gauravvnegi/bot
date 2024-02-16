@@ -1,8 +1,18 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { defaultRecordJson } from '../../constants/datatable';
 import { EntityStateRecord, FlagType } from '../../types/table.type';
 import { convertToTitleCase } from '../../utils/valueFormatter';
 import { Option } from '../../types/form.type';
+import { SplitButton } from 'primeng/splitbutton';
 
 @Component({
   selector: 'hospitality-bot-status-dropdown-toggle',
@@ -83,7 +93,10 @@ export class StatusDropdownToggleComponent implements OnInit {
   @Output() onClick = new EventEmitter<string | boolean>();
   @Output() onMenuItemClick = new EventEmitter<string>();
 
-  constructor() {}
+  @ViewChild('splitButton') splitButtonMenu: SplitButton;
+  documentClickHandler: (event: Event) => void;
+
+  constructor(private elementRef: ElementRef) {}
 
   setSettings() {
     this.isBoolean = typeof this.value === 'boolean';
@@ -152,8 +165,38 @@ export class StatusDropdownToggleComponent implements OnInit {
     }
   }
 
+  /**
+   * Track click event while clicking status dropdown toggle button
+   * @param event The click event
+   * @problem When using multiple status dropdown toggle buttons, menu options may not close properly.
+   */
+  onOuterDivClick(event) {
+    event.stopPropagation();
+
+    //creating new MouseClick event and dispatching
+    const newEvent = new MouseEvent('click');
+    document.dispatchEvent(newEvent);
+
+    this.documentClickHandler = (event: Event) => this.onDocumentClick(event);
+    document.body.addEventListener('click', this.documentClickHandler);
+  }
+
   handleMenuClick({ item: { value } }: { item: { value: string } }) {
     this.onMenuItemClick.emit(value);
+  }
+
+  /**
+   *
+   * @param event clicked area Event, which have HTMLElement
+   * @function removeEventListener will remove the event after closing menu,
+   * it will prevent to hamper the other click operation
+   */
+  onDocumentClick(event: Event) {
+    const clickedTarget = event.target as HTMLElement;
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.splitButtonMenu.menu.hide();
+      document.body.removeEventListener('click', this.documentClickHandler);
+    }
   }
 }
 

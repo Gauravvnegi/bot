@@ -65,7 +65,7 @@
       <ng-container *ngIf="!loading && guestList.length; else emptyGuest">
         <ng-container *ngFor="let guest of guestList; let i = index">
           <hospitality-bot-guest-card [item]="guest">
-            <ng-container *ngIf="isSeated; else watchList">
+            <ng-container *ngIf="isSeated; else waitlist">
               <hospitality-bot-button
                 label="Print Invoice"
                 variant="outlined"
@@ -75,7 +75,7 @@
                 variant="outlined"
               ></hospitality-bot-button>
             </ng-container>
-            <ng-template #watchList>
+            <ng-template #waitlist>
               <ng-container>
                 <hospitality-bot-button
                   label="Notified"

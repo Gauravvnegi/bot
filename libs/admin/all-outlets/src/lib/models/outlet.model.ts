@@ -85,21 +85,22 @@ export class MenuItem {
   id: string;
   mealPreference: MealPreferences;
   imageUrl: string;
+  popular: boolean;
 
   deserialize(input: MenuItemResponse) {
-    this.code = input.code;
-    this.name = input.name;
-    this.description = input.description;
-    this.type = input.type;
-    this.hsnCode = input.hsnCode;
-    this.category = input.category;
-    this.dineInPrice = input.dineInPrice;
-    this.deliveryPrice = input.deliveryPrice;
-    this.preparationTime = input.preparationTime;
-    this.unit = input.unit;
-    this.status = input.status;
-    this.quantity = input.quantity;
-    this.id = input.id;
+    this.code = input?.code;
+    this.name = input?.name;
+    this.description = input?.description;
+    this.type = input?.type;
+    this.hsnCode = input?.hsnCode;
+    this.category = input?.category;
+    this.dineInPrice = input?.dineInPrice;
+    this.deliveryPrice = input?.deliveryPrice;
+    this.preparationTime = input?.preparationTime;
+    this.unit = input?.unit;
+    this.status = input?.status;
+    this.quantity = input?.quantity;
+    this.id = input?.id;
     this.mealPreference = input?.mealPreference
       .replace(/[-_]/g, '')
       .toUpperCase() as MealPreferences;

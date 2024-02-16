@@ -36,7 +36,12 @@ import { ServiceListResponse } from 'libs/admin/services/src/lib/types/response'
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
-import { pairwise, startWith } from 'rxjs/operators';
+import {
+  distinctUntilChanged,
+  pairwise,
+  shareReplay,
+  startWith,
+} from 'rxjs/operators';
 import {
   addDiscountMenu,
   defaultMenu,
@@ -184,9 +189,11 @@ export class InvoiceComponent implements OnInit {
 
   ngOnInit(): void {
     const paramData = this.route.snapshot.queryParams;
+
     this.entityId = paramData.entityId
       ? paramData.entityId
       : this.globalFilterService.entityId;
+
     this.entityType = paramData.type;
     this.initForm();
     this.initOptions();
@@ -257,9 +264,14 @@ export class InvoiceComponent implements OnInit {
   }
 
   initNavRoutes() {
-    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
-      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
-    });
+    this.$subscription.add(
+      this.routesConfigService.navRoutesChanges
+        .pipe(distinctUntilChanged())
+        .subscribe((navRoutesRes) => {
+          this.initPageHeaders();
+          this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+        })
+    );
   }
 
   /**
@@ -1331,13 +1343,6 @@ export class InvoiceComponent implements OnInit {
    * Handle Invoice download
    */
 
-  /**
-   * @function ngOnDestroy to unsubscribe subscription.
-   */
-  ngOnDestroy(): void {
-    this.$subscription.unsubscribe();
-  }
-
   addNewDefaultDescription(option: DescriptionOption) {
     this.defaultDescriptionOptions = [
       ...this.defaultDescriptionOptions,
@@ -1353,7 +1358,7 @@ export class InvoiceComponent implements OnInit {
         return (
           control.value.itemId === itemId &&
           control.value.isDiscount &&
-          controlDate === targetDate  &&
+          controlDate === targetDate &&
           (!isMenu || !control.value.isRealised)
         );
       }
@@ -1697,6 +1702,10 @@ export class InvoiceComponent implements OnInit {
   }
   get isPermissionToCheckInOrOut(): boolean {
     return this.subscriptionService.show().isPermissionToEditReservation;
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }
 

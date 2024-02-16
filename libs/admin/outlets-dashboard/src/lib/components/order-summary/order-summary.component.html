@@ -2,13 +2,6 @@
   <ng-container *ngIf="selectedItems.length; else emptyView">
     <div class="btn-wrapper">
       <hospitality-bot-button
-        label="Cancel Order"
-        variant="text"
-        severity="reset"
-        (onClick)="cancelOrder()"
-        minWidth="50px"
-      ></hospitality-bot-button>
-      <hospitality-bot-button
         label="Clear"
         variant="text"
         (onClick)="clear()"
@@ -27,10 +20,8 @@
                 <p-accordion [multiple]="true">
                   <p-accordionTab click [selected]="true">
                     <p-header>
-                      <div class="heading">Dine-in</div>
-                      <span class="amount"
-                        >Qty: {{ selectedItems.length }}</span
-                      >
+                      <div class="heading">KOT {{ 1 }}</div>
+                      <span class="amount">Qty: {{ totalItemUnits }}</span>
                     </p-header>
                     <div class="items-content" formArrayName="items">
                       <ng-container
@@ -58,6 +49,11 @@
                                   itemControls.value.itemName
                                 }}</span>
                                 <span
+                                  *ngIf="
+                                    !itemFormArray
+                                      .at(j)
+                                      ?.get('viewItemInstruction')?.value
+                                  "
                                   class="instructions"
                                   (click)="
                                     toggleControlVisibility(
@@ -67,15 +63,12 @@
                                     )
                                   "
                                 >
-                                  Instruction
-                                  <img
-                                    [ngClass]="{
-                                      'rotated-up': itemFormArray
-                                        .at(j)
-                                        ?.get('viewItemInstruction')?.value
-                                    }"
-                                    src="assets/svg/union.svg"
-                                  />
+                                  {{
+                                    itemFormArray.at(j)?.get('itemInstruction')
+                                      ?.value
+                                      ? 'Edit Instruction'
+                                      : 'Add Instruction'
+                                  }}
                                 </span>
                               </div>
                             </div>
@@ -101,12 +94,23 @@
                             [props]="{
                               placeholder: 'Enter'
                             }"
+                            [viewButton]="true"
+                            (onSaveText)="
+                              toggleControlVisibility(
+                                'ItemInstruction',
+                                j,
+                                itemFormArray
+                              )
+                            "
                           ></hospitality-bot-input>
                         </ng-container>
                       </ng-container>
                     </div>
                     <div class="item-footer">
                       <span
+                        *ngIf="
+                          !kotFormArray.at(i)?.get('viewKotInstruction')?.value
+                        "
                         class="instructions"
                         (click)="
                           toggleControlVisibility(
@@ -116,15 +120,11 @@
                           )
                         "
                       >
-                        Add Instruction
-                        <img
-                          [ngClass]="{
-                            'rotated-up': kotFormArray
-                              .at(i)
-                              ?.get('viewKotInstruction')?.value
-                          }"
-                          src="assets/svg/union.svg"
-                        />
+                        {{
+                          kotFormArray.at(i)?.get('kotInstruction')?.value
+                            ? 'Edit Instruction'
+                            : 'Add Instruction'
+                        }}
                       </span>
                       <hospitality-bot-input
                         *ngIf="
@@ -134,9 +134,24 @@
                         [props]="{
                           placeholder: 'Enter'
                         }"
+                        [viewButton]="true"
+                        (onSaveText)="
+                          toggleControlVisibility(
+                            'Instruction',
+                            i,
+                            kotFormArray
+                          )
+                        "
                       ></hospitality-bot-input>
                       <div class="offer-wrapper">
+                        <p *ngIf="!viewOffer">
+                          Have an Offer?
+                          <span (click)="viewOffer = true" class="apply-btn"
+                            >Apply Offer</span
+                          >
+                        </p>
                         <hospitality-bot-multi-select
+                          *ngIf="viewOffer"
                           controlName="kotOffer"
                           [options]="itemOffers"
                           [settings]="{

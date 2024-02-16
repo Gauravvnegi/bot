@@ -162,6 +162,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
     this.offerService.entityId = this.entityId;
     this.routesConfigService.navigate({
       additionalPath: `${this.routes.createOffer.route}/${rowData.id}`,
+      queryParams: { entityId: this.entityId },
     });
   }
 

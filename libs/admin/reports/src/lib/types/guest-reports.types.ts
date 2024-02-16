@@ -78,10 +78,11 @@ export type SalesByGuestResponse = GuestHistoryResponse & {
 
 export type GuestEscalationComplaintReportData = GuestComplaintReportData & {
   escalationLevel: number;
-  frequency: number;
+  escalatedTo: string;
 };
 
 export type GuestComplaintReportData = {
+  roomType: string;
   guestName: string;
   serviceItem: string;
   complaint: string;
@@ -135,12 +136,15 @@ export type GuestEscalationComplaintReportResponse = {
   subject: string;
   fromEmail: string;
   toEmails: string;
+  recipientName: string;
   entityId: string;
   guestName: string;
   itemName: string;
   jobDuration: number;
+  roomNo: string;
   sla: number;
   status: string;
+  roomType: string;
 };
 
 interface ContactDetails {

@@ -104,10 +104,7 @@
         let-rowIndex="rowIndex"
       >
         <ng-container *ngIf="selectedReservationType === 'table'">
-          <tr
-            class="table-row"
-            (click)="editReservation(rowData?.bookingNumber)"
-          >
+          <tr class="table-row" (click)="editReservation(rowData?.orderId)">
             <td class="table-row__checkbox">
               <p-tableCheckbox
                 [value]="rowData"

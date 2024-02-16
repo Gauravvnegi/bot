@@ -1,7 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
 import { FormComponent } from '../form.components';
-import { ignoreElements } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-input',
@@ -14,8 +13,14 @@ export class InputComponent extends FormComponent {
   @Input() min: number;
   @Input() max: number;
   @Input() controlName: string;
+
   strike = false;
   inputLength = 0;
+
+  @Input() viewButton = false;
+  @Input() buttonText = 'Save';
+
+  @Output() onSaveText = new EventEmitter();
 
   constructor(public controlContainer: ControlContainer) {
     super(controlContainer);

@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { DetailsTabOptions } from '@hospitality-bot/admin/reservation';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
   BookingDetailService,
   Cols,
+  ModuleNames,
   Option,
 } from '@hospitality-bot/admin/shared';
 import * as FileSaver from 'file-saver';
@@ -27,6 +31,7 @@ import {
   RowStyles,
 } from '../../types/reports.types';
 import { distinctUntilChanged, takeUntil, shareReplay } from 'rxjs/operators';
+import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/services/notification.service';
 
 @Component({
   selector: 'hospitality-bot-reports-data-table',
@@ -63,7 +68,9 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     private globalFilterService: GlobalFilterService,
     private managePermissionService: ManagePermissionService,
     private adminUtilityService: AdminUtilityService,
-    public bookingDetailService: BookingDetailService
+    public bookingDetailService: BookingDetailService,
+    private notificationService: NotificationService,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb);
   }
@@ -273,7 +280,20 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     return styleClass.trim();
   }
 
-  onRowClick(data: {}) {}
+  onRowClick(data) {
+    if (data?.id || data?.bookingId) {
+      this.bookingDetailService.openBookingDetailSidebar({
+        ...(data.id && { bookingId: data.id }),
+        ...(data.guestId && { guestId: data.guestId }),
+        ...(data.tabKey && { tabKey: data.tabKey }),
+      });
+    } else if (data?.complaintId) {
+      this.notificationService.$requestNotification.next(data.complaintId);
+      this.routesConfigService.navigate({
+        subModuleName: ModuleNames.COMPLAINTS,
+      });
+    }
+  }
 
   get availableFilters() {
     return {

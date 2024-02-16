@@ -127,7 +127,6 @@ export class PreviewComponent implements OnInit {
 
   handleGenerateInvoice() {
     this.loadingInvoiceGenerate = true;
-    debugger;
     this.invoiceService.generateInvoice(this.reservationId).subscribe(
       (res) => {
         this.snackbarService.openSnackBarAsText(

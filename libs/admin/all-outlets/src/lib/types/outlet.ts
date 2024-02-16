@@ -103,10 +103,11 @@ export type MenuItemForm = {
   deliveryPrice: number;
   deliveryPriceCurrency: string;
   hsnCode: string;
-  taxes: TaxData[];
+  taxes?: TaxData[];
   status: boolean;
   imageUrl: string;
   itemCode: string;
+  popular: boolean;
 };
 
 export type MenuItemResponse = MenuItemForm & {

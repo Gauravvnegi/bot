@@ -109,8 +109,10 @@ export class OutletReservationTable {
   nextStates: string[];
   guestName: string;
   reservationStatus: ReservationStatus;
+  orderId: string;
 
   deserialize(input: ReservationTableResponse) {
+    this.orderId = input?.id;
     this.area = 'A1';
     this.bookingNumber = input?.reservation?.reservationNumber;
     this.date = input?.reservation?.from;

@@ -8,6 +8,8 @@ import {
   MenuForm,
 } from '../types/form';
 import { EntitySubType } from '@hospitality-bot/admin/shared';
+import { ReservationTableResponse } from '../types/reservation-table';
+import { MealPreferences } from '../types/menu-order';
 
 @Injectable({
   providedIn: 'root',
@@ -78,6 +80,43 @@ export class OutletFormService {
       from: data.checkIn,
       to: data.checkOut,
       marketSegment: data.marketSegment,
+    };
+
+    return formData;
+  }
+
+  mapOrderData(data: ReservationTableResponse) {
+    let formData = new MenuForm();
+    formData.orderInformation = {
+      search: '',
+      tableNumber: [data?.reservation.tableIdOrRoomId],
+      staff: data?.createdBy,
+      guest: data?.guest?.id,
+      numberOfPersons: data?.guest?.age,
+      menu: data?.items?.map((item) => item?.itemId),
+      orderType: data?.type,
+    };
+
+    // Map kot information
+    formData.kotInformation = {
+      kotItems: data?.kots?.map((kot) => ({
+        items: data?.items?.filter((item)=> item?.menuItem).map((item) => ({
+          id: item?.id,
+          itemName: item.menuItem?.name,
+          unit: item?.unit,
+          mealPreference: item.menuItem?.mealPreference
+            .replace(/[-_]/g, '')
+            .toUpperCase() as MealPreferences,
+          price: item.menuItem?.dineInPrice,
+          itemInstruction: item?.remarks,
+          image: item.menuItem?.imageUrl,
+          viewItemInstruction: false,
+        })),
+        kotInstruction: kot?.instructions,
+        kotOffer: [],
+        viewKotOffer: false,
+        viewKotInstruction: false,
+      })),
     };
 
     return formData;

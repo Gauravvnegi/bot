@@ -145,7 +145,7 @@ export class OrderSummaryComponent implements OnInit {
   listenForItemsChange() {
     this.$subscription.add(
       this.formService.selectedMenuItems.subscribe((res) => {
-        if (res) {
+        if (res?.length) {
           this.selectedItems = res;
           const existingIds = this.itemFormArray.value.map((item) => item.id);
           const newItems = res.filter((item) => !existingIds.includes(item.id));
@@ -198,6 +198,10 @@ export class OrderSummaryComponent implements OnInit {
       .patchValue(!array.at(index).get(controlName).value, {
         emitEvent: false,
       });
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 
   get orderInfoControls() {

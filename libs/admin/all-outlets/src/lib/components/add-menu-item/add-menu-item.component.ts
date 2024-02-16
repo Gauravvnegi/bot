@@ -8,7 +8,6 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import {
-  GlobalFilterService,
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
 import {
@@ -54,7 +53,6 @@ export class AddMenuItemComponent extends OutletBaseComponent
     router: Router,
     private pageReloadService: PageReloadService,
     private taxService: TaxService,
-    private globalFilterService: GlobalFilterService,
     private configService: ConfigService,
     private location: Location,
     protected routesConfigService: RoutesConfigService,
@@ -123,6 +121,7 @@ export class AddMenuItemComponent extends OutletBaseComponent
       description: [''],
       imageUrl: ['', [Validators.required]],
       itemCode: ['', [Validators.required]],
+      popular: [false],
     });
     if (this.menuItemId) {
       this.$subscription.add(

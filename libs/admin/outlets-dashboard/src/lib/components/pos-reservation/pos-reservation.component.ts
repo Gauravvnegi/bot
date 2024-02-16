@@ -40,6 +40,7 @@ import { reservationTabFilters } from '../../constants/data-table';
 export class PosReservationComponent implements OnInit {
   isSidebar: boolean;
   entityId: string;
+  orderId: string;
   data: PosConfig;
   userForm: FormGroup;
   checkboxForm: FormGroup;
@@ -83,6 +84,9 @@ export class PosReservationComponent implements OnInit {
     this.listenForGlobalFilters();
     this.initForm();
     this.initDetails();
+    if (this.orderId) {
+      this.initOrderData();
+    }
   }
 
   initForm() {
@@ -127,6 +131,24 @@ export class PosReservationComponent implements OnInit {
     this.getMenus();
     this.getOrderConfig();
     this.getTableData();
+  }
+
+  initOrderData() {
+    this.$subscription.add(
+      this.outletTableService
+        .getOrderById(this.entityId, this.orderId)
+        .subscribe((res) => {
+          if (res) {
+            const formData = this.formService.mapOrderData(res);
+            const menuItems = res.items
+              .filter((item) => item.menuItem)
+              .map((item) => new MenuItem().deserialize(item.menuItem));
+            menuItems.length &&
+              this.formService.selectedMenuItems.next(menuItems);
+            this.userForm.patchValue(formData);
+          }
+        })
+    );
   }
 
   getMenus() {

@@ -1,12 +1,12 @@
 import { EntitySubType } from '@hospitality-bot/admin/shared';
 import { MealPreferences, OrderTypes } from './menu-order';
-import { OrderMethod, ReservationStatus } from './reservation-table';
+import { ReservationStatus } from './reservation-table';
 
-export type MenuForm = {
+export class MenuForm {
   orderInformation: OrderInformation;
   paymentInformation: PaymentInformation;
   kotInformation: KotInformation;
-};
+}
 
 export type OrderInformation = {
   search: string;
@@ -50,7 +50,7 @@ export type MenuOrderResponse = {
   id: string;
   number: string;
   status: ReservationStatus;
-  type: OrderMethod;
+  type: OrderTypes;
   items: MenuItemResponse[];
   entityId: string;
   createdBy: string;
@@ -96,7 +96,7 @@ export type KotItemsResponse = {
   status: KotItemStatus;
   instructions: string;
   items: MenuItemResponse[];
-  preparedTime?: 387126;
+  preparedTime?: number;
 };
 
 export type CreateOrderData = {

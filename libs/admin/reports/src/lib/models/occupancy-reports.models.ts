@@ -72,16 +72,30 @@ export class HouseCountReport
     this.records = new Array<HouseCountReportData>();
 
     this.records = value.map((item) => {
+      const availableRoomPercentage = (
+        (item?.availableRoom / item?.totalRooms) *
+        100
+      ).toFixed(2);
+      const occupiedRoomPercentage = (
+        (item?.occupiedRooms / item?.totalRooms) *
+        100
+      ).toFixed(2);
+      const reservedRoomPercentage = (
+        (item?.arrivalRooms / item?.totalRooms) *
+        100
+      ).toFixed(2);
+
       return {
-        date: getFormattedDate(item?.date),
-        roomsAvailable: item?.availableRoom,
-        roomsOccupied: item?.occupiedRooms,
-        roomReserved: item?.roomNightsReserved,
-        roomsSold: item?.arrivalRooms,
+        date: item?.subTotalObject ? 'Total' : getFormattedDate(item?.date),
+        roomsAvailable: `${item?.availableRoom} (${availableRoomPercentage}%)`,
+        roomsOccupied: `${item?.occupiedRooms} (${occupiedRoomPercentage}%)`,
+        roomReserved: `${item?.arrivalRooms} (${reservedRoomPercentage}%)`,
+        roomsSold: `${item?.arrivalRooms} (${reservedRoomPercentage}%)`,
         total: item?.totalRooms,
         guestOccupied: item?.occupiedRoomGuests,
-        guestReserved: item?.inhouseGuest,
-        totalGuest: item?.totalPersonInHouse,
+        guestReserved: item?.arrivalPersons,
+        totalGuest: item?.arrivalPersons,
+        isSubTotal: item?.subTotalObject,
       };
     });
 

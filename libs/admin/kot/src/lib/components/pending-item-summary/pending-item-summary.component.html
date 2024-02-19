@@ -31,7 +31,14 @@
 </section>
 
 <ng-template #empty>
-  <div class="empty-container">
-    No Items found
-  </div>
+  <ng-container *ngIf="isLoading; else content">
+    <hospitality-bot-loader-bounce
+      class="loader"
+    ></hospitality-bot-loader-bounce>
+  </ng-container>
+  <ng-template #content>
+    <div class="empty-container">
+      No items found
+    </div>
+  </ng-template>
 </ng-template>

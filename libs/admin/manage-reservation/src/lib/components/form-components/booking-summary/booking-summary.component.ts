@@ -349,6 +349,7 @@ export class BookingSummaryComponent implements OnInit {
         },
         {
           label: 'Yes',
+          type: 'SUCCESS',
           onClick: (modelData: { remarks: string }) => {
             let updatedData = { ...data, ...modelData };
             this.updateReservation(updatedData, type);

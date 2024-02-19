@@ -305,6 +305,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         },
         {
           label: 'Yes',
+          type: 'SUCCESS',
           onClick: (modelData) => {
             this.changeStatus(status, reservationData, modelData);
             modalRef.close();

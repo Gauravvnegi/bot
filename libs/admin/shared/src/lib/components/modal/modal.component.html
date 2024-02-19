@@ -61,9 +61,8 @@
         <hospitality-bot-button
           *ngFor="let action of actions"
           [label]="action.label"
-          (onClick)="action.onClick(modelForm.value)"
+          (onClick)="onButtonClick(action)"
           [variant]="action.variant"
-          [disabled]="modelForm.invalid && action.type === 'SUCCESS'"
         ></hospitality-bot-button>
       </ng-container>
     </div>

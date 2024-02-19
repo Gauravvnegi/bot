@@ -12,6 +12,7 @@ import { PendingItemSummaryList } from '../../models/kot-pending-item.model';
 export class PendingItemSummaryComponent implements OnInit {
   @Input() itemPendingSummaryList: ItemPendingSummaryList[];
   subscription = new Subscription();
+  isLoading: boolean = false;
 
   _entityId: string;
   @Input() set entityId(value: string) {
@@ -37,12 +38,20 @@ export class PendingItemSummaryComponent implements OnInit {
   }
 
   initSummaryList() {
+    this.isLoading = true;
     this.subscription.add(
-      this.kotService.getPendingItemSummary(this._entityId).subscribe((res) => {
-        this.itemPendingSummaryList = new PendingItemSummaryList().deserialize(
-          res
-        ).records;
-      })
+      this.kotService.getPendingItemSummary(this._entityId).subscribe(
+        (res) => {
+          this.itemPendingSummaryList = new PendingItemSummaryList().deserialize(
+            res
+          ).records;
+
+          this.isLoading = false;
+        },
+        (err) => {
+          this.isLoading = false;
+        }
+      )
     );
   }
 

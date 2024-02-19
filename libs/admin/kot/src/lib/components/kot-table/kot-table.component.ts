@@ -110,7 +110,7 @@ export class KotTableComponent extends BaseDatatableComponent
    * @returns
    * @description override the base property method to handel QuickFilter locally
    */
-  changePage(page) {
+  changePage(page: number) {
     let keys: string[] = [];
     const data = this.getSelectedQuickReplyFilters();
 

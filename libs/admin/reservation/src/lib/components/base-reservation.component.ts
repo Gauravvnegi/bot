@@ -1,30 +1,30 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import {
+  HotelDetailService,
+  NavRouteOptions,
+} from '@hospitality-bot/admin/shared';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
+import { Subject, Subscription } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
+import { ReservationForm } from '../../../../manage-reservation/src/lib/constants/form';
+import { JourneyState } from '../../../../manage-reservation/src/lib/constants/reservation';
+import { ReservationType } from '../../../../manage-reservation/src/lib/constants/reservation-table';
+import { manageReservationRoutes } from '../../../../manage-reservation/src/lib/constants/routes';
 import {
   OfferData,
   OfferList,
   ReservationCurrentStatus,
   SummaryData,
 } from '../../../../manage-reservation/src/lib/models/reservations.model';
-import {
-  EntitySubType,
-  HotelDetailService,
-  NavRouteOptions,
-} from '@hospitality-bot/admin/shared';
-import { Subject, Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { manageReservationRoutes } from '../../../../manage-reservation/src/lib/constants/routes';
-import { ReservationForm } from '../../../../manage-reservation/src/lib/constants/form';
-import { JourneyState } from '../../../../manage-reservation/src/lib/constants/reservation';
-import { ReservationType } from '../../../../manage-reservation/src/lib/constants/reservation-table';
 import { FormService } from '../../../../manage-reservation/src/lib/services/form.service';
-import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-outlet-base',
@@ -62,6 +62,7 @@ export class BaseReservationComponent {
   ) {
     this.formService.resetData();
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
+    debugger;
     const { navRoutes, title } = manageReservationRoutes[
       this.reservationId ? 'editReservation' : 'addReservation'
     ];
@@ -72,9 +73,16 @@ export class BaseReservationComponent {
   }
 
   initNavRoutes() {
-    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
-      this.routes = [...navRoutesRes, ...this.routes];
-    });
+    this.$subscription.add(
+      this.routesConfigService.navRoutesChanges
+        .pipe(
+          filter((navRoutesRes) => navRoutesRes.length > 0),
+          take(1)
+        )
+        .subscribe((navRoutesRes) => {
+          this.routes = [...navRoutesRes, ...this.routes];
+        })
+    );
   }
 
   setFormDisability(
@@ -203,5 +211,9 @@ export class BaseReservationComponent {
       keyof ReservationForm['paymentRule'],
       AbstractControl
     >;
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

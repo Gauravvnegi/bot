@@ -134,7 +134,8 @@
           [props]="{
             showChips: false,
             isAsync: true,
-            placeholder: 'Select'
+            placeholder: 'Select',
+            emitResponse: true
           }"
           [apiConfig]="{
             entityId: entityId,
@@ -150,7 +151,7 @@
           }"
           (clickedOption)="roomTypeChange($event)"
           [reinitialize]="reinitializeRooms"
-          [initItems]="true"
+          [initItems]="initItems"
         ></hospitality-bot-quick-select>
         <ng-container *ngIf="!reservationId">
           <hospitality-bot-select

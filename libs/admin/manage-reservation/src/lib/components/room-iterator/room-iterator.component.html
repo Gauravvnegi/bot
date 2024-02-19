@@ -42,9 +42,7 @@
                 isAsync: false
               }"
               [options]="
-                field.options
-                  ? field.options
-                  : controls.get('rooms').value
+                field.options ? field.options : controls.get('rooms').value
               "
               [disabled]="field.disabled"
               [settings]="{ showHeader: false }"

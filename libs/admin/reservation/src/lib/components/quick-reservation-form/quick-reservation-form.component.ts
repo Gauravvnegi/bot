@@ -82,9 +82,10 @@ export class QuickReservationFormComponent implements OnInit {
   isExternalBooking = false;
   isCheckinCompleted = false;
   isCheckedout = false;
+  initItems = false;
 
   selectedGuest: Option;
-  defaultRoomType: IGRoomType;
+  defaultRoomTypeId: string;
   selectedRoomType: RoomTypeOption;
   selectedAgent: AgentTableResponse;
 
@@ -109,6 +110,7 @@ export class QuickReservationFormComponent implements OnInit {
   @Input() set isNewBooking(value: boolean) {
     if (value === true) {
       this.isDataLoaded = true;
+      this.initItems = true;
     }
   }
 
@@ -118,7 +120,7 @@ export class QuickReservationFormComponent implements OnInit {
       const val = value[key];
       this[key] = val;
     }
-    if (this.defaultRoomType) this.initDetails();
+    if (this.defaultRoomTypeId) this.initDetails();
   }
 
   constructor(
@@ -147,12 +149,12 @@ export class QuickReservationFormComponent implements OnInit {
       this.roomControls.roomTypeId.disable({ emitEvent: false });
     } else {
       this.isDataLoaded = true;
+      this.initItems = true;
       this.inputControls.roomInformation.patchValue({
-        roomTypeId: this.defaultRoomType.value,
+        roomTypeId: this.defaultRoomTypeId,
         roomNumber: this.selectedRoom,
         roomNumbers: [this.selectedRoom],
       });
-      this.setRoomInfo(this.defaultRoomType);
     }
   }
 
@@ -221,7 +223,7 @@ export class QuickReservationFormComponent implements OnInit {
 
     this.entityId = this.globalFilterService.entityId;
     this.listenForDateChanges();
-    if (!this.reservationId) this.listenForRoomChanges();
+    this.listenForRoomChanges();
   }
 
   listenForRoomChanges() {
@@ -254,10 +256,10 @@ export class QuickReservationFormComponent implements OnInit {
       }
     });
     this.roomControls.adultCount.valueChanges.subscribe((res) => {
-      res && updateRateImprovement;
+      res && updateRateImprovement();
     });
     this.roomControls.childCount.valueChanges.subscribe((res) => {
-      res && updateRateImprovement;
+      res && updateRateImprovement();
     });
   }
 
@@ -344,14 +346,9 @@ export class QuickReservationFormComponent implements OnInit {
               agent: formData.agent,
               company: formData?.company,
             });
-            this.roomOptions = this.defaultRoomType.rooms.map((room) => ({
-              label: room.roomNumber.toString(),
-              value: room.roomNumber.toString(),
-            }));
-
             this.userForm.patchValue(data);
             this.inputControls.roomInformation.patchValue(roomInformation[0]);
-
+            this.initItems = true;
             this.isCheckinCompleted =
               res?.status === ReservationCurrentStatus.INHOUSE;
             this.isCheckedout =
@@ -423,34 +420,38 @@ export class QuickReservationFormComponent implements OnInit {
 
   // Patch data for selected room type
   roomTypeChange(event: RoomTypeResponse) {
-    if (event && event.id && !this.reservationId) {
+    if (event && event.id) {
       this.selectedRoomType = this.formService.setReservationRoomType(event);
       if (
         !this.selectedRoomType?.rooms.some(
           (item) => item?.value === this.selectedRoom
-        )
+        ) &&
+        !this.reservationId
       )
         this.roomControls.roomNumbers.reset();
       this.setRoomInfo();
     }
   }
 
-  setRoomInfo(defaultRoomType?: IGRoomType) {
-    if (defaultRoomType || this.selectedRoomType) {
-      const roomType = defaultRoomType
-        ? defaultRoomType
-        : this.selectedRoomType;
-      this.ratePlans = (roomType?.ratePlans as ReservationRatePlan[]) ?? [];
-      this.roomOptions = ((roomType?.rooms as Option[]) ?? []).map((room) => ({
+  setRoomInfo() {
+    if (this.selectedRoomType) {
+      this.ratePlans =
+        (this.selectedRoomType?.ratePlans as ReservationRatePlan[]) ?? [];
+      this.roomOptions = this.selectedRoomType?.rooms.map((room) => ({
         label: room?.roomNumber,
         value: room?.roomNumber,
       }));
-      this.inputControls.roomInformation.patchValue({
-        ratePlanId: this.ratePlans?.filter((rateplan) => rateplan.isBase)[0]
-          .value,
-        adultCount: 1,
-        childCount: 0,
-      });
+      !this.reservationId &&
+        this.inputControls.roomInformation.patchValue({
+          ratePlanId: this.ratePlans?.filter((rateplan) => rateplan.isBase)[0]
+            .value,
+          adultCount: 1,
+          childCount: 0,
+        });
+    }
+    if (this.reservationId) {
+      const roomNumber = this.roomControls.roomNumber.value;
+      this.roomOptions.unshift({ label: roomNumber, value: roomNumber });
     }
   }
 
@@ -692,7 +693,7 @@ export class QuickReservationFormComponent implements OnInit {
 export type QuickReservationConfig = {
   reservationId?: string;
   selectedRoom?: string;
-  defaultRoomType?: IGRoomType;
+  defaultRoomTypeId?: string;
   date?: IGCol;
 };
 

@@ -86,21 +86,26 @@ export class KotTableComponent extends BaseDatatableComponent
   }
 
   initTableValue() {
+    this.loading = true;
     this.$subscription.add(
       this.kotService
         .getAllOrders(this.entityId, this.getQueryConfig())
-        .subscribe((res) => {
-          const data = new KotList().deserialize(res);
-          this.values = data?.records;
-          this.backUpData = this.values; //backup data
+        .subscribe(
+          (res) => {
+            const data = new KotList().deserialize(res);
+            this.values = data?.records;
+            this.backUpData = this.values; //backup data
 
-          this.initFilters(
-            data?.entityTypeCounts,
-            this.orderConfig.kotTimeFilter,
-            data?.total,
-            kotStatusDetails
-          );
-        })
+            this.initFilters(
+              data?.entityTypeCounts,
+              this.orderConfig.kotTimeFilter,
+              data?.total,
+              kotStatusDetails
+            );
+          },
+          this.handelError,
+          this.handleFinal
+        )
     );
   }
 
@@ -110,7 +115,7 @@ export class KotTableComponent extends BaseDatatableComponent
    * @returns
    * @description override the base property method to handel QuickFilter locally
    */
-  changePage(page) {
+  changePage(page: number) {
     let keys: string[] = [];
     const data = this.getSelectedQuickReplyFilters();
 
@@ -168,6 +173,14 @@ export class KotTableComponent extends BaseDatatableComponent
     };
     return config;
   }
+
+  handleFinal = () => {
+    this.loading = false;
+  };
+
+  handelError = ({ error }) => {
+    this.loading = false;
+  };
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();

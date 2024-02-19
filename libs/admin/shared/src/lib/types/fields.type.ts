@@ -25,7 +25,7 @@ export type IteratorField = {
 
 export type ModalAction = {
   label: string;
-  onClick: () => void;
+  onClick: (value) => void;
   variant: ButtonVariant;
   type?: 'SUCCESS' | 'REJECT';
 };

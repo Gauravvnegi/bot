@@ -17,7 +17,7 @@ export class ModalComponent {
   isDate: boolean = false;
   toDate: string;
   fromDate: string;
-  remarksValidators: Validators[];
+  remarksValidators: Validators[] = [Validators.required];
 
   constructor(
     private fb: FormBuilder,
@@ -73,5 +73,13 @@ export class ModalComponent {
   close() {
     this.dialogRef.close();
     this.onClose.emit();
+  }
+
+  onButtonClick(value: ModalAction) {
+    if (value.type === 'SUCCESS' && this.modelForm.invalid && this.isRemarks) {
+      this.modelForm.markAllAsTouched();
+    } else {
+      value.onClick(this.modelForm.value);
+    }
   }
 }

@@ -13,10 +13,10 @@ export type HistoryAndForecastReportResponse = ManagerReportResponse & {
 
 export type HouseCountReportData = {
   date: string;
-  roomsAvailable: number;
-  roomsOccupied: number;
-  roomReserved: number;
-  roomsSold: number;
+  roomsAvailable: string;
+  roomsOccupied: string;
+  roomReserved: string;
+  roomsSold: string;
   total: number;
   guestOccupied: number;
   guestReserved: number;
@@ -84,5 +84,5 @@ export type HouseCountReportResponse = {
   lateCheckOutAmount: number;
   noShowNightcount: number;
   cancellationNightCount: number;
-  subTotalObject: false;
+  subTotalObject: boolean;
 };

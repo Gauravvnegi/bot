@@ -27,7 +27,6 @@ import { FormService } from '../../../services/form.service';
 import {
   BookingDetailService,
   EntitySubType,
-  EntityType,
   ModuleNames,
   openModal,
 } from '@hospitality-bot/admin/shared';
@@ -57,7 +56,6 @@ export class BookingSummaryComponent implements OnInit {
   dateDifference: number = 1;
 
   heading = '';
-  outletId = '';
   externalBooking = false;
   offerResponse: ManualOffer;
 
@@ -424,7 +422,6 @@ export class BookingSummaryComponent implements OnInit {
 }
 
 type BookingSummaryInfo = {
-  outletId?: string;
   heading: string;
   occupancyDetails?: OccupancyDetails;
   externalBooking: boolean;

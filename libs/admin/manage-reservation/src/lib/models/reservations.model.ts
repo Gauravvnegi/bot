@@ -168,8 +168,6 @@ export class ReservationList {
   }
 }
 
-export class Outlets {}
-
 export class EntityTypeCounts {
   ALL: number;
   AGENT: number;

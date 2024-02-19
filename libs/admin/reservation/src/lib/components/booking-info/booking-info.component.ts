@@ -154,7 +154,7 @@ export class BookingInfoComponent implements OnInit {
   }
 
   /**
-   * Listen for date changes in ROOM_TYPE and outlets.
+   * Listen for date changes in ROOM_TYPE.
    */
   listenForDateChange() {
     const startTime = moment(this.startMinDate).unix() * 1000;

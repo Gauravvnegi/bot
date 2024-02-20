@@ -32,6 +32,7 @@ export type KotInformation = {
     kotOffer: string[];
     viewKotOffer?: boolean;
     viewKotInstruction?: boolean;
+    id?: string;
   }[];
 };
 

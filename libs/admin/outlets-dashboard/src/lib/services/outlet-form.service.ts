@@ -19,6 +19,9 @@ export class OutletFormService {
     MenuItem[]
   >([]);
 
+  orderFormData: BehaviorSubject<
+    ReservationTableResponse
+  > = new BehaviorSubject<ReservationTableResponse>(null);
   entityId: string;
   // Method to add an item to the selectedMenuItems array
   addItemToSelectedItems(item: MenuItem): void {
@@ -30,6 +33,7 @@ export class OutletFormService {
   // Method to remove an item from the selectedMenuItems array
   removeItemFromSelectedItems(itemId?: string): void {
     const currentItems = this.selectedMenuItems.value;
+
     if (!currentItems) return; // No items to remove
     const updatedItems = itemId
       ? currentItems.filter((selectedItem) => selectedItem.id !== itemId)
@@ -57,6 +61,7 @@ export class OutletFormService {
           amount: item.price,
           remarks: item.itemInstruction,
         })),
+        id: item?.id,
       })),
       outletType: EntitySubType.RESTAURANT,
       guestId: orderInformation.guest,
@@ -92,7 +97,7 @@ export class OutletFormService {
       tableNumber: [data?.reservation.tableIdOrRoomId],
       staff: data?.createdBy,
       guest: data?.guest?.id,
-      numberOfPersons: data?.guest?.age,
+      numberOfPersons: data?.reservation.occupancyDetails.maxAdult,
       menu: data?.items?.map((item) => item?.itemId),
       orderType: data?.type,
     };
@@ -100,25 +105,28 @@ export class OutletFormService {
     // Map kot information
     formData.kotInformation = {
       kotItems: data?.kots?.map((kot) => ({
-        items: data?.items?.filter((item)=> item?.menuItem).map((item) => ({
-          id: item?.id,
-          itemName: item.menuItem?.name,
-          unit: item?.unit,
-          mealPreference: item.menuItem?.mealPreference
-            .replace(/[-_]/g, '')
-            .toUpperCase() as MealPreferences,
-          price: item.menuItem?.dineInPrice,
-          itemInstruction: item?.remarks,
-          image: item.menuItem?.imageUrl,
-          viewItemInstruction: false,
-        })),
+        items: data?.items
+          ?.filter((item) => item?.menuItem)
+          .map((item) => ({
+            id: item?.id,
+            itemName: item.menuItem?.name,
+            unit: item?.unit,
+            mealPreference: item.menuItem?.mealPreference
+              .replace(/[-_]/g, '')
+              .toUpperCase() as MealPreferences,
+            price: item.menuItem?.dineInPrice,
+            itemInstruction: item?.remarks,
+            image: item.menuItem?.imageUrl,
+            viewItemInstruction: false,
+          })),
         kotInstruction: kot?.instructions,
         kotOffer: [],
         viewKotOffer: false,
         viewKotInstruction: false,
+        id: kot?.id,
       })),
     };
-
+    this.orderFormData.next(data);
     return formData;
   }
 }

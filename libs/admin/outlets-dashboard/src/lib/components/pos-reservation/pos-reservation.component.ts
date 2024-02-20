@@ -13,7 +13,10 @@ import {
   MenuList,
 } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
-import { Menu } from 'libs/admin/all-outlets/src/lib/types/outlet';
+import {
+  Menu,
+  MenuItemResponse,
+} from 'libs/admin/all-outlets/src/lib/types/outlet';
 import { Subscription } from 'rxjs';
 import {
   MealPreferences,
@@ -62,7 +65,7 @@ export class PosReservationComponent implements OnInit {
   loadingMenuItems: boolean = false;
   isPopular = true;
 
-  searchApi: string;
+  searchApi: string = '/api/v1/search/menu-items';
   selectedPreference: MealPreferences = MealPreferences.ALL;
 
   areaList: Option[] = [];
@@ -143,8 +146,9 @@ export class PosReservationComponent implements OnInit {
             const menuItems = res.items
               .filter((item) => item.menuItem)
               .map((item) => new MenuItem().deserialize(item.menuItem));
-            menuItems.length &&
-              this.formService.selectedMenuItems.next(menuItems);
+
+            // menuItems.length &&
+            //   this.formService.selectedMenuItems.next(menuItems);
             this.userForm.patchValue(formData);
           }
         })
@@ -314,9 +318,22 @@ export class PosReservationComponent implements OnInit {
     return selectedOrderType === OrderTypes.DINE_IN;
   }
 
-  clearSearch() {}
+  clearSearch() {
+    this.orderInfoControls.search.patchValue('', { emitEvent: false });
+    this.getMenuItems();
+  }
 
-  getSearchValue(event: { status: boolean; response? }) {}
+  getSearchValue(event: { status: boolean; response: MenuItemResponse[] }) {
+    if (event?.response) {
+      const cards =
+        event.response?.map((item: MenuItemResponse) =>
+          new MenuItem().deserialize(item)
+        ) ?? [];
+      this.cardData = cards;
+    } else {
+      this.getMenuItems();
+    }
+  }
 
   postToRoom() {}
 

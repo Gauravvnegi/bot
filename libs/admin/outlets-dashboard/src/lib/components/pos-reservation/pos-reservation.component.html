@@ -51,6 +51,8 @@
         (clear)="clearSearch()"
         (search)="getSearchValue($event)"
         [searchApi]="searchApi"
+        searchKeyLabel="?key"
+        [textLimit]="1"
         [props]="{
           placeholder: 'Search by Dish Name or Code'
         }"
@@ -221,7 +223,9 @@
       </div>
     </div>
     <div class="summary-section">
-      <hospitality-bot-order-summary></hospitality-bot-order-summary>
+      <hospitality-bot-order-summary
+        [orderId]="orderId"
+      ></hospitality-bot-order-summary>
     </div>
   </div>
 </div>

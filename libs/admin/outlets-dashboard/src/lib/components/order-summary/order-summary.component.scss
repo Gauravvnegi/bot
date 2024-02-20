@@ -30,6 +30,10 @@
 }
 
 .items-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
   .heading {
     color: $primary;
     font-weight: 500;
@@ -165,6 +169,8 @@
   }
 }
 
-.rotated-up {
-  transform: rotate(180deg);
+.loader {
+  height: 65vh;
+  width: 100%;
+  @include flex-justify-align-center;
 }

@@ -760,7 +760,7 @@ export class InvoiceComponent implements OnInit {
           return;
         }
 
-        const newDiscountValue = +(discountValue * currentUnitQuantity.value);
+        const newDiscountValue = +(discountValue * currentUnitQuantity);
         currentFormGroup.patchValue({ debitAmount: newDebitAmount });
         discountControl.patchValue({
           creditAmount: newDiscountValue,
@@ -882,6 +882,16 @@ export class InvoiceComponent implements OnInit {
     const priceControls = this.getTableRowValue(index);
 
     /**
+     * To update or add discount
+     */
+    const itemId = priceControls.itemId;
+    const reservationItemId = priceControls.reservationItemId;
+
+    const priceItem = this.getAllItemWithSameItemId(itemId).find(
+      (item) => !item.control.value.taxId && !item.control.value.isDiscount
+    );
+
+    /**
      * If delete item action is performed
      */
     if (value === MenuActionItem.DELETE_ITEM) {
@@ -890,15 +900,35 @@ export class InvoiceComponent implements OnInit {
     }
 
     if (value === MenuActionItem.REMOVE_DISCOUNT) {
-      const itemsToRemove = this.tableFormArray.controls.filter(
-        (control: Controls) =>
-          control.value.isDiscount && !control.value.isRealised
-      );
+      let removeRef: DynamicDialogRef;
+      const inputData: Partial<AddDiscountComponent> = {
+        discountAction: value,
+        serviceName: priceItem.control.value.description,
+      };
+      removeRef = openModal({
+        config: {
+          width: '40%',
+          styleClass: 'confirm-dialog',
+          data: inputData,
+        },
+        component: AddDiscountComponent,
+        dialogService: this.dialogService,
+      });
 
-      itemsToRemove.forEach((item) => {
-        this.tableFormArray.removeAt(
-          this.tableFormArray.controls.indexOf(item)
-        );
+      removeRef.onClose.subscribe((res?: boolean) => {
+        if (res) {
+          const itemsToRemove = this.tableFormArray.controls.filter(
+            (control: Controls) =>
+              control.value.isDiscount && !control.value.isRealised
+          );
+
+          itemsToRemove.forEach((item) => {
+            this.tableFormArray.removeAt(
+              this.tableFormArray.controls.indexOf(item)
+            );
+          });
+          priceControls.chargeType === 'ROOM' && this.handleSave();
+        }
       });
       return;
     }
@@ -910,16 +940,6 @@ export class InvoiceComponent implements OnInit {
       this.handleAdditionalCharges(AdditionalChargesType.ALLOWANCE, id);
       return;
     }
-
-    /**
-     * To update or add discount
-     */
-    const itemId = priceControls.itemId;
-    const reservationItemId = priceControls.reservationItemId;
-
-    const priceItem = this.getAllItemWithSameItemId(itemId).find(
-      (item) => !item.control.value.taxId && !item.control.value.isDiscount
-    );
 
     const reservationItems = this.getAllItemWithSameItemId(itemId).filter(
       (item) => !item.control.value.taxId && !item.control.value.isDiscount

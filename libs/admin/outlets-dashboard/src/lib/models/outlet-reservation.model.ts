@@ -85,11 +85,10 @@ export class OutletReservationTableList {
   entityTypeCounts: EntityState<string>;
   total: number;
   deserialize(input: ReservationTableListResponse) {
-    const reservationsWithReservation =
-      input?.records.filter((item) => item.reservation) ?? [];
-    this.reservationData = reservationsWithReservation.map((item) =>
-      new OutletReservationTable().deserialize(item)
-    );
+    this.reservationData =
+      input.records.map((item) =>
+        new OutletReservationTable().deserialize(item)
+      ) ?? [];
     this.entityTypeCounts = input.entityTypeCounts;
     this.total = input.total;
     return this;
@@ -114,7 +113,7 @@ export class OutletReservationTable {
   deserialize(input: ReservationTableResponse) {
     this.orderId = input?.id;
     this.area = 'A1';
-    this.bookingNumber = input?.reservation?.reservationNumber;
+    this.bookingNumber = input?.reservation?.reservationNumber ?? input?.number;
     this.date = input?.reservation?.from;
     // this.time = input?.reservation.;
     // this.paymentMethod = ;

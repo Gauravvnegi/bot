@@ -20,6 +20,7 @@ import * as FileSaver from 'file-saver';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Clipboard } from '@angular/cdk/clipboard';
 import {
+  OrderTableType,
   ReservationStatusDetails,
   posCols,
   reservationTypes,
@@ -54,6 +55,8 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
 
+  selectedTab: OrderTableType;
+
   readonly reservationStatusDetails = ReservationStatusDetails;
 
   constructor(
@@ -70,9 +73,15 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
+    this.initDetails();
+  }
+
+  initDetails() {
     this.entityId = this.formService.entityId;
     this.tableFG?.addControl('reservationType', new FormControl(''));
     this.setReservationType(this.reservationTypes[0].value);
+    this.selectedTab = OrderTableType.ALL;
+    this.isAllTabFilterRequired = true;
     this.cols = posCols;
   }
 
@@ -116,6 +125,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
       params: this.adminUtilityService.makeQueryParams([
         {
           order: 'DESC',
+          entityType: this.selectedTab,
           includeKot: true,
           raw: true,
           offset: this.first,

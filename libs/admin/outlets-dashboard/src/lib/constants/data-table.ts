@@ -476,3 +476,11 @@ export const menuCardData: MenuItemCard[] = [
     image: 'assets/images/menu-item.jpg',
   },
 ];
+
+export enum OrderTableType {
+  ALL = 'ALL',
+  ONLINE_ORDER = 'ONLINE_ORDER',
+  TAKE_AWAY = 'TAKE_AWAY',
+  DINE_IN = 'DINE_IN',
+  DELIVERY = 'DELIVERY',
+}

@@ -1,20 +1,9 @@
 <hospitality-bot-navigation-header
-  [heading]="'Welcome To Reservation'"
+  class="nav-header"
   [routes]="navRoutes"
   [isBack]="false"
   *ngIf="!showCalendarView"
 >
 </hospitality-bot-navigation-header>
 
-<hospitality-bot-entity-tab-filter
-  [config]="{
-    isSticky: true,
-    extraGap: 70,
-    scrollBoundary: 25,
-    isAllOutletTabFilter: false
-  }"
-  class="tab-filter"
-  (onEntityTabFilterChanges)="onEntityTabFilterChanges($event)"
-  *ngIf="!showCalendarView"
-></hospitality-bot-entity-tab-filter>
 <hospitality-bot-manage-reservation-data-table></hospitality-bot-manage-reservation-data-table>

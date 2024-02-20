@@ -41,8 +41,8 @@ export class AddDiscountComponent implements OnInit {
     const data = dialogConfig?.data as DiscountInput;
     const discountAction = data.discountAction;
     if (data) {
-      this.serviceName = data.serviceName;
-      this.billItems = data.billItems;
+      this.serviceName = data?.serviceName;
+      this.billItems = data?.billItems;
       if (discountAction) {
         this.isAdd = discountAction === MenuActionItem.ADD_DISCOUNT;
         this.isRemove = discountAction === MenuActionItem.REMOVE_DISCOUNT;
@@ -52,7 +52,7 @@ export class AddDiscountComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initForm();
+    if (!this.isRemove) this.initForm();
   }
 
   initForm(): void {
@@ -144,6 +144,10 @@ export class AddDiscountComponent implements OnInit {
   }
 
   handleApply() {
+    if (this.discountForm.invalid) {
+      this.discountForm.markAllAsTouched();
+      return;
+    }
     this.dialogRef.close({
       discountType: this.discountForm.get('discountType').value,
       discountValue: this.discountForm.get('discountValue').value,
@@ -153,19 +157,7 @@ export class AddDiscountComponent implements OnInit {
   }
 
   handleRemove() {
-    const resetTotalDiscount: { [date: number]: number } = {};
-
-    // Set each date to 0
-    this.billItems.forEach((item) => {
-      resetTotalDiscount[item.date] = 0;
-    });
-
-    this.dialogRef.close({
-      discountType: this.discountForm.get('discountType').value,
-      discountValue: this.discountForm.get('discountValue').value ?? 0,
-      totalDiscount: resetTotalDiscount,
-      isEditable: this.billItems[0].chargeType !== 'ROOM',
-    });
+    this.dialogRef.close(true);
   }
 
   close() {

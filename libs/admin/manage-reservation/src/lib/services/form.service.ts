@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 import { ReservationTableValue } from '../constants/reservation-table';
-import { SelectedEntity } from '../types/reservation.type';
 import {
-  OutletFormData,
   RoomReservationFormData,
   SourceData,
 } from '../types/forms.types';
@@ -44,14 +41,7 @@ export class FormService {
     null
   );
 
-  public selectedEntity = new BehaviorSubject<SelectedEntity>(null);
-
-  getSelectedEntity(): Observable<SelectedEntity> {
-    return this.selectedEntity.asObservable().pipe(distinctUntilChanged());
-  }
-
   reservationDate = new BehaviorSubject<Date>(null);
-  reservationDateAndTime = new BehaviorSubject<number>(0);
 
   selectedTab = ReservationTableValue.ALL;
   enableAccordion: boolean = false;
@@ -196,72 +186,6 @@ export class FormService {
     }
 
     return roomReservationData;
-  }
-
-  mapOutletReservationData(
-    input: ReservationForm,
-    outletType: string,
-    id?: string
-  ) {
-    const reservationData = new OutletFormData();
-    // Reservation Info
-    reservationData.id = id ?? '';
-    reservationData.eventType = input.reservationInformation?.eventType ?? '';
-    reservationData.from =
-      input.reservationInformation?.dateAndTime ??
-      input.reservationInformation?.from;
-    reservationData.to =
-      input.reservationInformation?.dateAndTime ??
-      input.reservationInformation?.to;
-    reservationData.reservationType =
-      input.reservationInformation?.reservationType ??
-      input.reservationInformation?.status;
-    reservationData.sourceName = input.reservationInformation?.sourceName;
-    reservationData.source = input.reservationInformation?.source;
-    reservationData.marketSegment = input.reservationInformation?.marketSegment;
-    reservationData.status = input.reservationInformation?.status;
-    reservationData.reservationType = input.reservationInformation?.status;
-
-    // Booking/order/event info
-    reservationData.occupancyDetails = {
-      maxAdult:
-        input.orderInformation?.numberOfAdults ??
-        input.bookingInformation?.numberOfAdults,
-    };
-    reservationData.items =
-      input.bookingInformation?.spaItems.map((item) => ({
-        itemId: item.serviceName,
-        unit: item?.unit ?? 1,
-        amount: item.amount,
-      })) ??
-      input.orderInformation?.menuItems.map((item) => ({
-        itemId: item.menuItems,
-        unit: item?.unit ?? 1,
-        amount: item.amount,
-      })) ??
-      input.eventInformation?.venueInfo.map((item) => ({
-        itemId: item.description,
-        unit: item?.unit ?? 1,
-        amount: item.amount,
-      }));
-
-    // Payment Info
-    reservationData.paymentMethod = input.paymentMethod?.paymentMethod ?? '';
-    reservationData.paymentRemark = input.paymentMethod?.paymentRemark ?? '';
-    reservationData.pricingDetails = {
-      totalPaidAmount: input.paymentMethod?.totalPaidAmount ?? 0,
-    };
-
-    reservationData.guestId = input.guestInformation?.guestDetails;
-    reservationData.offerId = input?.offerId ?? '';
-    reservationData.outletType = outletType;
-
-    reservationData.specialRequest =
-      outletType === 'RESTAURANT'
-        ? input.orderInformation.kotInstructions
-        : input.instructions?.specialInstructions;
-
-    return reservationData;
   }
 
   setReservationRoomType(data: RoomTypeResponse | RoomTypeOption) {

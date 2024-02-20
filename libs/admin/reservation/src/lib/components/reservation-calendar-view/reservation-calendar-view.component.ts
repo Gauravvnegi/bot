@@ -635,7 +635,7 @@ export class ReservationCalendarViewComponent implements OnInit {
       room:
         roomType.data.values.find((value) => value.id === id && id)?.rowValue ??
         event.rowValue,
-      roomType: roomType,
+      roomTypeId: roomType.value,
       date: event?.colValue,
     };
     this.viewReservationForm = true;
@@ -962,7 +962,7 @@ export type QuickFormProps = {
   reservationId: string;
   room: string | number;
   date?: number | string;
-  roomType: IGRoomType;
+  roomTypeId: string;
 };
 
 export type IGDate = {

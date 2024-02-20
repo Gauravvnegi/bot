@@ -1,31 +1,30 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import {
+  HotelDetailService,
+  NavRouteOptions,
+} from '@hospitality-bot/admin/shared';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
+import { Subject, Subscription } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
+import { ReservationForm } from '../../../../manage-reservation/src/lib/constants/form';
+import { JourneyState } from '../../../../manage-reservation/src/lib/constants/reservation';
+import { ReservationType } from '../../../../manage-reservation/src/lib/constants/reservation-table';
+import { manageReservationRoutes } from '../../../../manage-reservation/src/lib/constants/routes';
 import {
   OfferData,
   OfferList,
   ReservationCurrentStatus,
   SummaryData,
 } from '../../../../manage-reservation/src/lib/models/reservations.model';
-import { SelectedEntity } from '../../../../manage-reservation/src/lib/types/reservation.type';
-import {
-  EntitySubType,
-  HotelDetailService,
-  NavRouteOptions,
-} from '@hospitality-bot/admin/shared';
-import { Subject, Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { manageReservationRoutes } from '../../../../manage-reservation/src/lib/constants/routes';
-import { ReservationForm } from '../../../../manage-reservation/src/lib/constants/form';
-import { JourneyState } from '../../../../manage-reservation/src/lib/constants/reservation';
-import { ReservationType } from '../../../../manage-reservation/src/lib/constants/reservation-table';
 import { FormService } from '../../../../manage-reservation/src/lib/services/form.service';
-import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-outlet-base',
@@ -36,9 +35,7 @@ export class BaseReservationComponent {
   fields: IteratorField[];
 
   entityId: string;
-  outletId?: string;
   reservationId: string;
-  bookingType: string;
   totalPaidAmount = 0;
 
   summaryData: SummaryData;
@@ -52,8 +49,6 @@ export class BaseReservationComponent {
 
   offersList: OfferList;
   selectedOffer: OfferData;
-
-  selectedEntity: SelectedEntity;
 
   $subscription = new Subscription();
   cancelRequests$ = new Subject<void>();
@@ -73,23 +68,20 @@ export class BaseReservationComponent {
     this.routes = navRoutes;
     this.pageTitle = title;
     this.summaryData = new SummaryData().deserialize();
-    this.getSelectedEntity();
     this.initNavRoutes();
   }
 
-  getSelectedEntity() {
-    const outletId = this.activatedRoute.snapshot.queryParams.entityId;
-
-    const properties = this.hotelDetailService.getPropertyList('reservation');
-    const selectedOutlet = properties.filter((item) => item.value === outletId);
-
-    this.selectedEntity = selectedOutlet[0];
-  }
-
   initNavRoutes() {
-    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
-      this.routes = [...navRoutesRes, ...this.routes];
-    });
+    this.$subscription.add(
+      this.routesConfigService.navRoutesChanges
+        .pipe(
+          filter((navRoutesRes) => navRoutesRes.length > 0),
+          take(1)
+        )
+        .subscribe((navRoutesRes) => {
+          this.routes = [...navRoutesRes, ...this.routes];
+        })
+    );
   }
 
   setFormDisability(
@@ -98,16 +90,12 @@ export class BaseReservationComponent {
   ): void {
     // this.userForm.get('reservationInformation.source').disable();
     if (this.reservationId) {
-      const reservationType =
-        this.bookingType === EntitySubType.ROOM_TYPE
-          ? this.reservationInfoControls.reservationType
-          : this.reservationInfoControls.status;
-
       const disableForm = () => {
         this.userForm.disable({ emitEvent: false });
         this.formService.disableBtn = true;
         this.disableBtn = true;
-      }
+      };
+      const reservationType = this.reservationInfoControls.reservationType;
       switch (true) {
         case status === ReservationCurrentStatus.CHECKEDOUT ||
           reservationType.value === ReservationType.CANCELED:
@@ -123,10 +111,9 @@ export class BaseReservationComponent {
           ['roomNumber'].forEach((controlName) =>
             roomTypeArray[0].get(controlName).enable({ emitEvent: false })
           );
-          this.reservationInfoControls.reservationType.enable();
+          reservationType.enable();
           break;
-        case this.bookingType !== EntitySubType.ROOM_TYPE ||
-          journeyState === JourneyState.COMPLETED ||
+        case journeyState === JourneyState.COMPLETED ||
           status === ReservationCurrentStatus.INHOUSE ||
           status === ReservationCurrentStatus.DUEOUT:
           disableForm();
@@ -178,8 +165,6 @@ export class BaseReservationComponent {
           this.paymentControls[controlName].enable({ emitEvent: false });
         }
       }
-
-      // reservationType.enable();
     }
   }
 
@@ -225,5 +210,9 @@ export class BaseReservationComponent {
       keyof ReservationForm['paymentRule'],
       AbstractControl
     >;
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

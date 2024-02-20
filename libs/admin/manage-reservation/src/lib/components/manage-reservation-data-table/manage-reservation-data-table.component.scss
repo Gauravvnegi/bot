@@ -80,3 +80,7 @@
   pointer-events: none;
   cursor: not-allowed;
 }
+
+:host ::ng-deep .action-header {
+  margin: 0 0 15px;
+}

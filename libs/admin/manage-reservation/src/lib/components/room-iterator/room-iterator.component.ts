@@ -159,7 +159,7 @@ export class RoomIteratorComponent extends IteratorComponent
   createNewFields(initialField = false): void {
     const data = {
       roomTypeId: ['', [Validators.required]],
-      ratePlanId: [''],
+      ratePlanId: ['', [Validators.required]],
       roomCount: ['', [Validators.required, Validators.min(1)]],
       roomNumber: [''],
       roomNumbers: [[]],

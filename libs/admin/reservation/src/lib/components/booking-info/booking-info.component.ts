@@ -16,7 +16,6 @@ import {
 } from '@angular/forms';
 import {
   ConfigService,
-  EntitySubType,
   Option,
   manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
@@ -47,7 +46,6 @@ export class BookingInfoComponent implements OnInit {
   reservationTypes: Option[] = [];
   statusOptions: Option[] = [];
   eventTypes: Option[] = [];
-  bookingType: string;
   reservationId: string;
   isQuickReservation: boolean = false;
   disabledForm: boolean = false;
@@ -152,16 +150,11 @@ export class BookingInfoComponent implements OnInit {
     this.fromDateValue = this.startMinDate;
     this.toDateValue = this.endMinDate;
 
-    if (this.bookingType === EntitySubType.ROOM_TYPE)
-      this.maxDate.setDate(this.startMinDate.getDate() + 365);
-
-    // Venue only valid till 24 hours later.
-    if (this.bookingType === EntitySubType.VENUE)
-      this.maxDate = moment().add(24, 'hours').toDate();
+    this.maxDate.setDate(this.startMinDate.getDate() + 365);
   }
 
   /**
-   * Listen for date changes in ROOM_TYPE and outlets.
+   * Listen for date changes in ROOM_TYPE.
    */
   listenForDateChange() {
     const startTime = moment(this.startMinDate).unix() * 1000;
@@ -173,75 +166,50 @@ export class BookingInfoComponent implements OnInit {
 
     // Listen to from and to date changes in ROOM_TYPE and set
     // min and max dates accordingly
-    if (this.bookingType === EntitySubType.ROOM_TYPE) {
-      if (!this.reservationId) {
-        fromDateControl.setValue(startTime);
-        toDateControl.setValue(endTime);
-      }
-      let multipleDateChange = false;
-      fromDateControl.valueChanges.subscribe((res) => {
-        if (res) {
-          const maxToLimit = new Date(res);
-          this.fromDateValue = new Date(maxToLimit);
-          // Check if fromDate is greater than or equal to toDate before setting toDateControl
-          maxToLimit.setDate(maxToLimit.getDate() + 1);
-          if (maxToLimit >= this.toDateValue) {
-            // Calculate the date for one day later
-            const nextDayTime = moment(maxToLimit).unix() * 1000;
-            multipleDateChange = true;
-            toDateControl.setValue(nextDayTime); // Set toDateControl to one day later
-          }
-          (this.formService.isDataInitialized.value || !this.reservationId) &&
-            this.formService.reinitializeRooms.next(true);
-          this.updateDateDifference();
-          this.formService.reservationDate.next(res);
-          this.reservationId &&
-            !this.isCheckedIn &&
-            this.formService.updateRateImprovement(
-              this.inputControls.rateImprovement
-            );
-        }
-      });
-
-      toDateControl.valueChanges.subscribe((res) => {
-        if (res) {
-          this.toDateValue = new Date(res);
-          this.updateDateDifference();
-          (this.formService.isDataInitialized.value || !this.reservationId) &&
-            !multipleDateChange &&
-            this.formService.reinitializeRooms.next(true);
-          multipleDateChange = false;
-          this.reservationId &&
-            !this.isCheckedIn &&
-            this.formService.updateRateImprovement(
-              this.inputControls.rateImprovement
-            );
-        }
-      });
-    }
-
-    // Listen to from and to date changes in Venue
-    else if (this.bookingType === EntitySubType.VENUE) {
+    if (!this.reservationId) {
       fromDateControl.setValue(startTime);
       toDateControl.setValue(endTime);
-      this.endMinDate.setDate(this.startMinDate.getDate());
-      fromDateControl.valueChanges.subscribe((res) => {
-        const maxLimit = new Date(res);
-        toDateControl.setValue(moment(maxLimit).unix() * 1000);
-        this.maxDate = moment(maxLimit).add(24, 'hours').toDate();
+    }
+    let multipleDateChange = false;
+    fromDateControl.valueChanges.subscribe((res) => {
+      if (res) {
+        const maxToLimit = new Date(res);
+        this.fromDateValue = new Date(maxToLimit);
+        // Check if fromDate is greater than or equal to toDate before setting toDateControl
+        maxToLimit.setDate(maxToLimit.getDate() + 1);
+        if (maxToLimit >= this.toDateValue) {
+          // Calculate the date for one day later
+          const nextDayTime = moment(maxToLimit).unix() * 1000;
+          multipleDateChange = true;
+          toDateControl.setValue(nextDayTime); // Set toDateControl to one day later
+        }
+        (this.formService.isDataInitialized.value || !this.reservationId) &&
+          this.formService.reinitializeRooms.next(true);
+        this.updateDateDifference();
         this.formService.reservationDate.next(res);
-      });
-    }
+        this.reservationId &&
+          !this.isCheckedIn &&
+          this.formService.updateRateImprovement(
+            this.inputControls.rateImprovement
+          );
+      }
+    });
 
-    // Listen for date and time change in restaurant and spa
-    else {
-      dateAndTimeControl.setValue(startTime);
-      this.formService.reservationDateAndTime.next(startTime);
-
-      dateAndTimeControl.valueChanges.subscribe((res) => {
-        this.formService.reservationDateAndTime.next(res);
-      });
-    }
+    toDateControl.valueChanges.subscribe((res) => {
+      if (res) {
+        this.toDateValue = new Date(res);
+        this.updateDateDifference();
+        (this.formService.isDataInitialized.value || !this.reservationId) &&
+          !multipleDateChange &&
+          this.formService.reinitializeRooms.next(true);
+        multipleDateChange = false;
+        this.reservationId &&
+          !this.isCheckedIn &&
+          this.formService.updateRateImprovement(
+            this.inputControls.rateImprovement
+          );
+      }
+    });
   }
 
   listenForConfigDataChanges() {
@@ -620,7 +588,6 @@ type BookingInfoProps = {
   reservationTypes?: Option[];
   statusOptions?: Option[];
   eventTypes?: Option[];
-  bookingType?: string;
   reservationId?: string;
   isQuickReservation?: boolean;
   disabledForm: boolean;

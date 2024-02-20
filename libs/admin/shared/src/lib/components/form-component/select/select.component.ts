@@ -12,6 +12,7 @@ export class SelectComponent extends FormComponent {
   // menuClass = 'cdk-virtual-scroll-viewport';
   menuClass = 'p-dropdown-items-wrapper';
   searchInputClass = 'p-dropdown-filter';
+  optionAlignment: 'vertical' | 'horizontal' = 'vertical';
 
   @Input() isGroupOptions: boolean = false; // To group options
 
@@ -38,6 +39,7 @@ export class SelectComponent extends FormComponent {
     return {
       ...this.inputNgClasses,
       'input-margin-top': this.floatInsideLabel,
+      select__horizontal: this.optionAlignment === 'horizontal',
     };
   }
 

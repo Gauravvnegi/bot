@@ -15,6 +15,7 @@ import { EntityTabFilterConfig } from 'libs/admin/global-shared/src/lib/types/en
 @Injectable()
 export class TableManagementService extends ApiService {
   selectedTab = new BehaviorSubject<TableManagementDatableTabs>(null);
+  entityId: string;
   onGlobalFilterChange = new BehaviorSubject<EntityTabFilterConfig>(null);
 
   getTableById(

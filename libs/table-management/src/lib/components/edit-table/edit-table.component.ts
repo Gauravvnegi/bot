@@ -82,7 +82,8 @@ export class EditTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
+    this.entityId =
+      this.tableManagementService.entityId ?? this.globalFilterService.entityId;
 
     if (this.route?.snapshot?.queryParams?.type)
       this.formSubmissionType = this.route?.snapshot?.queryParams?.type;

@@ -80,6 +80,7 @@ export class OutletFormService {
       from: data.checkIn,
       to: data.checkOut,
       marketSegment: data.marketSegment,
+      outletType: data.outletType,
     };
 
     return formData;
@@ -100,18 +101,20 @@ export class OutletFormService {
     // Map kot information
     formData.kotInformation = {
       kotItems: data?.kots?.map((kot) => ({
-        items: data?.items?.filter((item)=> item?.menuItem).map((item) => ({
-          id: item?.id,
-          itemName: item.menuItem?.name,
-          unit: item?.unit,
-          mealPreference: item.menuItem?.mealPreference
-            .replace(/[-_]/g, '')
-            .toUpperCase() as MealPreferences,
-          price: item.menuItem?.dineInPrice,
-          itemInstruction: item?.remarks,
-          image: item.menuItem?.imageUrl,
-          viewItemInstruction: false,
-        })),
+        items: data?.items
+          ?.filter((item) => item?.menuItem)
+          .map((item) => ({
+            id: item?.id,
+            itemName: item.menuItem?.name,
+            unit: item?.unit,
+            mealPreference: item.menuItem?.mealPreference
+              .replace(/[-_]/g, '')
+              .toUpperCase() as MealPreferences,
+            price: item.menuItem?.dineInPrice,
+            itemInstruction: item?.remarks,
+            image: item.menuItem?.imageUrl,
+            viewItemInstruction: false,
+          })),
         kotInstruction: kot?.instructions,
         kotOffer: [],
         viewKotOffer: false,

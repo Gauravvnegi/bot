@@ -66,8 +66,8 @@ export class EditAreaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
-
+    this.entityId =
+      this.tableManagementService.entityId ?? this.globalFilterService.entityId;
     this.initForm();
     this.initNavRoutes();
   }

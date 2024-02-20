@@ -291,7 +291,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
                 command: () => {
                   this.activateAndgenerateJourney('CHECKIN');
                 },
-                disabled: !this.isPrintRate,
               },
             ];
             this.checkOutOptions = [

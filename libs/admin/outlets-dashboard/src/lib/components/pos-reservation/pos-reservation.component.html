@@ -99,7 +99,7 @@
         ></hospitality-bot-quick-select
       ></ng-container>
       <ng-container *ngIf="checkOrderType()">
-        <hospitality-bot-multi-select
+        <!-- <hospitality-bot-multi-select
           class="one-fourth-width"
           controlName="tableNumber"
           [options]="areaList"
@@ -111,7 +111,16 @@
             showChips: false,
             maxSelectedLabels: 1
           }"
-        ></hospitality-bot-multi-select>
+        ></hospitality-bot-multi-select> -->
+        <hospitality-bot-select
+          class="one-fourth-width"
+          controlName="tableNumber"
+          [options]="areaList"
+          label="Table No./Area"
+          [props]="{
+            placeholder: 'Select Table No.'
+          }"
+        ></hospitality-bot-select>
         <hospitality-bot-select
           class="one-fifth-width"
           controlName="staff"
@@ -164,7 +173,8 @@
           class="number"
           controlName="numberOfPersons"
           [props]="{
-            placeholder: 'Enter'
+            placeholder: 'Enter',
+            type: 'number'
           }"
           label="No. of Person"
         ></hospitality-bot-input>
@@ -172,7 +182,7 @@
       <hospitality-bot-address-component
         *ngIf="orderInfoControls.orderType.value === 'DELIVERY'"
         label="Delivery Address"
-        class="half-width"
+        class="half-width address"
         controlName="address"
       >
       </hospitality-bot-address-component>

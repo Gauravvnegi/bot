@@ -1,5 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import {
   AdminUtilityService,
   ConfigService,
@@ -34,6 +39,7 @@ import { OutletTableService } from '../../services/outlet-table.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { reservationTabFilters } from '../../constants/data-table';
+import { PosReservationResponse } from '../../types/reservation-table';
 
 @Component({
   selector: 'hospitality-bot-pos-reservation',
@@ -51,6 +57,8 @@ export class PosReservationComponent implements OnInit {
 
   mealPreferences = ['ALL', ...mealPreferences];
   readonly mealPreferenceConfig = mealPreferenceConfig;
+
+  defaultReservationData: PosReservationResponse;
 
   menuOptions: Menu[] = [];
   staffList: Option[] = [];
@@ -70,6 +78,7 @@ export class PosReservationComponent implements OnInit {
 
   areaList: Option[] = [];
   selectedCategories: string[] = [];
+  selectedTable: Option;
 
   constructor(
     private fb: FormBuilder,
@@ -103,6 +112,7 @@ export class PosReservationComponent implements OnInit {
         numberOfPersons: [null],
         menu: [[]],
         address: [''],
+        id: [null],
       }),
       paymentInformation: this.fb.group({
         paymentMethod: [''],
@@ -144,9 +154,11 @@ export class PosReservationComponent implements OnInit {
             const menuItems = res.items
               .filter((item) => item.menuItem)
               .map((item) => new MenuItem().deserialize(item.menuItem));
-
-            // menuItems.length &&
-            //   this.formService.selectedMenuItems.next(menuItems);
+            this.defaultReservationData = res.reservation;
+            this.selectedTable = {
+              label: res.reservation.tableNumberOrRoomNumber,
+              value: res.reservation.tableIdOrRoomId,
+            };
             this.userForm.patchValue(formData, { emitEvent: false });
           }
         })
@@ -268,6 +280,8 @@ export class PosReservationComponent implements OnInit {
             }));
             return acc.concat(tableOptions);
           }, []);
+
+          this.orderId && this.areaList.unshift(this.selectedTable);
         })
     );
   }
@@ -302,6 +316,15 @@ export class PosReservationComponent implements OnInit {
         label: `${guest.firstName} ${guest.lastName}`,
         value: guest.id,
       };
+      const guestAddress = {
+        formattedAddress: `${guest.address?.addressLine1 ?? ''}`,
+        city: guest.address?.city ?? '',
+        state: guest.address?.state ?? '',
+        countryCode: guest.address?.countryCode ?? '',
+        postalCode: guest.address?.postalCode ?? '',
+        id: guest.address?.id,
+      };
+      this.orderInfoControls.address.patchValue(guestAddress);
     }
   }
 
@@ -337,6 +360,10 @@ export class PosReservationComponent implements OnInit {
   postToRoom() {}
 
   handleSave() {
+    this.orderId ? this.updateOrder() : this.createOrder();
+  }
+
+  createOrder() {
     const data = this.formService.getOutletFormData(
       this.userForm.getRawValue() as MenuForm
     );
@@ -354,6 +381,29 @@ export class PosReservationComponent implements OnInit {
         );
       }
     );
+  }
+
+  updateOrder() {
+    const data = this.formService.getOutletUpdateData(
+      this.userForm.getRawValue() as MenuForm,
+      this.defaultReservationData
+    );
+    this.outletTableService
+      .updateOrder(this.entityId, this.orderId, data)
+      .subscribe(
+        (res) => {},
+        (error) => {},
+        () => {
+          this.close();
+          this.snackbarService.openSnackBarAsText(
+            'Order updated successfully',
+            '',
+            {
+              panelClass: 'success',
+            }
+          );
+        }
+      );
   }
 
   handleKOT(print: boolean = false) {}

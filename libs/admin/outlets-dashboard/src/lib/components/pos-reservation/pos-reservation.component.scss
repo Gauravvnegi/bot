@@ -96,16 +96,22 @@
     padding-top: 30px;
   }
   .one-fourth-width {
-    width: 24%;
+    width: 23%;
   }
   .one-fifth-width {
     width: 18%;
   }
   .half-width {
-    width: 50%;
+    width: 52%;
   }
   .number {
-    width: 12%;
+    width: 14%;
+  }
+}
+
+:host ::ng-deep .address {
+  .input-wrapper {
+    bottom: -3px;
   }
 }
 

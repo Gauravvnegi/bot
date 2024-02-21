@@ -36,6 +36,7 @@ export type ReservationTableResponse = {
     containerCharge: number;
     allowance: number;
   };
+  offer?: { id?: string };
   kots: (Omit<KotItemsResponse, 'items'> & { menuItems: MenuItemResponse })[];
   guest: OutletGuest;
   reservation: PosReservationResponse;

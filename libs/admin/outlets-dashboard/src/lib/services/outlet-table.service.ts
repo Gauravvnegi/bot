@@ -62,6 +62,10 @@ export class OutletTableService extends ApiService {
     return this.post(`/api/v1/entity/${entityId}/order`, data);
   }
 
+  updateOrder(entityId: string, orderId: string, data: CreateOrderData) {
+    return this.patch(`/api/v1/entity/${entityId}/order/${orderId}`, data);
+  }
+
   createReservation(data: CreateReservationData) {
     return this.post(`/api/v1/booking?type=OUTLET`, data);
   }

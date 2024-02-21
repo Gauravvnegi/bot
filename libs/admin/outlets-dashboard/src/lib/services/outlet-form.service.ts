@@ -8,7 +8,10 @@ import {
   MenuForm,
 } from '../types/form';
 import { EntitySubType } from '@hospitality-bot/admin/shared';
-import { ReservationTableResponse } from '../types/reservation-table';
+import {
+  PosReservationResponse,
+  ReservationTableResponse,
+} from '../types/reservation-table';
 import { MealPreferences } from '../types/menu-order';
 
 @Injectable({
@@ -47,32 +50,75 @@ export class OutletFormService {
     this.selectedMenuItems.next([]);
   }
 
-  getOutletFormData(data: MenuForm, reservationId?: string, reservationData?) {
+  getOutletFormData(data: MenuForm, orderId?: string) {
     const { orderInformation, paymentInformation, kotInformation } = data;
     const orderData: CreateOrderData = {
       status: 'CONFIRMED',
       type: orderInformation.orderType,
       source: 'Offline',
-      kots: kotInformation.kotItems.map((item) => ({
-        instructions: item.kotInstruction,
-        items: item.items.map((item) => ({
-          itemId: item?.itemId,
+      kots: kotInformation.kotItems.map((kotItem) => ({
+        instructions: kotItem.kotInstruction,
+        items: kotItem.items.map((item) => ({
+          itemId: item.itemId,
           unit: item.unit,
           amount: item.price,
           remarks: item.itemInstruction,
-          id: item?.id,
         })),
-        id: item?.id,
       })),
+      // offer: {
+      //   id:
+      //     kotInformation.kotItems[kotInformation.kotItems.length - 1].kotOffer,
+      // },
       outletType: EntitySubType.RESTAURANT,
       guestId: orderInformation.guest,
-      reservation: reservationId
-        ? reservationData
-        : {
-            occupancyDetails: { maxAdult: orderInformation.numberOfPersons },
-            status: 'CONFIRMED',
-            tableIds: orderInformation.tableNumber,
-          },
+      deliveryAddress: orderInformation.address.id,
+      reservation: {
+        occupancyDetails: { maxAdult: orderInformation.numberOfPersons },
+        status: 'CONFIRMED',
+        tableIds: [orderInformation.tableNumber],
+      },
+    };
+    return orderData;
+  }
+
+  getOutletUpdateData(
+    data: MenuForm,
+    reservationData: PosReservationResponse
+  ) {
+    const { orderInformation, paymentInformation, kotInformation } = data;
+
+    const orderData: CreateOrderData = {
+      status: 'CONFIRMED',
+      type: orderInformation.orderType,
+      source: 'Offline',
+      kots: kotInformation.kotItems.map((kotItem) => ({
+        instructions: kotItem.kotInstruction,
+        items: kotItem.items.map((item) => ({
+          itemId: item.itemId,
+          unit: item.unit,
+          amount: item.price,
+          remarks: item.itemInstruction,
+          id: item.id !== null ? item.id : undefined,
+        })),
+        id: kotItem.id !== null ? kotItem.id : undefined,
+      })),
+      // offer: {
+      //   id:
+      //     kotInformation.kotItems[kotInformation.kotItems.length - 1].kotOffer,
+      // },
+      outletType: EntitySubType.RESTAURANT,
+      guestId: orderInformation.guest,
+      deliveryAddress: orderInformation.address.id,
+      reservation: {
+        ...reservationData,
+        occupancyDetails: { maxAdult: orderInformation.numberOfPersons },
+        status: 'CONFIRMED',
+        tableIds: [orderInformation.tableNumber],
+        id:
+          data.orderInformation.id !== null
+            ? data.orderInformation.id
+            : undefined,
+      },
     };
     return orderData;
   }
@@ -96,12 +142,13 @@ export class OutletFormService {
     let formData = new MenuForm();
     formData.orderInformation = {
       search: '',
-      tableNumber: [data?.reservation.tableIdOrRoomId],
+      tableNumber: data?.reservation.tableIdOrRoomId,
       staff: data?.createdBy,
       guest: data?.guest?.id,
       numberOfPersons: data?.reservation.occupancyDetails.maxAdult,
       menu: data?.items?.map((item) => item?.itemId),
       orderType: data?.type,
+      id: data.reservation.id,
     };
 
     // Map kot information
@@ -123,7 +170,7 @@ export class OutletFormService {
             viewItemInstruction: false,
           })),
         kotInstruction: kot?.instructions,
-        kotOffer: [],
+        kotOffer: data?.offer?.id,
         viewKotOffer: false,
         viewKotInstruction: false,
         id: kot?.id,

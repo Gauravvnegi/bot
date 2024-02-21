@@ -26,6 +26,7 @@ export class Notification {
   userId: string;
   icon: string;
   data;
+  notificationHeading: string;
 
   deserialize(input) {
     this.id = input.id || '';
@@ -35,6 +36,9 @@ export class Notification {
       input.message || ''.replace(/\n/g, '<br/>')
     );
     this.notificationType = input.notificationType || '';
+    this.notificationHeading =
+      input.notificationHeading ?? input.notificationType;
+
     this.read = input.read || false;
     this.updated = input.updated || '';
     this.data = input.data;

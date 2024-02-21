@@ -99,7 +99,7 @@
               class="title"
               [ngStyle]="{ color: item?.read ? 'grey' : 'black' }"
             >
-              {{ item.notificationType | titlecase }}
+              {{ item.notificationHeading | titlecase }}
             </div>
             <div class="time">
               {{ item.getTime(globalFilterService.timezone) }}

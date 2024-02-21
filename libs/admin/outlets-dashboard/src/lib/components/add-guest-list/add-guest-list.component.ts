@@ -44,9 +44,11 @@ type GuestReservationForm = {
   remark: string;
   outletType: string;
   slotHours: number;
+  areaId: string[];
+  seated: boolean;
 };
 
-type TableOption = Option & { disabled: boolean };
+type TableOption = Option & { disabled: boolean; areaId: string };
 
 @Component({
   selector: 'hospitality-bot-add-guest-list',
@@ -110,8 +112,11 @@ export class AddGuestListComponent implements OnInit {
       slotHours: ['', Validators.required],
       remark: [''],
       outletType: ['RESTAURANT'],
+      areaId: ['', Validators.required],
+      seated: [true],
     });
     this.listenForTimeChanges();
+    this.listenForTableChanges();
 
     if (this.guestReservationId) {
       this.getReservationDetails();
@@ -121,6 +126,15 @@ export class AddGuestListComponent implements OnInit {
         slotHours: 1800000,
       });
     }
+  }
+
+  listenForTableChanges() {
+    const { areaId, tables } = this.guestReservationFormControl;
+    tables.valueChanges.subscribe((data) => {
+      const id = this.backupData.find((table) => table.value === data[0])
+        .areaId;
+      areaId.patchValue(id);
+    });
   }
 
   getReservationDetails() {
@@ -192,6 +206,7 @@ export class AddGuestListComponent implements OnInit {
                 tableList.push({
                   label: table.number,
                   value: table.id,
+                  areaId: item.id,
                   disabled: !bookedTableIds.includes(table.id),
                 });
               }
@@ -230,6 +245,7 @@ export class AddGuestListComponent implements OnInit {
     const formData = this.formService.getGuestFormData(
       this.useForm.getRawValue() as AddGuestForm
     );
+
     if (this.guestReservationId) {
       this.outletService
         .updateGuestReservation(this.guestReservationId, formData)
@@ -300,6 +316,8 @@ export class AddGuestListComponent implements OnInit {
       { panelClass: 'success' }
     );
   };
+
+  triggerStatusChange(event) {}
 
   /**
    * @function handleError to show the error

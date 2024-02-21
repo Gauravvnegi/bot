@@ -44,7 +44,7 @@ export class GuestReservation {
     this.orderNo = value?.order?.number;
     this.time = formatEpochTime(value?.from);
     this.timeLimit = undefined;
-    this.people = value?.order?.reservation?.occupancyDetails?.maxAdult ?? 0;
+    this.people = value?.occupancyDetails?.maxAdult ?? 0;
     this.name = getFullName(value?.guest?.firstName, value?.guest?.lastName);
     this.type =
       value?.guest?.type === 'GUEST' ? 'Resident' : (value?.guest?.type as any);
@@ -67,13 +67,13 @@ export class GuestFormData {
 
   deserialize(value: GuestReservationResponse) {
     this.tables = [value?.tableIdOrRoomId];
-    this.personCount = value?.order?.reservation?.occupancyDetails?.maxAdult;
+    this.personCount = value?.occupancyDetails?.maxAdult;
     this.guest = value?.guest?.id;
     this.marketSegment = value?.marketSegment;
     this.checkIn = value?.from;
     this.checkOut = value?.to;
     this.slotHours = Math.abs(value?.from - value?.to);
-    this.remark = undefined;
+    this.remark = value?.remarks;
     return this;
   }
 }

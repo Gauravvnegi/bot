@@ -323,6 +323,7 @@ export type GuestReservationResponse = {
   currentJourney: 'WAITLISTED' | 'SEATED';
   currentJoureyStatus: string;
   currentJourneyState: string;
+  remarks: string;
 };
 
 export type GuestReservationListResponse = {

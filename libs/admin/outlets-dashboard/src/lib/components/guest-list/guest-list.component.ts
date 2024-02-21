@@ -143,6 +143,15 @@ export class GuestListComponent implements OnInit {
   get isSeated() {
     return this.useForm.get('chip').value == this.chipEnum.seated;
   }
+
+  onPrintInvoice(event) {
+    event.stopPropagation();
+  }
+
+  onTableChange(event, guest: GuestReservation) {
+    event.stopPropagation();
+    this.openAddGuest(guest.id);
+  }
   close() {
     this.onClose.emit(true);
   }

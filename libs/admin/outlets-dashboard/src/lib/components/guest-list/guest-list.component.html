@@ -55,10 +55,12 @@
               <hospitality-bot-button
                 label="Print Invoice"
                 variant="outlined"
+                (onClick)="onPrintInvoice($event)"
               ></hospitality-bot-button>
               <hospitality-bot-button
                 label="Change Table"
                 variant="outlined"
+                (onClick)="onTableChange($event, guest)"
               ></hospitality-bot-button>
             </ng-container>
             <ng-template #waitlist>

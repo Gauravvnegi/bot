@@ -1,11 +1,48 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { tableList } from '../../constants/guest-list.const';
-import { BookingDetailService, Option } from '@hospitality-bot/admin/shared';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  Component,
+  ComponentFactoryResolver,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
+import { slotHours, tableList } from '../../constants/guest-list.const';
+import {
+  AdminUtilityService,
+  BookingDetailService,
+  ConfigService,
+  Option,
+  QueryConfig,
+  manageMaskZIndex,
+} from '@hospitality-bot/admin/shared';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { AddGuestForm } from '../../types/form';
 import { OutletFormService } from '../../services/outlet-form.service';
 import { OutletTableService } from '../../services/outlet-table.service';
+import { Subscription, combineLatest } from 'rxjs';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
+import { debounceTime } from 'rxjs/operators';
+import { AreaListResponse, AreaResponse } from '../../types/outlet.response';
+
+type GuestReservationForm = {
+  tables: string[];
+  personCount: number;
+  guest: string;
+  marketSegment: string;
+  checkIn: number;
+  checkOut: number;
+  remark: string;
+  outletType: string;
+  slotHours: number;
+};
 
 @Component({
   selector: 'hospitality-bot-add-guest-list',
@@ -13,29 +50,46 @@ import { OutletTableService } from '../../services/outlet-table.service';
   styleUrls: ['./add-guest-list.component.scss'],
 })
 export class AddGuestListComponent implements OnInit {
-  readonly tableOptions: Option[] = tableList;
-  @Output() onClose = new EventEmitter<boolean>();
+  private $subscriptions = new Subscription();
+  tableOptions: Option[] = [];
+  marketSegments: Option[] = [];
+  readonly slotOptions: Option[] = slotHours;
+  startMinDate: Date = new Date();
+
+  entityId: string;
+  selectedGuest: Option;
+  globalQueries = [];
+  sidebarVisible: boolean = false;
+
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
+
+  @Output()
+  onClose = new EventEmitter<boolean>();
 
   useForm!: FormGroup;
   loading = false;
 
-  marketSegments = [
-    {
-      label: 'val',
-      value: 'val',
-    },
-  ];
-
   constructor(
     private fb: FormBuilder,
     private bookingDetailService: BookingDetailService,
+    private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
     private formService: OutletFormService,
-    private outletService: OutletTableService
+    private outletService: OutletTableService,
+    private globalFilterService: GlobalFilterService,
+    private resolver: ComponentFactoryResolver,
+    private configService: ConfigService
   ) {}
 
   ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId;
     this.initForm();
+    this.initOptions();
+  }
+
+  initOptions(): void {
+    this.getMarketSegments();
   }
 
   initForm() {
@@ -44,13 +98,77 @@ export class AddGuestListComponent implements OnInit {
       personCount: [null, Validators.min(1)],
       guest: ['', Validators.required],
       marketSegment: ['', Validators.required],
-      checkIn: ['', Validators.required],
+      checkIn: [new Date().getTime(), Validators.required],
       checkOut: ['', Validators.required],
+      slotHours: ['30', Validators.required],
       remark: [''],
+      outletType: ['RESTAURANT'],
+    });
+
+    this.listenForTimeChanges();
+    this.updateCheckOutTime();
+  }
+
+  listenForTimeChanges(): void {
+    const { checkIn, slotHours } = this.guestReservationFormControl;
+    checkIn.valueChanges.pipe(debounceTime(300)).subscribe((res) => {
+      this.updateCheckOutTime();
+    });
+    slotHours.valueChanges.pipe(debounceTime(300)).subscribe((res) => {
+      this.updateCheckOutTime();
     });
   }
 
-  fullReservation() {}
+  updateCheckOutTime() {
+    const { checkIn, slotHours, checkOut } = this.guestReservationFormControl;
+
+    const checkInTime = checkIn.value;
+    const bookingTimeDuration = slotHours.value;
+
+    if (checkIn && slotHours) {
+      // Convert slotHours from minutes to milliseconds
+      const bookingTimeDurationInMill = bookingTimeDuration * 60 * 1000;
+
+      // Calculate check-out time by adding slot hours to check-in time
+      const checkOutTimeEpoch = checkInTime + bookingTimeDurationInMill;
+
+      checkOut.patchValue(checkOutTimeEpoch);
+
+      this.getTableList();
+    }
+  }
+
+  getTableList(): void {
+    const config: QueryConfig = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          type: 'AREA',
+          offset: '0',
+          limit: '50',
+          sort: 'updated',
+          raw: 'true',
+          fromDate: this.guestReservationFormControl.checkIn.value,
+          toDate: this.guestReservationFormControl.checkOut.value,
+          createBooking: true,
+        },
+      ]),
+    };
+
+    this.$subscriptions.add(
+      this.outletService
+        .getList<AreaListResponse>(this.entityId, config)
+        .subscribe((res) => {
+          res.areas.forEach((item: AreaResponse) => {
+            item.tables.forEach((table) => {
+              this.tableOptions.push({
+                label: table.number,
+                value: table.id,
+              });
+            });
+          });
+        })
+    );
+  }
 
   openDetailsPage() {
     // TODO: Replace guestId
@@ -72,18 +190,87 @@ export class AddGuestListComponent implements OnInit {
     );
 
     this.outletService.createReservation(formData).subscribe(
-      (res) => {},
-      (error) => {},
-      () => {
+      (res) => {
         this.snackbarService.openSnackBarAsText('Guest Registered !', '', {
           panelClass: 'success',
         });
-        this.close();
-      }
+      },
+      this.handleError,
+      this.handleFinal
     );
   }
 
+  getConfig(type = 'get') {
+    if (type === 'search') return { type: 'GUEST' };
+    const queries = {
+      entityId: this.entityId,
+      entityState: 'ALL',
+      type: 'GUEST,NON_RESIDENT_GUEST',
+    };
+    return queries;
+  }
+
+  guestChange(event) {
+    this.selectedGuest = {
+      label: `${event.firstName} ${event.lastName}`,
+      value: event.id,
+    };
+  }
+
+  onAddGuest() {
+    this.sidebarVisible = true;
+    const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
+    this.sidebarSlide.clear();
+    const componentRef = this.sidebarSlide.createComponent(factory);
+    componentRef.instance.isSidebar = true;
+    componentRef.instance.guestType = 'NON_RESIDENT_GUEST';
+    this.$subscriptions.add(
+      componentRef.instance.onCloseSidebar.subscribe((res) => {
+        if (typeof res !== 'boolean') {
+          this.selectedGuest = {
+            label: `${res.firstName} ${res.lastName}`,
+            value: res.id,
+          };
+        }
+        this.sidebarVisible = false;
+      })
+    );
+    manageMaskZIndex();
+  }
+
+  getMarketSegments(): void {
+    this.$subscriptions.add(
+      this.configService.$config.subscribe((response) => {
+        this.marketSegments =
+          response.bookingConfig.marketSegment.map((item) => ({
+            label: item,
+            value: item,
+          })) ?? [];
+      })
+    );
+  }
+
+  /**
+   * @function handleError to show the error
+   * @param param0 network error
+   */
+  handleError = ({ error }): void => {
+    this.loading = false;
+  };
+
+  handleFinal = () => {
+    this.loading = false;
+    this.close();
+  };
+
   close() {
     this.onClose.emit(true);
+  }
+
+  get guestReservationFormControl() {
+    return this.useForm.controls as Record<
+      keyof GuestReservationForm,
+      AbstractControl
+    >;
   }
 }

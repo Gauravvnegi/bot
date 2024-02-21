@@ -85,6 +85,7 @@ export class OutletFormService {
       from: data.checkIn,
       to: data.checkOut,
       marketSegment: data.marketSegment,
+      outletType: data.outletType,
     };
 
     return formData;

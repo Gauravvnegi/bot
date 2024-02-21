@@ -14,7 +14,7 @@ export class GuestCardComponent implements OnInit {
   ngOnInit(): void {}
 }
 
-export interface GuestCard {
+export type GuestCard = {
   tableNo: string;
   orderNo?: string;
   time: string;
@@ -24,4 +24,4 @@ export interface GuestCard {
   type: TabsType;
   feedback?: string;
   phone: string;
-}
+};

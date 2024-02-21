@@ -83,6 +83,7 @@ export class TableManagementDatableComponent extends BaseDatatableComponent
     this.subscriptionList$.add(
       this.tableManagementService.onGlobalFilterChange.subscribe((res) => {
         this.entityId = res.entityId[0];
+        this.tableManagementService.entityId = this.entityId;
         this.initTableValue();
       })
     );

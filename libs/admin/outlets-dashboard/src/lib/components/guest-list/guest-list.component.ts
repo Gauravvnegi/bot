@@ -19,6 +19,9 @@ import { GuestCard } from '../guest-card/guest-card.component';
 import { ChipType, TabsType } from '../../types/guest.type';
 import { AddGuestListComponent } from '../add-guest-list/add-guest-list.component';
 import { manageMaskZIndex } from '@hospitality-bot/admin/shared';
+import { Subscription } from 'rxjs';
+import { OutletTableService } from '../../services/outlet-table.service';
+import { GuestReservationList } from '../../models/guest-reservation.model';
 
 @Component({
   selector: 'hospitality-bot-guest-list',
@@ -30,8 +33,11 @@ export class GuestListComponent implements OnInit {
   readonly tabEnum = TabsType;
   readonly seatedChips: Option<ChipType>[] = seatedChips;
   readonly seatedTabGroup: Option<TabsType>[] = seatedTabGroup;
-  seatedGuestList: GuestCard[] = [...seatedCards];
-  waitListGuestList: GuestCard[] = [...waitListCards];
+
+  seatedGuestList: GuestCard[] = [];
+  waitListGuestList: GuestCard[] = [];
+
+  private $subscription = new Subscription();
 
   useForm: FormGroup;
   @Output() onClose = new EventEmitter<boolean>();
@@ -43,11 +49,13 @@ export class GuestListComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private componentFactoryResolver: ComponentFactoryResolver
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private outletService: OutletTableService
   ) {}
 
   ngOnInit(): void {
     this.initForm();
+    this.initGuestReservation();
   }
 
   initForm() {
@@ -58,8 +66,16 @@ export class GuestListComponent implements OnInit {
     });
   }
 
+  initGuestReservation(): void {
+    this.$subscription.add(
+      this.outletService.getGuestReservation().subscribe((response) => {
+        const data = new GuestReservationList().deserialize(response);
+        this.seatedGuestList = data.records;
+      })
+    );
+  }
+
   setChip(event: Option) {
-    console.log(ChipType[event.value]);
     this.useForm.patchValue(
       { search: '', chip: ChipType[event.value] },
       { emitEvent: false }
@@ -117,8 +133,6 @@ export class GuestListComponent implements OnInit {
     });
   }
 
-  fullReservation() {}
-
   searchGuest(event: string) {
     const activeChip = this.useForm.get('chip').value;
     const activeTab = this.useForm.get('tab').value;
@@ -152,5 +166,9 @@ export class GuestListComponent implements OnInit {
 
   close() {
     this.onClose.emit(true);
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

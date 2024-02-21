@@ -169,3 +169,12 @@
   letter-spacing: 0.72px;
   color: #8995a3;
 }
+
+:host ::ng-deep {
+  .select__horizontal {
+    .p-dropdown-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(33%, 1fr));
+    }
+  }
+}

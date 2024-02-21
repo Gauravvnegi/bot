@@ -3,13 +3,6 @@
     <span class="title">Guest List</span>
     <span class="close-icon">
       <img
-        (click)="fullReservation()"
-        class="expand"
-        [src]="'assets/svg/expand-white.svg'"
-        alt="reservation"
-        [pTooltip]="'Create Full Reservation'"
-      />
-      <img
         (click)="close()"
         class="close-sidebar-icon"
         src="assets/svg/close-sidebar.svg"
@@ -40,7 +33,7 @@
         ></hospitality-bot-global-search>
       </div>
       <div *ngIf="isSeated" (click)="openAddGuest()" class="add-guest">
-        + add guest
+        + Add guest
       </div>
       <div class="filter">
         <img src="assets/svg/Filter-Icon.svg" alt="filter" />
@@ -118,7 +111,7 @@
   class="sidebar-slide"
   [(visible)]="sidebarVisible"
   position="right"
-  [style]="{ width: '468px' }"
+  [style]="{ width: '500px' }"
   [dismissible]="true"
   [showCloseIcon]="false"
 >

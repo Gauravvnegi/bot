@@ -212,3 +212,34 @@ export const seatedTabGroup: Option<TabsType>[] = [
     value: TabsType['non-resident'],
   },
 ];
+
+export const slotHours = [
+  {
+    label: '30 Min',
+    value: '30',
+  },
+  {
+    label: '1 Hrs',
+    value: '60',
+  },
+  {
+    label: '1:30 Min',
+    value: '90 Min',
+  },
+  {
+    label: '2 Hrs',
+    value: '120 Min',
+  },
+  {
+    label: '3 Hrs',
+    value: '180 Min',
+  },
+  {
+    label: '4 Hrs',
+    value: '240 Min',
+  },
+  {
+    label: '5 Hrs',
+    value: '300 Min',
+  },
+];

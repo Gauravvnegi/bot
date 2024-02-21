@@ -10,6 +10,11 @@ import {
   ReservationTableResponse,
 } from '../types/reservation-table';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
+import {
+  AreaListResponse,
+  GuestReservationListResponse,
+  TableListResponse,
+} from '../types/outlet.response';
 
 @Injectable()
 export class OutletTableService extends ApiService {
@@ -70,5 +75,18 @@ export class OutletTableService extends ApiService {
 
   getFilteredMenuItems(config: QueryConfig) {
     return this.get(`/api/v1/menus/items${config?.params}`);
+  }
+
+  getList<T extends TableListResponse | AreaListResponse>(
+    entityId: string,
+    config?: QueryConfig
+  ): Observable<T> {
+    return this.get(
+      `/api/v1/entity/${entityId}/inventory${config?.params ?? ''}`
+    );
+  }
+
+  getGuestReservation(): Observable<GuestReservationListResponse> {
+    return this.get(`/api/v1/booking?type=OUTLET&outletType=RESTAURANT`);
   }
 }

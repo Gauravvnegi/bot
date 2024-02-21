@@ -3,13 +3,6 @@
     <span class="title">Add Guest</span>
     <span class="close-icon">
       <img
-        (click)="fullReservation()"
-        class="expand"
-        [src]="'assets/svg/expand-white.svg'"
-        alt="reservation"
-        [pTooltip]="'Create Full Reservation'"
-      />
-      <img
         (click)="close()"
         class="close-sidebar-icon"
         src="assets/svg/close-sidebar.svg"
@@ -26,6 +19,27 @@
     </div>
     <div class="content__wrapper">
       <div class="form-block content">
+        <hospitality-bot-date
+          class="half-width"
+          controlName="checkIn"
+          label="Check-in Date"
+          [props]="{
+            placeholder: 'DD/MM/YYYY'
+          }"
+          [minDate]="startMinDate"
+        ></hospitality-bot-date>
+        <hospitality-bot-select
+          label="Hours"
+          class="half-width"
+          controlName="slotHours"
+          [props]="{
+            placeholder: 'Select'
+          }"
+          [options]="slotOptions"
+          [settings]="{
+            optionAlignment: 'horizontal'
+          }"
+        ></hospitality-bot-select>
         <hospitality-bot-multi-select
           label="Table No./Area"
           class="half-width"
@@ -50,20 +64,46 @@
             }
           }"
         ></hospitality-bot-input>
-        <hospitality-bot-select
-          label="Guest"
+        <hospitality-bot-quick-select
           class="half-width"
           controlName="guest"
+          label="Guest"
+          [inputType]="'select'"
           [props]="{
-            placeholder: 'Select Guest'
+            showChips: false,
+            isAsync: true,
+            placeholder: 'Select',
+            createPrompt: '+ Add New Guest',
+            selectedOption: selectedGuest,
+            createType: 'sidebar'
           }"
-          [options]="[
-            {
-              label: 'Standard',
-              value: 'standard'
-            }
-          ]"
-        ></hospitality-bot-select>
+          [apiConfig]="{
+            apiEndPoint: '/api/v1/members',
+            dataModel: {
+              key: 'records',
+              values: {
+                label: ['firstName', 'lastName'],
+                value: 'id'
+              }
+            },
+            queryParams: getConfig(),
+            searchAPIEndPoint: '/api/v1/search/members',
+            searchModel: {
+              response: true,
+              values: {
+                label: ['firstName', 'lastName'],
+                value: 'id'
+              }
+            },
+            searchQueryParams: { type: 'GUEST,NON_RESIDENT_GUEST' }
+          }"
+          [paginationConfig]="{
+            isPagination: true
+          }"
+          (clickedOption)="guestChange($event)"
+          [initItems]="true"
+          (openSidebar)="onAddGuest()"
+        ></hospitality-bot-quick-select>
         <hospitality-bot-select
           label="Market Segment"
           class="half-width"
@@ -73,16 +113,7 @@
           }"
           [options]="marketSegments"
         ></hospitality-bot-select>
-        <hospitality-bot-from-to-date
-          [controlNames]="{
-            from: 'checkIn',
-            to: 'checkOut'
-          }"
-          [labels]="{
-            from: 'Check-in Date',
-            to: 'Check-out Date'
-          }"
-        ></hospitality-bot-from-to-date>
+
         <hospitality-bot-text-area
           class="full-width"
           controlName="remark"
@@ -111,3 +142,13 @@
   >
   </hospitality-bot-form-action>
 </div>
+
+<p-sidebar
+  class="sidebar"
+  [(visible)]="sidebarVisible"
+  position="right"
+  [showCloseIcon]="false"
+  [style]="{ width: '500px' }"
+>
+  <ng-container #sidebarSlide></ng-container>
+</p-sidebar>

@@ -34,6 +34,7 @@
       (onClick)="addNewOrder()"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
+      *ngIf="selectedReservationType === 'table'"
       [additionalActionItems]="additionalActionItems"
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"

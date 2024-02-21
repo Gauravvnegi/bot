@@ -19,25 +19,26 @@ export type OrderInformation = {
 };
 
 export type PaymentInformation = {
-  complementary: boolean;
   paymentMethod: string;
   paymentRecieved: number;
   transactionId: string;
 };
 
 export type KotInformation = {
-  kotItems: {
-    items: KotItemsForm[];
-    kotInstruction: string;
-    kotOffer: string[];
-    viewKotOffer?: boolean;
-    viewKotInstruction?: boolean;
-    id?: string;
-  }[];
+  kotItems: KotForm[];
+};
+
+export type KotForm = {
+  items: KotItemsForm[];
+  kotInstruction: string;
+  kotOffer: string[];
+  viewKotOffer?: boolean;
+  viewKotInstruction?: boolean;
+  id?: string;
 };
 
 export type KotItemsForm = {
-  id: string;
+  id?: string;
   itemName: string;
   unit: number;
   mealPreference: MealPreferences;
@@ -45,6 +46,7 @@ export type KotItemsForm = {
   itemInstruction: string;
   image: string;
   viewItemInstruction: boolean;
+  itemId?: string;
 };
 
 export type MenuOrderResponse = {

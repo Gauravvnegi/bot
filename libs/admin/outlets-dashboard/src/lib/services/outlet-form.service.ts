@@ -56,10 +56,11 @@ export class OutletFormService {
       kots: kotInformation.kotItems.map((item) => ({
         instructions: item.kotInstruction,
         items: item.items.map((item) => ({
-          itemId: item.id,
+          itemId: item?.itemId,
           unit: item.unit,
           amount: item.price,
           remarks: item.itemInstruction,
+          id: item?.id,
         })),
         id: item?.id,
       })),
@@ -112,6 +113,7 @@ export class OutletFormService {
             id: item?.id,
             itemName: item.menuItem?.name,
             unit: item?.unit,
+            itemId: item?.itemId,
             mealPreference: item.menuItem?.mealPreference
               .replace(/[-_]/g, '')
               .toUpperCase() as MealPreferences,

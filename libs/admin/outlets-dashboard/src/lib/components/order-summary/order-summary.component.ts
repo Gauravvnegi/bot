@@ -11,9 +11,14 @@ import {
 import { OutletTableService } from '../../services/outlet-table.service';
 import { Subscription } from 'rxjs';
 import { PaymentMethodList } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
-import { Option } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  Option,
+  QueryConfig,
+} from '@hospitality-bot/admin/shared';
 import { MenuItem } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 import { KotItemsForm, MenuForm } from '../../types/form';
+import { OfferListResponse } from 'libs/admin/offers/src/lib/types/response';
 
 @Component({
   selector: 'hospitality-bot-order-summary',
@@ -38,15 +43,19 @@ export class OrderSummaryComponent implements OnInit {
   itemOffers: Option[] = [];
 
   totalAmount: number = 0;
+  currentKotIndex = 0;
+
   viewOffer = false;
-  kotLength = 0;
   loadingKotData = false;
+
+  selectedOffer: Option;
 
   constructor(
     private fb: FormBuilder,
     private formService: OutletFormService,
     public controlContainer: ControlContainer,
-    private outletService: OutletTableService
+    private outletService: OutletTableService,
+    private adminUtilityService: AdminUtilityService
   ) {}
 
   ngOnInit(): void {
@@ -76,6 +85,8 @@ export class OrderSummaryComponent implements OnInit {
     const formGroup = this.fb.group(data);
     this.kotFormArray.push(formGroup);
 
+    if (this.orderId) formGroup.get('kotOffer').disable();
+
     const kotItemFormGroup = this.fb.group({
       kotItems: this.kotFormArray,
     });
@@ -85,6 +96,7 @@ export class OrderSummaryComponent implements OnInit {
     this.itemFormArray = this.kotFormArray.controls[0].get(
       'items'
     ) as FormArray;
+    if (!this.orderId) this.listenForOfferChange();
   }
 
   // Method to add a new KOT dynamically
@@ -95,11 +107,13 @@ export class OrderSummaryComponent implements OnInit {
       kotOffer: [[]],
       viewKotInstruction: [false],
       viewKotOffer: [false],
+      id: [null],
     };
     this.kotFormArray.push(this.fb.group(data));
     this.itemFormArray = this.kotFormArray.controls[kotIndex].get(
       'items'
     ) as FormArray;
+    this.listenForOfferChange();
   }
 
   createNewItemFields(newItem: MenuItem, kotIndex: number = 0) {
@@ -107,7 +121,8 @@ export class OrderSummaryComponent implements OnInit {
       keyof MenuItem & { viewItemInstruction: boolean },
       any
     > = {
-      id: [newItem?.id],
+      id: [null],
+      itemId: [newItem?.itemId],
       itemName: [newItem?.name],
       unit: [1],
       mealPreference: [newItem?.mealPreference],
@@ -129,7 +144,7 @@ export class OrderSummaryComponent implements OnInit {
           const menuItems = res.items
             .filter((item) => item.menuItem)
             .map((item) => new MenuItem().deserialize(item.menuItem));
-          this.kotLength = res.kots.length;
+          this.currentKotIndex = res.kots.length;
           menuItems.forEach((item) => {
             this.createNewItemFields(item);
           });
@@ -148,7 +163,7 @@ export class OrderSummaryComponent implements OnInit {
       .patchValue(itemControl.value.unit - 1, { emitEvent: false });
     this.totalAmount = this.totalAmount - itemControl.get('price').value;
     itemControl.value.unit === 0 &&
-      this.formService.removeItemFromSelectedItems(itemControl.value.id);
+      this.formService.removeItemFromSelectedItems(itemControl.value.itemId);
   }
 
   /**
@@ -181,6 +196,26 @@ export class OrderSummaryComponent implements OnInit {
     );
   }
 
+  listenForOfferChange() {
+    this.kotFormArray
+      .at(this.currentKotIndex)
+      .get('kotOffer')
+      .valueChanges.subscribe((res) => {
+        if (res) {
+          this.selectedOffer = this.itemOffers.find(
+            (offer) => offer.value === res
+          );
+        }
+      });
+  }
+
+  removeOffer() {
+    this.kotFormArray.at(this.currentKotIndex).patchValue({
+      kotOffer: [],
+      viewKotOffer: false,
+    });
+  }
+
   listenForItemsChange() {
     let newKotAdded = false;
 
@@ -190,15 +225,21 @@ export class OrderSummaryComponent implements OnInit {
           this.selectedItems = res;
 
           // Add New Kot while updating
-          if (this.kotLength > 0 && this.selectedItems.length && !newKotAdded) {
-            this.addNewKOT(this.kotLength);
+          if (
+            this.currentKotIndex > 0 &&
+            this.selectedItems.length &&
+            !newKotAdded
+          ) {
+            this.addNewKOT(this.currentKotIndex);
             newKotAdded = true;
           }
 
           // Add and remove menu items
-          const existingIds = this.itemFormArray.value.map((item) => item.id);
+          const existingIds = this.itemFormArray.value.map(
+            (item) => item.itemId
+          );
           const newItems = res?.filter(
-            (item) => !existingIds.includes(item.id)
+            (item) => !existingIds.includes(item.itemId)
           );
 
           this.totalAmount = this.selectedItems?.reduce(
@@ -207,17 +248,20 @@ export class OrderSummaryComponent implements OnInit {
           );
 
           const removedItems = this.itemFormArray.controls?.filter(
-            (control) => !res?.some((item) => item.id === control.value.id)
+            (control) =>
+              !res?.some((item) => item.itemId === control.value.itemId)
           );
 
           if (newItems.length > 0 || removedItems.length > 0) {
             newItems.forEach((newItem) => {
               this.createNewItemFields(newItem);
+              this.applyOffer();
             });
 
             removedItems.forEach((removedItem) => {
               const index = this.itemFormArray.controls.indexOf(removedItem);
               this.removeItemFields(index);
+              this.applyOffer();
             });
           }
         }
@@ -227,10 +271,63 @@ export class OrderSummaryComponent implements OnInit {
 
   removeItemFields(index: number) {
     this.itemFormArray.removeAt(index);
+    !this.itemFormArray.value.length &&
+      this.kotFormArray.at(this.currentKotIndex).patchValue({
+        viewKotOffer: false,
+        viewKotInstruction: false,
+        kotOffer: [],
+      });
   }
 
   clear() {
     this.formService.removeItemFromSelectedItems();
+  }
+
+  getTotalItemUnits(itemControls: FormGroup[]) {
+    let totalUnits = 0;
+
+    if (itemControls?.length) {
+      itemControls.forEach((itemControl) => {
+        totalUnits += itemControl.get('unit').value;
+      });
+    }
+
+    return totalUnits;
+  }
+
+  applyOffer(formGroup?: FormGroup) {
+    formGroup &&
+      formGroup.get('viewKotOffer').patchValue(true, { emitEvent: false });
+    const menuItemIds = this.itemFormArray.controls
+      .map((control) => control.get('itemId').value)
+      .join(',');
+    const config: QueryConfig = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          pagination: false,
+          type: 'OFFER',
+          source: 1,
+          serviceIds: menuItemIds,
+        },
+      ]),
+    };
+
+    this.$subscription.add(
+      this.outletService
+        .getOffer(this.entityId, config)
+        .subscribe((res: OfferListResponse) => {
+          if (res) {
+            this.itemOffers = res.offers.map((offer) => ({
+              label: offer.name,
+              value: offer.id,
+              description: offer.description,
+              validDate: offer.endDate,
+              discountType: offer.discountType,
+              discountValue: offer.discountValue,
+            }));
+          }
+        })
+    );
   }
 
   /**
@@ -240,16 +337,13 @@ export class OrderSummaryComponent implements OnInit {
   toggleControlVisibility(
     type: 'Instruction' | 'Offer' | 'ItemInstruction',
     index: number,
-    array: FormArray
+    formGroup: FormGroup
   ) {
     const controlName =
       type === 'ItemInstruction' ? `view${type}` : `viewKot${type}`;
-    array
-      .at(index)
-      .get(controlName)
-      .patchValue(!array.at(index).get(controlName).value, {
-        emitEvent: false,
-      });
+    formGroup.get(controlName).patchValue(!formGroup.get(controlName).value, {
+      emitEvent: false,
+    });
   }
 
   ngOnDestroy() {
@@ -282,7 +376,7 @@ export class OrderSummaryComponent implements OnInit {
 //   at: (
 //     idx: number
 //   ) => Omit<AbstractControl, 'get'> & {
-//     get: (keyName: keyof ItemForm) => AbstractControl;
+//     get: (keyName: keyof KotItemsForm) => AbstractControl;
 //   };
 // };
 

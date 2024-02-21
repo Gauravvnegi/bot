@@ -240,12 +240,7 @@
     <hospitality-bot-checkbox
       class="checkbox-field"
       label="Email Invoice"
-      controlName="emailInvoice"
-    ></hospitality-bot-checkbox>
-    <hospitality-bot-checkbox
-      class="checkbox-field"
-      label="Print Invoice"
-      controlName="printInvoice"
+      controlName="complementary"
     ></hospitality-bot-checkbox>
   </div>
   <div class="buttons">
@@ -256,19 +251,19 @@
       height="40px"
     ></hospitality-bot-button>
     <hospitality-bot-button
-      label="Save"
+      label="Hold"
       (onClick)="handleSave()"
       minWidth="120px"
       height="40px"
     ></hospitality-bot-button>
     <hospitality-bot-button
-      label="Print KOT"
+      label="Print & E-bill"
       (onClick)="handleKOT(true)"
       minWidth="120px"
       height="40px"
     ></hospitality-bot-button>
     <hospitality-bot-button
-      label="KOT"
+      label="KOT & Print"
       (onClick)="handleKOT()"
       minWidth="120px"
       height="40px"

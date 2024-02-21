@@ -105,7 +105,6 @@ export class PosReservationComponent implements OnInit {
         address: [''],
       }),
       paymentInformation: this.fb.group({
-        complementery: [false],
         paymentMethod: [''],
         paymentRecieved: [null],
         transactionId: [''],
@@ -114,8 +113,7 @@ export class PosReservationComponent implements OnInit {
 
     this.checkboxForm = this.fb.group({
       sendFeedback: [false],
-      emailInvoice: [false],
-      printInvoice: [false],
+      complementary: [false],
     });
   }
 
@@ -149,7 +147,7 @@ export class PosReservationComponent implements OnInit {
 
             // menuItems.length &&
             //   this.formService.selectedMenuItems.next(menuItems);
-            this.userForm.patchValue(formData);
+            this.userForm.patchValue(formData, { emitEvent: false });
           }
         })
     );
@@ -215,7 +213,7 @@ export class PosReservationComponent implements OnInit {
           type: 'AREA',
           offset: 0,
           limit: 0,
-          raw: 'true',
+          raw: true,
           createBooking: true,
           roomTypeStatus: true,
         },
@@ -257,20 +255,21 @@ export class PosReservationComponent implements OnInit {
   }
 
   getTableData() {
-    this.$subscription.add;
-    this.tableManagementService
-      .getList(this.entityId, this.getAreaConfig())
-      .subscribe((res) => {
-        const records = new AreaList().deserialize(res as AreaListResponse)
-          .records;
-        this.areaList = records.reduce((acc, item) => {
-          const tableOptions = item.tableList.map((table) => ({
-            label: table.label,
-            value: table.value,
-          }));
-          return acc.concat(tableOptions);
-        }, []);
-      });
+    this.$subscription.add(
+      this.tableManagementService
+        .getList(this.entityId, this.getAreaConfig())
+        .subscribe((res) => {
+          const records = new AreaList().deserialize(res as AreaListResponse)
+            .records;
+          this.areaList = records.reduce((acc, item) => {
+            const tableOptions = item.tableList.map((table) => ({
+              label: table.label,
+              value: table.value,
+            }));
+            return acc.concat(tableOptions);
+          }, []);
+        })
+    );
   }
 
   getCards() {
@@ -337,9 +336,7 @@ export class PosReservationComponent implements OnInit {
 
   postToRoom() {}
 
-  handleSave(print: boolean = false) {}
-
-  handleKOT(print: boolean = false) {
+  handleSave() {
     const data = this.formService.getOutletFormData(
       this.userForm.getRawValue() as MenuForm
     );
@@ -358,6 +355,8 @@ export class PosReservationComponent implements OnInit {
       }
     );
   }
+
+  handleKOT(print: boolean = false) {}
 
   close() {
     this.selectedCategories = [];

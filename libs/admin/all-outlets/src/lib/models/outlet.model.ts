@@ -86,6 +86,7 @@ export class MenuItem {
   mealPreference: MealPreferences;
   imageUrl: string;
   popular: boolean;
+  itemId?: string;
 
   deserialize(input: MenuItemResponse) {
     this.code = input?.code;
@@ -105,6 +106,7 @@ export class MenuItem {
       .replace(/[-_]/g, '')
       .toUpperCase() as MealPreferences;
     this.imageUrl = input?.imageUrl;
+    this.itemId = input?.id;
     return this;
   }
 }

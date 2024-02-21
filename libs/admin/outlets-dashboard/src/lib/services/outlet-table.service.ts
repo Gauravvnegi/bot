@@ -89,4 +89,8 @@ export class OutletTableService extends ApiService {
   getGuestReservation(): Observable<GuestReservationListResponse> {
     return this.get(`/api/v1/booking?type=OUTLET&outletType=RESTAURANT`);
   }
+
+  getOffer(entityId: string, config: QueryConfig): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}/library/${config.params}`);
+  }
 }

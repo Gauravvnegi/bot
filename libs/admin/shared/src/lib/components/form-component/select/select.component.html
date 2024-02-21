@@ -60,6 +60,13 @@
           {{ option.extras }}
         </span>
 
+        <!-- Offer description -->
+        <div
+          *ngIf="option?.description"
+          [innerHTML]="option?.description"
+          class="option-name"
+        ></div>
+
         <span *ngIf="option.phoneNumber && option.email" class="option-details">
           <span [ngStyle]="{ 'padding-right': '10px' }">{{
             option.phoneNumber
@@ -67,8 +74,12 @@
           <span>{{ option.email }}</span>
         </span>
       </div>
+
       <span *ngIf="option?.itemAmount" class="option-amount">
         {{ option.itemAmount | currency: 'INR' }}
+      </span>
+      <span *ngIf="option?.validDate" class="option-name">
+        Valid Till - {{ option.validDate | date: 'dd/MM/yy' }}
       </span>
     </ng-template>
 

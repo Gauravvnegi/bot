@@ -12,14 +12,7 @@
 
   <div class="guest-list-sidebar__content" [formGroup]="useForm">
     <div class="header">
-      <div
-        class="search-bar"
-        [ngStyle]="
-          !isSeated && {
-            width: 'calc(100% - 20px)'
-          }
-        "
-      >
+      <div class="search-bar">
         <hospitality-bot-global-search
           [formGroup]="useForm"
           controlName="search"
@@ -32,11 +25,8 @@
           (onSearch)="searchGuest($event)"
         ></hospitality-bot-global-search>
       </div>
-      <div *ngIf="isSeated" (click)="openAddGuest()" class="add-guest">
+      <div (click)="openAddGuest()" class="add-guest">
         + Add guest
-      </div>
-      <div class="filter">
-        <img src="assets/svg/Filter-Icon.svg" alt="filter" />
       </div>
     </div>
 
@@ -57,15 +47,20 @@
     <div class="content">
       <ng-container *ngIf="!loading && guestList.length; else emptyGuest">
         <ng-container *ngFor="let guest of guestList; let i = index">
-          <hospitality-bot-guest-card [item]="guest">
+          <hospitality-bot-guest-card
+            [item]="guest"
+            (click)="onEditGuestReservation(guest)"
+          >
             <ng-container *ngIf="isSeated; else waitlist">
               <hospitality-bot-button
                 label="Print Invoice"
                 variant="outlined"
+                (onClick)="onPrintInvoice($event)"
               ></hospitality-bot-button>
               <hospitality-bot-button
                 label="Change Table"
                 variant="outlined"
+                (onClick)="onTableChange($event, guest)"
               ></hospitality-bot-button>
             </ng-container>
             <ng-template #waitlist>
@@ -98,13 +93,17 @@
 </div>
 
 <ng-template #emptyGuest>
-  <div class="empty-guest">
-    <hospitality-bot-loader-bounce
-      *ngIf="loading; else empty"
-    ></hospitality-bot-loader-bounce>
-
-    <ng-template #empty>No Record Found...</ng-template>
-  </div>
+  <hospitality-bot-loader-bounce
+    *ngIf="loading; else empty"
+  ></hospitality-bot-loader-bounce>
+  <ng-template #empty>
+    <div class="empty-container">
+      <div class="content">
+        <img [src]="'assets/svg/no guest found.svg'" alt="" />
+        <span class="title">No Guest Found</span>
+      </div>
+    </div>
+  </ng-template>
 </ng-template>
 
 <p-sidebar

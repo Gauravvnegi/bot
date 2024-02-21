@@ -8,12 +8,7 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import {
-  seatedCards,
-  seatedChips,
-  seatedTabGroup,
-  waitListCards,
-} from '../../constants/guest-list.const';
+import { seatedChips, seatedTabGroup } from '../../constants/guest-list.const';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GuestCard } from '../guest-card/guest-card.component';
 import { ChipType, TabsType } from '../../types/guest.type';
@@ -21,7 +16,10 @@ import { AddGuestListComponent } from '../add-guest-list/add-guest-list.componen
 import { manageMaskZIndex } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import { OutletTableService } from '../../services/outlet-table.service';
-import { GuestReservationList } from '../../models/guest-reservation.model';
+import {
+  GuestReservation,
+  GuestReservationList,
+} from '../../models/guest-reservation.model';
 
 @Component({
   selector: 'hospitality-bot-guest-list',
@@ -47,6 +45,9 @@ export class GuestListComponent implements OnInit {
   sidebarSlide: ViewContainerRef;
   loading = false;
 
+  backupData: GuestReservation[];
+  guestList: GuestReservation[] = [];
+
   constructor(
     private fb: FormBuilder,
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -67,11 +68,17 @@ export class GuestListComponent implements OnInit {
   }
 
   initGuestReservation(): void {
+    this.loading = true;
     this.$subscription.add(
-      this.outletService.getGuestReservation().subscribe((response) => {
-        const data = new GuestReservationList().deserialize(response);
-        this.seatedGuestList = data.records;
-      })
+      this.outletService.getGuestReservationList().subscribe(
+        (response) => {
+          const data = new GuestReservationList().deserialize(response);
+          this.backupData = data.records;
+          this.guestList = data.records;
+        },
+        this.handelError,
+        this.handelFinal
+      )
     );
   }
 
@@ -80,43 +87,41 @@ export class GuestListComponent implements OnInit {
       { search: '', chip: ChipType[event.value] },
       { emitEvent: false }
     );
+    /**
+     *
+     * filter the guest list by chip type
+     */
   }
 
   tabChange(event: { index: number }) {
+    this.loading = true;
     const activeTab = TabsType[Object.keys(TabsType)[event.index]] as TabsType;
-    const activeChip = this.useForm.get('chip').value;
     this.useForm.patchValue(
       { search: '', tab: activeTab },
       { emitEvent: false }
     );
 
-    /**
-     * filtration------
-     */
-    let constCards =
-      activeChip == this.chipEnum.seated ? seatedCards : waitListCards;
-
-    if (
-      activeTab == TabsType.resident ||
-      activeTab == TabsType['non-resident']
-    ) {
-      this.waitListGuestList = constCards.filter(
-        (item) => item.type === activeTab
-      );
-      this.seatedGuestList = constCards.filter(
-        (item) => item.type === activeTab
-      );
-    } else {
-      this.seatedGuestList = [...constCards];
-      this.waitListGuestList = [...constCards];
+    if (activeTab === TabsType.all) {
+      this.initGuestReservation();
+      return;
     }
+
+    this.guestList = this.backupData.filter(
+      (data) => data.type === (activeTab as TabsType)
+    );
+
+    this.loading = false;
   }
 
-  get isSeated() {
-    return this.useForm.get('chip').value == this.chipEnum.seated;
+  searchGuest(event: string) {
+    this.loading = false;
   }
 
-  openAddGuest() {
+  onEditGuestReservation(data: GuestReservation) {
+    this.openAddGuest(data?.id);
+  }
+
+  openAddGuest(id?: string) {
     this.sidebarSlide.clear();
     this.sidebarVisible = true;
     manageMaskZIndex();
@@ -125,48 +130,39 @@ export class GuestListComponent implements OnInit {
     );
     const componentRef = this.sidebarSlide.createComponent(factory);
     const instance: AddGuestListComponent = componentRef.instance;
+    instance.guestReservationId = id && id;
 
     const closeSubscription = instance.onClose.subscribe((res: any) => {
+      this.initGuestReservation();
       componentRef.destroy();
       closeSubscription.unsubscribe();
       this.sidebarVisible = false;
     });
   }
 
-  searchGuest(event: string) {
-    const activeChip = this.useForm.get('chip').value;
-    const activeTab = this.useForm.get('tab').value;
-
-    let constCards =
-      activeChip == this.chipEnum.seated ? seatedCards : waitListCards;
-
-    if (event) {
-      const isAll = activeTab == this.tabEnum.all;
-      this.waitListGuestList = constCards.filter(
-        (item) =>
-          item.name.toLocaleLowerCase().includes(event.toLocaleLowerCase()) &&
-          (isAll || item.type === activeTab)
-      );
-      this.seatedGuestList = constCards.filter(
-        (item) =>
-          item.name.toLocaleLowerCase().includes(event.toLocaleLowerCase()) &&
-          (isAll || item.type === activeTab)
-      );
-      console.log(activeChip, activeTab, event);
-    } else {
-      this.tabChange({ index: Object.keys(TabsType).indexOf(activeTab) });
-      this.setChip({ value: activeChip } as any);
-    }
-    this.loading = false;
+  get isSeated() {
+    return this.useForm.get('chip').value == this.chipEnum.seated;
   }
 
-  get guestList() {
-    return this.isSeated ? this.seatedGuestList : this.waitListGuestList;
+  onPrintInvoice(event) {
+    event.stopPropagation();
   }
 
+  onTableChange(event, guest: GuestReservation) {
+    event.stopPropagation();
+    this.openAddGuest(guest.id);
+  }
   close() {
     this.onClose.emit(true);
   }
+
+  handelError = ({ error }) => {
+    this.loading = false;
+  };
+
+  handelFinal = () => {
+    this.loading = false;
+  };
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();

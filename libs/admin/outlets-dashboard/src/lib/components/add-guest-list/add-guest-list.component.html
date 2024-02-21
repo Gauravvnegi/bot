@@ -19,6 +19,16 @@
     </div>
     <div class="content__wrapper">
       <div class="form-block content">
+        <!-- <hospitality-bot-toggle-switch-with-label
+          class="toggle"
+          [isToggleOn]="guestReservationFormControl.seated"
+          (onToggleSwitch)="triggerStatusChange($event)"
+          [config]="{
+            toggleOnLabel: 'Seated',
+            toggleOffLabel: 'Waitlist'
+          }"
+          click-stop-propagation
+        ></hospitality-bot-toggle-switch-with-label> -->
         <hospitality-bot-date
           class="half-width"
           controlName="checkIn"
@@ -133,10 +143,13 @@
     [isSticky]="true"
     [isFixed]="true"
     [config]="{
-      postLabel: 'Create Reservation',
+      postLabel: guestReservationId
+        ? 'Update Reservation'
+        : 'Create Reservation',
       preLabel: 'Guest Profile',
       preVariant: 'text',
-      preSeverity: 'primary'
+      preSeverity: 'primary',
+      preHide: !guestReservationId
     }"
     #fa
   >

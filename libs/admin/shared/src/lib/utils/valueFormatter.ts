@@ -106,3 +106,15 @@ export function getFullName(firstName: string, lastName: string) {
     ? `${firstName} ${lastName}`
     : firstName || lastName || undefined;
 }
+
+/**
+ * @function formatEpochTime
+ * @param epochTime
+ * @returns
+ */
+export function formatEpochTime(epochTime: number): string {
+  return new Date(epochTime).toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}

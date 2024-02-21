@@ -133,10 +133,13 @@
     [isSticky]="true"
     [isFixed]="true"
     [config]="{
-      postLabel: 'Create Reservation',
+      postLabel: guestReservationId
+        ? 'Update Reservation'
+        : 'Create Reservation',
       preLabel: 'Guest Profile',
       preVariant: 'text',
-      preSeverity: 'primary'
+      preSeverity: 'primary',
+      preHide: !guestReservationId
     }"
     #fa
   >

@@ -13,6 +13,7 @@ import { QueryConfig } from '@hospitality-bot/admin/shared';
 import {
   AreaListResponse,
   GuestReservationListResponse,
+  GuestReservationResponse,
   TableListResponse,
 } from '../types/outlet.response';
 
@@ -86,7 +87,21 @@ export class OutletTableService extends ApiService {
     );
   }
 
-  getGuestReservation(): Observable<GuestReservationListResponse> {
+  getGuestReservationList(): Observable<GuestReservationListResponse> {
     return this.get(`/api/v1/booking?type=OUTLET&outletType=RESTAURANT`);
+  }
+
+  getGuestReservationById(id: string): Observable<GuestReservationResponse> {
+    return this.get(`/api/v1/booking/${id}?type=OUTLET&outletType=RESTAURANT`);
+  }
+
+  updateGuestReservation(
+    id: string,
+    reservation
+  ): Observable<GuestReservationResponse> {
+    return this.patch(
+      `/api/v1/booking/${id}?type=OUTLET&outletType=RESTAURANT`,
+      reservation
+    );
   }
 }

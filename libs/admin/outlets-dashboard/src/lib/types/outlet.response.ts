@@ -251,23 +251,6 @@ interface ContactDetails {
   emailId: string;
 }
 
-interface Guest {
-  id: string;
-  firstName: string;
-  lastName: string;
-  contactDetails: ContactDetails;
-  age: number;
-  type: string;
-  isVerified: boolean;
-  status: boolean;
-  code: string;
-  created: number;
-  updated: number;
-  gender: string;
-  creditLimit: number;
-  creditLimitUsed: number;
-}
-
 interface OccupancyDetails {
   maxChildren: number;
   maxAdult: number;
@@ -321,6 +304,7 @@ export type GuestReservationResponse = {
   specialRequest: string;
   source: string;
   sourceName: string;
+  marketSegment: string;
   reservationNumber: string;
   status: string;
   tableNumberOrRoomNumber?: string;
@@ -335,6 +319,10 @@ export type GuestReservationResponse = {
   tableIdOrRoomId: string;
   externalBooking: boolean;
   order: Order;
+  guest: Guest;
+  currentJourney: 'WAITLISTED' | 'SEATED';
+  currentJoureyStatus: string;
+  currentJourneyState: string;
 };
 
 export type GuestReservationListResponse = {

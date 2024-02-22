@@ -134,6 +134,9 @@ export class OutletFormService {
       marketSegment: data.marketSegment,
       outletType: data.outletType,
       areaId: data.areaId,
+      currentJourney: data.seated ? 'SEATED' : 'WAITLISTED',
+      source: data.source,
+      sourceName: data.sourceName,
     };
 
     return formData;

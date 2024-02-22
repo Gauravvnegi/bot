@@ -149,6 +149,9 @@ export type AddGuestForm = {
   remark: string;
   outletType: string;
   areaId: string;
+  seated: boolean;
+  sourceName: string;
+  source: string;
 };
 
 export type CreateReservationData = {
@@ -165,6 +168,7 @@ export type CreateReservationData = {
   marketSegment: string;
   outletType?: string;
   areaId: string;
+  currentJourney: string;
 };
 
 export type KotItemStatus = 'PREPARED' | 'PENDING';

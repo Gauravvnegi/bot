@@ -92,4 +92,5 @@
 .add-item {
   @include flex-justify-align-center;
   margin: 15px 0 35px;
+  cursor: pointer;
 }

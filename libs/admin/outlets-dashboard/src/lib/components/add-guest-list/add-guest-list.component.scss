@@ -9,6 +9,10 @@
 :host ::ng-deep .form-block {
   @include form-block;
   padding: 0 4%;
+
+  .toggle {
+    justify-content: flex-end;
+  }
 }
 
 .guest-list-sidebar {

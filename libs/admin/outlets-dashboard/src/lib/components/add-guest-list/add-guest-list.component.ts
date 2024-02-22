@@ -26,10 +26,10 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { AddGuestForm } from '../../types/form';
 import { OutletFormService } from '../../services/outlet-form.service';
 import { OutletTableService } from '../../services/outlet-table.service';
-import { Subscription, combineLatest } from 'rxjs';
+import { Observable, Subscription, combineLatest } from 'rxjs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
-import { debounceTime } from 'rxjs/operators';
+import { concatMap, debounceTime, switchMap, tap } from 'rxjs/operators';
 import { AreaListResponse, AreaResponse } from '../../types/outlet.response';
 import { GuestFormData } from '../../models/guest-reservation.model';
 import { TableList } from 'libs/table-management/src/lib/models/data-table.model';
@@ -98,7 +98,6 @@ export class AddGuestListComponent implements OnInit {
 
   initOptions(): void {
     this.getMarketSegments();
-    this.getTableList();
   }
 
   initForm() {
@@ -114,6 +113,8 @@ export class AddGuestListComponent implements OnInit {
       outletType: ['RESTAURANT'],
       areaId: ['', Validators.required],
       seated: [true],
+      sourceName: [],
+      source: [],
     });
     this.listenForTimeChanges();
     this.listenForTableChanges();
@@ -121,9 +122,11 @@ export class AddGuestListComponent implements OnInit {
     if (this.guestReservationId) {
       this.getReservationDetails();
     } else {
-      this.useForm.patchValue({
-        checkIn: new Date().getTime(),
-        slotHours: 1800000,
+      this.getTableList().subscribe(() => {
+        this.useForm.patchValue({
+          checkIn: new Date().getTime(),
+          slotHours: 1800000,
+        });
       });
     }
   }
@@ -132,26 +135,21 @@ export class AddGuestListComponent implements OnInit {
     const { areaId, tables } = this.guestReservationFormControl;
     tables.valueChanges.subscribe((data) => {
       const id = this.backupData.find((table) => table.value === data[0])
-        .areaId;
+        ?.areaId;
       areaId.patchValue(id);
     });
   }
 
-  getReservationDetails() {
-    this.$subscriptions.add(
-      this.outletService
-        .getGuestReservationById(this.guestReservationId)
-        .subscribe((reservation) => {
-          const data = new GuestFormData().deserialize(reservation);
-          this.useForm.patchValue(data);
-        })
-    );
-  }
-
   listenForTimeChanges(): void {
-    const { checkIn, slotHours } = this.guestReservationFormControl;
+    const { checkIn, slotHours, seated } = this.guestReservationFormControl;
     checkIn.valueChanges.pipe(debounceTime(300)).subscribe((res) => {
       this.updateCheckOutTime();
+      //update seating condition
+      if (res > new Date().getTime()) {
+        seated.patchValue(false);
+      } else {
+        seated.patchValue(true);
+      }
     });
     slotHours.valueChanges.pipe(debounceTime(300)).subscribe((res) => {
       this.updateCheckOutTime();
@@ -168,11 +166,28 @@ export class AddGuestListComponent implements OnInit {
       const checkOutTimeEpoch = checkInTime + bookingTimeDuration;
       checkOut.patchValue(checkOutTimeEpoch);
 
-      this.getTableList(true);
+      this.getTableList(true).subscribe();
     }
   }
 
-  getTableList(isCurrentBooking: boolean = false): void {
+  getReservationDetails() {
+    this.$subscriptions.add(
+      this.getTableList()
+        .pipe(
+          concatMap(() =>
+            this.outletService.getGuestReservationById(this.guestReservationId)
+          )
+        )
+        .subscribe((reservation) => {
+          const data = new GuestFormData().deserialize(reservation);
+          this.useForm.patchValue(data);
+        })
+    );
+  }
+
+  getTableList(
+    isCurrentBooking: boolean = false
+  ): Observable<AreaListResponse> {
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
         {
@@ -189,10 +204,10 @@ export class AddGuestListComponent implements OnInit {
       ]),
     };
 
-    this.$subscriptions.add(
-      this.outletService
-        .getList<AreaListResponse>(this.entityId, config)
-        .subscribe((res) => {
+    return this.outletService
+      .getList<AreaListResponse>(this.entityId, config)
+      .pipe(
+        tap((res) => {
           const tableList: TableOption[] = [];
           const bookedTableIds: string[] = isCurrentBooking
             ? [...this.guestReservationFormControl.tables.value]
@@ -225,7 +240,7 @@ export class AddGuestListComponent implements OnInit {
             this.tableOptions = [...tableList];
           }
         })
-    );
+      );
   }
 
   openDetailsPage() {
@@ -317,7 +332,9 @@ export class AddGuestListComponent implements OnInit {
     );
   };
 
-  triggerStatusChange(event) {}
+  triggerStatusChange(event) {
+    this.guestReservationFormControl.seated.patchValue(event);
+  }
 
   /**
    * @function handleError to show the error

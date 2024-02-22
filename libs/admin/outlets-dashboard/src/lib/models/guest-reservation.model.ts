@@ -38,6 +38,16 @@ export class GuestReservation {
   feedback?: string;
   phone: string;
   isSeated: boolean;
+  paymentMethod: string;
+  paymentStatus: string;
+  totalAmount: number;
+  totalDueAmount: number;
+  nextStates: string[];
+  orderMethod: string;
+  numberOfItems: string;
+  preparationTime: string;
+  reservationStatus: string;
+
   deserialize(value: GuestReservationResponse) {
     this.id = value.id;
     this.tableNo = value?.tableNumberOrRoomNumber;
@@ -47,10 +57,12 @@ export class GuestReservation {
     this.people = value?.occupancyDetails?.maxAdult ?? 0;
     this.name = getFullName(value?.guest?.firstName, value?.guest?.lastName);
     this.type =
-      value?.guest?.type === 'GUEST' ? 'Resident' : (value?.guest?.type as any);
+      value?.guest?.type === 'GUEST' ? 'Resident' : ('Non-Resident' as any);
     this.feedback = undefined;
     this.phone = value?.guest?.contactDetails?.contactNumber;
     this.isSeated = value?.currentJourney === 'SEATED';
+    this.reservationStatus = value?.currentJourneyState;
+
     return this;
   }
 }
@@ -64,6 +76,8 @@ export class GuestFormData {
   checkOut: number;
   slotHours: number;
   remark: string;
+  sourceName: string;
+  source: string;
 
   deserialize(value: GuestReservationResponse) {
     this.tables = [value?.tableIdOrRoomId];
@@ -74,6 +88,8 @@ export class GuestFormData {
     this.checkOut = value?.to;
     this.slotHours = Math.abs(value?.from - value?.to);
     this.remark = value?.remarks;
+    this.sourceName = value?.sourceName;
+    this.source = value?.source;
     return this;
   }
 }

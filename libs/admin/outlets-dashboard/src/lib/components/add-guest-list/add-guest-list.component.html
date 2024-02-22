@@ -19,16 +19,17 @@
     </div>
     <div class="content__wrapper">
       <div class="form-block content">
-        <!-- <hospitality-bot-toggle-switch-with-label
-          class="toggle"
-          [isToggleOn]="guestReservationFormControl.seated"
-          (onToggleSwitch)="triggerStatusChange($event)"
-          [config]="{
-            toggleOnLabel: 'Seated',
-            toggleOffLabel: 'Waitlist'
-          }"
-          click-stop-propagation
-        ></hospitality-bot-toggle-switch-with-label> -->
+        <div class="full-width">
+          <hospitality-bot-toggle-switch-with-label
+            class="toggle"
+            [isToggleOn]="guestReservationFormControl.seated.value"
+            (onToggleSwitch)="triggerStatusChange($event)"
+            [config]="{
+              toggleOnLabel: 'Seated',
+              toggleOffLabel: 'Waitlist'
+            }"
+          ></hospitality-bot-toggle-switch-with-label>
+        </div>
         <hospitality-bot-date
           class="half-width"
           controlName="checkIn"

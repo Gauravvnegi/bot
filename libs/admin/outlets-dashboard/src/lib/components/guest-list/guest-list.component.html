@@ -20,9 +20,7 @@
             placeholder: 'Search by Name',
             hasSuggestion: false
           }"
-          (onKeyDown)="loading = true"
           [suggestionList]="[]"
-          (onSearch)="searchGuest($event)"
         ></hospitality-bot-global-search>
       </div>
       <div (click)="openAddGuest()" class="add-guest">
@@ -44,9 +42,16 @@
       ></hospitality-bot-chips>
     </div>
 
-    <div class="content">
+    <div
+      class="content"
+      infiniteScroll
+      (scrolled)="loadMore()"
+      [toggleScrollListener]="paginationDisabled"
+    >
       <ng-container *ngIf="!loading && guestList.length; else emptyGuest">
-        <ng-container *ngFor="let guest of guestList; let i = index">
+        <ng-container
+          *ngFor="let guest of guestList; let i = index; trackBy: trackGuests"
+        >
           <hospitality-bot-guest-card
             [item]="guest"
             (click)="onEditGuestReservation(guest)"
@@ -81,11 +86,11 @@
             </ng-template>
           </hospitality-bot-guest-card>
 
-          <ng-container *ngIf="!isSeated">
+          <!-- <ng-container *ngIf="!isSeated">
             <div class="date__divider">
               {{ '20/12/2024' }}
             </div></ng-container
-          >
+          > -->
         </ng-container>
       </ng-container>
     </div>

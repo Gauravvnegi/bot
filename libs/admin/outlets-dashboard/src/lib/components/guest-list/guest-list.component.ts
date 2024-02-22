@@ -13,13 +13,19 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { GuestCard } from '../guest-card/guest-card.component';
 import { ChipType, TabsType } from '../../types/guest.type';
 import { AddGuestListComponent } from '../add-guest-list/add-guest-list.component';
-import { manageMaskZIndex } from '@hospitality-bot/admin/shared';
-import { Subscription } from 'rxjs';
+import {
+  AdminUtilityService,
+  QueryConfig,
+  manageMaskZIndex,
+} from '@hospitality-bot/admin/shared';
+import { Subscription, of } from 'rxjs';
 import { OutletTableService } from '../../services/outlet-table.service';
 import {
   GuestReservation,
   GuestReservationList,
 } from '../../models/guest-reservation.model';
+import { debounce } from 'lodash';
+import { debounceTime, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-guest-list',
@@ -31,9 +37,12 @@ export class GuestListComponent implements OnInit {
   readonly tabEnum = TabsType;
   readonly seatedChips: Option<ChipType>[] = seatedChips;
   readonly seatedTabGroup: Option<TabsType>[] = seatedTabGroup;
-
+  paginationDisabled: boolean = false;
   seatedGuestList: GuestCard[] = [];
   waitListGuestList: GuestCard[] = [];
+
+  limit: number = 20;
+  offset: number = 0;
 
   private $subscription = new Subscription();
 
@@ -51,12 +60,14 @@ export class GuestListComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private outletService: OutletTableService
+    private outletService: OutletTableService,
+    private adminUtilityService: AdminUtilityService
   ) {}
 
   ngOnInit(): void {
     this.initForm();
     this.initGuestReservation();
+    this.searchGuest();
   }
 
   initForm() {
@@ -69,12 +80,26 @@ export class GuestListComponent implements OnInit {
 
   initGuestReservation(): void {
     this.loading = true;
+
+    const config: QueryConfig = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          type: 'OUTLET',
+          outletType: 'RESTAURANT',
+          limit: this.limit,
+          offset: this.offset,
+        },
+      ]),
+    };
+
     this.$subscription.add(
-      this.outletService.getGuestReservationList().subscribe(
+      this.outletService.getGuestReservationList(config).subscribe(
         (response) => {
           const data = new GuestReservationList().deserialize(response);
           this.backupData = data.records;
           this.guestList = data.records;
+
+          this.paginationDisabled = this.limit > data?.total;
         },
         this.handelError,
         this.handelFinal
@@ -112,9 +137,29 @@ export class GuestListComponent implements OnInit {
 
     this.loading = false;
   }
+  searchGuest() {
+    this.loading = true;
+    this.useForm
+      .get('search')
+      .valueChanges.pipe(
+        debounceTime(1000),
+        switchMap((searchTerm) => {
+          searchTerm = searchTerm?.toLowerCase();
 
-  searchGuest(event: string) {
-    this.loading = false;
+          const filteredValues = this.backupData.filter(
+            (guest) =>
+              guest?.name?.toLowerCase()?.includes(searchTerm) ||
+              guest?.tableNo?.toLowerCase()?.includes(searchTerm) ||
+              guest?.orderNo?.toLowerCase()?.includes(searchTerm)
+          );
+          return of(filteredValues);
+        })
+      )
+      .subscribe(
+        (results) => (this.guestList = results),
+        this.handelError,
+        this.handelFinal
+      );
   }
 
   onEditGuestReservation(data: GuestReservation) {
@@ -144,6 +189,13 @@ export class GuestListComponent implements OnInit {
     return this.useForm.get('chip').value == this.chipEnum.seated;
   }
 
+  loadMore() {
+    if (!this.paginationDisabled) {
+      this.limit = this.limit + 20;
+      this.initGuestReservation();
+    }
+  }
+
   onPrintInvoice(event) {
     event.stopPropagation();
   }
@@ -154,6 +206,10 @@ export class GuestListComponent implements OnInit {
   }
   close() {
     this.onClose.emit(true);
+  }
+
+  trackGuest(index: number, guest: GuestReservation) {
+    return guest.id;
   }
 
   handelError = ({ error }) => {

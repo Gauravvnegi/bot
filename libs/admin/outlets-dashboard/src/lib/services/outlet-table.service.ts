@@ -91,8 +91,10 @@ export class OutletTableService extends ApiService {
     );
   }
 
-  getGuestReservationList(): Observable<GuestReservationListResponse> {
-    return this.get(`/api/v1/booking?type=OUTLET&outletType=RESTAURANT`);
+  getGuestReservationList(
+    config: QueryConfig
+  ): Observable<GuestReservationListResponse> {
+    return this.get(`/api/v1/booking${config?.params}`);
   }
 
   getOffer(entityId: string, config: QueryConfig): Observable<any> {
@@ -107,7 +109,7 @@ export class OutletTableService extends ApiService {
     id: string,
     reservation
   ): Observable<GuestReservationResponse> {
-    return this.patch(
+    return this.put(
       `/api/v1/booking/${id}?type=OUTLET&outletType=RESTAURANT`,
       reservation
     );

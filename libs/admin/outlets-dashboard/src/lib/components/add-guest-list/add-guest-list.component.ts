@@ -149,9 +149,15 @@ export class AddGuestListComponent implements OnInit {
   }
 
   listenForTimeChanges(): void {
-    const { checkIn, slotHours } = this.guestReservationFormControl;
+    const { checkIn, slotHours, seated } = this.guestReservationFormControl;
     checkIn.valueChanges.pipe(debounceTime(300)).subscribe((res) => {
       this.updateCheckOutTime();
+      //update seating condition
+      if (res > new Date().getTime()) {
+        seated.patchValue(false);
+      } else {
+        seated.patchValue(true);
+      }
     });
     slotHours.valueChanges.pipe(debounceTime(300)).subscribe((res) => {
       this.updateCheckOutTime();
@@ -317,7 +323,9 @@ export class AddGuestListComponent implements OnInit {
     );
   };
 
-  triggerStatusChange(event) {}
+  triggerStatusChange(event) {
+    this.guestReservationFormControl.seated.patchValue(event);
+  }
 
   /**
    * @function handleError to show the error

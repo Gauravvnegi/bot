@@ -47,7 +47,7 @@ export class GuestReservation {
     this.people = value?.occupancyDetails?.maxAdult ?? 0;
     this.name = getFullName(value?.guest?.firstName, value?.guest?.lastName);
     this.type =
-      value?.guest?.type === 'GUEST' ? 'Resident' : (value?.guest?.type as any);
+      value?.guest?.type === 'GUEST' ? 'Resident' : ('Non-Resident' as any);
     this.feedback = undefined;
     this.phone = value?.guest?.contactDetails?.contactNumber;
     this.isSeated = value?.currentJourney === 'SEATED';

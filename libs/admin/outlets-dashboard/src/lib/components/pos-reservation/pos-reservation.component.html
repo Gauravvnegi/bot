@@ -161,12 +161,13 @@
                 value: 'id'
               }
             },
-            searchQueryParams: { type: 'GUEST,NON_RESIDENT_GUEST' }
+            searchQueryParams: { type: 'GUEST' }
           }"
           [paginationConfig]="{
             isPagination: true
           }"
           (clickedOption)="guestChange($event)"
+          (openSidebar)="showGuests()"
           [initItems]="true"
         ></hospitality-bot-quick-select>
         <hospitality-bot-input
@@ -222,7 +223,7 @@
       <div class="menu-items">
         <ng-container *ngIf="!loadingMenuItems; else loader">
           <ng-container *ngIf="getCards().length; else emptyCardView">
-            <ng-container *ngFor="let card of getCards()">
+            <ng-container *ngFor="let card of getCards(); trackBy: trackCards">
               <hospitality-bot-menu-item-card
                 class="menu-item"
                 [itemCard]="card"

@@ -47,7 +47,8 @@
                               let itemControls of kotFormArray
                                 .at(i)
                                 .get('items').controls;
-                              let j = index
+                              let j = index;
+                              trackBy: trackItemControls
                             "
                           >
                             <ng-container [formGroupName]="j">

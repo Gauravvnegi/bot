@@ -1,1 +1,0 @@
-export const mealPreferences = ['VEG', 'NONVEG'];

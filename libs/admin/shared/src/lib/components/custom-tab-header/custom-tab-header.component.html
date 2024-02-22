@@ -16,7 +16,7 @@
     >
       <ng-container *ngIf="tab?.iconSrc; else textLabel">
         <img
-          src="{{ tab.iconSrc }}"
+          [src]="tab?.iconSrc"
           [class.active-image]="selectedIndex === index"
         />
       </ng-container>

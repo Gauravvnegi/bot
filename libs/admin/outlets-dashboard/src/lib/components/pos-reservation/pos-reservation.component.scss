@@ -40,30 +40,6 @@
   }
 }
 
-// :host ::ng-deep .menu-field .p-multiselect {
-//   margin-left: 0;
-//   background: transparent;
-//   outline: none;
-//   border: 1px solid $white;
-//   border-radius: 5px;
-//   padding: 6px 20px;
-//   border-color: transparent !important;
-//   width: 80%;
-//   .p-multiselect-label-container {
-//     margin-top: 0.2em;
-//     margin-bottom: 0;
-//   }
-//   .p-multiselect-label {
-//     color: $white;
-//   }
-//   &:hover {
-//     border-color: $white;
-//   }
-//   .p-multiselect-trigger-icon {
-//     color: $white;
-//   }
-// }
-
 :host ::ng-deep .menu {
   .p-multiselect-label {
     color: black;
@@ -89,7 +65,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  padding: 5px 2%;
+  padding: 5px 2% 14px;
   gap: 10px;
 
   .search {
@@ -120,6 +96,7 @@
   border-bottom: 1px solid #d9d9d9;
   background-color: #f1f2f7;
   padding: 8px 15px;
+  height: 53px;
 }
 
 .content {
@@ -197,5 +174,11 @@
     .wrapper__standard {
       width: unset;
     }
+  }
+}
+
+:host ::ng-deep .pos-form {
+  .p-error {
+    bottom: -1.4em;
   }
 }

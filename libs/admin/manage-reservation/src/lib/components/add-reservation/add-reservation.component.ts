@@ -30,7 +30,10 @@ import { BaseReservationComponent } from '../../../../../reservation/src/lib/com
 import { ReservationType } from '../../constants/reservation-table';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { Subject } from 'rxjs';
-import { GlobalFilterService, RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { ReservationForm } from '../../constants/form';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ManualOffer } from '../form-components/booking-summary/booking-summary.component';
@@ -82,7 +85,7 @@ export class AddReservationComponent extends BaseReservationComponent
   }
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId
+    this.entityId = this.globalFilterService.entityId;
     this.initDetails();
     if (this.reservationId) this.getReservationDetails();
     this.initFormData();

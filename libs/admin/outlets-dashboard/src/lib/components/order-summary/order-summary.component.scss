@@ -117,14 +117,20 @@
 
 :host ::ng-deep .p-accordion {
   .p-accordion-tab {
-    border: solid 1px rgba(112, 112, 112, 0.35) !important;
+    box-shadow: none;
   }
+
+  .p-accordion-tab:not(.p-accordion-tab-active) .p-accordion-header-link:focus {
+    background: $white;
+  }
+
   .p-accordion-content {
     padding: 0;
   }
+
   .p-accordion-tab-active {
     .p-accordion-header {
-      border-bottom: solid 1px rgba(112, 112, 112, 0.35);
+      border-bottom: solid 1px $border-line;
     }
   }
 }

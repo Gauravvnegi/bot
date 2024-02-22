@@ -330,6 +330,10 @@ export class OrderSummaryComponent implements OnInit {
     );
   }
 
+  trackItemControls(index: number, item: FormGroup) {
+    return item.get('itemId').value;
+  }
+
   /**
    * Toggles the control visibility in item and
    * kot controls for instruction and offer inputs

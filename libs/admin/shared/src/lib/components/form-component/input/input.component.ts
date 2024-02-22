@@ -60,4 +60,16 @@ export class InputComponent extends FormComponent {
       'hide-spinner': this.isHideSpinners,
     };
   }
+
+  handleKeyClick(event: KeyboardEvent) {
+    this.handleKeyDown(event);
+    this.viewButton && this.handleEnterClick(event);
+  }
+
+  handleEnterClick(event: KeyboardEvent): void {
+    // Check if the pressed key is Enter and the focus is on the current input field
+    if (event.key === 'Enter' && event.target === event.currentTarget) {
+      this.onSaveText.emit();
+    }
+  }
 }

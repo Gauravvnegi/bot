@@ -64,6 +64,8 @@ export class GuestFormData {
   checkOut: number;
   slotHours: number;
   remark: string;
+  sourceName: string;
+  source: string;
 
   deserialize(value: GuestReservationResponse) {
     this.tables = [value?.tableIdOrRoomId];
@@ -74,6 +76,8 @@ export class GuestFormData {
     this.checkOut = value?.to;
     this.slotHours = Math.abs(value?.from - value?.to);
     this.remark = value?.remarks;
+    this.sourceName = value?.sourceName;
+    this.source = value?.source;
     return this;
   }
 }

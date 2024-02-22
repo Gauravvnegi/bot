@@ -99,7 +99,7 @@ export class OutletTableService extends ApiService {
     id: string,
     reservation
   ): Observable<GuestReservationResponse> {
-    return this.patch(
+    return this.put(
       `/api/v1/booking/${id}?type=OUTLET&outletType=RESTAURANT`,
       reservation
     );

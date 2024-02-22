@@ -140,6 +140,8 @@ export type AddGuestForm = {
   outletType: string;
   areaId: string;
   seated: boolean;
+  sourceName: string;
+  source: string;
 };
 
 export type CreateReservationData = {

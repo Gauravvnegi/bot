@@ -113,6 +113,8 @@ export class AddGuestListComponent implements OnInit {
       outletType: ['RESTAURANT'],
       areaId: ['', Validators.required],
       seated: [true],
+      sourceName: [],
+      source: [],
     });
     this.listenForTimeChanges();
     this.listenForTableChanges();

@@ -14,12 +14,14 @@ import { GuestCard } from '../guest-card/guest-card.component';
 import { ChipType, TabsType } from '../../types/guest.type';
 import { AddGuestListComponent } from '../add-guest-list/add-guest-list.component';
 import { manageMaskZIndex } from '@hospitality-bot/admin/shared';
-import { Subscription } from 'rxjs';
+import { Subscription, of } from 'rxjs';
 import { OutletTableService } from '../../services/outlet-table.service';
 import {
   GuestReservation,
   GuestReservationList,
 } from '../../models/guest-reservation.model';
+import { debounce } from 'lodash';
+import { debounceTime, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-guest-list',
@@ -57,6 +59,7 @@ export class GuestListComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.initGuestReservation();
+    this.searchGuest();
   }
 
   initForm() {
@@ -112,9 +115,29 @@ export class GuestListComponent implements OnInit {
 
     this.loading = false;
   }
+  searchGuest() {
+    this.loading = true;
+    this.useForm
+      .get('search')
+      .valueChanges.pipe(
+        debounceTime(1000),
+        switchMap((searchTerm) => {
+          searchTerm = searchTerm?.toLowerCase();
 
-  searchGuest(event: string) {
-    this.loading = false;
+          const filteredValues = this.backupData.filter(
+            (guest) =>
+              guest?.name?.toLowerCase()?.includes(searchTerm) ||
+              guest?.tableNo?.toLowerCase()?.includes(searchTerm) ||
+              guest?.orderNo?.toLowerCase()?.includes(searchTerm)
+          );
+          return of(filteredValues);
+        })
+      )
+      .subscribe(
+        (results) => (this.guestList = results),
+        this.handelError,
+        this.handelFinal
+      );
   }
 
   onEditGuestReservation(data: GuestReservation) {

@@ -20,9 +20,7 @@
             placeholder: 'Search by Name',
             hasSuggestion: false
           }"
-          (onKeyDown)="loading = true"
           [suggestionList]="[]"
-          (onSearch)="searchGuest($event)"
         ></hospitality-bot-global-search>
       </div>
       <div (click)="openAddGuest()" class="add-guest">
@@ -81,11 +79,11 @@
             </ng-template>
           </hospitality-bot-guest-card>
 
-          <ng-container *ngIf="!isSeated">
+          <!-- <ng-container *ngIf="!isSeated">
             <div class="date__divider">
               {{ '20/12/2024' }}
             </div></ng-container
-          >
+          > -->
         </ng-container>
       </ng-container>
     </div>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { OutletReservation } from '../../models/outlet-reservation.model';
 import {
   CardConfig,
@@ -13,12 +13,16 @@ import {
 })
 export class ReservationCardComponent implements OnInit {
   @Input() data: OutletReservation;
-  isTableAvailable: boolean = true;
-
   readonly cardConfig = CardConfig;
   readonly statusColorConfig = ReservationStatusColorConfig;
   readonly tableStatusConfig = TableStatusConfig;
   constructor() {}
 
+  @Output() onAddItem = new EventEmitter<string>();
+
   ngOnInit(): void {}
+
+  onAddNewItem() {
+    this.onAddItem.emit(this.data?.id);
+  }
 }

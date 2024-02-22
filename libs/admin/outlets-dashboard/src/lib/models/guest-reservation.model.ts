@@ -38,6 +38,16 @@ export class GuestReservation {
   feedback?: string;
   phone: string;
   isSeated: boolean;
+  paymentMethod: string;
+  paymentStatus: string;
+  totalAmount: number;
+  totalDueAmount: number;
+  nextStates: string[];
+  orderMethod: string;
+  numberOfItems: string;
+  preparationTime: string;
+  reservationStatus: string;
+
   deserialize(value: GuestReservationResponse) {
     this.id = value.id;
     this.tableNo = value?.tableNumberOrRoomNumber;
@@ -51,6 +61,8 @@ export class GuestReservation {
     this.feedback = undefined;
     this.phone = value?.guest?.contactDetails?.contactNumber;
     this.isSeated = value?.currentJourney === 'SEATED';
+    this.reservationStatus = value?.currentJourneyState;
+
     return this;
   }
 }

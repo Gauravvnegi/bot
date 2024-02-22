@@ -14,7 +14,7 @@ import {
   manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
 import { LazyLoadEvent } from 'primeng/api';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, forkJoin } from 'rxjs';
 import { OutletTableService } from '../../services/outlet-table.service';
 import * as FileSaver from 'file-saver';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -32,6 +32,12 @@ import {
 import { ReservationStatus } from '../../types/reservation-table';
 import { PosReservationComponent } from '../pos-reservation/pos-reservation.component';
 import { OutletFormService } from '../../services/outlet-form.service';
+import {
+  GuestReservationListResponse,
+  TableListResponse,
+} from '../../types/outlet.response';
+import { MemoVoidIterator } from 'lodash';
+import { GuestReservation } from '../../models/guest-reservation.model';
 
 @Component({
   selector: 'hospitality-bot-outlets-data-table',
@@ -72,38 +78,85 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   ngOnInit(): void {
     this.entityId = this.formService.entityId;
     this.tableFG?.addControl('reservationType', new FormControl(''));
-    this.setReservationType(this.reservationTypes[0].value);
+    this.selectedReservationType = this.reservationTypes[0].value;
+    this.tableFG.patchValue({ reservationType: this.selectedReservationType });
     this.cols = posCols;
+    this.listenForGlobalFilterChanges();
   }
 
   setReservationType(value: string) {
     this.selectedReservationType = value;
     this.tableFG.patchValue({ reservationType: value });
     this.selectedReservationType === 'table' && this.initTableReservations();
-    this.selectedReservationType === 'card' && this.initReservations();
+    this.selectedReservationType === 'card' && this.initCardViewList();
   }
 
-  loadData(event: LazyLoadEvent): void {
+  loadData(event?: LazyLoadEvent): void {
     this.selectedReservationType === 'table' && this.initTableReservations();
-    this.selectedReservationType === 'card' && this.initReservations();
+    this.selectedReservationType === 'card' && this.initCardViewList();
   }
 
-  initReservations() {
-    this.loading = true;
-    this.$subscription.add(
-      this.outletService.getReservations(this.entityId).subscribe((res) => {
-        if (res) {
-          const data = new OutletReservationList().deserialize(res);
-          this.values = data.reservationData;
-          this.outletTableData = data.reservationData;
-          this.initFilters(
-            res.entityTypeCounts,
-            res.entityStateCounts,
-            12,
-            ReservationStatusDetails
+  /**
+   * reservation list in card view
+   */
+  getReservationList(): Observable<GuestReservationListResponse> {
+    const config: QueryConfig = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          type: 'OUTLET',
+          outletType: 'RESTAURANT',
+          paginationFalse: true,
+          fromDate: new Date().getTime(),
+        },
+        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
+      ]),
+    };
+    return this.outletService.getGuestReservationList(config);
+  }
+
+  getTableList(): Observable<TableListResponse> {
+    const config: QueryConfig = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          type: 'TABLE',
+          sort: 'updated',
+          raw: 'true',
+          limit: '0',
+          offset: '0',
+        },
+      ]),
+    };
+    return this.outletService.getList<TableListResponse>(this.entityId, config);
+  }
+
+  initCardViewList(): void {
+    this.subscriptionList$.add(
+      forkJoin([this.getTableList(), this.getReservationList()]).subscribe(
+        ([tableResponse, reservationResponse]) => {
+          const data = new OutletReservationList().deserialize(
+            tableResponse,
+            reservationResponse
           );
-          this.loading = false;
+
+          this.values = data?.reservationData;
+          this.initFilters(
+            data?.entityTypeCounts,
+            data?.entityStateCounts,
+            data?.total
+          );
         }
+      )
+    );
+  }
+
+  listenForGlobalFilterChanges(): void {
+    this.$subscription.add(
+      this.globalFilterService.globalFilter$.subscribe((value) => {
+        this.globalQueries = [
+          ...value['filter'].queryValue,
+          ...value['dateRange'].queryValue,
+        ];
+        this.loadData();
       })
     );
   }
@@ -164,6 +217,10 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
         );
       }, this.handleFinal)
     );
+  }
+
+  onPlaceNewOrder(orderId: string) {
+    this.addNewOrder();
   }
 
   copyConfirmationNumber(number: string) {

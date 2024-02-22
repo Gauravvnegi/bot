@@ -27,7 +27,7 @@
       padding: 15px 17px;
       padding-top: 0;
       overflow: auto;
-      height: calc(100vh - 240px);
+      height: calc(100vh - 250px);
       gap: 16px;
       .date__divider {
         @include flex-justify-align-center;

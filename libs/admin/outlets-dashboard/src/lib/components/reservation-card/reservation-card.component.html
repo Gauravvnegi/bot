@@ -20,7 +20,7 @@
       </span>
     </div>
   </div>
-  <ng-container *ngIf="isTableAvailable; else AddItem">
+  <ng-container *ngIf="data?.guestName; else AddItem">
     <div class="content">
       <div class="order-info">
         <!-- <p class="name">{{ data?.name }}</p> -->
@@ -67,7 +67,7 @@
 </div>
 
 <ng-template #AddItem>
-  <div class="add-item">
+  <div class="add-item" (click)="onAddNewItem()">
     <img src="assets/svg/add-item.svg" alt="" />
   </div>
 </ng-template>

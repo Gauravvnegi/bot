@@ -292,6 +292,7 @@
         <hospitality-bot-reservation-card
           class="reservation-card"
           [data]="rowData"
+          (onAddItem)="onPlaceNewOrder($event)"
         ></hospitality-bot-reservation-card>
       </ng-template>
 

@@ -42,9 +42,16 @@
       ></hospitality-bot-chips>
     </div>
 
-    <div class="content">
+    <div
+      class="content"
+      infiniteScroll
+      (scrolled)="loadMore()"
+      [toggleScrollListener]="paginationDisabled"
+    >
       <ng-container *ngIf="!loading && guestList.length; else emptyGuest">
-        <ng-container *ngFor="let guest of guestList; let i = index">
+        <ng-container
+          *ngFor="let guest of guestList; let i = index; trackBy: trackGuests"
+        >
           <hospitality-bot-guest-card
             [item]="guest"
             (click)="onEditGuestReservation(guest)"

@@ -1,4 +1,5 @@
 import { EntityState } from '@hospitality-bot/admin/shared';
+import { MealPreferences } from 'libs/admin/outlets-dashboard/src/lib/types/menu-order';
 
 export type OutletForm = {
   status: string;
@@ -92,9 +93,9 @@ export type VenueForm = Omit<OutletForm, 'cuisinesType'>;
 export type MenuItemForm = {
   name: string;
   description: string;
-  mealPreference: string;
+  mealPreference: MealPreferences;
   category: string;
-  type: string;
+  // type: string;
   preparationTime: number;
   quantity: number;
   unit: string;

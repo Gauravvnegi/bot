@@ -2,10 +2,17 @@
 
 .form-block {
   @include form-block;
+  position: relative;
 }
 
 .btn {
   display: flex;
   justify-content: center;
   gap: 20px;
+}
+
+.checkbox {
+  position: absolute;
+  top: 240px;
+  zoom: 0.8;
 }

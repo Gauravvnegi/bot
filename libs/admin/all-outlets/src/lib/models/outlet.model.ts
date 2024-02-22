@@ -92,7 +92,7 @@ export class MenuItem {
     this.code = input?.code;
     this.name = input?.name;
     this.description = input?.description;
-    this.type = input?.type;
+    // this.type = input?.type;
     this.hsnCode = input?.hsnCode;
     this.category = input?.category;
     this.dineInPrice = input?.dineInPrice;
@@ -102,9 +102,7 @@ export class MenuItem {
     this.status = input?.status;
     this.quantity = input?.quantity;
     this.id = input?.id;
-    this.mealPreference = input?.mealPreference
-      .replace(/[-_]/g, '')
-      .toUpperCase() as MealPreferences;
+    this.mealPreference = input?.mealPreference;
     this.imageUrl = input?.imageUrl;
     this.itemId = input?.id;
     return this;

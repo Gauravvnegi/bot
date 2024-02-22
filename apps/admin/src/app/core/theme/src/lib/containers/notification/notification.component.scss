@@ -136,6 +136,7 @@
       width: 100%;
       @include flex-item-center;
       cursor: pointer;
+      position: relative;
       background-color: #faf9f8;
       .profile {
         width: 38px;
@@ -170,6 +171,9 @@
           }
           .close {
             display: none;
+            position: absolute;
+            right: 13px;
+            top: 6px;
             img {
               height: 11px;
               filter: sepia(100%) hue-rotate(190deg) saturate(500);
@@ -189,7 +193,7 @@
       }
       &:hover {
         .title--container {
-          height: 18px;
+          // height: 18px;
           .time {
             display: none;
           }

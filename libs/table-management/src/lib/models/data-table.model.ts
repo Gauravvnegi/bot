@@ -43,7 +43,7 @@ export class TableData {
 
   deserialize(input: TableResponse) {
     this.id = input?.id;
-    this.name = `${input?.number} ${input?.area?.name ?? ''}`.trim();
+    this.name = `${input?.number}-${input?.area?.name ?? ''}`.trim();
     this.pax = input?.pax;
     this.remark = input?.remark;
     this.foStatus = input?.frontOfficeState;
@@ -90,7 +90,7 @@ export class AreaData {
     this.description = input?.description;
     this.status = input?.status;
     this.date = input?.updated && getFormattedDate(input?.updated);
-    this.tables = input.tables?.map((item) => item?.number).join(',');
+    this.tables = input.tables?.map((item) => item?.number).join(', ');
     this.tableList = input?.tables?.map((item) => ({
       label: item?.number,
       value: item?.id,

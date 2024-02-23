@@ -45,6 +45,10 @@
       color: $black;
     }
   }
+  .guest-name {
+    @include bold-vsm-text;
+    color: $grayMedium;
+  }
 }
 
 .pricing {

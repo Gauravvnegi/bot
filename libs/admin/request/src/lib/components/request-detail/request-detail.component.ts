@@ -59,9 +59,13 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   }
 
   get allAssigneeList() {
-    return this.data.assigneeId && this.data.isFocused
-      ? this.assigneeList
-      : this.alreadyAssignedName;
+    if (this.data.assigneeId && this.data.isFocused) {
+      return this.assigneeList.length
+        ? this.assigneeList
+        : this.alreadyAssignedName;
+    } else {
+      return this.alreadyAssignedName;
+    }
   }
 
   registerListeners() {
@@ -107,7 +111,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
             this.alreadyAssignedName = [
               {
                 label: this.data.assigneeName,
-                value: this.data.assigneeName,
+                value: this.data?.assigneeId ?? this.data.assigneeName,
               },
             ];
             // this.requestFG.get('assignee').disable();
@@ -160,21 +164,25 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   getAssigneeList(itemId) {
     this.isAssigneeLoading = true;
     this.$subscription.add(
-      this._requestService.getItemDetails(this.entityId, itemId).subscribe(
-        (response) => {
-          this.assigneeList =
-            response?.requestItemUsers?.map((item) => {
-              return {
-                label: item.firstName + ' ' + item.lastName,
-                value: item.userId,
-              };
-            }) ?? [];
-          this.isAssigneeLoading = false;
-        },
-        (error) => {
-          this.isAssigneeLoading = false;
-        }
-      )
+      this._requestService
+        .getItemDetails(this.entityId, itemId, {
+          params: '?includeActiveUsers=true',
+        })
+        .subscribe(
+          (response) => {
+            this.assigneeList =
+              response?.requestItemUsers?.map((item) => {
+                return {
+                  label: item.firstName + ' ' + item.lastName,
+                  value: item.userId,
+                };
+              }) ?? [];
+            this.isAssigneeLoading = false;
+          },
+          (error) => {
+            this.isAssigneeLoading = false;
+          }
+        )
     );
   }
 

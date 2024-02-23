@@ -85,6 +85,7 @@ export class OutletFormService {
       currentJourney: data.seated ? 'SEATED' : 'WAITLISTED',
       source: data.source,
       sourceName: data.sourceName,
+      specialRequest: data?.remark,
     };
 
     return formData;

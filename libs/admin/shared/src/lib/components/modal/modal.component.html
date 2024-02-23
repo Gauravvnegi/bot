@@ -56,6 +56,8 @@
         placeholder: 'Enter'
       }"
     ></hospitality-bot-text-area>
+
+    <ng-content></ng-content>
     <div class="actions">
       <ng-container *ngIf="!!actions?.length; else defaultCTA">
         <hospitality-bot-button

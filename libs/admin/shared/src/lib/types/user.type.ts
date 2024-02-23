@@ -114,6 +114,7 @@ export type UserResponse = {
   sites: Sites[];
   agent: boolean;
   reportingTo: string;
+  available: boolean;
 };
 
 type PermissionStatus = -1 | 0 | 1;

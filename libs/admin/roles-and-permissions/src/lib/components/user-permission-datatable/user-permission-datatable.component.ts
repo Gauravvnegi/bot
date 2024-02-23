@@ -1,16 +1,19 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { UserService, openModal } from '@hospitality-bot/admin/shared';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Option, UserService, openModal } from '@hospitality-bot/admin/shared';
 import * as FileSaver from 'file-saver';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
-import { Subscription } from 'rxjs';
-import { UserPermissionTable } from '../../models/user-permission-table.model';
+import { Observable, Subscription, of } from 'rxjs';
+import {
+  User,
+  UserPermissionTable,
+} from '../../models/user-permission-table.model';
 import { ManagePermissionService } from '../../services/manage-permission.service';
 import { QueryConfig } from '../../types';
 import { chips, cols, tableName } from '../../constants/data-table';
-import { LazyLoadEvent } from 'primeng/api';
+import { LazyLoadEvent, MenuItem } from 'primeng/api';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import {
   DialogService,
@@ -45,6 +48,10 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   manageUsersValues;
   $subscription = new Subscription();
   isAllTabFilterRequired = true;
+  menuOptions: Option[] = [];
+  isPopUpVisible: boolean = false;
+  popUpContent: Partial<ModalComponent>;
+  popupForm: FormGroup;
 
   constructor(
     public fb: FormBuilder,
@@ -71,6 +78,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     this.entityId = this.userService.getentityId();
     this.loggedInUserId = this.userService.getLoggedInUserId();
     this.loadInitialData();
+    this.initPopupForm();
   }
 
   loadInitialData(queries = []) {
@@ -106,7 +114,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   getQueryConfig() {
     const config = {
       params: this._adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
+        ...this.getModifiedParam(this.getSelectedQuickReplyFilters()),
         ...[{ order: 'DESC' }],
         {
           offset: this.first,
@@ -120,6 +128,12 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     };
 
     return config;
+  }
+
+  getModifiedParam(config): [] {
+    debugger;
+
+    return [];
   }
 
   /**
@@ -258,6 +272,64 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
             this.handelStatus(status, userData, true);
         }
       );
+  }
+
+  initPopupForm() {
+    this.popupForm = this.fb.group({
+      status: [],
+      hours: [],
+    });
+  }
+
+  handleMenuClick(event, data: User) {
+    if (event === 'UNAVAILABLE') {
+      this.isPopUpVisible = true;
+      this.popUpContent = {
+        heading: 'Mark as Unavailable',
+        descriptions: [
+          'Are you sure you want to mark this user as unavailable?',
+          'Once marked unavailable, this user will not be assigned any task. You can always make them available again.',
+        ],
+        actions: [
+          {
+            label: 'Cancel',
+            onClick: () => {
+              this.isPopUpVisible = false;
+            },
+            variant: 'outlined',
+          },
+          {
+            label: event.toLowerCase(),
+            onClick: () => {
+              this.updateUserAvailability(false, data);
+            },
+            variant: 'contained',
+          },
+        ],
+      };
+    } else {
+      this.updateUserAvailability(true, data);
+    }
+  }
+
+  updateUserAvailability(condition: boolean, userDetails: User) {
+    const data = this.popupForm.getRawValue();
+
+    const config: QueryConfig = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        {
+          available: condition,
+          ...(data?.status && { unavailableDuration: data?.hours }),
+        },
+      ]),
+    };
+
+    return this._managePermissionService
+      .updateUserAvailability(userDetails.userId, config)
+      .subscribe(() => {
+        this.isPopUpVisible = false;
+        this.loadInitialData();
+      });
   }
 
   openUserDetails(rowData) {

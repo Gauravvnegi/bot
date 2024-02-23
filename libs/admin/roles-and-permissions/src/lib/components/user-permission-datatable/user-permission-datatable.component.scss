@@ -181,3 +181,19 @@ tr > td {
   border: none;
   cursor: pointer;
 }
+
+:host ::ng-deep .status-toggle .wrapper {
+  display: flex;
+}
+
+.popup-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+
+  .hours {
+    display: block;
+    width: 68px;
+  }
+}

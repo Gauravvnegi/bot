@@ -8,6 +8,7 @@ import { CMSUpdateJobData } from '../types/request.type';
 import { AllJobRequestResponse } from '../types/response.types';
 import { ReservationResponse } from 'libs/admin/shared/src/lib/types/response';
 import { ServiceItemListResponse } from 'libs/admin/service-item/src/lib/types/service-item-datatable.type';
+import { QueryConfig } from '@hospitality-bot/admin/shared';
 
 @Injectable({ providedIn: 'root' })
 export class RequestService extends ApiService {
@@ -148,8 +149,14 @@ export class RequestService extends ApiService {
     return this.get(`/api/v1/request/${guestId}/guest`);
   }
 
-  getItemDetails(entityId: string, itemId: string): Observable<any> {
-    return this.get(`/api/v1/entity/${entityId}/cms-service/${itemId}`);
+  getItemDetails(
+    entityId: string,
+    itemId: string,
+    config?: QueryConfig
+  ): Observable<any> {
+    return this.get(
+      `/api/v1/entity/${entityId}/cms-service/${itemId}${config.params}`
+    );
   }
 
   assignComplaintToUser(jobId: string, data): Observable<any> {

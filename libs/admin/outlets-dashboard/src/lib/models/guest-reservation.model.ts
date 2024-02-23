@@ -68,7 +68,7 @@ export class GuestReservation {
 }
 
 export class GuestFormData {
-  tables: string[];
+  tables: string; //@multipleTableBooking: need to change for multiple tables bookings : string[]
   personCount: number;
   guest: string;
   marketSegment: string;
@@ -80,7 +80,7 @@ export class GuestFormData {
   source: string;
 
   deserialize(value: GuestReservationResponse) {
-    this.tables = [value?.tableIdOrRoomId];
+    this.tables = value?.tableIdOrRoomId; //@multipleTableBooking: need to change for multiple tables bookings: [...]
     this.personCount = value?.occupancyDetails?.maxAdult;
     this.guest = value?.guest?.id;
     this.marketSegment = value?.marketSegment;

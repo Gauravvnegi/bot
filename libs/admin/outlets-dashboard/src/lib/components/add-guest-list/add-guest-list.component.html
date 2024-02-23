@@ -15,6 +15,7 @@
       <hospitality-bot-item-view
         controlName="tables"
         [items]="tableOptions"
+        selectType="single"
       ></hospitality-bot-item-view>
     </div>
     <div class="content__wrapper">
@@ -51,7 +52,7 @@
             optionAlignment: 'horizontal'
           }"
         ></hospitality-bot-select>
-        <hospitality-bot-multi-select
+        <!-- <hospitality-bot-multi-select
           label="Table No./Area"
           class="half-width"
           controlName="tables"
@@ -60,23 +61,10 @@
             placeholder: 'Select Tables'
           }"
           [options]="tableOptions"
-        ></hospitality-bot-multi-select>
-        <hospitality-bot-input
-          class="half-width"
-          controlName="personCount"
-          label="No of Person"
-          min="1"
-          [props]="{
-            type: 'number',
-            placeholder: 'Enter',
-            errorMessages: {
-              required: 'This is a required field.',
-              min: 'Value should be greater than 1'
-            }
-          }"
-        ></hospitality-bot-input>
+        ></hospitality-bot-multi-select> -->
+
         <hospitality-bot-quick-select
-          class="half-width"
+          class="full-width"
           controlName="guest"
           label="Guest"
           [inputType]="'select'"
@@ -115,6 +103,20 @@
           [initItems]="true"
           (openSidebar)="onAddGuest()"
         ></hospitality-bot-quick-select>
+        <hospitality-bot-input
+          class="half-width"
+          controlName="personCount"
+          label="No of Person"
+          min="1"
+          [props]="{
+            type: 'number',
+            placeholder: 'Enter',
+            errorMessages: {
+              required: 'This is a required field.',
+              min: 'Value should be greater than 1'
+            }
+          }"
+        ></hospitality-bot-input>
         <hospitality-bot-select
           label="Market Segment"
           class="half-width"

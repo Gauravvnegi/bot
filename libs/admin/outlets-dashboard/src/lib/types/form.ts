@@ -130,7 +130,7 @@ export type CreateOrderData = {
 };
 
 export type AddGuestForm = {
-  tables: string[];
+  tables: string; //@multipleTableBooking: need to change string[] for multiple table booking
   personCount: number;
   guest: string;
   marketSegment: string;

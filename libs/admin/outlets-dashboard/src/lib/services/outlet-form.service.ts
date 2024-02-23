@@ -76,7 +76,7 @@ export class OutletFormService {
       occupancyDetails: { maxAdult: data.personCount },
       status: 'CONFIRMED',
       guestId: data.guest,
-      tableIds: data.tables,
+      tableIds: [data.tables], //@multipleTableBooking
       from: data.checkIn,
       to: data.checkOut,
       marketSegment: data.marketSegment,

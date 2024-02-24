@@ -3,6 +3,10 @@ import { ControlContainer } from '@angular/forms';
 import { defaultFilterChipValue } from '../../../constants/datatable';
 import { Chip } from '../../../types/table.type';
 
+enum FilterChipsSelectionType {
+  SINGLE_SELECT = 'single',
+  MULTI_SELECT = 'multiple',
+}
 @Component({
   selector: 'hospitality-bot-filter-chips',
   templateUrl: './filter-chips.component.html',
@@ -17,6 +21,8 @@ export class FilterChipsComponent implements OnInit {
   @Input() controlName = 'quickReplyActionFilters';
   @Input() selectedChips = new Set<string>();
   @Input() isCountVisible: boolean = true;
+  @Input() selectionType: FilterChipsSelectionType =
+    FilterChipsSelectionType.MULTI_SELECT;
 
   // --chips will be removed from type (only index)
   @Output() onChange = new EventEmitter<{

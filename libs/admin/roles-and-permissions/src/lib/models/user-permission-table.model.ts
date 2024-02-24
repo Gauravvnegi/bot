@@ -19,6 +19,11 @@ export class User {
   status: boolean;
 
   reportingTo: string;
+  availableStatus: {
+    label: string;
+    value: boolean;
+    type: string;
+  };
   deserialize(input: UserResponse) {
     this.firstName = input.firstName;
     this.lastName = input.lastName;
@@ -34,6 +39,11 @@ export class User {
     this.status = input.status;
 
     this.reportingTo = input?.reportingTo;
+    this.availableStatus = {
+      label: input?.available ? 'Available' : 'Unavailable',
+      value: input?.available,
+      type: input.available ? 'success' : 'failed',
+    };
     return this;
   }
 

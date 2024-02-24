@@ -122,6 +122,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
           limit: '0',
           offset: '0',
           categoryStatus: true,
+          includeActiveUsers: true,
         },
       ]),
     };
@@ -167,7 +168,9 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   getItemDetails(itemId) {
     this.$subscription.add(
       this._requestService
-        .getItemDetails(this.entityId, itemId)
+        .getItemDetails(this.entityId, itemId, {
+          params: '?includeActiveUsers=true',
+        })
         .subscribe((response) => {
           this.isAssigneeList = !!response?.requestItemUsers?.length;
           if (!this.isAssigneeList)

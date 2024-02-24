@@ -128,7 +128,7 @@ export class OutletFormService {
       occupancyDetails: { maxAdult: data.personCount },
       status: 'CONFIRMED',
       guestId: data.guest,
-      tableIds: data.tables,
+      tableIds: [data.tables], //@multipleTableBooking
       from: data.checkIn,
       to: data.checkOut,
       marketSegment: data.marketSegment,
@@ -137,6 +137,7 @@ export class OutletFormService {
       currentJourney: data.seated ? 'SEATED' : 'WAITLISTED',
       source: data.source,
       sourceName: data.sourceName,
+      specialRequest: data?.remark,
     };
 
     return formData;

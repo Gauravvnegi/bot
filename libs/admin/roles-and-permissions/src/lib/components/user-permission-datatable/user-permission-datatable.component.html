@@ -124,12 +124,28 @@
             </div>
           </td>
           <td>
+            <div *ngIf="rowData?.availableStatus; else empty">
+              <div
+                statusCell
+                [status]="rowData?.availableStatus?.label"
+                [type]="rowData?.availableStatus?.type"
+              ></div>
+            </div>
+          </td>
+          <td>
             <div class="cell-content">
               <hospitality-bot-status-dropdown-toggle
-                class="toggle-btn"
                 (onClick)="handelStatus($event, rowData)"
                 [state]="rowData.status"
+                class="status-toggle"
                 [disabled]="isEditAccessDenied(rowData)"
+                [toggleMenu]="true"
+                [menuOptions]="
+                  rowData.availableStatus.value
+                    ? [{ label: 'Mark Unavailable', value: 'UNAVAILABLE' }]
+                    : [{ label: 'Mark Available', value: 'AVAILABLE' }]
+                "
+                (onMenuItemClick)="handleMenuClick($event, rowData)"
               >
               </hospitality-bot-status-dropdown-toggle>
             </div>
@@ -151,3 +167,30 @@
     </p-table>
   </div>
 </div>
+
+<p-dialog
+  class="dialog"
+  [showHeader]="false"
+  [(visible)]="isPopUpVisible"
+  [modal]="true"
+>
+  <hospitality-bot-modal *ngIf="isPopUpVisible" [content]="popUpContent">
+    <div class="popup-form" [formGroup]="popupForm">
+      <hospitality-bot-toggle-switch
+        class="status"
+        label="Status:"
+        controlName="status"
+        onLabel="Hours"
+        offLabel="Always"
+      ></hospitality-bot-toggle-switch>
+      <hospitality-bot-input
+        class="hours"
+        [props]="{
+          placeholder: 'Enter',
+          type: 'number'
+        }"
+        controlName="hours"
+      ></hospitality-bot-input>
+    </div>
+  </hospitality-bot-modal>
+</p-dialog>

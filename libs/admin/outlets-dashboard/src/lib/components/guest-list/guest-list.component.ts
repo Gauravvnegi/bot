@@ -88,6 +88,7 @@ export class GuestListComponent implements OnInit {
           outletType: 'RESTAURANT',
           limit: this.limit,
           offset: this.offset,
+          fromDate: new Date().getTime(),
         },
       ]),
     };

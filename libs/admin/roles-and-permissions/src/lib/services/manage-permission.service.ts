@@ -172,4 +172,14 @@ export class ManagePermissionService extends ApiService {
       }
     );
   }
+
+  updateUserAvailability(
+    userId: string,
+    config: QueryConfig
+  ): Observable<void> {
+    return this.patch(
+      `/api/v1/user/${userId}/available${config?.queryObj}`,
+      {}
+    );
+  }
 }

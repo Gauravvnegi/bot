@@ -140,7 +140,7 @@ export type CreateOrderData = {
 };
 
 export type AddGuestForm = {
-  tables: string[];
+  tables: string; //@multipleTableBooking: need to change string[] for multiple table booking
   personCount: number;
   guest: string;
   marketSegment: string;
@@ -169,6 +169,7 @@ export type CreateReservationData = {
   outletType?: string;
   areaId: string;
   currentJourney: string;
+  specialRequest: string;
 };
 
 export type KotItemStatus = 'PREPARED' | 'PENDING';

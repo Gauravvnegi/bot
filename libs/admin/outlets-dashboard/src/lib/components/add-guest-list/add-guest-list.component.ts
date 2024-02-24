@@ -102,7 +102,7 @@ export class AddGuestListComponent implements OnInit {
 
   initForm() {
     this.useForm = this.fb.group({
-      tables: [[], Validators.required],
+      tables: ['', Validators.required], //@multipleTableBooking
       personCount: [null, Validators.min(1)],
       guest: ['', Validators.required],
       marketSegment: ['', Validators.required],
@@ -134,8 +134,10 @@ export class AddGuestListComponent implements OnInit {
   listenForTableChanges() {
     const { areaId, tables } = this.guestReservationFormControl;
     tables.valueChanges.subscribe((data) => {
-      const id = this.backupData.find((table) => table.value === data[0])
-        ?.areaId;
+      /**
+       * @multipleTableBooking: need to change logic, when we enable multi table bookings,
+       */
+      const id = this.backupData.find((table) => table.value === data)?.areaId;
       areaId.patchValue(id);
     });
   }
@@ -179,6 +181,7 @@ export class AddGuestListComponent implements OnInit {
           )
         )
         .subscribe((reservation) => {
+          debugger;
           const data = new GuestFormData().deserialize(reservation);
           this.useForm.patchValue(data);
         })
@@ -210,7 +213,7 @@ export class AddGuestListComponent implements OnInit {
         tap((res) => {
           const tableList: TableOption[] = [];
           const bookedTableIds: string[] = isCurrentBooking
-            ? [...this.guestReservationFormControl.tables.value]
+            ? [this.guestReservationFormControl.tables.value] //@multipleTableBooking: need to change for multiple tables bookings
             : [];
 
           res.areas.forEach((item: AreaResponse) => {

@@ -14,6 +14,7 @@ import { ServiceItemService } from '../../services/service-item-datatable.servic
 import { Subscription } from 'rxjs';
 import { RoutesConfigService } from 'apps/admin/src/app/core/theme/src/lib/services/routes-config.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { ServiceItemFormData } from '../../models/create-service-item.model';
 
 @Component({
   selector: 'hospitality-bot-create-service-item',
@@ -89,9 +90,7 @@ export class CreateServiceItemComponent implements OnInit {
       this.serviceItemService
         .getServiceItemById(this.entityId, this.serviceItemId)
         .subscribe((res) => {
-          let { sla, ...rest } = res;
-          //convert sla into milliseconds
-          this.useForm.patchValue({ ...res, sla });
+          this.useForm.patchValue(new ServiceItemFormData().deserialize(res));
         })
     );
   }
@@ -144,7 +143,7 @@ export class CreateServiceItemComponent implements OnInit {
     if (this.serviceItemId) {
       this.$subscription.add(
         this.serviceItemService
-          .updateLibraryItem(this.entityId, this.serviceItemId, {
+          .updateServiceItem(this.entityId, this.serviceItemId, {
             ...rest,
             sla,
           })

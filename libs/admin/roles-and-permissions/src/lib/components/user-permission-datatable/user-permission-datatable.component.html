@@ -142,8 +142,18 @@
                 [toggleMenu]="true"
                 [menuOptions]="
                   rowData.availableStatus.value
-                    ? [{ label: 'Mark Unavailable', value: 'UNAVAILABLE' }]
-                    : [{ label: 'Mark Available', value: 'AVAILABLE' }]
+                    ? [
+                        {
+                          label: 'Mark Unavailable',
+                          value: UserAvailabilityStatus.Unavailable
+                        }
+                      ]
+                    : [
+                        {
+                          label: 'Mark Available',
+                          value: UserAvailabilityStatus.Available
+                        }
+                      ]
                 "
                 (onMenuItemClick)="handleMenuClick($event, rowData)"
               >
@@ -186,7 +196,6 @@
       <hospitality-bot-input
         class="hours"
         [props]="{
-          placeholder: 'Enter',
           type: 'number'
         }"
         controlName="hours"

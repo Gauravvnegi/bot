@@ -7,6 +7,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { SnackBarService } from 'libs/shared/material/src';
 import { Observable, Subscription, of } from 'rxjs';
 import {
+  ServiceItemUserList,
   User,
   UserPermissionTable,
 } from '../../models/user-permission-table.model';
@@ -21,6 +22,24 @@ import {
   DynamicDialogRef,
 } from 'primeng/dynamicdialog';
 
+const UserAvailabilityStatus = {
+  Available: 'AVAILABLE',
+  Unavailable: 'UNAVAILABLE',
+} as const;
+
+type UserAvailabilityStatus = typeof UserAvailabilityStatus[keyof typeof UserAvailabilityStatus];
+
+const UserTableType = {
+  All: 'ALL',
+  ServiceItem: 'SERVICE_ITEM',
+} as const;
+
+type UserTableType = typeof UserTableType[keyof typeof UserTableType];
+
+export type UserPermissionResponse = {
+  userId?: string;
+  isView?: boolean;
+};
 @Component({
   selector: 'hospitality-bot-user-permission-datatable',
   templateUrl: './user-permission-datatable.component.html',
@@ -33,6 +52,8 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   loggedInUserId: string;
   @Input() tabFilterIdx = 1;
+  @Input() tableType: UserTableType = UserTableType.All;
+  @Input() serviceItemId: string;
 
   tableName = tableName;
   isResizableColumns = true;
@@ -52,6 +73,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   isPopUpVisible: boolean = false;
   popUpContent: Partial<ModalComponent>;
   popupForm: FormGroup;
+  readonly UserAvailabilityStatus = UserAvailabilityStatus;
 
   constructor(
     public fb: FormBuilder,
@@ -81,40 +103,75 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     this.initPopupForm();
   }
 
-  loadInitialData(queries = []) {
+  loadInitialData() {
     this.loading = true;
-    this.$subscription.add(
-      this._managePermissionService
-        .getAllUsers(this.entityId, this.getQueryConfig())
-        .subscribe(
-          (allUsersData) => {
-            const manageUsersValues = new UserPermissionTable().deserialize(
-              allUsersData
-            );
-            this.values = manageUsersValues.records;
-            this.totalRecords = manageUsersValues.totalRecords;
 
-            this.initFilters(
-              manageUsersValues.entityTypeCounts,
-              manageUsersValues.entityStateCounts,
-              manageUsersValues.totalRecords
-            );
+    switch (this.tableType) {
+      case UserTableType.All:
+        this.$subscription.add(
+          this._managePermissionService
+            .getAllUsers(this.entityId, this.getQueryConfig())
+            .subscribe(
+              (allUsersData) => {
+                const manageUsersValues = new UserPermissionTable().deserialize(
+                  allUsersData
+                );
+                this.values = manageUsersValues.records;
+                this.totalRecords = manageUsersValues.totalRecords;
 
-            this.loading = false;
-          },
-          (error) => {
-            this.allUsersValues = [];
-            this.manageUsersValues = [];
-            this.loading = false;
-          }
-        )
-    );
+                this.initFilters(
+                  manageUsersValues.entityTypeCounts,
+                  manageUsersValues.entityStateCounts,
+                  manageUsersValues.totalRecords
+                );
+
+                this.loading = false;
+              },
+              (error) => {
+                this.allUsersValues = [];
+                this.manageUsersValues = [];
+                this.loading = false;
+              }
+            )
+        );
+        break;
+      case UserTableType.ServiceItem:
+        this.isAllTabFilterRequired = false;
+        this.subscriptionList$.add(
+          this._managePermissionService
+            .getServiceItemUsers(
+              this.entityId,
+              this.serviceItemId,
+              this.getQueryConfig()
+            )
+            .subscribe(
+              (response) => {
+                const data = new ServiceItemUserList().deserialize(response);
+                this.values = data.records;
+                this.totalRecords = data.totalRecords;
+
+                this.initFilters(
+                  undefined,
+                  data.entityStateCounts,
+                  data.totalRecords
+                );
+                this.loading = false;
+              },
+              (error) => {
+                this.allUsersValues = [];
+                this.manageUsersValues = [];
+                this.loading = false;
+              }
+            )
+        );
+        break;
+    }
   }
 
   getQueryConfig() {
     const config = {
       params: this._adminUtilityService.makeQueryParams([
-        ...this.getModifiedParam(this.getSelectedQuickReplyFilters()),
+        ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
         ...[{ order: 'DESC' }],
         {
           offset: this.first,
@@ -128,12 +185,6 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     };
 
     return config;
-  }
-
-  getModifiedParam(config): [] {
-    debugger;
-
-    return [];
   }
 
   /**
@@ -281,8 +332,8 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     });
   }
 
-  handleMenuClick(event, data: User) {
-    if (event === 'UNAVAILABLE') {
+  handleMenuClick(event: UserAvailabilityStatus, data: User) {
+    if (event === UserAvailabilityStatus.Unavailable) {
       this.isPopUpVisible = true;
       this.popUpContent = {
         heading: 'Mark as Unavailable',
@@ -299,7 +350,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
             variant: 'outlined',
           },
           {
-            label: event.toLowerCase(),
+            label: 'Unavailable',
             onClick: () => {
               this.updateUserAvailability(false, data);
             },
@@ -359,8 +410,3 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     this.$subscription.unsubscribe();
   }
 }
-
-export type UserPermissionResponse = {
-  userId?: string;
-  isView?: boolean;
-};

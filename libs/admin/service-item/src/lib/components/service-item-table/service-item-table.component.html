@@ -107,7 +107,7 @@
           <div class="member-container">
             <div
               class="member"
-              (click)="openTableModal($event)"
+              (click)="openTableModal($event, rowData)"
               [ngStyle]="{
                 width: rowData?.totalUsers < 3 ? '40px' : '80px'
               }"

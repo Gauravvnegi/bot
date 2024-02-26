@@ -17,12 +17,15 @@ export class ServiceItemService extends ApiService {
     return this.get(`/api/v1/entity/${entityId}/cms-service/${serviceItemId}`);
   }
 
-  updateLibraryItem(
+  updateServiceItem(
     entityId: string,
     serviceItemId: string,
     data
   ): Observable<any> {
-    return this.put(``, data);
+    return this.put(
+      `/api/v1/entity/${entityId}/cms-service/${serviceItemId}`,
+      data
+    );
   }
 
   getServiceItemList(

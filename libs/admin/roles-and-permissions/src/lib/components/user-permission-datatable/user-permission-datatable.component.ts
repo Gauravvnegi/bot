@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Option, UserService, openModal } from '@hospitality-bot/admin/shared';
 import * as FileSaver from 'file-saver';
@@ -227,7 +227,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
             );
             this.loading = false;
           },
-          (error) => {
+          ({ error }) => {
             this.loading = false;
           }
         )
@@ -265,7 +265,6 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
               {
                 label: 'Cancel',
                 onClick: () => {
-                  this.dialogRef.close();
                   dialogRef.close();
                 },
                 variant: 'outlined',

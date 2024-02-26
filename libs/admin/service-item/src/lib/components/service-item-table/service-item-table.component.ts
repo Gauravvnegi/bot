@@ -3,11 +3,14 @@ import { FormBuilder } from '@angular/forms';
 import {
   GlobalFilterService,
   RoutesConfigService,
+  SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  ModuleNames,
   NavRouteOption,
+  PermissionModuleNames,
   QueryConfig,
   openModal,
 } from '@hospitality-bot/admin/shared';
@@ -27,6 +30,7 @@ import {
   UserPermissionResponse,
 } from 'libs/admin/roles-and-permissions/src/lib/components/user-permission-datatable/user-permission-datatable.component';
 import { DialogService } from 'primeng/dynamicdialog';
+import { managePermissionRoutes } from 'libs/admin/roles-and-permissions/src/lib/constants/routes';
 
 @Component({
   selector: 'hospitality-bot-service-item-table',
@@ -60,7 +64,8 @@ export class ServiceItemTableComponent extends BaseDatatableComponent
     private routesConfigService: RoutesConfigService,
     private serviceItemService: ServiceItemService,
     private router: Router,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private subscriptionPlanService: SubscriptionPlanService
   ) {
     super(fb);
   }
@@ -175,7 +180,17 @@ export class ServiceItemTableComponent extends BaseDatatableComponent
       component: UserPermissionDatatableComponent,
     });
 
-    dialogRef.onClose.subscribe((res: UserPermissionResponse) => {});
+    dialogRef.onClose.subscribe((res: UserPermissionResponse) => {
+      if (res?.userId) {
+        this.routesConfigService.navigate({
+          moduleName: ModuleNames.SETTINGS,
+          subModuleName: ModuleNames.ROLES_AND_PERMISSION,
+          additionalPath: `/${
+            res?.isView || !this.hasManagePermission ? 'view-user' : 'edit-user'
+          }/${res?.userId}`,
+        });
+      }
+    });
   }
 
   editServiceItem(id: string) {
@@ -201,5 +216,11 @@ export class ServiceItemTableComponent extends BaseDatatableComponent
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+  }
+
+  get hasManagePermission() {
+    return this.subscriptionPlanService.hasManageUserPermission(
+      PermissionModuleNames.USERS
+    );
   }
 }

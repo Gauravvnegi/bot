@@ -11,6 +11,10 @@ import {
   FoodPackageResponse,
 } from '../types/response';
 import { MealPreferences } from 'libs/admin/outlets-dashboard/src/lib/types/menu-order';
+import {
+  OfferListResponse,
+  OfferResponse,
+} from 'libs/admin/offers/src/lib/types/response';
 
 export class OutletList {
   id: string;
@@ -87,6 +91,7 @@ export class MenuItem {
   imageUrl: string;
   popular: boolean;
   itemId?: string;
+  offers: OfferResponse[];
 
   deserialize(input: MenuItemResponse) {
     this.code = input?.code;
@@ -104,6 +109,7 @@ export class MenuItem {
     this.id = input?.id;
     this.mealPreference = input?.mealPreference;
     this.imageUrl = input?.imageUrl;
+    this.offers = input?.offers;
     this.itemId = input?.id;
     return this;
   }

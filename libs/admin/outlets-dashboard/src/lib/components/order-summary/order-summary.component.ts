@@ -18,7 +18,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { MenuItem } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 import { KotItemsForm, MenuForm } from '../../types/form';
-import { OfferListResponse } from 'libs/admin/offers/src/lib/types/response';
+import { OfferResponse } from 'libs/admin/offers/src/lib/types/response';
 
 @Component({
   selector: 'hospitality-bot-order-summary',
@@ -252,21 +252,46 @@ export class OrderSummaryComponent implements OnInit {
               !res?.some((item) => item.itemId === control.value.itemId)
           );
 
+          this.mapItemOffers();
+
           if (newItems.length > 0 || removedItems.length > 0) {
             newItems.forEach((newItem) => {
               this.createNewItemFields(newItem);
-              this.applyOffer();
             });
 
             removedItems.forEach((removedItem) => {
               const index = this.itemFormArray.controls.indexOf(removedItem);
               this.removeItemFields(index);
-              this.applyOffer();
             });
           }
         }
       })
     );
+  }
+
+  mapItemOffers() {
+    this.itemOffers = this.selectedItems?.reduce((acc, item) => {
+      const offers = item.offers.map((offer) => ({
+        label: offer.name,
+        value: offer.id,
+        description: offer.description,
+        validDate: offer.endDate,
+        discountType: offer.discountType,
+        discountValue: offer.discountValue,
+      }));
+
+      // Merge offers from the current item with accumulated offers, filtering out duplicates
+      offers.forEach((offer) => {
+        const existingOfferIndex = acc.findIndex(
+          (accOffer) => accOffer.value === offer.value
+        );
+        if (existingOfferIndex === -1) {
+          acc.push(offer); // Add the offer if it's not already in the accumulator
+        }
+      });
+
+      return acc;
+    }, []);
   }
 
   removeItemFields(index: number) {
@@ -298,36 +323,6 @@ export class OrderSummaryComponent implements OnInit {
   applyOffer(formGroup?: FormGroup) {
     formGroup &&
       formGroup.get('viewKotOffer').patchValue(true, { emitEvent: false });
-    const menuItemIds = this.itemFormArray.controls
-      .map((control) => control.get('itemId').value)
-      .join(',');
-    const config: QueryConfig = {
-      params: this.adminUtilityService.makeQueryParams([
-        {
-          pagination: false,
-          type: 'OFFER',
-          source: 1,
-          serviceIds: menuItemIds,
-        },
-      ]),
-    };
-
-    this.$subscription.add(
-      this.outletService
-        .getOffer(this.entityId, config)
-        .subscribe((res: OfferListResponse) => {
-          if (res) {
-            this.itemOffers = res.offers.map((offer) => ({
-              label: offer.name,
-              value: offer.id,
-              description: offer.description,
-              validDate: offer.endDate,
-              discountType: offer.discountType,
-              discountValue: offer.discountValue,
-            }));
-          }
-        })
-    );
   }
 
   trackItemControls(index: number, item: FormGroup) {

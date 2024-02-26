@@ -12,7 +12,7 @@ import {
   PosReservationResponse,
   ReservationTableResponse,
 } from '../types/reservation-table';
-import { MealPreferences } from '../types/menu-order';
+import { MealPreferences, OrderTypes } from '../types/menu-order';
 
 @Injectable({
   providedIn: 'root',
@@ -65,26 +65,32 @@ export class OutletFormService {
           remarks: item.itemInstruction,
         })),
       })),
-      // offer: {
-      //   id:
-      //     kotInformation.kotItems[kotInformation.kotItems.length - 1].kotOffer,
-      // },
+      offer: {
+        id:
+          kotInformation.kotItems[kotInformation.kotItems.length - 1].kotOffer,
+      },
       outletType: EntitySubType.RESTAURANT,
       guestId: orderInformation.guest,
-      deliveryAddress: orderInformation.address.id,
+      deliveryAddress:
+        orderInformation.orderType === OrderTypes.DELIVERY
+          ? orderInformation.address.id
+          : undefined,
       reservation: {
         occupancyDetails: { maxAdult: orderInformation.numberOfPersons },
         status: 'CONFIRMED',
         tableIds: [orderInformation.tableNumber],
+        areaId: orderInformation.areaId,
+      },
+      paymentDetails: {
+        paymentMethod: paymentInformation?.paymentMethod ?? '',
+        amount: paymentInformation?.paymentRecieved ?? 0,
+        transactionId: paymentInformation?.transactionId ?? '',
       },
     };
     return orderData;
   }
 
-  getOutletUpdateData(
-    data: MenuForm,
-    reservationData: PosReservationResponse
-  ) {
+  getOutletUpdateData(data: MenuForm, reservationData: PosReservationResponse) {
     const { orderInformation, paymentInformation, kotInformation } = data;
 
     const orderData: CreateOrderData = {
@@ -102,10 +108,10 @@ export class OutletFormService {
         })),
         id: kotItem.id !== null ? kotItem.id : undefined,
       })),
-      // offer: {
-      //   id:
-      //     kotInformation.kotItems[kotInformation.kotItems.length - 1].kotOffer,
-      // },
+      offer: {
+        id:
+          kotInformation.kotItems[kotInformation.kotItems.length - 1].kotOffer,
+      },
       outletType: EntitySubType.RESTAURANT,
       guestId: orderInformation.guest,
       deliveryAddress: orderInformation.address.id,
@@ -118,6 +124,11 @@ export class OutletFormService {
           data.orderInformation.id !== null
             ? data.orderInformation.id
             : undefined,
+      },
+      paymentDetails: {
+        paymentMethod: paymentInformation?.paymentMethod ?? '',
+        amount: paymentInformation?.paymentRecieved ?? 0,
+        transactionId: paymentInformation?.transactionId ?? '',
       },
     };
     return orderData;

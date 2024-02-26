@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -40,6 +48,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { reservationTabFilters } from '../../constants/data-table';
 import { PosReservationResponse } from '../../types/reservation-table';
+import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 
 @Component({
   selector: 'hospitality-bot-pos-reservation',
@@ -72,6 +81,7 @@ export class PosReservationComponent implements OnInit {
 
   loadingMenuItems: boolean = false;
   isPopular = true;
+  initialMenuItemsLoad = false;
 
   searchApi: string = '/api/v1/search/menu-items';
   selectedPreference: MealPreferences = MealPreferences.ALL;
@@ -79,6 +89,10 @@ export class PosReservationComponent implements OnInit {
   areaList: Option[] = [];
   selectedCategories: string[] = [];
   selectedTable: Option;
+
+  sidebarVisible: boolean;
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
 
   constructor(
     private fb: FormBuilder,
@@ -89,7 +103,8 @@ export class PosReservationComponent implements OnInit {
     private configService: ConfigService,
     private globalFilterService: GlobalFilterService,
     private outletTableService: OutletTableService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private sidebarService: SideBarService
   ) {}
 
   ngOnInit(): void {
@@ -106,13 +121,14 @@ export class PosReservationComponent implements OnInit {
       orderInformation: this.fb.group({
         orderType: [],
         search: [''],
-        tableNumber: [[]],
+        tableNumber: [''],
         staff: [''],
         guest: [''],
         numberOfPersons: [null],
         menu: [[]],
         address: [''],
         id: [null],
+        areaId: [''],
       }),
       paymentInformation: this.fb.group({
         paymentMethod: [''],
@@ -144,6 +160,7 @@ export class PosReservationComponent implements OnInit {
     this.getTableData();
     this.initMealPreferences();
     this.listenForOrderTypeChanges();
+    this.listenForTableChanges();
   }
 
   initMealPreferences() {
@@ -193,6 +210,7 @@ export class PosReservationComponent implements OnInit {
           );
           this.getCategories();
           this.getMenuItems();
+
           if (!this.menuOptions.length) this.loadingMenuItems = false;
         }
       })
@@ -207,6 +225,7 @@ export class PosReservationComponent implements OnInit {
           (res) => {
             const menuItems = new MenuItemList().deserialize(res).records;
             if (menuItems.length) this.cardData = menuItems;
+            this.initialMenuItemsLoad = true;
           },
           (error) => (this.loadingMenuItems = false),
           () => (this.loadingMenuItems = false)
@@ -267,28 +286,33 @@ export class PosReservationComponent implements OnInit {
     const addressControl = this.orderInfoControls.address;
     const tableControl = this.orderInfoControls.tableNumber;
     const numberOfPersons = this.orderInfoControls.numberOfPersons;
+    const guestControl = this.orderInfoControls.guest;
 
+    this.updateValidators(guestControl, [Validators.required]);
     this.orderInfoControls.orderType.valueChanges.subscribe(
       (res: OrderTypes) => {
         if (res) {
           switch (res) {
             case OrderTypes.DELIVERY:
+              this.updateValidators(guestControl);
               this.updateValidators(addressControl, [Validators.required]);
               this.resetValidators(numberOfPersons);
               this.resetValidators(tableControl);
               break;
 
             case OrderTypes.DINE_IN:
-              this.resetValidators(addressControl);
+              this.updateValidators(guestControl);
               this.updateValidators(numberOfPersons, [
                 Validators.required,
                 Validators.min(1),
               ]);
               this.updateValidators(tableControl, [Validators.required]);
+              this.resetValidators(addressControl);
               break;
 
             case OrderTypes.KIOSK:
             case OrderTypes.TAKE_AWAY:
+              this.updateValidators(guestControl);
               this.resetValidators(addressControl);
               this.resetValidators(tableControl);
               this.resetValidators(numberOfPersons);
@@ -297,6 +321,19 @@ export class PosReservationComponent implements OnInit {
         }
       }
     );
+  }
+
+  listenForTableChanges() {
+    this.orderInfoControls.tableNumber.valueChanges.subscribe((res) => {
+      if (res) {
+        const selectedArea = this.areaList.filter(
+          (area) => area.value === res
+        )[0].areaId;
+        this.orderInfoControls.areaId.patchValue(selectedArea, {
+          emitEvent: false,
+        });
+      }
+    });
   }
 
   getCategories() {
@@ -338,6 +375,7 @@ export class PosReservationComponent implements OnInit {
             const tableOptions = item.tableList.map((table) => ({
               label: table.label,
               value: table.value,
+              areaId: item.id,
             }));
             return acc.concat(tableOptions);
           }, []);
@@ -364,29 +402,45 @@ export class PosReservationComponent implements OnInit {
             value: item.value,
           })
         );
-        this.orderInfoControls.orderType.patchValue(OrderTypes.DINE_IN, {
-          emitEvent: false,
-        });
+        this.orderInfoControls.orderType.patchValue(OrderTypes.DINE_IN);
       }
     });
   }
 
   guestChange(guest: GuestType) {
     if (guest) {
-      this.selectedGuest = {
-        label: `${guest.firstName} ${guest.lastName}`,
-        value: guest.id,
-      };
-      const guestAddress = {
-        formattedAddress: `${guest.address?.addressLine1 ?? ''}`,
-        city: guest.address?.city ?? '',
-        state: guest.address?.state ?? '',
-        countryCode: guest.address?.countryCode ?? '',
-        postalCode: guest.address?.postalCode ?? '',
-        id: guest.address?.id,
-      };
-      this.orderInfoControls.address.patchValue(guestAddress);
+      this.mapGuestData(guest);
     }
+  }
+
+  mapGuestData(guest: GuestType) {
+    this.selectedGuest = {
+      label: `${guest.firstName} ${guest.lastName}`,
+      value: guest.id,
+    };
+    const guestAddress = {
+      formattedAddress: `${guest.address?.addressLine1 ?? ''}`,
+      city: guest.address?.city ?? '',
+      state: guest.address?.state ?? '',
+      countryCode: guest.address?.countryCode ?? '',
+      postalCode: guest.address?.postalCode ?? '',
+      id: guest.address?.id,
+    };
+    this.orderInfoControls.address.patchValue(guestAddress);
+  }
+
+  showGuests() {
+    this.sidebarService.openSidebar({
+      componentName: 'AddGuest',
+      containerRef: this.sidebarSlide,
+      onOpen: () => (this.sidebarVisible = true),
+      onClose: (res) => {
+        this.sidebarVisible = false;
+        if (typeof res !== 'boolean') {
+          this.mapGuestData(res);
+        }
+      },
+    });
   }
 
   selectedTab(selectedCategory: string) {
@@ -394,7 +448,7 @@ export class PosReservationComponent implements OnInit {
       this.isPopular = selectedCategory === 'POPULAR' ? true : null;
       this.selectedCategories =
         selectedCategory === 'POPULAR' ? [] : [selectedCategory];
-      this.getMenuItems();
+      this.initialMenuItemsLoad && this.getMenuItems();
     }
   }
 
@@ -488,8 +542,8 @@ export class PosReservationComponent implements OnInit {
     control.markAsUntouched();
   }
 
-  updateValidators(control: AbstractControl, validators: ValidatorFn[]) {
-    control.setValidators(validators);
+  updateValidators(control: AbstractControl, validators?: ValidatorFn[]) {
+    validators && control.setValidators(validators);
     control.updateValueAndValidity({ emitEvent: false });
     control.markAsUntouched();
   }

@@ -153,7 +153,7 @@
             <td>
               <div
                 class="cell-content"
-                *ngIf="rowData?.guestName.length; else emptyCell"
+                *ngIf="rowData?.guestName?.length; else emptyCell"
               >
                 <!-- (click)="openDetailsPage(rowData.id)" -->
                 <!-- click-stop-propagation

@@ -1,4 +1,5 @@
 import { EntityState } from '@hospitality-bot/admin/shared';
+import { OfferListResponse, OfferResponse } from 'libs/admin/offers/src/lib/types/response';
 import { MealPreferences } from 'libs/admin/outlets-dashboard/src/lib/types/menu-order';
 
 export type OutletForm = {
@@ -114,6 +115,7 @@ export type MenuItemForm = {
 export type MenuItemResponse = MenuItemForm & {
   id: string;
   code?: string;
+  offers: OfferResponse[];
 };
 
 export type MenuItemListResponse = {

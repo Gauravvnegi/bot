@@ -19,6 +19,7 @@ export type OrderInformation = {
   orderType: OrderTypes;
   address?: AddressFieldType;
   id?: string;
+  areaId?: string
 };
 
 export type PaymentInformation = {
@@ -136,6 +137,12 @@ export type CreateOrderData = {
     source?: string;
     sourceName?: string;
     marketSegment?: string;
+    areaId?: string;
+  };
+  paymentDetails?: {
+    paymentMethod: string;
+    amount: number;
+    transactionId: string;
   };
 };
 

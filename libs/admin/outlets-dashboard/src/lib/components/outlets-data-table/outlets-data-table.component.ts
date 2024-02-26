@@ -202,7 +202,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
           this.initFilters(
             data?.entityTypeCounts,
             {},
-            12,
+            data.total,
             ReservationStatusDetails
           );
           this.loading = false;

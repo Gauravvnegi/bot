@@ -112,7 +112,7 @@ export class AuditSummaryComponent implements OnInit {
                     label: 'Yes',
                     onClick: () => {
                       this.indexChange.emit({ index: 0 });
-                      dialogRef.close();
+                      dialogRef.close({ index: 0 });
                     },
                     variant: 'contained',
                   },
@@ -130,7 +130,8 @@ export class AuditSummaryComponent implements OnInit {
                   dialogService: this.dialogService,
                 });
                 dialogRef.onClose.subscribe((res) => {
-                  this.indexChange.emit(this.activeIndex + 1);
+                  const index = res ? res : this.activeIndex + 1
+                  this.indexChange.emit(index);
                 });
               } else {
                 loadTable();

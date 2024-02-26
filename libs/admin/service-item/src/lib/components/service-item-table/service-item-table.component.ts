@@ -9,6 +9,7 @@ import {
   BaseDatatableComponent,
   NavRouteOption,
   QueryConfig,
+  openModal,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { LazyLoadEvent } from 'primeng/api';
@@ -21,6 +22,11 @@ import { ServiceItemService } from '../../services/service-item-datatable.servic
 import { cols } from '../../constants/service-item-datatable.contant';
 import { parmaId, serviceItemRoutes } from '../../constants/routes';
 import { Router } from '@angular/router';
+import {
+  UserPermissionDatatableComponent,
+  UserPermissionResponse,
+} from 'libs/admin/roles-and-permissions/src/lib/components/user-permission-datatable/user-permission-datatable.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-service-item-table',
@@ -53,7 +59,8 @@ export class ServiceItemTableComponent extends BaseDatatableComponent
     protected snackbarService: SnackBarService,
     private routesConfigService: RoutesConfigService,
     private serviceItemService: ServiceItemService,
-    private router: Router
+    private router: Router,
+    private dialogService: DialogService
   ) {
     super(fb);
   }
@@ -152,17 +159,32 @@ export class ServiceItemTableComponent extends BaseDatatableComponent
     );
   }
 
-  openTableModal(event) {
+  openTableModal(event, data: ServiceItem) {
     event.stopPropagation();
+    const modalData: Partial<UserPermissionDatatableComponent> = {
+      tableType: 'SERVICE_ITEM',
+      serviceItemId: data?.id,
+    };
+    const dialogRef = openModal({
+      config: {
+        width: '80%',
+        styleClass: 'dynamic-modal',
+        data: modalData,
+      },
+      dialogService: this.dialogService,
+      component: UserPermissionDatatableComponent,
+    });
+
+    dialogRef.onClose.subscribe((res: UserPermissionResponse) => {});
   }
 
   editServiceItem(id: string) {
-    // this.routesConfigService.navigate({
-    //   additionalPath: serviceItemRoutes.editServiceItem.route.replace(
-    //     ':' + parmaId.editServiceItem,
-    //     id
-    //   ),
-    // });
+    this.routesConfigService.navigate({
+      additionalPath: serviceItemRoutes.editServiceItem.route.replace(
+        ':' + parmaId.editServiceItem,
+        id
+      ),
+    });
   }
 
   /**

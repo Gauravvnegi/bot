@@ -9,12 +9,19 @@ export type RequestItemUser = {
   lastName: string;
 };
 
+export type Category = {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl: string[];
+  active: boolean;
+  entityId: string;
+};
+
 export type ServiceItemResponse = {
   id: string;
   itemCode: string;
-  category: {
-    name: string;
-  };
+  category: Category;
   itemName: string;
   active: boolean;
   entityId: string;

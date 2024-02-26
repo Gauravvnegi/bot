@@ -1,5 +1,9 @@
 import { UserResponse } from '@hospitality-bot/admin/shared';
-import { UserListResponse } from '../types/response';
+import {
+  ServiceItemUserListResponse,
+  ServiceItemUserResponse,
+  UserListResponse,
+} from '../types/response';
 export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
 }
@@ -29,7 +33,7 @@ export class User {
     this.lastName = input.lastName;
     this.jobTitle = input.title;
 
-    this.cc = input.cc;
+    this.cc = input?.cc;
     this.phoneNumber = input.phoneNumber;
     this.email = input.email;
     this.profileUrl = input.profileUrl;
@@ -39,6 +43,26 @@ export class User {
     this.status = input.status;
 
     this.reportingTo = input?.reportingTo;
+    this.availableStatus = {
+      label: input?.available ? 'Available' : 'Unavailable',
+      value: input?.available,
+      type: input.available ? 'success' : 'failed',
+    };
+    return this;
+  }
+
+  createServiceItem(input: ServiceItemUserResponse) {
+    this.firstName = input.firstName;
+    this.lastName = input.lastName;
+    this.jobTitle = input.title;
+
+    this.phoneNumber = input.phoneNumber;
+    this.email = input.email;
+    this.userId = input.id;
+    this.parentId = input.parentId;
+
+    this.status = input.status;
+
     this.availableStatus = {
       label: input?.available ? 'Available' : 'Unavailable',
       value: input?.available,
@@ -78,3 +102,19 @@ export class UserPermissionTable {
     return this;
   }
 }
+
+export class ServiceItemUserList {
+  records: User[];
+  entityStateCounts: {};
+  totalRecords: number;
+
+  deserialize(input: ServiceItemUserListResponse) {
+    this.records = input.records.map((record) =>
+      new User().createServiceItem(record)
+    );
+    this.entityStateCounts = input.entityStateCounts;
+    this.totalRecords = input.total;
+    return this;
+  }
+}
+                    

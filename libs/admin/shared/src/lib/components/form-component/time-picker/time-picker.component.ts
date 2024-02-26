@@ -84,6 +84,7 @@ export class TimePickerComponent extends FormComponent {
    * @returns formatted time HH:MM
    */
   millisecondsToRequiredFormat(time: number) {
+    debugger;
     const hours = Math.floor(time / (1000 * 60 * 60));
     const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
     const formattedHours = ('0' + hours).slice(-2);

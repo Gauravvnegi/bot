@@ -4,7 +4,10 @@ import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { QueryConfig } from '../types';
-import { UserListResponse } from '../types/response';
+import {
+  ServiceItemUserListResponse,
+  UserListResponse,
+} from '../types/response';
 import {
   PermissionOption,
   UserConfig,
@@ -180,6 +183,18 @@ export class ManagePermissionService extends ApiService {
     return this.patch(
       `/api/v1/user/${userId}/available${config?.queryObj}`,
       {}
+    );
+  }
+
+  getServiceItemUsers(
+    entityId: string,
+    serviceItemId: string,
+    config
+  ): Observable<ServiceItemUserListResponse> {
+    return this.get(
+      `/api/v1/entity/${entityId}/cms-service/${serviceItemId}/users${
+        config.params ?? ''
+      }`
     );
   }
 }

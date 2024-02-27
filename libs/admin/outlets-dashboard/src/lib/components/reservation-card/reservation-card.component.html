@@ -4,6 +4,7 @@
     backgroundColor: tableStatusConfig[data?.tableStatus]?.backgroundColor
   }"
   class="wrapper"
+  (click)="cardClick()"
 >
   <div class="header-wrapper">
     <div class="heading">{{ data?.tableNumber }}</div>
@@ -70,7 +71,7 @@
 </div>
 
 <ng-template #AddItem>
-  <div class="add-item" (click)="onAddNewItem()">
+  <div class="add-item">
     <img src="assets/svg/add-item.svg" alt="" />
   </div>
 </ng-template>

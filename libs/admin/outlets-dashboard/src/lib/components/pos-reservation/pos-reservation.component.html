@@ -1,6 +1,6 @@
 <div class="container" [formGroup]="userForm">
   <!-- Header -->
-  <ng-container formGroupName="orderInformation">
+  <ng-container formGroupName="reservationInformation">
     <div class="header">
       <div class="heading">
         <!-- <span class="header-data">
@@ -57,8 +57,9 @@
           placeholder: 'Search by Dish Name or Code'
         }"
       ></hospitality-bot-search>
+      <!-- [ngClass]="checkOrderType ? 'one-fifth-width' : 'one-fourth-width'" -->
       <hospitality-bot-quick-select
-        [ngClass]="checkOrderType ? 'one-fifth-width' : 'one-fourth-width'"
+        class="one-fourth-width"
         controlName="guest"
         label="Guest"
         [inputType]="'select'"
@@ -109,7 +110,7 @@
             placeholder: 'Select Table No.'
           }"
         ></hospitality-bot-select>
-        <hospitality-bot-select
+        <!-- <hospitality-bot-select
           class="one-fifth-width"
           controlName="staff"
           [options]="staffList"
@@ -117,9 +118,9 @@
             placeholder: 'Select'
           }"
           label="Staff"
-        ></hospitality-bot-select>
+        ></hospitality-bot-select> -->
         <hospitality-bot-input
-          class="number"
+          class="one-fourth-width"
           controlName="numberOfPersons"
           [props]="{
             placeholder: 'Enter',

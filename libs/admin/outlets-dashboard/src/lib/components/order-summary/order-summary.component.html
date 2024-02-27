@@ -3,15 +3,6 @@
     <ng-container
       *ngIf="selectedItems.length || currentKotIndex; else emptyView"
     >
-      <div class="btn-wrapper">
-        <hospitality-bot-button
-          label="Clear"
-          variant="text"
-          (onClick)="clear()"
-          minWidth="50px"
-        ></hospitality-bot-button>
-      </div>
-
       <ng-container [formGroup]="parentFormGroup">
         <div class="items-wrapper">
           <ng-container formGroupName="kotInformation">
@@ -32,14 +23,24 @@
                       >
                         <p-header>
                           <div class="heading">KOT {{ i + 1 }}</div>
-                          <span class="amount"
-                            >Qty:
-                            {{
-                              getTotalItemUnits(
-                                kotControls.get('items').controls
-                              )
-                            }}</span
-                          >
+                          <div class="accordion-data">
+                            <hospitality-bot-button
+                              label="Clear"
+                              variant="text"
+                              (onClick)="clear()"
+                              minWidth="50px"
+                              height="20px"
+                              [disabled]="kotControls.value.id"
+                            ></hospitality-bot-button>
+                            <span class="amount"
+                              >Qty:
+                              {{
+                                getTotalItemUnits(
+                                  kotControls.get('items').controls
+                                )
+                              }}</span
+                            >
+                          </div>
                         </p-header>
                         <div class="items-content" formArrayName="items">
                           <ng-container
@@ -97,6 +98,10 @@
                                     (click)="decrementQuantity(itemControls)"
                                   />
                                   <p>{{ itemControls.value.unit }}</p>
+                                  <!-- <hospitality-bot-input
+                                    class="item-input"
+                                    controlName="unit"
+                                  ></hospitality-bot-input> -->
                                   <img
                                     src="assets/svg/add-item-black.svg"
                                     [ngClass]="{

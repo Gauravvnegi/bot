@@ -12,7 +12,6 @@ import {
 } from '../types/response';
 import { MealPreferences } from 'libs/admin/outlets-dashboard/src/lib/types/menu-order';
 import {
-  OfferListResponse,
   OfferResponse,
 } from 'libs/admin/offers/src/lib/types/response';
 

@@ -18,11 +18,12 @@ export class ReservationCardComponent implements OnInit {
   readonly tableStatusConfig = TableStatusConfig;
   constructor() {}
 
-  @Output() onAddItem = new EventEmitter<string>();
+  @Output() onCardClick = new EventEmitter<string>();
 
   ngOnInit(): void {}
 
-  onAddNewItem() {
-    this.onAddItem.emit(this.data?.id);
+  cardClick() {
+    // if(this.data.)
+    this.onCardClick.emit(this.data?.id);
   }
 }

@@ -51,10 +51,10 @@ export class OutletFormService {
   }
 
   getOutletFormData(data: MenuForm, orderId?: string) {
-    const { orderInformation, paymentInformation, kotInformation } = data;
+    const { reservationInformation, paymentInformation, kotInformation } = data;
     const orderData: CreateOrderData = {
       status: 'CONFIRMED',
-      type: orderInformation.orderType,
+      type: reservationInformation.orderType,
       source: 'Offline',
       kots: kotInformation.kotItems.map((kotItem) => ({
         instructions: kotItem.kotInstruction,
@@ -70,17 +70,23 @@ export class OutletFormService {
           kotInformation.kotItems[kotInformation.kotItems.length - 1].kotOffer,
       },
       outletType: EntitySubType.RESTAURANT,
-      guestId: orderInformation.guest,
+      guestId: reservationInformation.guest,
       deliveryAddress:
-        orderInformation.orderType === OrderTypes.DELIVERY
-          ? orderInformation.address.id
+        reservationInformation.orderType === OrderTypes.DELIVERY
+          ? reservationInformation.address.id
           : undefined,
-      reservation: {
-        occupancyDetails: { maxAdult: orderInformation.numberOfPersons },
-        status: 'CONFIRMED',
-        tableIds: [orderInformation.tableNumber],
-        areaId: orderInformation.areaId,
-      },
+      reservation:
+        reservationInformation.orderType === OrderTypes.DINE_IN
+          ? {
+              occupancyDetails: {
+                maxAdult: reservationInformation.numberOfPersons,
+              },
+              status: 'CONFIRMED',
+              tableIds: [reservationInformation.tableNumber],
+              areaId: reservationInformation.areaId,
+              currentJourney: 'SEATED',
+            }
+          : undefined,
       paymentDetails: {
         paymentMethod: paymentInformation?.paymentMethod ?? '',
         amount: paymentInformation?.paymentRecieved ?? 0,
@@ -91,13 +97,13 @@ export class OutletFormService {
   }
 
   getOutletUpdateData(data: MenuForm, reservationData: PosReservationResponse) {
-    const { orderInformation, paymentInformation, kotInformation } = data;
+    const { reservationInformation, paymentInformation, kotInformation } = data;
 
     const selectedOffer =
       kotInformation.kotItems[kotInformation.kotItems.length - 1].kotOffer;
     const orderData: CreateOrderData = {
       status: 'CONFIRMED',
-      type: orderInformation.orderType,
+      type: reservationInformation.orderType,
       source: 'Offline',
       kots: kotInformation.kotItems.map((kotItem) => ({
         instructions: kotItem.kotInstruction,
@@ -112,19 +118,19 @@ export class OutletFormService {
       })),
       offer: selectedOffer?.length ? { id: selectedOffer } : undefined,
       outletType: EntitySubType.RESTAURANT,
-      guestId: orderInformation.guest,
+      guestId: reservationInformation.guest,
       deliveryAddress:
-        orderInformation.orderType === OrderTypes.DELIVERY
-          ? orderInformation.address.id
+        reservationInformation.orderType === OrderTypes.DELIVERY
+          ? reservationInformation.address.id
           : undefined,
       reservation: {
         ...reservationData,
-        occupancyDetails: { maxAdult: orderInformation.numberOfPersons },
+        occupancyDetails: { maxAdult: reservationInformation.numberOfPersons },
         status: 'CONFIRMED',
-        tableIds: [orderInformation.tableNumber],
+        tableIds: [reservationInformation.tableNumber],
         id:
-          data.orderInformation.id !== null
-            ? data.orderInformation.id
+          data.reservationInformation.id !== null
+            ? data.reservationInformation.id
             : undefined,
       },
       paymentDetails: {
@@ -159,15 +165,24 @@ export class OutletFormService {
   mapOrderData(data: ReservationTableResponse) {
     let formData = new MenuForm();
 
-    formData.orderInformation = {
+    const address = data.deliveryAddress;
+    formData.reservationInformation = {
       search: '',
-      tableNumber: data?.reservation.tableIdOrRoomId,
+      tableNumber: data?.reservation?.tableIdOrRoomId,
       staff: '',
       guest: data?.guest?.id,
-      numberOfPersons: data?.reservation.occupancyDetails.maxAdult,
+      numberOfPersons: data?.reservation?.occupancyDetails?.maxAdult,
       menu: data?.items?.map((item) => item?.itemId),
       orderType: data?.type,
-      id: data.reservation.id,
+      id: data?.reservation?.id,
+      address: {
+        formattedAddress: `${address?.addressLine1 ?? ''}`,
+        city: address?.city ?? '',
+        state: address?.state ?? '',
+        countryCode: address?.countryCode ?? '',
+        postalCode: address?.postalCode ?? '',
+        id: address?.id,
+      },
     };
 
     // Map kot information

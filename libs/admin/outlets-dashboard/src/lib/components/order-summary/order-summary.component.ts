@@ -355,8 +355,11 @@ export class OrderSummaryComponent implements OnInit {
   }
 
   get orderInfoControls() {
-    return (this.parentFormGroup.get('orderInformation') as FormGroup)
-      .controls as Record<keyof MenuForm['orderInformation'], AbstractControl>;
+    return (this.parentFormGroup.get('reservationInformation') as FormGroup)
+      .controls as Record<
+      keyof MenuForm['reservationInformation'],
+      AbstractControl
+    >;
   }
 
   get paymentControls() {

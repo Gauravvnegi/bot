@@ -62,7 +62,10 @@ import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 export class PosReservationComponent implements OnInit {
   isSidebar: boolean;
   entityId: string;
+
   orderId: string;
+  reservationId: string;
+
   data: PosConfig;
   userForm: FormGroup;
   checkboxForm: FormGroup;
@@ -116,16 +119,18 @@ export class PosReservationComponent implements OnInit {
     this.listenForGlobalFilters();
     this.initForm();
     this.initDetails();
-    if (this.orderId) {
-      this.initOrderData();
-    } else {
-      this.getTableData();
-    }
+    this.initFormData();
+  }
+
+  initFormData() {
+    if (this.orderId) this.initOrderData();
+    if (this.reservationId) this.initReservationData();
+    if (!this.reservationId && !this.orderId) this.getTableData();
   }
 
   initForm() {
     this.userForm = this.fb.group({
-      orderInformation: this.fb.group({
+      reservationInformation: this.fb.group({
         orderType: [],
         search: [''],
         tableNumber: [''],
@@ -206,6 +211,30 @@ export class PosReservationComponent implements OnInit {
           }
         })
     );
+  }
+
+  initReservationData() {
+    this.outletService
+      .getReservationById(this.reservationId)
+      .subscribe((res) => {
+        if (res) {
+          const reservationInformation = {
+            tableNumber: res?.tableIdOrRoomId,
+            guest: res?.guest.id,
+            numberOfPersons: res?.occupancyDetails.maxAdult,
+            orderType: OrderTypes.DINE_IN,
+          };
+          this.selectedTable = {
+            label: res?.tableNumberOrRoomNumber,
+            value: res?.tableIdOrRoomId,
+          };
+          this.userForm.patchValue(
+            { reservationInformation: reservationInformation },
+            { emitEvent: false }
+          );
+          this.getTableData();
+        }
+      });
   }
 
   getMenus() {
@@ -514,6 +543,7 @@ export class PosReservationComponent implements OnInit {
         (error) => {},
         () => {
           this.close();
+          // this.resetForm();
           this.snackbarService.openSnackBarAsText(
             'Order created successfully',
             '',
@@ -539,6 +569,7 @@ export class PosReservationComponent implements OnInit {
           (error) => {},
           () => {
             this.close();
+            this.resetForm();
             this.snackbarService.openSnackBarAsText(
               'Order updated successfully',
               '',
@@ -552,6 +583,13 @@ export class PosReservationComponent implements OnInit {
   }
 
   handleKOT(print: boolean = false) {}
+
+  resetForm() {
+    this.initForm;
+    this.selectedCategories = [];
+    this.orderId = undefined;
+    this.formService.resetData();
+  }
 
   close() {
     this.selectedCategories = [];
@@ -577,8 +615,11 @@ export class PosReservationComponent implements OnInit {
   }
 
   get orderInfoControls() {
-    return (this.userForm.get('orderInformation') as FormGroup)
-      .controls as Record<keyof MenuForm['orderInformation'], AbstractControl>;
+    return (this.userForm.get('reservationInformation') as FormGroup)
+      .controls as Record<
+      keyof MenuForm['reservationInformation'],
+      AbstractControl
+    >;
   }
 
   ngOnDestroy() {

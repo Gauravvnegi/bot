@@ -37,9 +37,6 @@ import {
   GuestReservationListResponse,
   TableListResponse,
 } from '../../types/outlet.response';
-import { MemoVoidIterator } from 'lodash';
-import { GuestReservation } from '../../models/guest-reservation.model';
-
 @Component({
   selector: 'hospitality-bot-outlets-data-table',
   templateUrl: './outlets-data-table.component.html',
@@ -231,8 +228,8 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     );
   }
 
-  onPlaceNewOrder(orderId: string) {
-    this.addNewOrder();
+  onCardClick(orderId: string) {
+    this.addNewOrder(orderId);
   }
 
   copyConfirmationNumber(number: string) {
@@ -250,14 +247,15 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     this.addNewOrder(id);
   }
 
-  addNewOrder(id?: string) {
+  addNewOrder(orderId?: string, reservationId?: string) {
     this.sidebarVisible = true;
     const factory = this.resolver.resolveComponentFactory(
       PosReservationComponent
     );
     const sidebarData = {
       isSidebar: true,
-      orderId: id,
+      orderId: orderId,
+      reservationId: reservationId,
     };
     this.sidebarSlide.clear();
     const componentRef = this.sidebarSlide.createComponent(factory);

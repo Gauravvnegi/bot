@@ -4,12 +4,12 @@ import { KotMenuItem, ReservationStatus } from './reservation-table';
 import { AddressFieldType } from 'libs/admin/guests/src/lib/types/guest.type';
 
 export class MenuForm {
-  orderInformation: OrderInformation;
+  reservationInformation: ReservationInformation;
   paymentInformation: PaymentInformation;
   kotInformation: KotInformation;
 }
 
-export type OrderInformation = {
+export type ReservationInformation = {
   search: string;
   tableNumber?: string;
   staff?: string;
@@ -140,6 +140,7 @@ export type CreateOrderData = {
     sourceName?: string;
     marketSegment?: string;
     areaId?: string;
+    currentJourney?: string;
   };
   paymentDetails?: {
     paymentMethod: string;

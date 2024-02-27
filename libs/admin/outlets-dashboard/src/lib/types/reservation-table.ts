@@ -19,6 +19,14 @@ export type ReservationTableResponse = {
   items: KotMenuItem[];
   entityId: string;
   createdBy: string;
+  deliveryAddress: {
+    addressLine1: string;
+    city: string;
+    state: string;
+    countryCode: string;
+    postalCode: string;
+    id?: string;
+  };
   pricingDetails: OutletPricingDetails & {
     containerCharge: number;
     allowance: number;
@@ -26,7 +34,7 @@ export type ReservationTableResponse = {
   offer?: { id?: string };
   // kots: (Omit<KotItemsResponse, 'items'> & { menuItems: MenuItemResponse })[];
   kots: KotItemsResponse[];
-  guest: OutletGuest;
+  guest?: OutletGuest;
   reservation: PosReservationResponse;
   source: 'Offline';
 };
@@ -68,6 +76,7 @@ export type PosReservationResponse = {
   printRate: boolean;
   tableIdOrRoomId: string;
   externalBooking: boolean;
+  guest?: OutletGuest;
 };
 
 export type ReservationStatus =

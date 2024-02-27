@@ -290,14 +290,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
                 label: 'Generate Link',
                 command: () => {
                   this.activateAndgenerateJourney('CHECKIN');
-                }
+                },
               },
             ];
             this.checkOutOptions = [
               {
                 label: 'Generate Link',
                 command: () => this.activateAndgenerateJourney('CHECKOUT'),
-                disabled: !this.isPrintRate,
               },
             ];
             if (initGuestDetails) {

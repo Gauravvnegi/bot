@@ -1,257 +1,302 @@
 <div class="summary-wrapper">
-  <ng-container *ngIf="selectedItems.length; else emptyView">
-    <div class="btn-wrapper">
-      <hospitality-bot-button
-        label="Clear"
-        variant="text"
-        (onClick)="clear()"
-        minWidth="50px"
-      ></hospitality-bot-button>
-    </div>
-
-    <ng-container [formGroup]="parentFormGroup">
-      <div class="items-wrapper">
-        <ng-container formGroupName="kotInformation">
-          <ng-container formArrayName="kotItems">
-            <ng-container
-              *ngFor="let kotControls of kotFormArray.controls; let i = index"
-            >
-              <ng-container [formGroupName]="i">
-                <p-accordion [multiple]="true">
-                  <p-accordionTab click [selected]="true">
-                    <p-header>
-                      <div class="heading">KOT {{ 1 }}</div>
-                      <span class="amount">Qty: {{ totalItemUnits }}</span>
-                    </p-header>
-                    <div class="items-content" formArrayName="items">
-                      <ng-container
-                        *ngFor="
-                          let itemControls of kotFormArray.at(i).get('items')
-                            .controls;
-                          let j = index
+  <ng-container *ngIf="!loadingKotData; else loader">
+    <ng-container
+      *ngIf="selectedItems.length || currentKotIndex; else emptyView"
+    >
+      <ng-container [formGroup]="parentFormGroup">
+        <div class="items-wrapper">
+          <ng-container formGroupName="kotInformation">
+            <ng-container formArrayName="kotItems">
+              <ng-container
+                *ngFor="let kotControls of kotFormArray.controls; let i = index"
+              >
+                <ng-container [formGroupName]="i">
+                  <ng-container
+                    *ngIf="selectedItems.length || kotControls.value.id"
+                  >
+                    <p-accordion [multiple]="true">
+                      <p-accordionTab
+                        click
+                        [selected]="
+                          i === currentKotIndex || !selectedItems.length
                         "
                       >
-                        <ng-container [formGroupName]="j">
-                          <div
-                            class="selected-item"
-                            *ngIf="itemControls.value.unit > 0"
-                          >
-                            <div class="item-name-wrapper">
-                              <img
-                                [src]="
-                                  mealPreferenceConfig[
-                                    selectedItems[j].mealPreference
-                                  ].image
-                                "
-                              />
-                              <div class="item-name">
-                                <span class="name">{{
-                                  itemControls.value.itemName
-                                }}</span>
-                                <span
-                                  *ngIf="
-                                    !itemFormArray
-                                      .at(j)
-                                      ?.get('viewItemInstruction')?.value
-                                  "
-                                  class="instructions"
-                                  (click)="
-                                    toggleControlVisibility(
-                                      'ItemInstruction',
-                                      j,
-                                      itemFormArray
-                                    )
-                                  "
-                                >
-                                  {{
-                                    itemFormArray.at(j)?.get('itemInstruction')
-                                      ?.value
-                                      ? 'Edit Instruction'
-                                      : 'Add Instruction'
-                                  }}
-                                </span>
-                              </div>
-                            </div>
-                            <div class="items-count">
-                              <img
-                                src="assets/svg/remove-item-black.svg"
-                                (click)="decrementQuantity(itemControls)"
-                              />
-                              <p>{{ itemControls.value.unit }}</p>
-                              <img
-                                src="assets/svg/add-item-black.svg"
-                                (click)="incrementQuantity(itemControls)"
-                              />
-                            </div>
+                        <p-header>
+                          <div class="heading">KOT {{ i + 1 }}</div>
+                          <div class="accordion-data">
+                            <hospitality-bot-button
+                              label="Clear"
+                              variant="text"
+                              (onClick)="clear()"
+                              minWidth="50px"
+                              height="20px"
+                              [disabled]="kotControls.value.id"
+                            ></hospitality-bot-button>
+                            <span class="amount"
+                              >Qty:
+                              {{
+                                getTotalItemUnits(
+                                  kotControls.get('items').controls
+                                )
+                              }}</span
+                            >
                           </div>
-                          <hospitality-bot-input
-                            class="item-instruction"
-                            *ngIf="
-                              itemFormArray.at(j)?.get('viewItemInstruction')
-                                ?.value
+                        </p-header>
+                        <div class="items-content" formArrayName="items">
+                          <ng-container
+                            *ngFor="
+                              let itemControls of kotFormArray
+                                .at(i)
+                                .get('items').controls;
+                              let j = index;
+                              trackBy: trackItemControls
                             "
-                            controlName="itemInstruction"
+                          >
+                            <ng-container [formGroupName]="j">
+                              <div
+                                class="selected-item"
+                                *ngIf="itemControls.value.unit > 0"
+                              >
+                                <div class="item-name-wrapper">
+                                  <img
+                                    [src]="
+                                      mealPreferenceConfig[
+                                        itemControls.value.mealPreference
+                                      ].image
+                                    "
+                                  />
+                                  <div class="item-name">
+                                    <span class="name">{{
+                                      itemControls.value.itemName
+                                    }}</span>
+                                    <span
+                                      *ngIf="
+                                        !itemControls.value.viewItemInstruction
+                                      "
+                                      class="instructions"
+                                      (click)="
+                                        toggleControlVisibility(
+                                          'ItemInstruction',
+                                          itemControls
+                                        )
+                                      "
+                                    >
+                                      {{
+                                        itemControls.value.itemInstruction
+                                          ? 'Edit Instruction'
+                                          : 'Add Instruction'
+                                      }}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div class="items-count">
+                                  <img
+                                    src="assets/svg/remove-item-black.svg"
+                                    [ngClass]="{
+                                      'disabled-form': kotControls.value.id
+                                    }"
+                                    (click)="decrementQuantity(itemControls)"
+                                  />
+                                  <p>{{ itemControls.value.unit }}</p>
+                                  <!-- <hospitality-bot-input
+                                    class="item-input"
+                                    controlName="unit"
+                                  ></hospitality-bot-input> -->
+                                  <img
+                                    src="assets/svg/add-item-black.svg"
+                                    [ngClass]="{
+                                      'disabled-form': kotControls.value.id
+                                    }"
+                                    (click)="incrementQuantity(itemControls)"
+                                  />
+                                </div>
+                              </div>
+                              <hospitality-bot-input
+                                class="item-instruction"
+                                *ngIf="itemControls.value.viewItemInstruction"
+                                controlName="itemInstruction"
+                                [props]="{
+                                  placeholder: 'Enter'
+                                }"
+                                [viewButton]="true"
+                                (onSaveText)="
+                                  toggleControlVisibility(
+                                    'ItemInstruction',
+                                    itemControls
+                                  )
+                                "
+                              ></hospitality-bot-input>
+                            </ng-container>
+                          </ng-container>
+                        </div>
+                        <div class="item-footer">
+                          <span
+                            *ngIf="!kotControls.value.viewKotInstruction"
+                            class="instructions"
+                            (click)="
+                              toggleControlVisibility(
+                                'Instruction',
+                                kotControls
+                              )
+                            "
+                          >
+                            {{
+                              kotControls.value.kotInstruction
+                                ? 'Edit Instruction'
+                                : 'Add Instruction'
+                            }}
+                          </span>
+                          <hospitality-bot-input
+                            *ngIf="kotControls.value.viewKotInstruction"
+                            controlName="kotInstruction"
                             [props]="{
                               placeholder: 'Enter'
                             }"
                             [viewButton]="true"
                             (onSaveText)="
                               toggleControlVisibility(
-                                'ItemInstruction',
-                                j,
-                                itemFormArray
+                                'Instruction',
+                                kotControls
                               )
                             "
                           ></hospitality-bot-input>
-                        </ng-container>
-                      </ng-container>
-                    </div>
-                    <div class="item-footer">
-                      <span
-                        *ngIf="
-                          !kotFormArray.at(i)?.get('viewKotInstruction')?.value
-                        "
-                        class="instructions"
-                        (click)="
-                          toggleControlVisibility(
-                            'Instruction',
-                            i,
-                            kotFormArray
-                          )
-                        "
-                      >
-                        {{
-                          kotFormArray.at(i)?.get('kotInstruction')?.value
-                            ? 'Edit Instruction'
-                            : 'Add Instruction'
-                        }}
-                      </span>
-                      <hospitality-bot-input
-                        *ngIf="
-                          kotFormArray.at(i)?.get('viewKotInstruction')?.value
-                        "
-                        controlName="kotInstruction"
-                        [props]="{
-                          placeholder: 'Enter'
-                        }"
-                        [viewButton]="true"
-                        (onSaveText)="
-                          toggleControlVisibility(
-                            'Instruction',
-                            i,
-                            kotFormArray
-                          )
-                        "
-                      ></hospitality-bot-input>
-                      <div class="offer-wrapper">
-                        <p *ngIf="!viewOffer">
-                          Have an Offer?
-                          <span (click)="viewOffer = true" class="apply-btn"
-                            >Apply Offer</span
-                          >
-                        </p>
-                        <hospitality-bot-multi-select
-                          *ngIf="viewOffer"
-                          controlName="kotOffer"
-                          [options]="itemOffers"
-                          [settings]="{
-                            placeholder: 'Apply Offer',
-                            showChips: false,
-                            showHeaders: false,
-                            maxSelectedLabels: 1
-                          }"
-                        ></hospitality-bot-multi-select>
-                        <!-- Have an Offer?
-                        <span
-                          class="offer"
-                          (click)="
-                            toggleControlVisibility('Offer', i, kotFormArray)
-                          "
-                        >
-                          Apply Offer
-                          <img
-                            [ngClass]="{
-                              'rotated-up': kotFormArray
-                                .at(i)
-                                ?.get('viewKotOffer')?.value
-                            }"
-                            src="assets/svg/union.svg"
-                          />
-                        </span>
-                        <hospitality-bot-input
-                          *ngIf="kotFormArray.at(i)?.get('viewKotOffer')?.value"
-                          controlName="kotOffer"
-                        ></hospitality-bot-input> -->
-                      </div>
-                    </div>
-                  </p-accordionTab>
-                </p-accordion>
+                          <div class="offer-wrapper">
+                            <p *ngIf="!kotControls.value.viewKotOffer">
+                              Have an Offer?
+                              <span
+                                (click)="applyOffer(kotControls)"
+                                class="apply-btn"
+                                [ngClass]="{
+                                  'disabled-form': kotControls.value.id
+                                }"
+                                >Apply Offer</span
+                              >
+                            </p>
+                            <hospitality-bot-select
+                              *ngIf="
+                                kotControls.value.viewKotOffer &&
+                                !kotControls.value.selectedOffer
+                              "
+                              class="offer-select"
+                              controlName="kotOffer"
+                              [options]="kotControls.value.itemOffers"
+                              [props]="{
+                                placeholder: 'Select Offer'
+                              }"
+                            >
+                            </hospitality-bot-select>
+                            <ng-container
+                              *ngIf="kotControls.value.selectedOffer"
+                            >
+                              <div class="promo-code">
+                                <p>Promo Code</p>
+                                <span
+                                  class="remove-btn"
+                                  [ngClass]="{
+                                    'disabled-form': kotControls.value.id
+                                  }"
+                                  (click)="removeOffer()"
+                                  >Remove</span
+                                >
+                              </div>
+                              <div class="offer">
+                                <span class="offerName">{{
+                                  kotControls.value.selectedOffer?.label
+                                }}</span>
+                                <span
+                                  class="offerAmount"
+                                  *ngIf="
+                                    kotControls.value.selectedOffer
+                                      ?.discountType === 'PERCENTAGE'
+                                  "
+                                >
+                                  ({{
+                                    kotControls.value.selectedOffer
+                                      ?.discountValue
+                                  }}% OFF)</span
+                                >
+                                <span
+                                  class="offerAmount"
+                                  *ngIf="
+                                    kotControls.value.selectedOffer
+                                      ?.discountType === 'FLAT'
+                                  "
+                                >
+                                  ({{
+                                    kotControls.value.selectedOffer
+                                      ?.discountValue | currency: 'INR'
+                                  }}
+                                  FLAT)</span
+                                >
+                              </div>
+                            </ng-container>
+                          </div>
+                        </div>
+                      </p-accordionTab>
+                    </p-accordion>
+                  </ng-container>
+                </ng-container>
               </ng-container>
             </ng-container>
           </ng-container>
-        </ng-container>
-      </div>
-      <ng-container formGroupName="paymentInformation">
-        <div class="payment-wrapper">
-          <p class="payment-header">Bill Details</p>
-          <div class="payment-details">
-            <ul>
-              <li class="payment-item">
-                <span>Total Charges</span>
-                <span>{{ totalAmount | currency: 'INR' }} </span>
-              </li>
-              <!-- <li class="payment-item">
-                <span>Total Container Charges</span>
-                <span>{{ 223 | currency: 'INR' }} </span>
-              </li> -->
-              <li class="payment-item">
-                <span>Total Discount</span>
-                <span>{{ 0 | currency: 'INR' }} </span>
-              </li>
-              <li class="payment-item">
-                <span>Total Payable</span>
-                <span>{{ totalAmount | currency: 'INR' }} </span>
-              </li>
-              <li class="payment-item">
-                <span>Total Paid Amount</span>
-                <span>{{ 0 | currency: 'INR' }} </span>
-              </li>
-            </ul>
-            <div class="remaining-balance">
-              <span>Remaining Balance</span>
-              <span>{{
-                totalAmount - paymentControls.paymentRecieved.value
-                  | currency: 'INR'
-              }}</span>
+        </div>
+        <ng-container formGroupName="paymentInformation">
+          <div class="payment-wrapper">
+            <p class="payment-header">Bill Details</p>
+            <div class="payment-details">
+              <ul>
+                <li class="payment-item">
+                  <span>Total Charges</span>
+                  <span>{{ totalAmount | currency: 'INR' }} </span>
+                </li>
+                <!-- <li class="payment-item">
+                  <span>Total Container Charges</span>
+                  <span>{{ 223 | currency: 'INR' }} </span>
+                </li> -->
+                <li class="payment-item">
+                  <span>Total Discount</span>
+                  <span>{{ 0 | currency: 'INR' }} </span>
+                </li>
+                <li class="payment-item">
+                  <span>Total Payable</span>
+                  <span>{{ totalAmount | currency: 'INR' }} </span>
+                </li>
+                <li class="payment-item">
+                  <span>Total Paid Amount</span>
+                  <span>{{ 0 | currency: 'INR' }} </span>
+                </li>
+              </ul>
+              <div class="remaining-balance">
+                <span>Remaining Balance</span>
+                <span>{{
+                  totalAmount - paymentControls.paymentRecieved.value
+                    | currency: 'INR'
+                }}</span>
+              </div>
+            </div>
+            <div class="form-block">
+              <hospitality-bot-select-group
+                class="full-width select-group"
+                controlName="paymentMethod"
+                [options]="paymentOptions"
+              ></hospitality-bot-select-group>
+              <hospitality-bot-input
+                class="half-width"
+                controlName="paymentRecieved"
+                [props]="{
+                  placeholder: 'Payment Recieved'
+                }"
+              ></hospitality-bot-input>
+              <hospitality-bot-input
+                class="half-width"
+                controlName="transactionId"
+                [props]="{
+                  placeholder: 'Transaction ID'
+                }"
+              ></hospitality-bot-input>
             </div>
           </div>
-          <div class="form-block">
-            <hospitality-bot-checkbox
-              class="half-width"
-              label="Complementery"
-              controlName="complementery"
-            ></hospitality-bot-checkbox>
-            <hospitality-bot-select-group
-              class="full-width select-group"
-              controlName="paymentMethod"
-              [options]="paymentOptions"
-            ></hospitality-bot-select-group>
-            <hospitality-bot-input
-              class="half-width"
-              controlName="paymentRecieved"
-              [props]="{
-                placeholder: 'Payment Recieved'
-              }"
-            ></hospitality-bot-input>
-            <hospitality-bot-input
-              class="half-width"
-              controlName="transactionId"
-              [props]="{
-                placeholder: 'Transaction ID'
-              }"
-            ></hospitality-bot-input>
-          </div>
-        </div>
+        </ng-container>
       </ng-container>
     </ng-container>
   </ng-container>
@@ -263,4 +308,8 @@
     <h2>No items selected</h2>
     <p>Select the item from the left menu</p>
   </div>
+</ng-template>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
 </ng-template>

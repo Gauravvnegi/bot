@@ -27,6 +27,7 @@ export type AgentTableResponse = AdditionalFeature & {
     state: string;
     countryCode: string;
     postalCode: string;
+    id?: string;
   };
   companyId?: string;
   agencyName?: string;

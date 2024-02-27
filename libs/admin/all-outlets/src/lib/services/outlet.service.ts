@@ -18,6 +18,7 @@ import {
   MenuItemResponse,
   MenuListResponse,
 } from '../types/outlet';
+import { PosReservationResponse } from 'libs/admin/outlets-dashboard/src/lib/types/reservation-table';
 
 @Injectable()
 export class OutletService extends ApiService {
@@ -199,5 +200,11 @@ export class OutletService extends ApiService {
     return this.get(
       `/api/v1/entity/${entityId}/categories?type=FOOD_PACKAGE_CATEGORY`
     );
+  }
+
+  getReservationById(
+    reservationId: string
+  ): Observable<PosReservationResponse> {
+    return this.get(`/api/v1/booking/${reservationId}?type=OUTLET`);
   }
 }

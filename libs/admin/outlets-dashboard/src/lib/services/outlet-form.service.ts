@@ -8,9 +8,14 @@ import {
   MenuForm,
 } from '../types/form';
 import { EntitySubType } from '@hospitality-bot/admin/shared';
-import { ReservationStatus, ReservationTableResponse } from '../types/reservation-table';
+import { ReservationStatus } from '../types/reservation-table';
 import { MealPreferences } from '../types/menu-order';
 import { GuestReservationForm } from '../components/add-guest-list/add-guest-list.component';
+import {
+  PosReservationResponse,
+  ReservationTableResponse,
+} from '../types/reservation-table';
+import { OrderTypes } from '../types/menu-order';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +25,9 @@ export class OutletFormService {
     MenuItem[]
   >([]);
 
+  orderFormData: BehaviorSubject<
+    ReservationTableResponse
+  > = new BehaviorSubject<ReservationTableResponse>(null);
   entityId: string;
   // Method to add an item to the selectedMenuItems array
   addItemToSelectedItems(item: MenuItem): void {
@@ -31,7 +39,7 @@ export class OutletFormService {
   // Method to remove an item from the selectedMenuItems array
   removeItemFromSelectedItems(itemId?: string): void {
     const currentItems = this.selectedMenuItems.value;
-    if (!currentItems) return; // No items to remove
+    if (!currentItems?.length) return; // No items to remove
     const updatedItems = itemId
       ? currentItems.filter((selectedItem) => selectedItem.id !== itemId)
       : [];
@@ -42,32 +50,97 @@ export class OutletFormService {
 
   resetData() {
     this.selectedMenuItems.next([]);
+    this.orderFormData.next(null);
   }
 
-  getOutletFormData(data: MenuForm, reservationId?: string, reservationData?) {
-    const { orderInformation, paymentInformation, kotInformation } = data;
+  getOutletFormData(data: MenuForm, orderId?: string) {
+    const { reservationInformation, paymentInformation, kotInformation } = data;
     const orderData: CreateOrderData = {
       status: 'CONFIRMED',
-      type: orderInformation.orderType,
+      type: reservationInformation.orderType,
       source: 'Offline',
-      kots: kotInformation.kotItems.map((item) => ({
-        instructions: item.kotInstruction,
-        items: item.items.map((item) => ({
-          itemId: item.id,
+      kots: kotInformation.kotItems.map((kotItem) => ({
+        instructions: kotItem.kotInstruction,
+        items: kotItem.items.map((item) => ({
+          itemId: item.itemId,
           unit: item.unit,
           amount: item.price,
           remarks: item.itemInstruction,
         })),
       })),
+      offer: {
+        id:
+          kotInformation.kotItems[kotInformation.kotItems.length - 1].kotOffer,
+      },
       outletType: EntitySubType.RESTAURANT,
-      guestId: orderInformation.guest,
-      reservation: reservationId
-        ? reservationData
-        : {
-            occupancyDetails: { maxAdult: orderInformation.numberOfPersons },
-            status: 'CONFIRMED',
-            tableIds: orderInformation.tableNumber,
-          },
+      guestId: reservationInformation.guest,
+      deliveryAddress:
+        reservationInformation.orderType === OrderTypes.DELIVERY
+          ? reservationInformation.address.id
+          : undefined,
+      reservation:
+        reservationInformation.orderType === OrderTypes.DINE_IN
+          ? {
+              occupancyDetails: {
+                maxAdult: reservationInformation.numberOfPersons,
+              },
+              status: 'CONFIRMED',
+              tableIds: [reservationInformation.tableNumber],
+              areaId: reservationInformation.areaId,
+              currentJourney: 'SEATED',
+            }
+          : undefined,
+      paymentDetails: {
+        paymentMethod: paymentInformation?.paymentMethod ?? '',
+        amount: paymentInformation?.paymentRecieved ?? 0,
+        transactionId: paymentInformation?.transactionId ?? '',
+      },
+    };
+    return orderData;
+  }
+
+  getOutletUpdateData(data: MenuForm, reservationData: PosReservationResponse) {
+    const { reservationInformation, paymentInformation, kotInformation } = data;
+
+    const selectedOffer =
+      kotInformation.kotItems[kotInformation.kotItems.length - 1].kotOffer;
+    const orderData: CreateOrderData = {
+      status: 'CONFIRMED',
+      type: reservationInformation.orderType,
+      source: 'Offline',
+      kots: kotInformation.kotItems.map((kotItem) => ({
+        instructions: kotItem.kotInstruction,
+        items: kotItem.items.map((item) => ({
+          itemId: item.itemId,
+          unit: item.unit,
+          amount: item.price,
+          remarks: item.itemInstruction,
+          id: item.id !== null ? item.id : undefined,
+        })),
+        id: kotItem.id !== null ? kotItem.id : undefined,
+      })),
+      offer: selectedOffer?.length ? { id: selectedOffer } : undefined,
+      outletType: EntitySubType.RESTAURANT,
+      guestId: reservationInformation.guest,
+      deliveryAddress:
+        reservationInformation.orderType === OrderTypes.DELIVERY
+          ? reservationInformation.address.id
+          : undefined,
+      reservation: {
+        ...reservationData,
+        occupancyDetails: { maxAdult: reservationInformation.numberOfPersons },
+        status: 'CONFIRMED',
+        tableIds: [reservationInformation.tableNumber],
+        id:
+          data.reservationInformation.id !== null
+            ? data.reservationInformation.id
+            : undefined,
+      },
+      paymentDetails: {
+        paymentMethod: paymentInformation?.paymentMethod ?? '',
+        amount: paymentInformation?.paymentRecieved ?? 0,
+        transactionId: paymentInformation?.transactionId ?? '',
+      },
     };
     return orderData;
   }
@@ -94,17 +167,29 @@ export class OutletFormService {
 
   mapOrderData(data: ReservationTableResponse) {
     let formData = new MenuForm();
-    formData.orderInformation = {
+
+    const address = data.deliveryAddress;
+    formData.reservationInformation = {
       search: '',
-      tableNumber: [data?.reservation.tableIdOrRoomId],
-      staff: data?.createdBy,
+      tableNumber: data?.reservation?.tableIdOrRoomId,
+      staff: '',
       guest: data?.guest?.id,
-      numberOfPersons: data?.guest?.age,
+      numberOfPersons: data?.reservation?.occupancyDetails?.maxAdult,
       menu: data?.items?.map((item) => item?.itemId),
       orderType: data?.type,
+      id: data?.reservation?.id,
+      address: {
+        formattedAddress: `${address?.addressLine1 ?? ''}`,
+        city: address?.city ?? '',
+        state: address?.state ?? '',
+        countryCode: address?.countryCode ?? '',
+        postalCode: address?.postalCode ?? '',
+        id: address?.id,
+      },
     };
 
     // Map kot information
+    const offer = data?.items?.filter((item) => item.type === 'ITEM_OFFER')[0];
     formData.kotInformation = {
       kotItems: data?.kots?.map((kot) => ({
         items: data?.items
@@ -113,20 +198,29 @@ export class OutletFormService {
             id: item?.id,
             itemName: item.menuItem?.name,
             unit: item?.unit,
-            mealPreference: item.menuItem?.mealPreference
-              .replace(/[-_]/g, '')
-              .toUpperCase() as MealPreferences,
+            itemId: item?.itemId,
+            mealPreference: item.menuItem?.mealPreference,
             price: item.menuItem?.dineInPrice,
             itemInstruction: item?.remarks,
             image: item.menuItem?.imageUrl,
             viewItemInstruction: false,
           })),
         kotInstruction: kot?.instructions,
-        kotOffer: [],
-        viewKotOffer: false,
+        kotOffer: offer?.id,
+        viewKotOffer: !!offer,
         viewKotInstruction: false,
+        id: kot?.id,
+        selectedOffer: offer
+          ? {
+              label: offer.description,
+              value: offer.id,
+              offerDescription: offer.description,
+            }
+          : undefined,
       })),
     };
+
+    this.orderFormData.next(data);
 
     return formData;
   }

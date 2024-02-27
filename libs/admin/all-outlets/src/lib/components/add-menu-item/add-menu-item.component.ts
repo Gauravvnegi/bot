@@ -7,9 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import {
-  RoutesConfigService,
-} from '@hospitality-bot/admin/core/theme';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   ConfigService,
@@ -38,7 +36,7 @@ export class AddMenuItemComponent extends OutletBaseComponent
   navRoutes: NavRouteOptions;
   packageCode: string = '# will be auto generated';
   mealPreferences: Option[] = [];
-  types: Option[] = [];
+  // types: Option[] = [];
   categories: Option[] = [];
   loading: boolean = false;
   $subscription = new Subscription();
@@ -53,7 +51,6 @@ export class AddMenuItemComponent extends OutletBaseComponent
     router: Router,
     private pageReloadService: PageReloadService,
     private taxService: TaxService,
-    private configService: ConfigService,
     private location: Location,
     protected routesConfigService: RoutesConfigService,
     private adminUtilityService: AdminUtilityService
@@ -93,10 +90,10 @@ export class AddMenuItemComponent extends OutletBaseComponent
         if (item.menu) return item.menu;
       });
       this.mealPreferences = config[0].menu.mealPreference;
-      this.types = config[0].menu.type.map((item) => ({
-        label: item,
-        value: item,
-      }));
+      // this.types = config[0].menu.type.map((item) => ({
+      //   label: item,
+      //   value: item,
+      // }));
       this.unitOptions = config[0].menu.units;
     });
     this.getTax();
@@ -108,7 +105,7 @@ export class AddMenuItemComponent extends OutletBaseComponent
       name: ['', Validators.required],
       mealPreference: ['', Validators.required],
       category: ['', Validators.required],
-      type: [''],
+      // type: [''],
       preparationTime: ['', Validators.required],
       quantity: ['', Validators.required],
       unit: ['GRAMS'],

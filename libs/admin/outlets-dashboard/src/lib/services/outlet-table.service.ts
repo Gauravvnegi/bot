@@ -63,6 +63,10 @@ export class OutletTableService extends ApiService {
     return this.post(`/api/v1/entity/${entityId}/order`, data);
   }
 
+  updateOrder(entityId: string, orderId: string, data: CreateOrderData) {
+    return this.patch(`/api/v1/entity/${entityId}/order/${orderId}`, data);
+  }
+
   createReservation(data: CreateReservationData) {
     return this.post(`/api/v1/booking?type=OUTLET`, data);
   }
@@ -93,6 +97,10 @@ export class OutletTableService extends ApiService {
     return this.get(`/api/v1/booking${config?.params}`);
   }
 
+  getOffer(entityId: string, config: QueryConfig): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}/library/${config.params}`);
+  }
+  
   getGuestReservationById(id: string): Observable<GuestReservationResponse> {
     return this.get(`/api/v1/booking/${id}?type=OUTLET&outletType=RESTAURANT`);
   }

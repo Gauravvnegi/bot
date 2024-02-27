@@ -14,8 +14,10 @@ export class SearchComponent extends FormComponent implements OnInit {
   @Input() searchApi: string;
   @Output() clear = new EventEmitter();
   @Output() search = new EventEmitter();
+
+  @Input() searchKeyLabel = '&key';
   searchValue = false;
-  textLimit = 3;
+  @Input() textLimit = 3;
   constructor(
     private apiService: ApiService,
     public controlContainer: ControlContainer
@@ -34,7 +36,7 @@ export class SearchComponent extends FormComponent implements OnInit {
   listenForSearchChanges(): void {
     const formChanges$ = this.inputControl.valueChanges;
     const findSearch$ = ({ search }: { search: string }) => {
-      const searchKey = `&key=${search.trim()}`;
+      const searchKey = `${this.searchKeyLabel}=${search.trim()}`;
       return this.apiService.get(`${this.searchApi}${searchKey}`);
     };
     formChanges$

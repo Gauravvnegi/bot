@@ -8,6 +8,7 @@ import {
   Inject,
   ViewChild,
   ElementRef,
+  SimpleChanges,
 } from '@angular/core';
 import { Filter } from '../../types/table.type';
 
@@ -38,6 +39,17 @@ export class CustomTabHeaderComponent implements OnInit {
     this.document
       .getElementById('main-layout')
       ?.addEventListener('scroll', this.onScroll);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Reset selectedIndex to 0 when listItems change
+    if (
+      changes.listItems.previousValue?.length !==
+      changes.listItems.currentValue?.length
+    ) {
+      this.selectedIndex = 0;
+      this.selectedTabChange.emit(this.listItems[0]?.value);
+    }
   }
 
   onScroll = () => {

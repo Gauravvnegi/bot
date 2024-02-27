@@ -30,6 +30,11 @@
 }
 
 .items-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 10px 0;
   .heading {
     color: $primary;
     font-weight: 500;
@@ -93,7 +98,13 @@
   .items-count {
     @include flex-item-center;
     gap: 10px;
+    // width: 25%;
   }
+}
+
+.accordion-data {
+  display: flex;
+  align-items: center;
 }
 
 .item-name-wrapper {
@@ -113,14 +124,20 @@
 
 :host ::ng-deep .p-accordion {
   .p-accordion-tab {
-    border: solid 1px rgba(112, 112, 112, 0.35) !important;
+    box-shadow: none;
   }
+
+  .p-accordion-tab:not(.p-accordion-tab-active) .p-accordion-header-link:focus {
+    background: $white;
+  }
+
   .p-accordion-content {
     padding: 0;
   }
+
   .p-accordion-tab-active {
     .p-accordion-header {
-      border-bottom: solid 1px rgba(112, 112, 112, 0.35);
+      border-bottom: solid 1px $border-line;
     }
   }
 }
@@ -165,6 +182,55 @@
   }
 }
 
-.rotated-up {
-  transform: rotate(180deg);
+.loader {
+  height: 65vh;
+  width: 100%;
+  @include flex-justify-align-center;
+}
+
+:host ::ng-deep .offer-select {
+  .p-dropdown-item {
+    display: flex;
+    justify-content: space-between;
+    .option-items {
+      gap: 0px;
+      overflow: hidden;
+      flex-direction: column;
+    }
+    .option-amount {
+      @include flex-item-center;
+    }
+  }
+}
+
+.offer-wrapper {
+  font-weight: 400;
+  letter-spacing: 0.72px;
+  font-size: 13px;
+  .promo-code {
+    color: $grayMedium;
+  }
+  .offer {
+    .offerName {
+      font-weight: 500;
+    }
+    .offerAmount {
+      color: $grayMedium;
+    }
+  }
+}
+
+.promo-code {
+  display: flex;
+  gap: 10px;
+  .remove-btn {
+    color: #f00;
+    cursor: pointer;
+    border-bottom: 1px solid #f00;
+  }
+}
+
+.disabled-form {
+  pointer-events: none;
+  opacity: 0.5;
 }

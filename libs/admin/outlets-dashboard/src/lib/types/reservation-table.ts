@@ -16,30 +16,42 @@ export type ReservationTableResponse = {
   status: ReservationStatus;
   type: OrderTypes;
   reservationId: string;
-  items: {
-    id: string;
-    amount: number;
-    description: string;
-    remarks?: string;
-    transactionType: string;
-    unit: number;
-    type: string;
-    currency: string;
-    itemId: string;
-    kotId?: string;
-    parentItem: string;
-    menuItem?: MenuItemResponse;
-  }[];
+  items: KotMenuItem[];
   entityId: string;
   createdBy: string;
+  deliveryAddress: {
+    addressLine1: string;
+    city: string;
+    state: string;
+    countryCode: string;
+    postalCode: string;
+    id?: string;
+  };
   pricingDetails: OutletPricingDetails & {
     containerCharge: number;
     allowance: number;
   };
-  kots: (Omit<KotItemsResponse, 'items'> & { menuItems: MenuItemResponse })[];
-  guest: OutletGuest;
+  offer?: { id?: string };
+  // kots: (Omit<KotItemsResponse, 'items'> & { menuItems: MenuItemResponse })[];
+  kots: KotItemsResponse[];
+  guest?: OutletGuest;
   reservation: PosReservationResponse;
   source: 'Offline';
+};
+
+export type KotMenuItem = {
+  id: string;
+  amount: number;
+  description: string;
+  remarks?: string;
+  transactionType: string;
+  unit: number;
+  type: string;
+  currency: string;
+  itemId: string;
+  kotId?: string;
+  parentItem: string;
+  menuItem?: MenuItemResponse;
 };
 
 export type PosReservationResponse = {
@@ -64,6 +76,7 @@ export type PosReservationResponse = {
   printRate: boolean;
   tableIdOrRoomId: string;
   externalBooking: boolean;
+  guest?: OutletGuest;
 };
 
 export type ReservationStatus =

@@ -7,6 +7,7 @@ export type AddressFieldType = {
   state: string;
   countryCode: string;
   postalCode: string;
+  id?: string
 };
 export interface GuestMemberForm {
   firstName: string;

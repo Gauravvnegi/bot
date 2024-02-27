@@ -5,7 +5,6 @@ import {
   PaymentStatus,
   TableStatus,
 } from '../types/reservation-table';
-import { MealPreferences, MenuItemCard } from '../types/menu-order';
 
 export const posCols: Cols[] = [
   {
@@ -418,61 +417,10 @@ export const reservationTabFilters = [
   },
 ];
 
-export const menuCardData: MenuItemCard[] = [
-  {
-    id: 'burger1',
-    itemName: 'Burger',
-    price: 200,
-    mealPreference: MealPreferences.VEG,
-    image: 'assets/images/menu-item.jpg',
-  },
-  {
-    id: 'burger2',
-    itemName: 'Burger',
-    price: 200,
-    mealPreference: MealPreferences.VEG,
-    image: 'assets/images/menu-item.jpg',
-  },
-  {
-    id: 'burger3',
-    itemName: 'Burger',
-    price: 200,
-    mealPreference: MealPreferences.NONVEG,
-    image: 'assets/images/menu-item.jpg',
-  },
-  {
-    id: 'burger4',
-    itemName: 'Burger',
-    price: 200,
-    mealPreference: MealPreferences.VEG,
-    image: 'assets/images/menu-item.jpg',
-  },
-  {
-    id: 'burger5',
-    itemName: 'Burger',
-    price: 200,
-    mealPreference: MealPreferences.NONVEG,
-    image: 'assets/images/menu-item.jpg',
-  },
-  {
-    id: 'burger6',
-    itemName: 'Burger',
-    price: 200,
-    mealPreference: MealPreferences.VEG,
-    image: 'assets/images/menu-item.jpg',
-  },
-  {
-    id: 'burger7',
-    itemName: 'Burger',
-    price: 200,
-    mealPreference: MealPreferences.VEG,
-    image: 'assets/images/menu-item.jpg',
-  },
-  {
-    id: 'burger8',
-    itemName: 'Burger',
-    price: 200,
-    mealPreference: MealPreferences.VEG,
-    image: 'assets/images/menu-item.jpg',
-  },
-];
+export enum OrderTableType {
+  ALL = 'ALL',
+  ONLINE_ORDER = 'ONLINE_ORDER',
+  TAKE_AWAY = 'TAKE_AWAY',
+  DINE_IN = 'DINE_IN',
+  DELIVERY = 'DELIVERY',
+}

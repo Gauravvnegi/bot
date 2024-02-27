@@ -1,42 +1,50 @@
-import { EntitySubType } from '@hospitality-bot/admin/shared';
+import { EntitySubType, Option } from '@hospitality-bot/admin/shared';
 import { MealPreferences, OrderTypes } from './menu-order';
-import { ReservationStatus } from './reservation-table';
+import { KotMenuItem, ReservationStatus } from './reservation-table';
+import { AddressFieldType } from 'libs/admin/guests/src/lib/types/guest.type';
 
 export class MenuForm {
-  orderInformation: OrderInformation;
+  reservationInformation: ReservationInformation;
   paymentInformation: PaymentInformation;
   kotInformation: KotInformation;
 }
 
-export type OrderInformation = {
+export type ReservationInformation = {
   search: string;
-  tableNumber: string[];
-  staff: string;
+  tableNumber?: string;
+  staff?: string;
   guest: string;
-  numberOfPersons: number;
+  numberOfPersons?: number;
   menu: string[];
   orderType: OrderTypes;
+  address?: AddressFieldType;
+  id?: string;
+  areaId?: string;
 };
 
 export type PaymentInformation = {
-  complementary: boolean;
   paymentMethod: string;
   paymentRecieved: number;
   transactionId: string;
 };
 
 export type KotInformation = {
-  kotItems: {
-    items: KotItemsForm[];
-    kotInstruction: string;
-    kotOffer: string[];
-    viewKotOffer?: boolean;
-    viewKotInstruction?: boolean;
-  }[];
+  kotItems: KotForm[];
+};
+
+export type KotForm = {
+  items: KotItemsForm[];
+  kotInstruction: string;
+  kotOffer: string;
+  viewKotOffer?: boolean;
+  viewKotInstruction?: boolean;
+  id?: string;
+  selectedOffer?: Option;
+  itemOffers?: Option[];
 };
 
 export type KotItemsForm = {
-  id: string;
+  id?: string;
   itemName: string;
   unit: number;
   mealPreference: MealPreferences;
@@ -44,6 +52,7 @@ export type KotItemsForm = {
   itemInstruction: string;
   image: string;
   viewItemInstruction: boolean;
+  itemId?: string;
 };
 
 export type MenuOrderResponse = {
@@ -95,7 +104,7 @@ export type KotItemsResponse = {
   number: string;
   status: KotItemStatus;
   instructions: string;
-  items: MenuItemResponse[];
+  items: KotMenuItem[];
   preparedTime?: number;
 };
 
@@ -112,8 +121,12 @@ export type CreateOrderData = {
       remarks: string;
     }[];
   }[];
+  offer?: {
+    id?: string;
+  };
   outletType: EntitySubType;
   guestId: string;
+  deliveryAddress?: string;
   reservation: {
     id?: string;
     occupancyDetails: {
@@ -126,6 +139,13 @@ export type CreateOrderData = {
     source?: string;
     sourceName?: string;
     marketSegment?: string;
+    areaId?: string;
+    currentJourney?: string;
+  };
+  paymentDetails?: {
+    paymentMethod: string;
+    amount: number;
+    transactionId: string;
   };
 };
 

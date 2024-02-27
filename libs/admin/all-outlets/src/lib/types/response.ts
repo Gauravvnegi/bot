@@ -1,5 +1,4 @@
-import { EntityTypeCounts } from '@hospitality-bot/admin/library';
-import { EntityState, EntityType } from '@hospitality-bot/admin/shared';
+import { EntityState } from '@hospitality-bot/admin/shared';
 
 export type OutletResponse = {
   id: string;
@@ -78,3 +77,8 @@ export type FoodPackageResponse = {
   created: number;
   updated: number;
 };
+
+
+export type TableReservationResponse = {
+  
+}

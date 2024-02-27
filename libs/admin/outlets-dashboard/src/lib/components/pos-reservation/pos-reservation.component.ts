@@ -1,11 +1,28 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
+import {
+  Compiler,
+  Component,
+  ComponentFactoryResolver,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import {
   AdminUtilityService,
   ConfigService,
   Filter,
   Option,
   QueryConfig,
+  manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
 import {
   MenuItem,
@@ -13,14 +30,16 @@ import {
   MenuList,
 } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
-import { Menu } from 'libs/admin/all-outlets/src/lib/types/outlet';
+import {
+  Menu,
+  MenuItemResponse,
+} from 'libs/admin/all-outlets/src/lib/types/outlet';
 import { Subscription } from 'rxjs';
 import {
   MealPreferences,
   OrderTypes,
   mealPreferenceConfig,
 } from '../../types/menu-order';
-import { mealPreferences } from '../../constants/form';
 import { MenuForm } from '../../types/form';
 import { OutletFormService } from '../../services/outlet-form.service';
 import { TableManagementService } from 'libs/table-management/src/lib/services/table-management.service';
@@ -31,6 +50,9 @@ import { OutletTableService } from '../../services/outlet-table.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { reservationTabFilters } from '../../constants/data-table';
+import { PosReservationResponse } from '../../types/reservation-table';
+import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
+import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 
 @Component({
   selector: 'hospitality-bot-pos-reservation',
@@ -40,14 +62,19 @@ import { reservationTabFilters } from '../../constants/data-table';
 export class PosReservationComponent implements OnInit {
   isSidebar: boolean;
   entityId: string;
+
   orderId: string;
+  reservationId: string;
+
   data: PosConfig;
   userForm: FormGroup;
   checkboxForm: FormGroup;
   @Output() onCloseSidebar = new EventEmitter();
 
-  mealPreferences = ['ALL', ...mealPreferences];
+  mealPreferences: MealPreferences[] = [];
   readonly mealPreferenceConfig = mealPreferenceConfig;
+
+  defaultReservationData: PosReservationResponse;
 
   menuOptions: Menu[] = [];
   staffList: Option[] = [];
@@ -61,12 +88,18 @@ export class PosReservationComponent implements OnInit {
 
   loadingMenuItems: boolean = false;
   isPopular = true;
+  initialMenuItemsLoad = false;
 
-  searchApi: string;
+  searchApi: string = '/api/v1/search/menu-items';
   selectedPreference: MealPreferences = MealPreferences.ALL;
 
   areaList: Option[] = [];
   selectedCategories: string[] = [];
+  selectedTable: Option;
+
+  sidebarVisible: boolean;
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
 
   constructor(
     private fb: FormBuilder,
@@ -77,32 +110,39 @@ export class PosReservationComponent implements OnInit {
     private configService: ConfigService,
     private globalFilterService: GlobalFilterService,
     private outletTableService: OutletTableService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private compiler: Compiler,
+    private resolver: ComponentFactoryResolver
   ) {}
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
     this.initForm();
     this.initDetails();
-    if (this.orderId) {
-      this.initOrderData();
-    }
+    this.initFormData();
+  }
+
+  initFormData() {
+    if (this.orderId) this.initOrderData();
+    if (this.reservationId) this.initReservationData();
+    if (!this.reservationId && !this.orderId) this.getTableData();
   }
 
   initForm() {
     this.userForm = this.fb.group({
-      orderInformation: this.fb.group({
+      reservationInformation: this.fb.group({
         orderType: [],
         search: [''],
-        tableNumber: [[]],
+        tableNumber: [''],
         staff: [''],
         guest: [''],
         numberOfPersons: [null],
         menu: [[]],
         address: [''],
+        id: [null],
+        areaId: [''],
       }),
       paymentInformation: this.fb.group({
-        complementery: [false],
         paymentMethod: [''],
         paymentRecieved: [null],
         transactionId: [''],
@@ -111,8 +151,7 @@ export class PosReservationComponent implements OnInit {
 
     this.checkboxForm = this.fb.group({
       sendFeedback: [false],
-      emailInvoice: [false],
-      printInvoice: [false],
+      complementary: [false],
     });
   }
 
@@ -120,17 +159,36 @@ export class PosReservationComponent implements OnInit {
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
   listenForGlobalFilters(): void {
-    this.globalFilterService.globalFilter$.subscribe((data) => {
-      // set-global query everytime global filter changes
-      this.globalQueries = [...data['dateRange'].queryValue];
-    });
+    this.$subscription.add(
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        // set-global query everytime global filter changes
+        this.globalQueries = [...data['dateRange'].queryValue];
+      })
+    );
   }
 
   initDetails() {
     this.entityId = this.formService.entityId;
     this.getMenus();
     this.getOrderConfig();
-    this.getTableData();
+    this.initMealPreferences();
+    this.listenForOrderTypeChanges();
+    this.listenForTableChanges();
+  }
+
+  initMealPreferences() {
+    // const menu = this.outletService.menu.value;
+    this.$subscription.add(
+      this.outletService.getOutletConfig().subscribe((res) => {
+        const config = res.type.filter((item) => {
+          if (item.menu) return item.menu;
+        });
+        this.mealPreferences = [
+          { value: 'ALL' },
+          ...config[0].menu.mealPreference,
+        ].map((preference) => preference.value as MealPreferences);
+      })
+    );
   }
 
   initOrderData() {
@@ -143,12 +201,40 @@ export class PosReservationComponent implements OnInit {
             const menuItems = res.items
               .filter((item) => item.menuItem)
               .map((item) => new MenuItem().deserialize(item.menuItem));
-            menuItems.length &&
-              this.formService.selectedMenuItems.next(menuItems);
-            this.userForm.patchValue(formData);
+            this.defaultReservationData = res.reservation;
+            this.selectedTable = {
+              label: res?.reservation?.tableNumberOrRoomNumber,
+              value: res?.reservation?.tableIdOrRoomId,
+            };
+            this.userForm.patchValue(formData, { emitEvent: false });
+            this.getTableData();
           }
         })
     );
+  }
+
+  initReservationData() {
+    this.outletService
+      .getReservationById(this.reservationId)
+      .subscribe((res) => {
+        if (res) {
+          const reservationInformation = {
+            tableNumber: res?.tableIdOrRoomId,
+            guest: res?.guest.id,
+            numberOfPersons: res?.occupancyDetails.maxAdult,
+            orderType: OrderTypes.DINE_IN,
+          };
+          this.selectedTable = {
+            label: res?.tableNumberOrRoomNumber,
+            value: res?.tableIdOrRoomId,
+          };
+          this.userForm.patchValue(
+            { reservationInformation: reservationInformation },
+            { emitEvent: false }
+          );
+          this.getTableData();
+        }
+      });
   }
 
   getMenus() {
@@ -164,6 +250,7 @@ export class PosReservationComponent implements OnInit {
           );
           this.getCategories();
           this.getMenuItems();
+
           if (!this.menuOptions.length) this.loadingMenuItems = false;
         }
       })
@@ -178,6 +265,7 @@ export class PosReservationComponent implements OnInit {
           (res) => {
             const menuItems = new MenuItemList().deserialize(res).records;
             if (menuItems.length) this.cardData = menuItems;
+            this.initialMenuItemsLoad = true;
           },
           (error) => (this.loadingMenuItems = false),
           () => (this.loadingMenuItems = false)
@@ -211,7 +299,7 @@ export class PosReservationComponent implements OnInit {
           type: 'AREA',
           offset: 0,
           limit: 0,
-          raw: 'true',
+          raw: true,
           createBooking: true,
           roomTypeStatus: true,
         },
@@ -222,23 +310,87 @@ export class PosReservationComponent implements OnInit {
 
   listenForMenuChanges() {
     this.orderInfoControls.menu.valueChanges.subscribe((res) => {
-      if (res?.length) this.getCategories();
+      if (res?.length) {
+        this.getCategories();
+        this.getMenuItems();
+      } else if (res.length === 0) {
+        this.tabFilters = [];
+        this.selectedCategories = [];
+        this.cardData = [];
+        this.formService.resetData();
+      }
+    });
+  }
+
+  listenForOrderTypeChanges() {
+    const addressControl = this.orderInfoControls.address;
+    const tableControl = this.orderInfoControls.tableNumber;
+    const numberOfPersons = this.orderInfoControls.numberOfPersons;
+    const guestControl = this.orderInfoControls.guest;
+
+    this.updateValidators(guestControl, [Validators.required]);
+    this.orderInfoControls.orderType.valueChanges.subscribe(
+      (res: OrderTypes) => {
+        if (res) {
+          switch (res) {
+            case OrderTypes.DELIVERY:
+              this.updateValidators(guestControl);
+              this.updateValidators(addressControl, [Validators.required]);
+              this.resetValidators(numberOfPersons);
+              this.resetValidators(tableControl);
+              break;
+
+            case OrderTypes.DINE_IN:
+              this.updateValidators(guestControl);
+              this.updateValidators(numberOfPersons, [
+                Validators.required,
+                Validators.min(1),
+              ]);
+              this.updateValidators(tableControl, [Validators.required]);
+              this.resetValidators(addressControl);
+              break;
+
+            case OrderTypes.KIOSK:
+            case OrderTypes.TAKE_AWAY:
+              this.updateValidators(guestControl);
+              this.resetValidators(addressControl);
+              this.resetValidators(tableControl);
+              this.resetValidators(numberOfPersons);
+              break;
+          }
+        }
+      }
+    );
+  }
+
+  listenForTableChanges() {
+    this.orderInfoControls.tableNumber.valueChanges.subscribe((res) => {
+      if (res) {
+        const selectedArea = this.areaList.filter(
+          (area) => area.value === res
+        )[0].areaId;
+        this.orderInfoControls.areaId.patchValue(selectedArea, {
+          emitEvent: false,
+        });
+      }
     });
   }
 
   getCategories() {
     const menuIds = this.orderInfoControls.menu.value.join(',');
-    this.outletTableService.getAllCategories(menuIds).subscribe((res) => {
-      if (res) {
-        this.tabFilters = [{ name: 'Popular', id: 'POPULAR' }, ...res]?.map(
-          (item: { name: string; id: string }) => ({
-            label: item.name,
-            value: item.id,
-            isSelected: item?.id === 'POPULAR',
-          })
-        );
-      }
-    });
+    this.$subscription.add(
+      this.outletTableService.getAllCategories(menuIds).subscribe((res) => {
+        if (res) {
+          this.tabFilters = [{ name: 'Popular', id: 'POPULAR' }, ...res]?.map(
+            (item: { name: string; id: string }) => ({
+              label: item.name,
+              value: item.id,
+              isSelected: item?.id === 'POPULAR',
+            })
+          );
+        }
+      })
+    );
   }
 
   getGuestConfig() {
@@ -253,20 +405,24 @@ export class PosReservationComponent implements OnInit {
   }
 
   getTableData() {
-    this.$subscription.add;
-    this.tableManagementService
-      .getList(this.entityId, this.getAreaConfig())
-      .subscribe((res) => {
-        const records = new AreaList().deserialize(res as AreaListResponse)
-          .records;
-        this.areaList = records.reduce((acc, item) => {
-          const tableOptions = item.tableList.map((table) => ({
-            label: table.label,
-            value: table.value,
-          }));
-          return acc.concat(tableOptions);
-        }, []);
-      });
+    this.$subscription.add(
+      this.tableManagementService
+        .getList(this.entityId, this.getAreaConfig())
+        .subscribe((res) => {
+          const records = new AreaList().deserialize(res as AreaListResponse)
+            .records;
+          this.areaList = records.reduce((acc, item) => {
+            const tableOptions = item.tableList.map((table) => ({
+              label: table.label,
+              value: table.value,
+              areaId: item.id,
+            }));
+            return acc.concat(tableOptions);
+          }, []);
+
+          this.orderId && this.areaList.unshift(this.selectedTable);
+        })
+    );
   }
 
   getCards() {
@@ -286,27 +442,67 @@ export class PosReservationComponent implements OnInit {
             value: item.value,
           })
         );
-        this.orderInfoControls.orderType.patchValue(OrderTypes.DINE_IN, {
-          emitEvent: false,
-        });
+        this.orderInfoControls.orderType.patchValue(OrderTypes.DINE_IN);
       }
     });
   }
 
   guestChange(guest: GuestType) {
     if (guest) {
-      this.selectedGuest = {
-        label: `${guest.firstName} ${guest.lastName}`,
-        value: guest.id,
-      };
+      this.mapGuestData(guest);
     }
   }
 
+  mapGuestData(guest: GuestType) {
+    this.selectedGuest = {
+      label: `${guest.firstName} ${guest.lastName}`,
+      value: guest.id,
+    };
+    const guestAddress = {
+      formattedAddress: `${guest.address?.addressLine1 ?? ''}`,
+      city: guest.address?.city ?? '',
+      state: guest.address?.state ?? '',
+      countryCode: guest.address?.countryCode ?? '',
+      postalCode: guest.address?.postalCode ?? '',
+      id: guest.address?.id,
+    };
+    this.orderInfoControls.address.patchValue(guestAddress);
+  }
+
+  showGuests() {
+    const lazyModulePromise = import(
+      'libs/admin/guests/src/lib/admin-guests.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminGuestsModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSidebar = true;
+      manageMaskZIndex();
+      componentRef.instance.onCloseSidebar.subscribe((res) => {
+        this.sidebarVisible = false;
+        if (typeof res !== 'boolean') {
+          this.mapGuestData(res);
+        }
+        componentRef.destroy();
+      });
+    });
+  }
+
   selectedTab(selectedCategory: string) {
-    this.isPopular = selectedCategory === 'POPULAR' ? true : null;
-    this.selectedCategories =
-      selectedCategory === 'POPULAR' ? [] : [selectedCategory];
-    this.getMenuItems();
+    if (selectedCategory) {
+      this.isPopular = selectedCategory === 'POPULAR' ? true : null;
+      this.selectedCategories =
+        selectedCategory === 'POPULAR' ? [] : [selectedCategory];
+      this.initialMenuItemsLoad && this.getMenuItems();
+    }
   }
 
   checkOrderType(isAddress: boolean = false) {
@@ -314,32 +510,85 @@ export class PosReservationComponent implements OnInit {
     return selectedOrderType === OrderTypes.DINE_IN;
   }
 
-  clearSearch() {}
+  clearSearch() {
+    this.orderInfoControls.search.patchValue('', { emitEvent: false });
+    this.getMenuItems();
+  }
 
-  getSearchValue(event: { status: boolean; response? }) {}
+  getSearchValue(event: { status: boolean; response: MenuItemResponse[] }) {
+    if (event?.response) {
+      const cards =
+        event.response?.map((item: MenuItemResponse) =>
+          new MenuItem().deserialize(item)
+        ) ?? [];
+      this.cardData = cards;
+    } else {
+      this.getMenuItems();
+    }
+  }
 
   postToRoom() {}
 
-  handleSave(print: boolean = false) {}
+  handleSave() {
+    this.orderId ? this.updateOrder() : this.createOrder();
+  }
 
-  handleKOT(print: boolean = false) {
+  createOrder() {
     const data = this.formService.getOutletFormData(
       this.userForm.getRawValue() as MenuForm
     );
-    this.outletTableService.createOrder(this.entityId, data).subscribe(
-      (res) => {},
-      (error) => {},
-      () => {
-        this.close();
-        this.snackbarService.openSnackBarAsText(
-          'Order created successfully',
-          '',
-          {
-            panelClass: 'success',
-          }
-        );
-      }
+    this.$subscription.add(
+      this.outletTableService.createOrder(this.entityId, data).subscribe(
+        (res) => {},
+        (error) => {},
+        () => {
+          this.close();
+          // this.resetForm();
+          this.snackbarService.openSnackBarAsText(
+            'Order created successfully',
+            '',
+            {
+              panelClass: 'success',
+            }
+          );
+        }
+      )
     );
+  }
+
+  updateOrder() {
+    const data = this.formService.getOutletUpdateData(
+      this.userForm.getRawValue() as MenuForm,
+      this.defaultReservationData
+    );
+    this.$subscription.add(
+      this.outletTableService
+        .updateOrder(this.entityId, this.orderId, data)
+        .subscribe(
+          (res) => {},
+          (error) => {},
+          () => {
+            this.close();
+            this.resetForm();
+            this.snackbarService.openSnackBarAsText(
+              'Order updated successfully',
+              '',
+              {
+                panelClass: 'success',
+              }
+            );
+          }
+        )
+    );
+  }
+
+  handleKOT(print: boolean = false) {}
+
+  resetForm() {
+    this.initForm;
+    this.selectedCategories = [];
+    this.orderId = undefined;
+    this.formService.resetData();
   }
 
   close() {
@@ -348,9 +597,29 @@ export class PosReservationComponent implements OnInit {
     this.onCloseSidebar.emit();
   }
 
+  resetValidators(control: AbstractControl) {
+    control.reset();
+    control.clearValidators();
+    control.updateValueAndValidity({ emitEvent: false });
+    control.markAsUntouched();
+  }
+
+  updateValidators(control: AbstractControl, validators?: ValidatorFn[]) {
+    validators && control.setValidators(validators);
+    control.updateValueAndValidity({ emitEvent: false });
+    control.markAsUntouched();
+  }
+
+  trackCards(index: number, item: MenuItem) {
+    return item.id;
+  }
+
   get orderInfoControls() {
-    return (this.userForm.get('orderInformation') as FormGroup)
-      .controls as Record<keyof MenuForm['orderInformation'], AbstractControl>;
+    return (this.userForm.get('reservationInformation') as FormGroup)
+      .controls as Record<
+      keyof MenuForm['reservationInformation'],
+      AbstractControl
+    >;
   }
 
   ngOnDestroy() {

@@ -1,6 +1,6 @@
 <div class="container" [formGroup]="userForm">
   <!-- Header -->
-  <ng-container formGroupName="orderInformation">
+  <ng-container formGroupName="reservationInformation">
     <div class="header">
       <div class="heading">
         <!-- <span class="header-data">
@@ -51,53 +51,57 @@
         (clear)="clearSearch()"
         (search)="getSearchValue($event)"
         [searchApi]="searchApi"
+        searchKeyLabel="?key"
+        [textLimit]="1"
         [props]="{
           placeholder: 'Search by Dish Name or Code'
         }"
       ></hospitality-bot-search>
-      <ng-container *ngIf="!checkOrderType()">
-        <hospitality-bot-quick-select
-          class="one-fourth-width"
-          controlName="guest"
-          label="Guest"
-          [inputType]="'select'"
-          [props]="{
-            showChips: false,
-            isAsync: true,
-            placeholder: 'Select',
-            createPrompt: '+ Add New Guest',
-            selectedOption: selectedGuest,
-            createType: 'sidebar'
-          }"
-          [apiConfig]="{
-            apiEndPoint: '/api/v1/members',
-            dataModel: {
-              key: 'records',
-              values: {
-                label: ['firstName', 'lastName'],
-                value: 'id'
-              }
-            },
-            queryParams: getGuestConfig(),
-            searchAPIEndPoint: '/api/v1/search/members',
-            searchModel: {
-              response: true,
-              values: {
-                label: ['firstName', 'lastName'],
-                value: 'id'
-              }
-            },
-            searchQueryParams: { type: 'GUEST,NON_RESIDENT_GUEST' }
-          }"
-          [paginationConfig]="{
-            isPagination: true
-          }"
-          (clickedOption)="guestChange($event)"
-          [initItems]="true"
-        ></hospitality-bot-quick-select
-      ></ng-container>
+      <!-- [ngClass]="checkOrderType ? 'one-fifth-width' : 'one-fourth-width'" -->
+      <hospitality-bot-quick-select
+        class="one-fourth-width"
+        controlName="guest"
+        label="Guest"
+        [inputType]="'select'"
+        [props]="{
+          showChips: false,
+          isAsync: true,
+          placeholder: 'Select',
+          selectedOption: selectedGuest
+        }"
+        [apiConfig]="{
+          apiEndPoint: '/api/v1/members',
+          dataModel: {
+            key: 'records',
+            values: {
+              label: ['firstName', 'lastName'],
+              value: 'id'
+            }
+          },
+          queryParams: getGuestConfig(),
+          searchAPIEndPoint: '/api/v1/search/members',
+          searchModel: {
+            response: true,
+            values: {
+              label: ['firstName', 'lastName'],
+              value: 'id'
+            }
+          },
+          searchQueryParams: { type: 'GUEST' }
+        }"
+        [paginationConfig]="{
+          isPagination: true
+        }"
+        (clickedOption)="guestChange($event)"
+        [initItems]="true"
+      ></hospitality-bot-quick-select>
+      <!-- 
+        createPrompt: '+ Add New Guest',
+        createType: 'sidebar' 
+        (openSidebar)="showGuests()"
+      -->
       <ng-container *ngIf="checkOrderType()">
-        <hospitality-bot-multi-select
+        <hospitality-bot-select
           class="one-fourth-width"
           controlName="tableNumber"
           [options]="areaList"
@@ -105,12 +109,8 @@
           [props]="{
             placeholder: 'Select Table No.'
           }"
-          [settings]="{
-            showChips: false,
-            maxSelectedLabels: 1
-          }"
-        ></hospitality-bot-multi-select>
-        <hospitality-bot-select
+        ></hospitality-bot-select>
+        <!-- <hospitality-bot-select
           class="one-fifth-width"
           controlName="staff"
           [options]="staffList"
@@ -118,51 +118,13 @@
             placeholder: 'Select'
           }"
           label="Staff"
-        ></hospitality-bot-select>
-        <hospitality-bot-quick-select
-          class="one-fifth-width"
-          controlName="guest"
-          label="Guest"
-          [inputType]="'select'"
-          [props]="{
-            showChips: false,
-            isAsync: true,
-            placeholder: 'Select',
-            createPrompt: '+ Add New Guest',
-            selectedOption: selectedGuest,
-            createType: 'sidebar'
-          }"
-          [apiConfig]="{
-            apiEndPoint: '/api/v1/members',
-            dataModel: {
-              key: 'records',
-              values: {
-                label: ['firstName', 'lastName'],
-                value: 'id'
-              }
-            },
-            queryParams: getGuestConfig(),
-            searchAPIEndPoint: '/api/v1/search/members',
-            searchModel: {
-              response: true,
-              values: {
-                label: ['firstName', 'lastName'],
-                value: 'id'
-              }
-            },
-            searchQueryParams: { type: 'GUEST,NON_RESIDENT_GUEST' }
-          }"
-          [paginationConfig]="{
-            isPagination: true
-          }"
-          (clickedOption)="guestChange($event)"
-          [initItems]="true"
-        ></hospitality-bot-quick-select>
+        ></hospitality-bot-select> -->
         <hospitality-bot-input
-          class="number"
+          class="one-fourth-width"
           controlName="numberOfPersons"
           [props]="{
-            placeholder: 'Enter'
+            placeholder: 'Enter',
+            type: 'number'
           }"
           label="No. of Person"
         ></hospitality-bot-input>
@@ -170,7 +132,7 @@
       <hospitality-bot-address-component
         *ngIf="orderInfoControls.orderType.value === 'DELIVERY'"
         label="Delivery Address"
-        class="half-width"
+        class="half-width address"
         controlName="address"
       >
       </hospitality-bot-address-component>
@@ -210,7 +172,7 @@
       <div class="menu-items">
         <ng-container *ngIf="!loadingMenuItems; else loader">
           <ng-container *ngIf="getCards().length; else emptyCardView">
-            <ng-container *ngFor="let card of getCards()">
+            <ng-container *ngFor="let card of getCards(); trackBy: trackCards">
               <hospitality-bot-menu-item-card
                 class="menu-item"
                 [itemCard]="card"
@@ -221,7 +183,9 @@
       </div>
     </div>
     <div class="summary-section">
-      <hospitality-bot-order-summary></hospitality-bot-order-summary>
+      <hospitality-bot-order-summary
+        [orderId]="orderId"
+      ></hospitality-bot-order-summary>
     </div>
   </div>
 </div>
@@ -236,12 +200,7 @@
     <hospitality-bot-checkbox
       class="checkbox-field"
       label="Email Invoice"
-      controlName="emailInvoice"
-    ></hospitality-bot-checkbox>
-    <hospitality-bot-checkbox
-      class="checkbox-field"
-      label="Print Invoice"
-      controlName="printInvoice"
+      controlName="complementary"
     ></hospitality-bot-checkbox>
   </div>
   <div class="buttons">
@@ -252,19 +211,19 @@
       height="40px"
     ></hospitality-bot-button>
     <hospitality-bot-button
-      label="Save"
+      label="Hold"
       (onClick)="handleSave()"
       minWidth="120px"
       height="40px"
     ></hospitality-bot-button>
     <hospitality-bot-button
-      label="Print KOT"
+      label="Print & E-bill"
       (onClick)="handleKOT(true)"
       minWidth="120px"
       height="40px"
     ></hospitality-bot-button>
     <hospitality-bot-button
-      label="KOT"
+      label="KOT & Print"
       (onClick)="handleKOT()"
       minWidth="120px"
       height="40px"
@@ -294,3 +253,15 @@
   >
   </hospitality-bot-empty-table>
 </ng-template>
+
+<ng-container>
+  <p-sidebar
+    class="sidebar-slide"
+    [ngClass]="'booking'"
+    [(visible)]="sidebarVisible"
+    position="right"
+    [showCloseIcon]="false"
+  >
+    <ng-container #sidebarSlide></ng-container>
+  </p-sidebar>
+</ng-container>

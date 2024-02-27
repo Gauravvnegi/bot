@@ -45,7 +45,13 @@
       }"
       (onCreate)="createCategory($event)"
     ></hospitality-bot-select>
-    <hospitality-bot-select
+    <hospitality-bot-checkbox
+      class="checkbox"
+      label="Mark this as popular"
+      controlName="popular"
+    >
+    </hospitality-bot-checkbox>
+    <!-- <hospitality-bot-select
       class="one-third-width"
       controlName="type"
       [options]="types"
@@ -54,7 +60,7 @@
         placeholder: 'Select Type'
       }"
       (onCreate)="createType($event)"
-    ></hospitality-bot-select>
+    ></hospitality-bot-select> -->
     <hospitality-bot-time-picker
       class="one-third-width"
       controlName="preparationTime"
@@ -136,12 +142,6 @@
       "
       [entityId]="outletId"
     ></hospitality-bot-custom-file-upload>
-    <hospitality-bot-checkbox
-      class="checkbox"
-      label="Mark this as popular menu item"
-      controlName="popular"
-    >
-    </hospitality-bot-checkbox>
     <div class="des-template">
       <div class="des-template__label">Notes</div>
       <div class="des-template__input">

@@ -78,6 +78,9 @@ export class GuestFormData {
   remark: string;
   sourceName: string;
   source: string;
+  reservationType: string;
+  seated: boolean;
+  areaId: string;
 
   deserialize(value: GuestReservationResponse) {
     this.tables = value?.tableIdOrRoomId; //@multipleTableBooking: need to change for multiple tables bookings: [...]
@@ -87,9 +90,12 @@ export class GuestFormData {
     this.checkIn = value?.from;
     this.checkOut = value?.to;
     this.slotHours = Math.abs(value?.from - value?.to);
-    this.remark = value?.remarks;
+    this.remark = value?.specialRequest;
     this.sourceName = value?.sourceName;
     this.source = value?.source;
+    this.reservationType = value?.status;
+    this.seated = value?.currentJourney === 'SEATED';
+    this.areaId = value?.areaId;
     return this;
   }
 }

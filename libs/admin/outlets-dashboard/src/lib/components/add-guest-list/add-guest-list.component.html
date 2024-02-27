@@ -16,6 +16,7 @@
         controlName="tables"
         [items]="tableOptions"
         selectType="single"
+        [disabled]="isDraftReservation"
       ></hospitality-bot-item-view>
     </div>
     <div class="content__wrapper">
@@ -62,9 +63,28 @@
           }"
           [options]="tableOptions"
         ></hospitality-bot-multi-select> -->
+        <hospitality-bot-select
+          label="Reservation Type"
+          class="half-width"
+          controlName="reservationType"
+          [props]="{
+            placeholder: 'Select'
+          }"
+          [options]="bookingTypeOptions"
+        ></hospitality-bot-select>
+        <hospitality-bot-select
+          *ngIf="isDraftReservation"
+          label="Area"
+          class="half-width"
+          controlName="areaId"
+          [props]="{
+            placeholder: 'Select'
+          }"
+          [options]="areaOptions"
+        ></hospitality-bot-select>
 
         <hospitality-bot-quick-select
-          class="full-width"
+          class="half-width"
           controlName="guest"
           label="Guest"
           [inputType]="'select'"

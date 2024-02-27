@@ -90,6 +90,7 @@ export type AreaResponse = {
   name: string;
   status: true;
   updated: number;
+  shortDescription: string;
   tables: {
     areaId: string;
     created: number;

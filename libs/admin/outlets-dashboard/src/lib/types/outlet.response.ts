@@ -324,6 +324,7 @@ export type GuestReservationResponse = {
   currentJoureyStatus: string;
   currentJourneyState: string;
   remarks: string;
+  areaId: string;
 };
 
 export type GuestReservationListResponse = {

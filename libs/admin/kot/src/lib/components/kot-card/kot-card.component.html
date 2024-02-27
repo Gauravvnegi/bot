@@ -70,8 +70,14 @@
     {{ _config?.kotInstructions }}
   </div>
   <div class="bottom">
-    <div class="cta" (click)="markFoodIsReady()">
-      Food is ready
+    <div
+      class="cta"
+      (click)="markFoodIsReady()"
+      [ngClass]="{
+        disabled: _config.status === 'PREPARED'
+      }"
+    >
+      {{ _config.status | titlecase }}
     </div>
   </div>
 </section>

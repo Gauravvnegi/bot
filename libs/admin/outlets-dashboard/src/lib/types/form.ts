@@ -142,6 +142,7 @@ export type AddGuestForm = {
   seated: boolean;
   sourceName: string;
   source: string;
+  reservationType: string;
 };
 
 export type CreateReservationData = {

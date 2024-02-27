@@ -8,8 +8,9 @@ import {
   MenuForm,
 } from '../types/form';
 import { EntitySubType } from '@hospitality-bot/admin/shared';
-import { ReservationTableResponse } from '../types/reservation-table';
+import { ReservationStatus, ReservationTableResponse } from '../types/reservation-table';
 import { MealPreferences } from '../types/menu-order';
+import { GuestReservationForm } from '../components/add-guest-list/add-guest-list.component';
 
 @Injectable({
   providedIn: 'root',
@@ -71,10 +72,10 @@ export class OutletFormService {
     return orderData;
   }
 
-  getGuestFormData(data: AddGuestForm) {
+  getGuestFormData(data: GuestReservationForm) {
     const formData: CreateReservationData = {
       occupancyDetails: { maxAdult: data.personCount },
-      status: 'CONFIRMED',
+      status: data?.reservationType as ReservationStatus,
       guestId: data.guest,
       tableIds: [data.tables], //@multipleTableBooking
       from: data.checkIn,

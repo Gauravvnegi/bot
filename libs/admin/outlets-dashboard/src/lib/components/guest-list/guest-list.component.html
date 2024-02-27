@@ -24,7 +24,7 @@
         ></hospitality-bot-global-search>
       </div>
       <div (click)="openAddGuest()" class="add-guest">
-        + Add guest
+        + Add Guest
       </div>
     </div>
 
@@ -77,6 +77,7 @@
                 <hospitality-bot-button
                   label="Seated"
                   variant="outlined"
+                  (onClick)="onMarkSeated($event , guest)"
                 ></hospitality-bot-button>
                 <hospitality-bot-button
                   label="Delete"

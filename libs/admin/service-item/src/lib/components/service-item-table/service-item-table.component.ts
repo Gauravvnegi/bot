@@ -31,6 +31,7 @@ import {
 } from 'libs/admin/roles-and-permissions/src/lib/components/user-permission-datatable/user-permission-datatable.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { managePermissionRoutes } from 'libs/admin/roles-and-permissions/src/lib/constants/routes';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-service-item-table',
@@ -124,12 +125,15 @@ export class ServiceItemTableComponent extends BaseDatatableComponent
   /**
    * To get query params
    */
-  getQueryConfig(): QueryConfig {
+  getQueryConfig(isExport: boolean = false): QueryConfig {
     const tabFilterValue = this.tabFilterItems[this.tabFilterIdx]?.value;
     const config = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
         ...[...this.globalQueries, { order: 'DESC' }],
+        ...(isExport && this.selectedRows && this.selectedRows.length > 0
+          ? this.selectedRows.map((item) => ({ ids: item.id }))
+          : []),
         {
           offset: this.first,
           limit: this.rowsPerPage,
@@ -200,6 +204,24 @@ export class ServiceItemTableComponent extends BaseDatatableComponent
         id
       ),
     });
+  }
+
+  exportCSV(): void {
+    this.loading = true;
+    this.$subscription.add(
+      this.serviceItemService
+        .exportServiceItems(this.entityId, this.getQueryConfig(true))
+        .subscribe(
+          (response) => {
+            FileSaver.saveAs(
+              response,
+              `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+            );
+          },
+          this.handleError,
+          this.handleFinal
+        )
+    );
   }
 
   /**

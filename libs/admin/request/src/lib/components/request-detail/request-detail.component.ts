@@ -243,7 +243,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
     };
     this.$subscription.add(
       this._requestService
-        .updateJobRequestStatus(config, requestData)
+        .updateJobRequestStatus(this.entityId , config, requestData)
         .subscribe(
           (response) => {
             this.snackbarService.openSnackBarAsText(

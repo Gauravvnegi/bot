@@ -192,9 +192,26 @@ export class ManagePermissionService extends ApiService {
     config
   ): Observable<ServiceItemUserListResponse> {
     return this.get(
-      `/api/v1/entity/${entityId}/cms-service/${serviceItemId}/users${
+      `/api/v1/entity/${entityId}/cms-services/${serviceItemId}/users${
         config.params ?? ''
       }`
+    );
+  }
+
+  exportServiceItemUsers(
+    entityId: string,
+    serviceItemId: string,
+    config: QueryConfig
+  ): Observable<any> {
+    return this.get(
+      `/api/v1/entity/${
+        config.entityId
+      }/cms-services/${serviceItemId}/users/export${
+        config.queryObj ? config.queryObj : ''
+      }`,
+      {
+        responseType: 'blob',
+      }
     );
   }
 }

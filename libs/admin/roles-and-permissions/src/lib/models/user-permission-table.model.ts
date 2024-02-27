@@ -62,6 +62,7 @@ export class User {
     this.parentId = input.parentId;
 
     this.status = input.status;
+    this.cc = input?.cc;
 
     this.availableStatus = {
       label: input?.available ? 'Available' : 'Unavailable',
@@ -117,4 +118,3 @@ export class ServiceItemUserList {
     return this;
   }
 }
-                    

@@ -25,4 +25,5 @@ export type ServiceItemUserResponse = {
   status: boolean;
   available: boolean;
   email: string;
+  cc: string;
 };

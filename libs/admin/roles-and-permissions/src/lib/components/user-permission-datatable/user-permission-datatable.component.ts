@@ -197,10 +197,27 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
 
   exportCSV() {
     this.loading = true;
+    this.$subscription.add(
+      this.getExportCsvApi().subscribe(
+        (res) => {
+          FileSaver.saveAs(
+            res,
+            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+          );
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+        }
+      )
+    );
+  }
 
+  getExportCsvApi(): Observable<any> {
     const config: QueryConfig = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.userId })),
+        ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
         {
           type:
             this.tabFilterItems[this.tabFilterIdx]?.value === 'ALL'
@@ -213,25 +230,19 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
       entityId: this.entityId,
     };
 
-    this.$subscription.add(
-      this._managePermissionService
-        .exportCSV(
+    switch (this.tableType) {
+      case UserTableType.All:
+        return this._managePermissionService.exportCSV(
           config,
           this.tabFilterItems[this.tabFilterIdx].value === 'ALL'
-        )
-        .subscribe(
-          (res) => {
-            FileSaver.saveAs(
-              res,
-              `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
-            );
-            this.loading = false;
-          },
-          ({ error }) => {
-            this.loading = false;
-          }
-        )
-    );
+        );
+      case UserTableType.ServiceItem:
+        return this._managePermissionService.exportServiceItemUsers(
+          this.entityId,
+          this.serviceItemId,
+          config
+        );
+    }
   }
 
   handelStatus(status: boolean, userData, force?: boolean) {

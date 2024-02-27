@@ -154,7 +154,6 @@ export class OrderConfigData {
     } as KotFilter);
 
     this.kotFilterConfigurations = value?.timeFilters.reduce((acc, key) => {
-
       acc[key.minValue] = (value: number): boolean => {
         return (
           value >= key.minValue &&

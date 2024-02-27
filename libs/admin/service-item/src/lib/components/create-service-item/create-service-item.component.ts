@@ -73,6 +73,7 @@ export class CreateServiceItemComponent implements OnInit {
 
   initForm() {
     this.useForm = this.fb.group({
+      active: [true],
       itemName: ['', [Validators.required]],
       categoryId: ['', [Validators.required]],
       sla: ['', [Validators.required]],
@@ -99,7 +100,7 @@ export class CreateServiceItemComponent implements OnInit {
     this.$subscription.add(
       this.managePermissionService
         .getAllUsers(this.entityId, {
-          params: '?status=true&mention=true',
+          params: '?mention=true',
         })
         .subscribe((data) => {
           this.userList = data.users.map((item) => ({
@@ -159,7 +160,11 @@ export class CreateServiceItemComponent implements OnInit {
   }
 
   close() {
-    this.closeSidebar();
+    if (this.isSidebar) {
+      this.closeSidebar();
+    } else {
+      this.routesConfigService.goBack();
+    }
   }
 
   createCategory(categoryName: string) {

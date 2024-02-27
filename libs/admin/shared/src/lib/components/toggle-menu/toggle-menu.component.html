@@ -5,6 +5,7 @@
     pButton
     icon="pi pi-ellipsis-v"
     (click)="menu.toggle($event)"
+    [disabled]="disabled"
   ></button>
   <p-menu #menu [popup]="true" [model]="menuItems"></p-menu>
 </div>

@@ -139,6 +139,7 @@
                 [state]="rowData.status"
                 class="status-toggle"
                 [disabled]="isEditAccessDenied(rowData)"
+                [isDisabledMenuCta]="isEditAccessDenied(rowData)"
                 [toggleMenu]="true"
                 [menuOptions]="
                   rowData.availableStatus.value
@@ -181,10 +182,10 @@
 <p-dialog
   class="dialog"
   [showHeader]="false"
-  [(visible)]="isPopUpVisible"
+  [visible]="isPopUpVisible"
   [modal]="true"
 >
-  <hospitality-bot-modal *ngIf="isPopUpVisible" [content]="popUpContent">
+  <hospitality-bot-modal #md *ngIf="isPopUpVisible" [content]="popUpContent">
     <div class="popup-form" [formGroup]="popupForm">
       <hospitality-bot-toggle-switch
         class="status"

@@ -30,8 +30,11 @@ import { BaseReservationComponent } from '../../../../../reservation/src/lib/com
 import { ReservationType } from '../../constants/reservation-table';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { Subject } from 'rxjs';
-import { GlobalFilterService, RoutesConfigService } from '@hospitality-bot/admin/core/theme';
-import { ReservationForm } from '../../constants/form';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
+import { ReservationForm, RoomInformation } from '../../constants/form';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ManualOffer } from '../form-components/booking-summary/booking-summary.component';
 
@@ -82,7 +85,7 @@ export class AddReservationComponent extends BaseReservationComponent
   }
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId
+    this.entityId = this.globalFilterService.entityId;
     this.initDetails();
     if (this.reservationId) this.getReservationDetails();
     this.initFormData();
@@ -106,18 +109,25 @@ export class AddReservationComponent extends BaseReservationComponent
       });
   }
 
-  initParamsData(paramsData: ReservationForm & { guestData: Option }) {
+  initParamsData(
+    paramsData: ReservationForm & {
+      guestData: Option;
+      isCloneReservation?: boolean;
+    }
+  ) {
     const {
       roomInformation,
       guestInformation,
       reservationInformation: { source, sourceName, ...reservationInfo },
       reservationInformation,
+      isCloneReservation,
       ...data
     } = paramsData;
+
     this.userForm.patchValue(
       {
         reservationInformation: reservationInfo,
-        ...data,
+        ...(isCloneReservation ? {} : data),
       },
       { emitEvent: false }
     );
@@ -130,9 +140,16 @@ export class AddReservationComponent extends BaseReservationComponent
         ReservationType.CONFIRMED
       );
     this.isRouteData = true;
-    this.roomTypeValues = Array.isArray(roomInformation)
-      ? roomInformation
-      : [roomInformation];
+
+    // Remove id property from roomInformation for cloned reservation
+    let updatedRoomInformation = (isCloneReservation
+      ? Array.isArray(roomInformation)
+        ? roomInformation.map(({ id, ...roomWithoutId }) => roomWithoutId)
+        : { ...roomInformation, id: '' }
+      : [roomInformation]) as RoomInformation[];
+
+    this.roomTypeValues = updatedRoomInformation;
+
     this.formService.guestInformation.next(paramsData.guestData);
   }
 

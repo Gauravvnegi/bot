@@ -384,6 +384,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           (reservation.guestInformation?.lastName ?? '')
         : '';
     reservation.reservationInformation.reservationType = ReservationType.DRAFT;
+
     let queryParams = {
       entityId: this.entityId,
       data: btoa(
@@ -393,6 +394,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
             label: guestName,
             value: selectedReservation.guest?.id,
           },
+          isCloneReservation: true,
         })
       ),
     };

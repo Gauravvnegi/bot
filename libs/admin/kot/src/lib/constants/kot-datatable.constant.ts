@@ -4,6 +4,11 @@ export const kotStatusDetails: Record<
   string,
   { label: string; type: FlagType; color: string }
 > = {
+  '0mins': {
+    label: 'Between 0-5Mins',
+    type: 'success',
+    color: '#000000',
+  },
   '5mins': {
     label: 'Between 5-10Mins',
     type: 'active',

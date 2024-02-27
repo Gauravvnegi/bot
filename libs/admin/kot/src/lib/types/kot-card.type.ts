@@ -142,14 +142,17 @@ interface KotStatus {
   value: string;
 }
 
-interface KotTimeFilter {
-  key: string;
-  value: string;
+export type  KotTimeFilterResponse = {
+  label: string;
+  minValue: number;
+  maxValue: number;
+  unit: string;
   colorCode: string;
+  description: string;
 }
 
 export type OrderConfigResponse = {
   type: Type[];
   kotStatus: KotStatus[];
-  kotTimeFilter: KotTimeFilter[];
+  timeFilters: KotTimeFilterResponse[];
 };

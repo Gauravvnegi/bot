@@ -14,10 +14,13 @@ import { Subject, Subscription, interval } from 'rxjs';
 import { kotStatusDetails } from '../../constants/kot-datatable.constant';
 import {
   Kot,
+  KotFilter,
   KotList,
   OrderConfigData,
 } from '../../models/kot-datatable.model';
 import { KotService } from '../../services/kot.service';
+import { debounce } from 'lodash';
+import { defaultFilterChipValue } from 'libs/admin/shared/src/lib/constants/datatable';
 
 @Component({
   selector: 'hospitality-bot-kot-table',
@@ -43,6 +46,8 @@ export class KotTableComponent extends BaseDatatableComponent
   kotFilter: any[];
   subscription$ = new Subscription();
   countData: Record<string, number>;
+  timeFilterConfiguration: Record<string, (value: number) => boolean>;
+  filterChips: KotFilter[];
 
   constructor(
     fb: FormBuilder,
@@ -57,9 +62,13 @@ export class KotTableComponent extends BaseDatatableComponent
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.configService.$config.subscribe((res) => {
-      this.orderConfig = new OrderConfigData().deserialize(res?.orderConfig);
-      this.listenForGlobalFilterChange();
+      if (res) {
+        this.orderConfig = new OrderConfigData().deserialize(res?.orderConfig);
+        this.timeFilterConfiguration = this.orderConfig.kotFilterConfigurations;
+        this.listenForGlobalFilterChange();
+      }
     });
+    this.listenForRefreshData();
   }
 
   listenForGlobalFilterChange() {
@@ -98,9 +107,12 @@ export class KotTableComponent extends BaseDatatableComponent
 
             this.initFilters(
               data?.entityTypeCounts,
-              this.orderConfig.kotTimeFilter,
+              {},
               data?.total,
               kotStatusDetails
+            );
+            this.filterChips = JSON.parse(
+              JSON.stringify(this.orderConfig.kotTimeFilter)
             );
           },
           this.handelError,
@@ -109,48 +121,22 @@ export class KotTableComponent extends BaseDatatableComponent
     );
   }
 
-  /**
-   * @function changePage
-   * @param page
-   * @returns
-   * @description override the base property method to handel QuickFilter locally
-   */
-  changePage(page: number) {
-    let keys: string[] = [];
-    const data = this.getSelectedQuickReplyFilters();
+  toggleQuickReplyFilter(event): void {
+    const keys = [...event.selectedChips];
 
-    if (!data?.length) {
-      //when we select all filter
+    if (keys[0] === 'ALL') {
+      //if we selected all filter
       this.values = this.backUpData;
       return;
     }
 
-    //extracting keys from selected quick filters
-    keys = (data as Array<{ status: string }>)
-      ?.map((item) => {
-        const status = item?.status;
-        return status ? status.match(/\d+/)[0] : undefined;
-      })
-      ?.filter(Boolean);
-
-    // Filter the values array based on the extracted numbers
     this.values = this.backUpData.filter((value) => {
       const timerValue = value.timer.split(':')[0];
 
       //checking for conditions
       return keys.some((key) => {
-        switch (key) {
-          case '5':
-            return +timerValue >= 5 && timerValue < 10;
-          case '10':
-            return +timerValue >= 10 && timerValue < 15;
-          case '15':
-            return +timerValue >= 15 && timerValue < 20;
-          case '20':
-            return +timerValue >= 20;
-          default:
-            return false;
-        }
+        const ans = this.timeFilterConfiguration[key](+timerValue);
+        return ans;
       });
     });
   }

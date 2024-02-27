@@ -2,6 +2,7 @@ import { EntityState } from '@hospitality-bot/admin/shared';
 import {
   Item,
   KotResponse,
+  KotTimeFilterResponse,
   OrderConfigResponse,
   OrderListResponse,
   OrderResponse,
@@ -134,18 +135,61 @@ function convertMillisecondsToMinSec(milliseconds) {
 
 export class OrderConfigData {
   type: {};
-  kotTimeFilter: Record<string, number>;
+  kotTimeFilter: KotFilter[];
+  kotFilterConfigurations: Record<string, (value: number) => boolean>;
 
   deserialize(value: OrderConfigResponse) {
     this.type = value?.type;
 
-    this.kotTimeFilter = value?.kotTimeFilter.reduce((chips, data) => {
-      chips[data?.value] = 0;
-      return chips;
+    this.kotTimeFilter = value?.timeFilters.map((item) =>
+      new KotFilter().deserialize(item)
+    );
+
+    this.kotTimeFilter.unshift({
+      label: 'All',
+      value: 'ALL',
+      total: 0,
+      isSelected: true,
+      type: 'default',
+    } as KotFilter);
+
+    this.kotFilterConfigurations = value?.timeFilters.reduce((acc, key) => {
+      debugger;
+      acc[key.minValue] = (value: number): boolean => {
+        return (
+          value >= key.minValue &&
+          (key.maxValue
+            ? value < key?.maxValue
+            : value < Number.MAX_SAFE_INTEGER)
+        );
+      };
+
+      return acc;
     }, {});
 
     return this;
   }
 }
 
-export class KotFilter {}
+export class KotFilter {
+  label: string;
+  value: number | string;
+  total?: number;
+  isSelected: boolean;
+  type: string;
+  minValue?: number;
+  maxValue?: number;
+  color?: string;
+
+  deserialize(value: KotTimeFilterResponse) {
+    this.label = value?.label;
+    this.value = value?.minValue;
+    this.total = value?.maxValue;
+    this.isSelected = false;
+    this.type = value?.unit;
+    this.minValue = value?.minValue;
+    this.maxValue = value?.maxValue;
+    this.color = value?.colorCode;
+    return this;
+  }
+}

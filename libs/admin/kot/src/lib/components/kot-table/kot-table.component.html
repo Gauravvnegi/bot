@@ -46,9 +46,10 @@
         <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
 
         <hospitality-bot-filter-chips
-          *ngIf="isQuickFilters"
+          *ngIf="filterChips"
           [chips]="filterChips"
           [isCountVisible]="false"
+          [selectedChips]="selectedFilterChips"
           (onChange)="toggleQuickReplyFilter($event)"
         ></hospitality-bot-filter-chips>
       </div>

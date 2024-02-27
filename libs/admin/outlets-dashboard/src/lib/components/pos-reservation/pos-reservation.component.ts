@@ -1,5 +1,7 @@
 import {
+  Compiler,
   Component,
+  ComponentFactoryResolver,
   EventEmitter,
   Input,
   OnInit,
@@ -20,6 +22,7 @@ import {
   Filter,
   Option,
   QueryConfig,
+  manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
 import {
   MenuItem,
@@ -49,6 +52,7 @@ import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { reservationTabFilters } from '../../constants/data-table';
 import { PosReservationResponse } from '../../types/reservation-table';
 import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
+import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 
 @Component({
   selector: 'hospitality-bot-pos-reservation',
@@ -104,7 +108,8 @@ export class PosReservationComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private outletTableService: OutletTableService,
     private snackbarService: SnackBarService,
-    private sidebarService: SideBarService
+    private compiler: Compiler,
+    private resolver: ComponentFactoryResolver
   ) {}
 
   ngOnInit(): void {
@@ -113,6 +118,8 @@ export class PosReservationComponent implements OnInit {
     this.initDetails();
     if (this.orderId) {
       this.initOrderData();
+    } else {
+      this.getTableData();
     }
   }
 
@@ -147,17 +154,18 @@ export class PosReservationComponent implements OnInit {
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
   listenForGlobalFilters(): void {
-    this.globalFilterService.globalFilter$.subscribe((data) => {
-      // set-global query everytime global filter changes
-      this.globalQueries = [...data['dateRange'].queryValue];
-    });
+    this.$subscription.add(
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        // set-global query everytime global filter changes
+        this.globalQueries = [...data['dateRange'].queryValue];
+      })
+    );
   }
 
   initDetails() {
     this.entityId = this.formService.entityId;
     this.getMenus();
     this.getOrderConfig();
-    this.getTableData();
     this.initMealPreferences();
     this.listenForOrderTypeChanges();
     this.listenForTableChanges();
@@ -165,15 +173,17 @@ export class PosReservationComponent implements OnInit {
 
   initMealPreferences() {
     // const menu = this.outletService.menu.value;
-    this.outletService.getOutletConfig().subscribe((res) => {
-      const config = res.type.filter((item) => {
-        if (item.menu) return item.menu;
-      });
-      this.mealPreferences = [
-        { value: 'ALL' },
-        ...config[0].menu.mealPreference,
-      ].map((preference) => preference.value as MealPreferences);
-    });
+    this.$subscription.add(
+      this.outletService.getOutletConfig().subscribe((res) => {
+        const config = res.type.filter((item) => {
+          if (item.menu) return item.menu;
+        });
+        this.mealPreferences = [
+          { value: 'ALL' },
+          ...config[0].menu.mealPreference,
+        ].map((preference) => preference.value as MealPreferences);
+      })
+    );
   }
 
   initOrderData() {
@@ -188,10 +198,11 @@ export class PosReservationComponent implements OnInit {
               .map((item) => new MenuItem().deserialize(item.menuItem));
             this.defaultReservationData = res.reservation;
             this.selectedTable = {
-              label: res.reservation.tableNumberOrRoomNumber,
-              value: res.reservation.tableIdOrRoomId,
+              label: res?.reservation?.tableNumberOrRoomNumber,
+              value: res?.reservation?.tableIdOrRoomId,
             };
             this.userForm.patchValue(formData, { emitEvent: false });
+            this.getTableData();
           }
         })
     );
@@ -430,16 +441,29 @@ export class PosReservationComponent implements OnInit {
   }
 
   showGuests() {
-    this.sidebarService.openSidebar({
-      componentName: 'AddGuest',
-      containerRef: this.sidebarSlide,
-      onOpen: () => (this.sidebarVisible = true),
-      onClose: (res) => {
+    const lazyModulePromise = import(
+      'libs/admin/guests/src/lib/admin-guests.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminGuestsModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSidebar = true;
+      manageMaskZIndex();
+      componentRef.instance.onCloseSidebar.subscribe((res) => {
         this.sidebarVisible = false;
         if (typeof res !== 'boolean') {
           this.mapGuestData(res);
         }
-      },
+        componentRef.destroy();
+      });
     });
   }
 

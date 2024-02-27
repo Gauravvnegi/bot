@@ -12,7 +12,7 @@ import {
   PosReservationResponse,
   ReservationTableResponse,
 } from '../types/reservation-table';
-import { MealPreferences, OrderTypes } from '../types/menu-order';
+import { OrderTypes } from '../types/menu-order';
 
 @Injectable({
   providedIn: 'root',
@@ -36,8 +36,7 @@ export class OutletFormService {
   // Method to remove an item from the selectedMenuItems array
   removeItemFromSelectedItems(itemId?: string): void {
     const currentItems = this.selectedMenuItems.value;
-
-    if (!currentItems) return; // No items to remove
+    if (!currentItems?.length) return; // No items to remove
     const updatedItems = itemId
       ? currentItems.filter((selectedItem) => selectedItem.id !== itemId)
       : [];
@@ -48,6 +47,7 @@ export class OutletFormService {
 
   resetData() {
     this.selectedMenuItems.next([]);
+    this.orderFormData.next(null);
   }
 
   getOutletFormData(data: MenuForm, orderId?: string) {
@@ -93,6 +93,8 @@ export class OutletFormService {
   getOutletUpdateData(data: MenuForm, reservationData: PosReservationResponse) {
     const { orderInformation, paymentInformation, kotInformation } = data;
 
+    const selectedOffer =
+      kotInformation.kotItems[kotInformation.kotItems.length - 1].kotOffer;
     const orderData: CreateOrderData = {
       status: 'CONFIRMED',
       type: orderInformation.orderType,
@@ -108,13 +110,13 @@ export class OutletFormService {
         })),
         id: kotItem.id !== null ? kotItem.id : undefined,
       })),
-      offer: {
-        id:
-          kotInformation.kotItems[kotInformation.kotItems.length - 1].kotOffer,
-      },
+      offer: selectedOffer?.length ? { id: selectedOffer } : undefined,
       outletType: EntitySubType.RESTAURANT,
       guestId: orderInformation.guest,
-      deliveryAddress: orderInformation.address.id,
+      deliveryAddress:
+        orderInformation.orderType === OrderTypes.DELIVERY
+          ? orderInformation.address.id
+          : undefined,
       reservation: {
         ...reservationData,
         occupancyDetails: { maxAdult: orderInformation.numberOfPersons },
@@ -156,10 +158,11 @@ export class OutletFormService {
 
   mapOrderData(data: ReservationTableResponse) {
     let formData = new MenuForm();
+
     formData.orderInformation = {
       search: '',
       tableNumber: data?.reservation.tableIdOrRoomId,
-      staff: data?.createdBy,
+      staff: '',
       guest: data?.guest?.id,
       numberOfPersons: data?.reservation.occupancyDetails.maxAdult,
       menu: data?.items?.map((item) => item?.itemId),
@@ -168,6 +171,7 @@ export class OutletFormService {
     };
 
     // Map kot information
+    const offer = data?.items?.filter((item) => item.type === 'ITEM_OFFER')[0];
     formData.kotInformation = {
       kotItems: data?.kots?.map((kot) => ({
         items: data?.items
@@ -177,22 +181,29 @@ export class OutletFormService {
             itemName: item.menuItem?.name,
             unit: item?.unit,
             itemId: item?.itemId,
-            mealPreference: item.menuItem?.mealPreference
-              .replace(/[-_]/g, '')
-              .toUpperCase() as MealPreferences,
+            mealPreference: item.menuItem?.mealPreference,
             price: item.menuItem?.dineInPrice,
             itemInstruction: item?.remarks,
             image: item.menuItem?.imageUrl,
             viewItemInstruction: false,
           })),
         kotInstruction: kot?.instructions,
-        kotOffer: data?.offer?.id,
-        viewKotOffer: false,
+        kotOffer: offer?.id,
+        viewKotOffer: !!offer,
         viewKotInstruction: false,
         id: kot?.id,
+        selectedOffer: offer
+          ? {
+              label: offer.description,
+              value: offer.id,
+              offerDescription: offer.description,
+            }
+          : undefined,
       })),
     };
+
     this.orderFormData.next(data);
+
     return formData;
   }
 }

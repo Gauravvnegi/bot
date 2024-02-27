@@ -76,7 +76,6 @@
                                       (click)="
                                         toggleControlVisibility(
                                           'ItemInstruction',
-                                          j,
                                           itemControls
                                         )
                                       "
@@ -92,11 +91,17 @@
                                 <div class="items-count">
                                   <img
                                     src="assets/svg/remove-item-black.svg"
+                                    [ngClass]="{
+                                      'disabled-form': kotControls.value.id
+                                    }"
                                     (click)="decrementQuantity(itemControls)"
                                   />
                                   <p>{{ itemControls.value.unit }}</p>
                                   <img
                                     src="assets/svg/add-item-black.svg"
+                                    [ngClass]="{
+                                      'disabled-form': kotControls.value.id
+                                    }"
                                     (click)="incrementQuantity(itemControls)"
                                   />
                                 </div>
@@ -112,7 +117,6 @@
                                 (onSaveText)="
                                   toggleControlVisibility(
                                     'ItemInstruction',
-                                    j,
                                     itemControls
                                   )
                                 "
@@ -127,7 +131,6 @@
                             (click)="
                               toggleControlVisibility(
                                 'Instruction',
-                                i,
                                 kotControls
                               )
                             "
@@ -148,7 +151,6 @@
                             (onSaveText)="
                               toggleControlVisibility(
                                 'Instruction',
-                                i,
                                 kotControls
                               )
                             "
@@ -159,51 +161,65 @@
                               <span
                                 (click)="applyOffer(kotControls)"
                                 class="apply-btn"
+                                [ngClass]="{
+                                  'disabled-form': kotControls.value.id
+                                }"
                                 >Apply Offer</span
                               >
                             </p>
                             <hospitality-bot-select
                               *ngIf="
                                 kotControls.value.viewKotOffer &&
-                                !kotControls.value.kotOffer?.length
+                                !kotControls.value.selectedOffer
                               "
                               class="offer-select"
                               controlName="kotOffer"
-                              [options]="itemOffers"
+                              [options]="kotControls.value.itemOffers"
                               [props]="{
                                 placeholder: 'Select Offer'
                               }"
                             >
                             </hospitality-bot-select>
                             <ng-container
-                              *ngIf="kotControls.value.kotOffer?.length"
+                              *ngIf="kotControls.value.selectedOffer"
                             >
                               <div class="promo-code">
                                 <p>Promo Code</p>
-                                <span class="remove-btn" (click)="removeOffer()"
+                                <span
+                                  class="remove-btn"
+                                  [ngClass]="{
+                                    'disabled-form': kotControls.value.id
+                                  }"
+                                  (click)="removeOffer()"
                                   >Remove</span
                                 >
                               </div>
                               <div class="offer">
                                 <span class="offerName">{{
-                                  selectedOffer?.label
+                                  kotControls.value.selectedOffer?.label
                                 }}</span>
                                 <span
                                   class="offerAmount"
                                   *ngIf="
-                                    selectedOffer?.discountType === 'PERCENTAGE'
+                                    kotControls.value.selectedOffer
+                                      ?.discountType === 'PERCENTAGE'
                                   "
                                 >
-                                  ({{ selectedOffer?.discountValue }}%
-                                  OFF)</span
+                                  ({{
+                                    kotControls.value.selectedOffer
+                                      ?.discountValue
+                                  }}% OFF)</span
                                 >
                                 <span
                                   class="offerAmount"
-                                  *ngIf="selectedOffer?.discountType === 'FLAT'"
+                                  *ngIf="
+                                    kotControls.value.selectedOffer
+                                      ?.discountType === 'FLAT'
+                                  "
                                 >
                                   ({{
-                                    selectedOffer?.discountValue
-                                      | currency: 'INR'
+                                    kotControls.value.selectedOffer
+                                      ?.discountValue | currency: 'INR'
                                   }}
                                   FLAT)</span
                                 >

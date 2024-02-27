@@ -1,6 +1,6 @@
-import { EntitySubType } from '@hospitality-bot/admin/shared';
+import { EntitySubType, Option } from '@hospitality-bot/admin/shared';
 import { MealPreferences, OrderTypes } from './menu-order';
-import { ReservationStatus } from './reservation-table';
+import { KotMenuItem, ReservationStatus } from './reservation-table';
 import { AddressFieldType } from 'libs/admin/guests/src/lib/types/guest.type';
 
 export class MenuForm {
@@ -19,7 +19,7 @@ export type OrderInformation = {
   orderType: OrderTypes;
   address?: AddressFieldType;
   id?: string;
-  areaId?: string
+  areaId?: string;
 };
 
 export type PaymentInformation = {
@@ -39,6 +39,8 @@ export type KotForm = {
   viewKotOffer?: boolean;
   viewKotInstruction?: boolean;
   id?: string;
+  selectedOffer?: Option;
+  itemOffers?: Option[];
 };
 
 export type KotItemsForm = {
@@ -102,7 +104,7 @@ export type KotItemsResponse = {
   number: string;
   status: KotItemStatus;
   instructions: string;
-  items: MenuItemResponse[];
+  items: KotMenuItem[];
   preparedTime?: number;
 };
 

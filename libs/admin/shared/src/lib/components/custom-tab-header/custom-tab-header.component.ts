@@ -44,8 +44,8 @@ export class CustomTabHeaderComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     // Reset selectedIndex to 0 when listItems change
     if (
-      changes.listItems.previousValue.length !==
-      changes.listItems.currentValue.length
+      changes.listItems.previousValue?.length !==
+      changes.listItems.currentValue?.length
     ) {
       this.selectedIndex = 0;
       this.selectedTabChange.emit(this.listItems[0]?.value);

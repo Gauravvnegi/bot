@@ -66,9 +66,7 @@
           showChips: false,
           isAsync: true,
           placeholder: 'Select',
-          createPrompt: '+ Add New Guest',
-          selectedOption: selectedGuest,
-          createType: 'sidebar'
+          selectedOption: selectedGuest
         }"
         [apiConfig]="{
           apiEndPoint: '/api/v1/members',
@@ -94,9 +92,13 @@
           isPagination: true
         }"
         (clickedOption)="guestChange($event)"
-        (openSidebar)="showGuests()"
         [initItems]="true"
       ></hospitality-bot-quick-select>
+      <!-- 
+        createPrompt: '+ Add New Guest',
+        createType: 'sidebar' 
+        (openSidebar)="showGuests()"
+      -->
       <ng-container *ngIf="checkOrderType()">
         <hospitality-bot-select
           class="one-fourth-width"
@@ -250,3 +252,15 @@
   >
   </hospitality-bot-empty-table>
 </ng-template>
+
+<ng-container>
+  <p-sidebar
+    class="sidebar-slide"
+    [ngClass]="'booking'"
+    [(visible)]="sidebarVisible"
+    position="right"
+    [showCloseIcon]="false"
+  >
+    <ng-container #sidebarSlide></ng-container>
+  </p-sidebar>
+</ng-container>

@@ -11,14 +11,9 @@ import {
 import { OutletTableService } from '../../services/outlet-table.service';
 import { Subscription } from 'rxjs';
 import { PaymentMethodList } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
-import {
-  AdminUtilityService,
-  Option,
-  QueryConfig,
-} from '@hospitality-bot/admin/shared';
+import { Option } from '@hospitality-bot/admin/shared';
 import { MenuItem } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 import { KotItemsForm, MenuForm } from '../../types/form';
-import { OfferResponse } from 'libs/admin/offers/src/lib/types/response';
 
 @Component({
   selector: 'hospitality-bot-order-summary',
@@ -54,8 +49,7 @@ export class OrderSummaryComponent implements OnInit {
     private fb: FormBuilder,
     private formService: OutletFormService,
     public controlContainer: ControlContainer,
-    private outletService: OutletTableService,
-    private adminUtilityService: AdminUtilityService
+    private outletService: OutletTableService
   ) {}
 
   ngOnInit(): void {
@@ -76,10 +70,12 @@ export class OrderSummaryComponent implements OnInit {
     const data = {
       items: new FormArray([]),
       kotInstruction: [''],
-      kotOffer: [[]],
+      kotOffer: [''],
       viewKotInstruction: [false],
       viewKotOffer: [false],
       id: [null],
+      itemOffers: [[]],
+      selectedOffer: [null],
     };
 
     const formGroup = this.fb.group(data);
@@ -104,10 +100,12 @@ export class OrderSummaryComponent implements OnInit {
     const data = {
       items: new FormArray([]),
       kotInstruction: [''],
-      kotOffer: [[]],
+      kotOffer: [''],
       viewKotInstruction: [false],
       viewKotOffer: [false],
       id: [null],
+      itemOffers: [[]],
+      selectedOffer: [null],
     };
     this.kotFormArray.push(this.fb.group(data));
     this.itemFormArray = this.kotFormArray.controls[kotIndex].get(
@@ -145,9 +143,11 @@ export class OrderSummaryComponent implements OnInit {
             .filter((item) => item.menuItem)
             .map((item) => new MenuItem().deserialize(item.menuItem));
           this.currentKotIndex = res.kots.length;
+
           menuItems.forEach((item) => {
             this.createNewItemFields(item);
           });
+
           this.loadingKotData = false;
         }
       })
@@ -202,9 +202,12 @@ export class OrderSummaryComponent implements OnInit {
       .get('kotOffer')
       .valueChanges.subscribe((res) => {
         if (res) {
-          this.selectedOffer = this.itemOffers.find(
-            (offer) => offer.value === res
-          );
+          const selectedOffer = this.kotFormArray
+            .at(this.currentKotIndex)
+            .value.itemOffers.find((offer) => offer.value === res);
+          this.kotFormArray
+            .at(this.currentKotIndex)
+            .patchValue({ selectedOffer: selectedOffer });
         }
       });
   }
@@ -252,7 +255,7 @@ export class OrderSummaryComponent implements OnInit {
               !res?.some((item) => item.itemId === control.value.itemId)
           );
 
-          this.mapItemOffers();
+          this.selectedItems.length && this.mapItemOffers();
 
           if (newItems.length > 0 || removedItems.length > 0) {
             newItems.forEach((newItem) => {
@@ -270,11 +273,11 @@ export class OrderSummaryComponent implements OnInit {
   }
 
   mapItemOffers() {
-    this.itemOffers = this.selectedItems?.reduce((acc, item) => {
+    const itemOffers = this.selectedItems?.reduce((acc, item) => {
       const offers = item.offers.map((offer) => ({
         label: offer.name,
         value: offer.id,
-        description: offer.description,
+        offerDescription: offer.description,
         validDate: offer.endDate,
         discountType: offer.discountType,
         discountValue: offer.discountValue,
@@ -292,6 +295,9 @@ export class OrderSummaryComponent implements OnInit {
 
       return acc;
     }, []);
+    this.kotFormArray
+      .at(this.currentKotIndex)
+      .patchValue({ itemOffers: itemOffers });
   }
 
   removeItemFields(index: number) {
@@ -335,7 +341,6 @@ export class OrderSummaryComponent implements OnInit {
    */
   toggleControlVisibility(
     type: 'Instruction' | 'Offer' | 'ItemInstruction',
-    index: number,
     formGroup: FormGroup
   ) {
     const controlName =

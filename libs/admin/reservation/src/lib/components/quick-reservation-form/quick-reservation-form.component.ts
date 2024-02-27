@@ -31,7 +31,6 @@ import {
 } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
 import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
 import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
-import { IGRoomType } from '../reservation-calendar-view/reservation-calendar-view.component';
 import { IGCol } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 import { Subscription } from 'rxjs';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';

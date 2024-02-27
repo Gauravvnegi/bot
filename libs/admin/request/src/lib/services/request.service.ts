@@ -89,7 +89,7 @@ export class RequestService extends ApiService {
     config
   ): Observable<ServiceItemListResponse> {
     return this.get(
-      `/api/v1/entity/${entityId}/cms-service-items${config.queryObj}`
+      `/api/v1/entity/${entityId}/cms-services${config.queryObj}`
     );
   }
 
@@ -126,9 +126,9 @@ export class RequestService extends ApiService {
   /**
    * Updates status of job to to-do or close
    */
-  updateJobRequestStatus(config, data: CMSUpdateJobData) {
+  updateJobRequestStatus(entityId: string, config, data: CMSUpdateJobData) {
     return this.put(
-      `/api/v1/reservation/cms-update-job-status${config.queryObj}`,
+      `/api/v1/entity/${entityId}/cms-services/cms-update-job-status${config.queryObj}`,
       data
     );
   }
@@ -155,7 +155,7 @@ export class RequestService extends ApiService {
     config?: QueryConfig
   ): Observable<any> {
     return this.get(
-      `/api/v1/entity/${entityId}/cms-service/${itemId}${config.params}`
+      `/api/v1/entity/${entityId}/cms-services/${itemId}${config.params}`
     );
   }
 
@@ -164,7 +164,7 @@ export class RequestService extends ApiService {
   }
 
   addServiceItem(entityId: string, data): Observable<any> {
-    return this.post(`/api/v1/entity/${entityId}/cms-service`, data);
+    return this.post(`/api/v1/entity/${entityId}/cms-services`, data);
   }
 
   getStatusList(jobId: string): Observable<any> {

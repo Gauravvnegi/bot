@@ -18,6 +18,7 @@ import { categoryCols } from '../../constants/service-item-category-datable.cons
 import { CategoryList } from '../../models/service-item-category-datable.model';
 import { LazyLoadEvent } from 'primeng/api';
 import { parmaId, serviceItemRoutes } from '../../constants/routes';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-category-datatable',
@@ -113,7 +114,7 @@ export class CategoryDatatableComponent extends BaseDatatableComponent
   /**
    * To get query params
    */
-  getQueryConfig(): QueryConfig {
+  getQueryConfig(isExport: boolean = false): QueryConfig {
     const tabFilterValue = this.tabFilterItems[this.tabFilterIdx]?.value;
     const config = {
       params: this.adminUtilityService.makeQueryParams([
@@ -124,6 +125,9 @@ export class CategoryDatatableComponent extends BaseDatatableComponent
           limit: this.rowsPerPage,
           includeItems: true,
         },
+        ...(isExport && this.selectedRows && this.selectedRows.length > 0
+          ? this.selectedRows.map((item) => ({ ids: item.id }))
+          : []),
       ]),
     };
     return config;
@@ -163,6 +167,25 @@ export class CategoryDatatableComponent extends BaseDatatableComponent
       {
         relativeTo: this.route,
       }
+    );
+  }
+
+  exportCSV(): void {
+    this.loading = true;
+
+    this.subscriptionList$.add(
+      this.serviceItemService
+        .exportComplaintCategories(this.entityId, this.getQueryConfig(true))
+        .subscribe(
+          (response) => {
+            FileSaver.saveAs(
+              response,
+              `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+            );
+          },
+          this.handleError,
+          this.handleFinal
+        )
     );
   }
 

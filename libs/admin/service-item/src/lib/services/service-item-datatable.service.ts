@@ -10,11 +10,11 @@ import { CategoryListResponse } from '../types/service-items-category-datable.ty
 })
 export class ServiceItemService extends ApiService {
   createServiceItem(entityId: string, data): Observable<any> {
-    return this.post(`/api/v1/entity/${entityId}/cms-service`, data);
+    return this.post(`/api/v1/entity/${entityId}/cms-services`, data);
   }
 
   getServiceItemById(entityId: string, serviceItemId: string): Observable<any> {
-    return this.get(`/api/v1/entity/${entityId}/cms-service/${serviceItemId}`);
+    return this.get(`/api/v1/entity/${entityId}/cms-services/${serviceItemId}`);
   }
 
   updateServiceItem(
@@ -23,7 +23,7 @@ export class ServiceItemService extends ApiService {
     data
   ): Observable<any> {
     return this.put(
-      `/api/v1/entity/${entityId}/cms-service/${serviceItemId}`,
+      `/api/v1/entity/${entityId}/cms-services/${serviceItemId}`,
       data
     );
   }
@@ -32,9 +32,7 @@ export class ServiceItemService extends ApiService {
     entityId: string,
     config: QueryConfig
   ): Observable<ServiceItemListResponse> {
-    return this.get(
-      `/api/v1/entity/${entityId}/cms-service-items${config.params}`
-    );
+    return this.get(`/api/v1/entity/${entityId}/cms-services${config.params}`);
   }
 
   updateServiceItemStatus(
@@ -43,7 +41,7 @@ export class ServiceItemService extends ApiService {
     config: { status: boolean }
   ): Observable<any> {
     return this.patch(
-      `/api/v1/entity/${entityId}/cms-service/${serviceItemId}?status=${config.status}`,
+      `/api/v1/entity/${entityId}/cms-services/${serviceItemId}?status=${config.status}`,
       config
     );
   }
@@ -84,4 +82,28 @@ export class ServiceItemService extends ApiService {
       `/api/v1/entity/${entityId}/complaint/category/${categoryId}`
     );
   }
+
+  exportComplaintCategories(entityId: string, config?: QueryConfig) {
+    return this.get(
+      `/api/v1/entity/${entityId}/complaint/category/export${
+        config?.params ?? ''
+      }`,
+      {
+        responseType: 'blob',
+      }
+    );
+  }
+
+  exportServiceItems(entityId: string, config?: QueryConfig) { 
+    return this.get(
+      `/api/v1/entity/${entityId}/cms-services/export${
+        config?.params?? ''
+      }`,
+      {
+        responseType: 'blob',
+      }
+    );
+  }
+
+
 }

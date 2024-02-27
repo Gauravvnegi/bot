@@ -282,7 +282,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
         },
       ]),
     };
-    this._requestService.updateJobRequestStatus(config, requestData).subscribe(
+    this._requestService.updateJobRequestStatus(this.entityId , config, requestData).subscribe(
       (response) => {
         this.snackbarService.openSnackBarAsText(
           `Job: ${

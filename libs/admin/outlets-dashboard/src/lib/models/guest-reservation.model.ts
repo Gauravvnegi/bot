@@ -8,6 +8,7 @@ import {
   GuestReservationListResponse,
   GuestReservationResponse,
 } from '../types/outlet.response';
+import { PosOrderResponse } from '../types/reservation-table';
 
 export class GuestReservationList {
   total: number;
@@ -47,6 +48,7 @@ export class GuestReservation {
   numberOfItems: string;
   preparationTime: string;
   reservationStatus: string;
+  order?: Omit<PosOrderResponse, 'reservation'>;
 
   deserialize(value: GuestReservationResponse) {
     this.id = value.id;
@@ -61,8 +63,8 @@ export class GuestReservation {
     this.feedback = undefined;
     this.phone = value?.guest?.contactDetails?.contactNumber;
     this.isSeated = value?.currentJourney === 'SEATED';
-    this.reservationStatus = value?.currentJourneyState;
-
+    this.reservationStatus = value?.currentJourney;
+    this.order = value.order
     return this;
   }
 }

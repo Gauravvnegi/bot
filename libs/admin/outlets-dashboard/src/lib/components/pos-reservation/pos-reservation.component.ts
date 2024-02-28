@@ -198,16 +198,8 @@ export class PosReservationComponent implements OnInit {
         .subscribe((res) => {
           if (res) {
             const formData = this.formService.mapOrderData(res);
-            const menuItems = res.items
-              .filter((item) => item.menuItem)
-              .map((item) => new MenuItem().deserialize(item.menuItem));
-            this.defaultReservationData = res.reservation;
-            this.selectedTable = {
-              label: res?.reservation?.tableNumberOrRoomNumber,
-              value: res?.reservation?.tableIdOrRoomId,
-            };
             this.userForm.patchValue(formData, { emitEvent: false });
-            this.getTableData();
+            this.mapDefaultReservationData(res.reservation);
           }
         })
     );
@@ -218,23 +210,35 @@ export class PosReservationComponent implements OnInit {
       .getReservationById(this.reservationId)
       .subscribe((res) => {
         if (res) {
-          const reservationInformation = {
-            tableNumber: res?.tableIdOrRoomId,
-            guest: res?.guest.id,
-            numberOfPersons: res?.occupancyDetails.maxAdult,
-            orderType: OrderTypes.DINE_IN,
-          };
-          this.selectedTable = {
-            label: res?.tableNumberOrRoomNumber,
-            value: res?.tableIdOrRoomId,
-          };
-          this.userForm.patchValue(
-            { reservationInformation: reservationInformation },
-            { emitEvent: false }
-          );
-          this.getTableData();
+          if (res.order) {
+            const formData = this.formService.mapReservationData(res);
+            this.userForm.patchValue(formData, { emitEvent: false });
+          } else {
+            const reservationInformation = {
+              tableNumber: res?.tableIdOrRoomId,
+              guest: res?.guest.id,
+              numberOfPersons: res?.occupancyDetails.maxAdult,
+              orderType: OrderTypes.DINE_IN,
+              areaId: res.areaId,
+              id: res?.id,
+            };
+            this.userForm.patchValue(
+              { reservationInformation: reservationInformation },
+              { emitEvent: false }
+            );
+          }
+          this.mapDefaultReservationData(res);
         }
       });
+  }
+
+  mapDefaultReservationData(data: PosReservationResponse) {
+    this.selectedTable = {
+      label: data?.tableNumberOrRoomNumber,
+      value: data?.tableIdOrRoomId,
+    };
+    this.defaultReservationData = data;
+    this.getTableData();
   }
 
   getMenus() {
@@ -420,7 +424,8 @@ export class PosReservationComponent implements OnInit {
             return acc.concat(tableOptions);
           }, []);
 
-          this.orderId && this.areaList.unshift(this.selectedTable);
+          (this.orderId || this.reservationId) &&
+            this.areaList.unshift(this.selectedTable);
         })
     );
   }
@@ -535,7 +540,8 @@ export class PosReservationComponent implements OnInit {
 
   createOrder() {
     const data = this.formService.getOutletFormData(
-      this.userForm.getRawValue() as MenuForm
+      this.userForm.getRawValue() as MenuForm,
+      this.defaultReservationData
     );
     this.$subscription.add(
       this.outletTableService.createOrder(this.entityId, data).subscribe(

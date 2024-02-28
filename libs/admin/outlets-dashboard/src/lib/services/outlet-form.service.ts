@@ -10,7 +10,7 @@ import {
 import { EntitySubType } from '@hospitality-bot/admin/shared';
 import {
   PosReservationResponse,
-  ReservationTableResponse,
+  PosOrderResponse,
 } from '../types/reservation-table';
 import { OrderTypes } from '../types/menu-order';
 
@@ -23,8 +23,8 @@ export class OutletFormService {
   >([]);
 
   orderFormData: BehaviorSubject<
-    ReservationTableResponse
-  > = new BehaviorSubject<ReservationTableResponse>(null);
+    Omit<PosOrderResponse, 'reservation'>
+  > = new BehaviorSubject<Omit<PosOrderResponse, 'reservation'>>(null);
   entityId: string;
   // Method to add an item to the selectedMenuItems array
   addItemToSelectedItems(item: MenuItem): void {
@@ -50,11 +50,21 @@ export class OutletFormService {
     this.orderFormData.next(null);
   }
 
-  getOutletFormData(data: MenuForm, orderId?: string) {
+  getOutletFormData(data: MenuForm, reservationData?: PosReservationResponse) {
     const { reservationInformation, paymentInformation, kotInformation } = data;
+    const {
+      id,
+      orderType,
+      tableNumber,
+      areaId,
+      numberOfPersons,
+      address,
+      guest,
+    } = reservationInformation;
+
     const orderData: CreateOrderData = {
       status: 'CONFIRMED',
-      type: reservationInformation.orderType,
+      type: orderType,
       source: 'Offline',
       kots: kotInformation.kotItems.map((kotItem) => ({
         instructions: kotItem.kotInstruction,
@@ -70,21 +80,21 @@ export class OutletFormService {
           kotInformation.kotItems[kotInformation.kotItems.length - 1].kotOffer,
       },
       outletType: EntitySubType.RESTAURANT,
-      guestId: reservationInformation.guest,
+      guestId: guest,
       deliveryAddress:
-        reservationInformation.orderType === OrderTypes.DELIVERY
-          ? reservationInformation.address.id
-          : undefined,
+        orderType === OrderTypes.DELIVERY ? address.id : undefined,
       reservation:
-        reservationInformation.orderType === OrderTypes.DINE_IN
+        orderType === OrderTypes.DINE_IN
           ? {
+              ...reservationData, // Spread operator here if reservationData exists
               occupancyDetails: {
-                maxAdult: reservationInformation.numberOfPersons,
+                maxAdult: numberOfPersons,
               },
               status: 'CONFIRMED',
-              tableIds: [reservationInformation.tableNumber],
-              areaId: reservationInformation.areaId,
+              tableIds: [tableNumber],
+              areaId: areaId,
               currentJourney: 'SEATED',
+              id: id ? id : undefined,
             }
           : undefined,
       paymentDetails: {
@@ -162,7 +172,7 @@ export class OutletFormService {
     return formData;
   }
 
-  mapOrderData(data: ReservationTableResponse) {
+  mapOrderData(data: PosOrderResponse) {
     let formData = new MenuForm();
 
     const address = data.deliveryAddress;
@@ -218,6 +228,68 @@ export class OutletFormService {
     };
 
     this.orderFormData.next(data);
+
+    return formData;
+  }
+
+  mapReservationData(data: PosReservationResponse) {
+    let formData = new MenuForm();
+
+    const address = data.deliveryAddress;
+    formData.reservationInformation = {
+      search: '',
+      tableNumber: data?.tableIdOrRoomId,
+      staff: '',
+      guest: data?.guest?.id,
+      numberOfPersons: data?.occupancyDetails?.maxAdult,
+      menu: data?.order.items?.map((item) => item?.itemId),
+      orderType: data?.order.type,
+      id: data?.id,
+      address: {
+        formattedAddress: `${address?.addressLine1 ?? ''}`,
+        city: address?.city ?? '',
+        state: address?.state ?? '',
+        countryCode: address?.countryCode ?? '',
+        postalCode: address?.postalCode ?? '',
+        id: address?.id,
+      },
+    };
+
+    // Map kot information
+    const offer = data?.order?.items?.filter(
+      (item) => item.type === 'ITEM_OFFER'
+    )[0];
+    formData.kotInformation = {
+      kotItems: data?.order?.kots?.map((kot) => ({
+        items: data?.order?.items
+          ?.filter((item) => item?.menuItem)
+          .map((item) => ({
+            id: item?.id,
+            itemName: item.menuItem?.name,
+            unit: item?.unit,
+            itemId: item?.itemId,
+            mealPreference: item.menuItem?.mealPreference,
+            price: item.menuItem?.dineInPrice,
+            itemInstruction: item?.remarks,
+            image: item.menuItem?.imageUrl,
+            viewItemInstruction: false,
+          })),
+        kotInstruction: kot?.instructions,
+        kotOffer: offer?.id,
+        viewKotOffer: !!offer,
+        viewKotInstruction: false,
+        id: kot?.id,
+        selectedOffer: offer
+          ? {
+              label: offer.description,
+              value: offer.id,
+              offerDescription: offer.description,
+            }
+          : undefined,
+      })),
+    };
+
+    this.orderFormData.next(data.order);
 
     return formData;
   }

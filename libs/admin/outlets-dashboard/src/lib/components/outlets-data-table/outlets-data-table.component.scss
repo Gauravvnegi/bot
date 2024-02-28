@@ -17,8 +17,8 @@
 
 :host ::ng-deep .card-view {
   .p-datatable-tbody {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(23%, 1fr));
     overflow: hidden;
     border: 1px solid #e4e4e4;
     border-top: none;
@@ -32,8 +32,4 @@
   .wrapper {
     display: flex;
   }
-}
-
-.reservation-card {
-  flex-basis: 32%;
 }

@@ -23,7 +23,6 @@ export class ReservationCardComponent implements OnInit {
   ngOnInit(): void {}
 
   cardClick() {
-    // if(this.data.)
     this.onCardClick.emit(this.data?.id);
   }
 }

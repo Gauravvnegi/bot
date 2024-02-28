@@ -118,6 +118,10 @@ export const TableStatusConfig: Record<
     borderColor: '#E0EFD7',
     backgroundColor: '#EEF8EC',
   },
+  BLANK_TABLE: {
+    borderColor: 'rgba(112, 112, 112, 0.35)',
+    backgroundColor: '#fff',
+  },
 };
 
 export const ReservationStatusColorConfig: Record<ReservationStatus, string> = {

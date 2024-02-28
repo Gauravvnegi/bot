@@ -22,6 +22,7 @@ import { KotItemsForm, MenuForm } from '../../types/form';
 })
 export class OrderSummaryComponent implements OnInit {
   @Input() orderId: string;
+  @Input() reservationId: string;
   selectedItems: MenuItem[] = [];
 
   readonly mealPreferenceConfig = mealPreferenceConfig;
@@ -57,7 +58,7 @@ export class OrderSummaryComponent implements OnInit {
     this.initForm();
     this.getPaymentMethod();
     this.listenForItemsChange();
-    if (this.orderId) this.listenForFormData();
+    if (this.orderId || this.reservationId) this.listenForFormData();
   }
 
   initDetails() {

@@ -3,6 +3,8 @@ import {
   ReservationStatus,
   PaymentStatus,
   TableStatus,
+  KotMenuItem,
+  PosOrderResponse,
 } from './reservation-table';
 import { OrderTypes } from './menu-order';
 
@@ -112,46 +114,12 @@ interface OccupancyDetails {
   maxAdult: number;
 }
 
-interface MenuItem {
-  id: string;
-  name: string;
-  imageUrl: string;
-  description: string;
-  popular: boolean;
-  mealPreference: string;
-  category: string;
-  type: string;
-  preparationTime: number;
-  quantity: number;
-  unit: string;
-  dineInPrice: number;
-  deliveryPrice: number;
-  hsnCode: string;
-  entityId: string;
-  status: boolean;
-  parentId: string;
-}
-
-interface KotItem {
-  id: string;
-  amount: number;
-  description: string;
-  remarks: string;
-  transactionType: string;
-  unit: number;
-  type: string;
-  currency: string;
-  itemId: string;
-  kotId: string;
-  menuItem: MenuItem;
-}
-
 interface Kot {
   id: string;
   number: string;
   status: string;
   instructions: string;
-  items: KotItem[];
+  items: KotMenuItem[];
   preparedTime: number;
   created: number;
 }
@@ -196,27 +164,6 @@ interface Guest {
   creditLimitUsed: number;
 }
 
-interface MenuItem {
-  id: string;
-  name: string;
-  imageUrl: string;
-  description: string;
-  popular: boolean;
-  mealPreference: string;
-  category: string;
-  type: string;
-  preparationTime: number;
-  quantity: number;
-  unit: string;
-  dineInPrice: number;
-  deliveryPrice: number;
-  hsnCode: string;
-  entityId: string;
-  status: boolean;
-  itemCode: string;
-  parentId: string;
-}
-
 interface PricingDetails {
   paxChildBelowFive: number;
   paxChildAboveFive: number;
@@ -233,22 +180,6 @@ interface PricingDetails {
   discountedAmount: number;
   containerCharge: number;
   allowance: number;
-}
-
-interface Kot {
-  id: string;
-  number: string;
-  status: string;
-  instructions: string;
-  items: KotItem[];
-  preparedTime: number;
-  created: number;
-}
-
-interface ContactDetails {
-  cc: string;
-  contactNumber: string;
-  emailId: string;
 }
 
 interface OccupancyDetails {
@@ -279,22 +210,6 @@ interface Reservation {
   externalBooking: boolean;
 }
 
-interface Order {
-  id: string;
-  number: string;
-  status: string;
-  type: string;
-  reservationId: string;
-  items: KotItem[];
-  entityId: string;
-  createdBy: string;
-  pricingDetails: PricingDetails;
-  kots: Kot[];
-  guest: Guest;
-  reservation: Reservation;
-  source: string;
-}
-
 export type GuestReservationResponse = {
   id: string;
   from: number;
@@ -318,7 +233,7 @@ export type GuestReservationResponse = {
   printRate: boolean;
   tableIdOrRoomId: string;
   externalBooking: boolean;
-  order: Order;
+  order: Omit<PosOrderResponse, 'reservation'>;
   guest: Guest;
   currentJourney: 'WAITLISTED' | 'SEATED';
   currentJoureyStatus: string;

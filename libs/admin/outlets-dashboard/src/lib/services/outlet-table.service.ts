@@ -7,7 +7,7 @@ import { dineInReservationResponse } from '../constants/data-table';
 import { CreateOrderData, CreateReservationData } from '../types/form';
 import {
   ReservationTableListResponse,
-  ReservationTableResponse,
+  PosOrderResponse,
 } from '../types/reservation-table';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 import {
@@ -24,7 +24,7 @@ export class OutletTableService extends ApiService {
   getOrderById(
     entityId: string,
     orderId: string
-  ): Observable<ReservationTableResponse> {
+  ): Observable<PosOrderResponse> {
     return this.get(`/api/v1/entity/${entityId}/order/${orderId}`);
   }
 
@@ -100,7 +100,7 @@ export class OutletTableService extends ApiService {
   getOffer(entityId: string, config: QueryConfig): Observable<any> {
     return this.get(`/api/v1/entity/${entityId}/library/${config.params}`);
   }
-  
+
   getGuestReservationById(id: string): Observable<GuestReservationResponse> {
     return this.get(`/api/v1/booking/${id}?type=OUTLET&outletType=RESTAURANT`);
   }

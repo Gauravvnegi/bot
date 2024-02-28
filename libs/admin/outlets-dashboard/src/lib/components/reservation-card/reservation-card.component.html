@@ -23,20 +23,20 @@
   </div>
   <ng-container *ngIf="data?.guestName; else AddItem">
     <div class="content">
-      <div class="order-info">
+      <div class="guest-name">
+        {{ data?.guestName }}
+      </div>
+      <div class="order-info" *ngIf="data?.orderNumber">
         <!-- <p class="name">{{ data?.name }}</p> -->
         ORDER NO:
         <p class="order-number">{{ data?.orderNumber }}</p>
       </div>
-      <div class="guest-name">
-        {{ data?.guestName }}
-      </div>
     </div>
-    <div class="pricing">
+    <!-- <div class="pricing">
       <div class="price">
         {{ data?.price | currency: 'INR' }}
       </div>
-      <span class="payment-status">
+      <span *ngIf="data?.orderNumber" class="payment-status">
         <img
           [src]="cardConfig[data?.paymentStatus]?.icon"
           height="15px"
@@ -44,11 +44,11 @@
         />
         {{ cardConfig[data?.paymentStatus]?.text }}
       </span>
-    </div>
+    </div> -->
     <div class="footer">
       <div class="menu-item">
         <span class="items">
-          <img src="assets/svg/menu-item.svg" />
+          <img *ngIf="data?.orderNumber" src="assets/svg/menu-item.svg" />
           <span class="order-items">
             {{ data?.numberOfItems }}
           </span>
@@ -64,7 +64,7 @@
           }"
           >{{ data?.reservationStatus | titlecase }}</span
         >
-        <span class="order-method">{{ data?.orderMethod }}</span>
+        <!-- <span class="order-method">{{ data?.orderMethod }}</span> -->
       </div>
     </div>
   </ng-container>

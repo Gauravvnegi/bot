@@ -7,10 +7,10 @@ import { MenuItemResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
 export type ReservationTableListResponse = {
   total: number;
   entityTypeCounts: EntityState<string>;
-  records: ReservationTableResponse[];
+  records: PosOrderResponse[];
 };
 
-export type ReservationTableResponse = {
+export type PosOrderResponse = {
   id: string;
   number: string;
   status: ReservationStatus;
@@ -19,7 +19,7 @@ export type ReservationTableResponse = {
   items: KotMenuItem[];
   entityId: string;
   createdBy: string;
-  deliveryAddress: {
+  deliveryAddress?: {
     addressLine1: string;
     city: string;
     state: string;
@@ -32,11 +32,45 @@ export type ReservationTableResponse = {
     allowance: number;
   };
   offer?: { id?: string };
-  // kots: (Omit<KotItemsResponse, 'items'> & { menuItems: MenuItemResponse })[];
   kots: KotItemsResponse[];
   guest?: OutletGuest;
-  reservation: PosReservationResponse;
+  reservation?: Omit<PosReservationResponse, 'order'>;
   source: 'Offline';
+};
+
+export type PosReservationResponse = {
+  id: string;
+  from: number;
+  to: number;
+  occupancyDetails?: {
+    maxChildren: number;
+    maxAdult: number;
+  };
+  deliveryAddress?: {
+    addressLine1: string;
+    city: string;
+    state: string;
+    countryCode: string;
+    postalCode: string;
+    id?: string;
+  };
+  specialRequest: string;
+  source: string;
+  sourceName: string;
+  reservationNumber: string;
+  status: ReservationStatus;
+  tableNumberOrRoomNumber: string;
+  created: number;
+  updated: number;
+  outletType: EntitySubType;
+  systemAction: boolean;
+  totalReservationAmount: number;
+  printRate: boolean;
+  tableIdOrRoomId: string;
+  externalBooking: boolean;
+  guest?: OutletGuest;
+  areaId?: string;
+  order?: Omit<PosOrderResponse, 'reservation'>;
 };
 
 export type KotMenuItem = {
@@ -54,42 +88,14 @@ export type KotMenuItem = {
   menuItem?: MenuItemResponse;
 };
 
-export type PosReservationResponse = {
-  id: string;
-  from: number;
-  to: number;
-  occupancyDetails: {
-    maxChildren: number;
-    maxAdult: number;
-  };
-  specialRequest: string;
-  source: string;
-  sourceName: string;
-  reservationNumber: string;
-  status: ReservationStatus;
-  tableNumberOrRoomNumber: string;
-  created: number;
-  updated: number;
-  outletType: EntitySubType;
-  systemAction: boolean;
-  totalReservationAmount: number;
-  printRate: boolean;
-  tableIdOrRoomId: string;
-  externalBooking: boolean;
-  guest?: OutletGuest;
-};
-
 export type ReservationStatus =
   | 'COMPLETED'
   | 'CONFIRMED'
   | 'CANCELED'
   | 'PREPARING'
-  | 'BLANK_TABLE'
   | 'PAID'
-  | 'RUNNING_KOT_TABLE'
-  | 'RUNNING_TABLE'
-  | 'PRINTED_TABLE'
-  | 'DRAFT';
+  | 'DRAFT'
+  | TableStatus;
 
 export type PaymentStatus = 'PAID' | 'UNPAID';
 
@@ -105,4 +111,5 @@ export type ReservationStatusData = {
 export type TableStatus =
   | 'RUNNING_KOT_TABLE'
   | 'RUNNING_TABLE'
-  | 'PRINTED_TABLE';
+  | 'PRINTED_TABLE'
+  | 'BLANK_TABLE';

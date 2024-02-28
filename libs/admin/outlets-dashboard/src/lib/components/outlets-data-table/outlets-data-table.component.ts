@@ -228,8 +228,8 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     );
   }
 
-  onCardClick(orderId: string) {
-    this.addNewOrder(orderId);
+  onCardClick(reservationId: string) {
+    this.addNewOrder(undefined, reservationId);
   }
 
   copyConfirmationNumber(number: string) {

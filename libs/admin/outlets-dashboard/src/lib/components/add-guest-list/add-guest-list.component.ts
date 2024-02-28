@@ -95,6 +95,8 @@ export class AddGuestListComponent implements OnInit {
   useForm!: FormGroup;
   loading = false;
 
+  currentTime: number = new Date().getTime();
+
   constructor(
     private fb: FormBuilder,
     private bookingDetailService: BookingDetailService,
@@ -121,7 +123,7 @@ export class AddGuestListComponent implements OnInit {
     this.useForm = this.fb.group({
       reservationType: ['CONFIRMED', Validators.required],
       tables: ['', Validators.required], //@multipleTableBooking
-      personCount: [null, Validators.min(1)],
+      personCount: [1, [Validators.required, Validators.min(1)]],
       guest: ['', Validators.required],
       marketSegment: ['', Validators.required],
       checkIn: [, Validators.required],
@@ -143,7 +145,7 @@ export class AddGuestListComponent implements OnInit {
     } else {
       this.getTableList().subscribe(() => {
         this.useForm.patchValue({
-          checkIn: new Date().getTime(),
+          checkIn: this.currentTime,
           slotHours: 1800000,
         });
       });
@@ -179,8 +181,7 @@ export class AddGuestListComponent implements OnInit {
     checkIn.valueChanges.pipe(debounceTime(300)).subscribe((res) => {
       this.updateCheckOutTime();
       //update seating condition
-
-      if (res > new Date().getTime()) {
+      if (res > this.currentTime) {
         seated.patchValue(false);
       } else {
         seated.patchValue(true);
@@ -216,8 +217,26 @@ export class AddGuestListComponent implements OnInit {
         .subscribe((reservation) => {
           const data = new GuestFormData().deserialize(reservation);
           this.useForm.patchValue(data);
+          this.updateFormValidations();
         })
     );
+  }
+
+  updateFormValidations() {
+    const {
+      checkIn,
+      guest,
+      seated,
+      reservationType,
+    } = this.guestReservationFormControl;
+
+    if (seated.value) {
+      this.startMinDate = new Date(checkIn.value); //min date validation
+      seated.disable();
+      checkIn.disable();
+      guest.disable();
+      reservationType.disable();
+    }
   }
 
   getTableList(

@@ -17,6 +17,7 @@ import {
   AdminUtilityService,
   QueryConfig,
   manageMaskZIndex,
+  openModal,
 } from '@hospitality-bot/admin/shared';
 import { Subscription, of } from 'rxjs';
 import { OutletTableService } from '../../services/outlet-table.service';
@@ -28,6 +29,8 @@ import { debounce } from 'lodash';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
 @Component({
   selector: 'hospitality-bot-guest-list',
@@ -61,13 +64,16 @@ export class GuestListComponent implements OnInit {
   backupData: GuestReservation[];
   guestList: GuestReservation[] = [];
 
+  activeIndex: number = 0;
+
   constructor(
     private fb: FormBuilder,
     private componentFactoryResolver: ComponentFactoryResolver,
     private outletService: OutletTableService,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -105,8 +111,20 @@ export class GuestListComponent implements OnInit {
           const data = new GuestReservationList().deserialize(response);
           this.backupData = data.records;
 
-          this.initGuestList(data?.records);
-          this.paginationDisabled = this.limit > data?.total;
+          this.seatedGuestList = [];
+          this.waitListGuestList = [];
+
+          if (this.useForm.get('tab').value === TabsType.all) {
+            this.initGuestList(this.backupData);
+          } else {
+            this.initGuestList(
+              this.backupData.filter(
+                (item) => item.type === this.useForm.get('tab').value
+              )
+            );
+          }
+
+          // this.paginationDisabled = this.limit > data?.total;
         },
         this.handelError,
         this.handelFinal
@@ -114,6 +132,10 @@ export class GuestListComponent implements OnInit {
     );
   }
 
+  /**
+   * need to refactor latter
+   * @param data
+   */
   initGuestList(data) {
     data?.forEach((record) => {
       if (record.isSeated) {
@@ -122,7 +144,10 @@ export class GuestListComponent implements OnInit {
         this.waitListGuestList.push(record);
       }
     });
-    this.guestList = this.seatedGuestList;
+    this.guestList =
+      this.useForm.get('chip').value === ChipType.seated
+        ? this.seatedGuestList
+        : this.waitListGuestList;
   }
 
   setChip(event: Option) {
@@ -132,32 +157,33 @@ export class GuestListComponent implements OnInit {
     );
 
     if (event.value === 'waitlist') {
+      this.activeIndex = 1;
       this.guestList = this.waitListGuestList;
     } else {
+      this.activeIndex = 0;
       this.guestList = this.seatedGuestList;
     }
   }
 
+  /**
+   * @function tabChange
+   * @param event
+   * @returns
+   */
   tabChange(event: { index: number }) {
-    this.loading = true;
     const activeTab = TabsType[Object.keys(TabsType)[event.index]] as TabsType;
     this.useForm.patchValue(
       { search: '', tab: activeTab },
       { emitEvent: false }
     );
 
-    if (activeTab === TabsType.all) {
-      this.initGuestReservation();
-      return;
-    }
-
-    this.guestList = this.backupData.filter(
-      (data) => data.type === (activeTab as TabsType)
-    );
-    this.initGuestList(this.guestList);
-
-    this.loading = false;
+    this.initGuestReservation();
   }
+
+  /**
+   * @function searchGuest
+   * @description search for a guest
+   */
   searchGuest() {
     this.loading = true;
     this.useForm
@@ -183,10 +209,19 @@ export class GuestListComponent implements OnInit {
       );
   }
 
+  /**
+   * @function onEditGuestReservation
+   * @param data
+   */
   onEditGuestReservation(data: GuestReservation) {
     this.openAddGuest(data?.id);
   }
 
+  /**
+   * @function openAddGuest
+   * @param id
+   * @description to open add guest side bar
+   */
   openAddGuest(id?: string) {
     this.sidebarSlide.clear();
     this.sidebarVisible = true;
@@ -199,7 +234,7 @@ export class GuestListComponent implements OnInit {
     instance.guestReservationId = id && id;
 
     const closeSubscription = instance.onClose.subscribe((res: any) => {
-      this.initGuestReservation();
+      this.resetFilterAndTab();
       componentRef.destroy();
       closeSubscription.unsubscribe();
       this.sidebarVisible = false;
@@ -221,32 +256,112 @@ export class GuestListComponent implements OnInit {
     event.stopPropagation();
   }
 
-  onMarkSeated(event, guest: GuestReservation) {
+  handelQuickCTA(event, reservation: GuestReservation, type: HandelQuickCTA) {
     event.stopPropagation();
+    switch (type) {
+      case 'SEATED':
+        this.updateReservation(reservation.id, {
+          currentJourney: 'SEATED',
+        });
+        break;
+      case 'DELETE':
+        this.openDeletePopup(reservation.id);
+    }
+  }
 
+  updateReservation(
+    reservationId: string,
+    data,
+    endPoints = 'updateBookingStatus'
+  ) {
     this.$subscription.add(
-      this.outletService
-        .markSeated(guest.id, {
+      this.outletService[endPoints](
+        reservationId,
+        {
           params: `?type=OUTLET&outletType=RESTAURANT&entityId=${this.entityId}`,
-        })
-        .subscribe(
-          (res) => {
-            this.snackbarService.openSnackBarAsText(
-              'Reservation is marked seated successfully',
-              '',
-              { panelClass: 'success' }
-            );
-          },
-          this.handelError,
-          this.handelFinal
-        )
+        },
+        data
+      ).subscribe(
+        (res) => {
+          this.snackbarService.openSnackBarAsText(
+            'Reservation is updated successfully',
+            '',
+            { panelClass: 'success' }
+          );
+          this.resetFilterAndTab();
+        },
+        this.handelError,
+        this.handelFinal
+      )
     );
+  }
+
+  resetFilterAndTab() {
+    this.useForm.patchValue({
+      search: '',
+      chip: ChipType.seated,
+      tab: TabsType.all,
+    });
+    this.activeIndex = 0; //need to refactor bot chips component
+
+    this.initGuestReservation();
   }
 
   onTableChange(event, guest: GuestReservation) {
     event.stopPropagation();
     this.openAddGuest(guest.id);
   }
+
+  openDeletePopup(reservationId: string): void {
+    let modalRef: DynamicDialogRef;
+
+    const data = {
+      content: {
+        heading: `Mark Reservation As Cancelled`,
+        descriptions: [
+          `You are about to mark this reservation as Cancelled`,
+          `Are you Sure?`,
+        ],
+        isRemarks: true,
+      },
+      actions: [
+        {
+          label: 'Cancel',
+          onClick: () => {
+            modalRef.close();
+          },
+          variant: 'outlined',
+        },
+        {
+          label: 'Yes',
+          type: 'SUCCESS',
+          onClick: (modelData) => {
+            this.updateReservation(
+              reservationId,
+              {
+                status: 'CANCELED',
+                remarks: modelData.remarks,
+              },
+              'cancelReservation'
+            );
+            modalRef.close();
+          },
+          variant: 'contained',
+        },
+      ],
+    };
+
+    modalRef = openModal({
+      config: {
+        width: '35vw',
+        styleClass: 'confirm-dialog',
+        data: data,
+      },
+      component: ModalComponent,
+      dialogService: this.dialogService,
+    });
+  }
+
   close() {
     this.onClose.emit(true);
   }
@@ -263,7 +378,13 @@ export class GuestListComponent implements OnInit {
     this.loading = false;
   };
 
+  get isFilterHidden() {
+    return this.useForm?.get('search')?.value?.length > 0;
+  }
+
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
 }
+
+export type HandelQuickCTA = 'SEATED' | 'DELETE';

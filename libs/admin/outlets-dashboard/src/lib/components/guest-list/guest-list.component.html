@@ -28,15 +28,16 @@
       </div>
     </div>
 
-    <div class="tab-group">
+    <div class="tab-group" *ngIf="!isFilterHidden">
       <hospitality-bot-tab-group
         [listItems]="seatedTabGroup"
         (selectedTabChange)="tabChange($event)"
       ></hospitality-bot-tab-group>
     </div>
 
-    <div class="chips">
+    <div class="chips" *ngIf="!isFilterHidden">
       <hospitality-bot-chips
+        [activeIndex]="activeIndex"
         [chips]="seatedChips"
         (changeChips)="setChip($event)"
       ></hospitality-bot-chips>
@@ -44,6 +45,9 @@
 
     <div
       class="content"
+      [ngStyle]="{
+        height: isFilterHidden ? 'calc(100vh - 124px)' : 'calc(100vh - 250px)'
+      }"
       infiniteScroll
       (scrolled)="loadMore()"
       [toggleScrollListener]="paginationDisabled"
@@ -77,11 +81,12 @@
                 <hospitality-bot-button
                   label="Seated"
                   variant="outlined"
-                  (onClick)="onMarkSeated($event , guest)"
+                  (onClick)="handelQuickCTA($event, guest, 'SEATED')"
                 ></hospitality-bot-button>
                 <hospitality-bot-button
-                  label="Delete"
+                  label="Cancel"
                   variant="outlined"
+                  (onClick)="handelQuickCTA($event, guest, 'DELETE')"
                 ></hospitality-bot-button>
               </ng-container>
             </ng-template>

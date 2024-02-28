@@ -23,6 +23,7 @@
       <div class="form-block content">
         <div class="full-width">
           <hospitality-bot-toggle-switch-with-label
+            *ngIf="!isDraftReservation"
             class="toggle"
             [isToggleOn]="guestReservationFormControl.seated.value"
             (onToggleSwitch)="triggerStatusChange($event)"
@@ -30,6 +31,7 @@
               toggleOnLabel: 'Seated',
               toggleOffLabel: 'Waitlist'
             }"
+            [isDisabled]="guestReservationFormControl.seated.disabled"
           ></hospitality-bot-toggle-switch-with-label>
         </div>
         <hospitality-bot-date
@@ -40,6 +42,7 @@
             placeholder: 'DD/MM/YYYY'
           }"
           [minDate]="startMinDate"
+          [disabled]="guestReservationFormControl.checkIn.disabled"
         ></hospitality-bot-date>
         <hospitality-bot-select
           label="Hours"

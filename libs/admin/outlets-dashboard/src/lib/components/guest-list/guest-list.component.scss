@@ -5,7 +5,7 @@
     .header {
       @include flex-space-between;
       padding: 20px 17px;
-      padding-bottom: 0;
+      padding-bottom: 6px;
       .add-guest,
       .filter {
         color: $primary-cta;

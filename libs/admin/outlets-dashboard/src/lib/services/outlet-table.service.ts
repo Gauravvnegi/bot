@@ -115,12 +115,24 @@ export class OutletTableService extends ApiService {
     );
   }
 
-  markSeated(reservationId: string, config: QueryConfig): Observable<any> {
+  updateBookingStatus(
+    reservationId: string,
+    config: QueryConfig,
+    data: { status?: string; remarks?: string; currentJourney?: string }
+  ): Observable<any> {
     return this.patch(
       `/api/v1/booking/${reservationId}${config?.params ?? {}}`,
-      {
-        currentJourney: 'SEATED',
-      }
+      data
+    );
+  }
+  cancelReservation(
+    reservationId: string,
+    config: QueryConfig,
+    data: { status?: string; remarks?: string; currentJourney?: string }
+  ): Observable<any> {
+    return this.patch(
+      `/api/v1/booking/${reservationId}/status${config?.params ?? {}}`,
+      data
     );
   }
 }

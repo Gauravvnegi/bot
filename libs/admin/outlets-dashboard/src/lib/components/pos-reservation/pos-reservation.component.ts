@@ -1,9 +1,7 @@
 import {
-  Compiler,
   Component,
   ComponentFactoryResolver,
   EventEmitter,
-  Input,
   OnInit,
   Output,
   ViewChild,
@@ -51,7 +49,6 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { reservationTabFilters } from '../../constants/data-table';
 import { PosReservationResponse } from '../../types/reservation-table';
-import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 
 @Component({
@@ -111,7 +108,6 @@ export class PosReservationComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private outletTableService: OutletTableService,
     private snackbarService: SnackBarService,
-    private compiler: Compiler,
     private resolver: ComponentFactoryResolver
   ) {}
 
@@ -124,7 +120,7 @@ export class PosReservationComponent implements OnInit {
 
   initFormData() {
     if (this.orderId) this.initOrderData();
-    if (this.reservationId) this.initReservationData();
+    if (this.reservationId && !this.orderId) this.initReservationData();
     if (!this.reservationId && !this.orderId) this.getTableData();
   }
 
@@ -298,8 +294,9 @@ export class PosReservationComponent implements OnInit {
   getAreaConfig() {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.globalQueries,
         {
+          fromDate: Date.now(),
+          toDate: Date.now() + 2 * 60 * 60 * 1000,
           type: 'AREA',
           offset: 0,
           limit: 0,
@@ -475,30 +472,24 @@ export class PosReservationComponent implements OnInit {
   }
 
   showGuests() {
-    const lazyModulePromise = import(
-      'libs/admin/guests/src/lib/admin-guests.module'
-    )
-      .then((module) => {
-        return this.compiler.compileModuleAsync(module.AdminGuestsModule);
-      })
-      .catch((error) => {
-        console.error('Error loading the lazy module:', error);
-      });
-    lazyModulePromise.then((moduleFactory) => {
-      this.sidebarVisible = true;
-      const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
-      this.sidebarSlide.clear();
-      const componentRef = this.sidebarSlide.createComponent(factory);
-      componentRef.instance.isSidebar = true;
-      manageMaskZIndex();
+    this.sidebarVisible = true;
+    const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
+    this.sidebarSlide.clear();
+    const componentRef = this.sidebarSlide.createComponent(factory);
+    componentRef.instance.isSidebar = true;
+    componentRef.instance.guestType = 'NON_RESIDENT_GUEST';
+    this.$subscription.add(
       componentRef.instance.onCloseSidebar.subscribe((res) => {
-        this.sidebarVisible = false;
         if (typeof res !== 'boolean') {
-          this.mapGuestData(res);
+          this.selectedGuest = {
+            label: `${res.firstName} ${res.lastName}`,
+            value: res.id,
+          };
         }
-        componentRef.destroy();
-      });
-    });
+        this.sidebarVisible = false;
+      })
+    );
+    manageMaskZIndex();
   }
 
   selectedTab(selectedCategory: string) {
@@ -548,7 +539,7 @@ export class PosReservationComponent implements OnInit {
         (res) => {},
         (error) => {},
         () => {
-          this.close();
+          this.close(true);
           // this.resetForm();
           this.snackbarService.openSnackBarAsText(
             'Order created successfully',
@@ -574,7 +565,7 @@ export class PosReservationComponent implements OnInit {
           (res) => {},
           (error) => {},
           () => {
-            this.close();
+            this.close(true);
             this.resetForm();
             this.snackbarService.openSnackBarAsText(
               'Order updated successfully',
@@ -597,10 +588,10 @@ export class PosReservationComponent implements OnInit {
     this.formService.resetData();
   }
 
-  close() {
+  close(isSaved: boolean = false) {
     this.selectedCategories = [];
     this.formService.resetData();
-    this.onCloseSidebar.emit();
+    this.onCloseSidebar.emit(isSaved);
   }
 
   resetValidators(control: AbstractControl) {

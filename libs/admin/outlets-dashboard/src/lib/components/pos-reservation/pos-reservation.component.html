@@ -67,7 +67,9 @@
           showChips: false,
           isAsync: true,
           placeholder: 'Select',
-          selectedOption: selectedGuest
+          selectedOption: selectedGuest,
+          createPrompt: '+ Add New Guest',
+          createType: 'sidebar'
         }"
         [apiConfig]="{
           apiEndPoint: '/api/v1/members',
@@ -87,19 +89,15 @@
               value: 'id'
             }
           },
-          searchQueryParams: { type: 'GUEST' }
+          searchQueryParams: { type: 'GUEST, NON_RESIDENT_GUEST' }
         }"
         [paginationConfig]="{
           isPagination: true
         }"
+        (openSidebar)="showGuests()"
         (clickedOption)="guestChange($event)"
         [initItems]="true"
       ></hospitality-bot-quick-select>
-      <!-- 
-        createPrompt: '+ Add New Guest',
-        createType: 'sidebar' 
-        (openSidebar)="showGuests()"
-      -->
       <ng-container *ngIf="checkOrderType()">
         <hospitality-bot-select
           class="one-fourth-width"

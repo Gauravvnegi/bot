@@ -93,6 +93,7 @@ export class OrderSummaryComponent implements OnInit {
     this.itemFormArray = this.kotFormArray.controls[0].get(
       'items'
     ) as FormArray;
+
     if (!this.orderId) this.listenForOfferChange();
   }
 
@@ -112,7 +113,8 @@ export class OrderSummaryComponent implements OnInit {
     this.itemFormArray = this.kotFormArray.controls[kotIndex].get(
       'items'
     ) as FormArray;
-    this.listenForOfferChange();
+
+    if (!this.orderId) this.listenForOfferChange();
   }
 
   createNewItemFields(newItem: MenuItem, kotIndex: number = 0) {
@@ -140,14 +142,22 @@ export class OrderSummaryComponent implements OnInit {
     this.$subscription.add(
       this.formService.orderFormData.subscribe((res) => {
         if (res) {
-          const menuItems = res.items
-            .filter((item) => item.menuItem)
-            .map((item) => new MenuItem().deserialize(item.menuItem));
-          this.currentKotIndex = res.kots.length;
+          const menuItems = res.kots[0].items.map((item) =>
+            new MenuItem().deserialize(item.menuItem)
+          );
+          this.currentKotIndex = res?.kots?.length;
+          let kotIndex = 0;
+          // Process all KOTs efficiently using a single loop
+          for (const kot of res.kots) {
+            kotIndex > 0 && this.addNewKOT(kotIndex); // Create KOT with unique ID
 
-          menuItems.forEach((item) => {
-            this.createNewItemFields(item);
-          });
+            const menuItems = kot.items
+              .filter((item) => item.menuItem) // Filter only items with menu items
+              .map((item) => new MenuItem().deserialize(item.menuItem)); // Deserialize menu items
+
+            menuItems.forEach((item) => this.createNewItemFields(item));
+            kotIndex++; // Increment the index for the next KOT
+          }
 
           this.loadingKotData = false;
         }
@@ -198,19 +208,21 @@ export class OrderSummaryComponent implements OnInit {
   }
 
   listenForOfferChange() {
-    this.kotFormArray
-      .at(this.currentKotIndex)
-      .get('kotOffer')
-      .valueChanges.subscribe((res) => {
-        if (res) {
-          const selectedOffer = this.kotFormArray
-            .at(this.currentKotIndex)
-            .value.itemOffers.find((offer) => offer.value === res);
-          this.kotFormArray
-            .at(this.currentKotIndex)
-            .patchValue({ selectedOffer: selectedOffer });
-        }
-      });
+    this.$subscription.add(
+      this.kotFormArray
+        .at(this.currentKotIndex)
+        .get('kotOffer')
+        .valueChanges.subscribe((res) => {
+          if (res) {
+            const selectedOffer = this.kotFormArray
+              .at(this.currentKotIndex)
+              .value.itemOffers.find((offer) => offer.value === res);
+            this.kotFormArray
+              .at(this.currentKotIndex)
+              .patchValue({ selectedOffer: selectedOffer });
+          }
+        })
+    );
   }
 
   removeOffer() {

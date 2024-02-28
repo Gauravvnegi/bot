@@ -179,7 +179,7 @@ export class AddGuestListComponent implements OnInit {
     checkIn.valueChanges.pipe(debounceTime(300)).subscribe((res) => {
       this.updateCheckOutTime();
       //update seating condition
-      debugger;
+
       if (res > new Date().getTime()) {
         seated.patchValue(false);
       } else {

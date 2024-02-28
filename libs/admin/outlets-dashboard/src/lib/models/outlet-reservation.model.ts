@@ -120,6 +120,7 @@ export class OutletReservation {
   numberOfItems: number;
   orderMethod: string;
   tableStatus: TableStatus;
+  orderId?: string;
 
   deserialize(
     table: TableResponse,
@@ -156,6 +157,7 @@ export class OutletReservation {
       const itemsWithMenuItem = kot.items.filter((item) => item.menuItem);
       return total + itemsWithMenuItem.length;
     }, 0);
+    this.orderId = reservationData?.order?.id;
 
     return this;
   }

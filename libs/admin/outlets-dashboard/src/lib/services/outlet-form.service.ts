@@ -2,14 +2,12 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { MenuItem } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 import {
-  AddGuestForm,
   CreateOrderData,
   CreateReservationData,
   MenuForm,
 } from '../types/form';
 import { EntitySubType } from '@hospitality-bot/admin/shared';
 import { ReservationStatus } from '../types/reservation-table';
-import { MealPreferences } from '../types/menu-order';
 import { GuestReservationForm } from '../components/add-guest-list/add-guest-list.component';
 import {
   PosReservationResponse,

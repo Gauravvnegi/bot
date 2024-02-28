@@ -114,4 +114,13 @@ export class OutletTableService extends ApiService {
       reservation
     );
   }
+
+  markSeated(reservationId: string, config: QueryConfig): Observable<any> {
+    return this.patch(
+      `/api/v1/booking/${reservationId}${config?.params ?? {}}`,
+      {
+        currentJourney: 'SEATED',
+      }
+    );
+  }
 }

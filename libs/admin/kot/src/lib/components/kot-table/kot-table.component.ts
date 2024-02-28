@@ -4,13 +4,12 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
-  Chip,
   ConfigService,
   NavRouteOptions,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
 import { LazyLoadEvent } from 'primeng/api';
-import { Subject, Subscription, interval } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { kotStatusDetails } from '../../constants/kot-datatable.constant';
 import {
   Kot,
@@ -19,8 +18,6 @@ import {
   OrderConfigData,
 } from '../../models/kot-datatable.model';
 import { KotService } from '../../services/kot.service';
-import { debounce } from 'lodash';
-import { defaultFilterChipValue } from 'libs/admin/shared/src/lib/constants/datatable';
 
 @Component({
   selector: 'hospitality-bot-kot-table',
@@ -153,7 +150,7 @@ export class KotTableComponent extends BaseDatatableComponent
           limit: this.rowsPerPage,
           order: 'DESC',
           includeKot: true,
-          type: this.tabFilterItems[this.tabFilterIdx]?.value,
+          entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
         },
       ]),
     };

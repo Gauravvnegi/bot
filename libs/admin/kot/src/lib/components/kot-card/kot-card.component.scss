@@ -162,6 +162,7 @@
       background-color: #5f38f9;
       border-radius: 2px;
       cursor: pointer;
+      text-transform: capitalize;
 
       &:hover {
         background-color: #4423c6;
@@ -179,4 +180,12 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  &:hover {
+    cursor: not-allowed;
+  }
 }

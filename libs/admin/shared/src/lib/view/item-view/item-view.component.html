@@ -1,17 +1,17 @@
-<div class="item-view__main">
+<div class="item-view__main" [ngClass]="{ 'item-view__disabled': isDisabled }">
   <div class="wrapper">
     <div
       class="item"
       [ngClass]="{
-        reserved: item.disabled,
+        reserved: item?.disabled,
         active: isActive(item),
-        pointer: !item.disabled
+        pointer: !item?.disabled
       }"
-      title=""
+      title="{{ item?.label }}"
       (click)="!item?.disabled && click(item)"
       *ngFor="let item of items; let i = index"
     >
-      {{ item.label }}
+      {{ item?.label }}
     </div>
   </div>
 </div>

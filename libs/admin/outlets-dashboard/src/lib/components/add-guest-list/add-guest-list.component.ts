@@ -34,8 +34,8 @@ import { AreaListResponse, AreaResponse } from '../../types/outlet.response';
 import { GuestFormData } from '../../models/guest-reservation.model';
 import { TableList } from 'libs/table-management/src/lib/models/data-table.model';
 
-type GuestReservationForm = {
-  tables: string[];
+export type GuestReservationForm = {
+  tables: string;
   personCount: number;
   guest: string;
   marketSegment: string;
@@ -44,11 +44,16 @@ type GuestReservationForm = {
   remark: string;
   outletType: string;
   slotHours: number;
-  areaId: string[];
+  areaId: string;
   seated: boolean;
+  reservationType: string;
+  source: string;
+  sourceName: string;
 };
 
 type TableOption = Option & { disabled: boolean; areaId: string };
+
+type ReservationType = 'CONFIRMED' | 'DRAFT';
 
 @Component({
   selector: 'hospitality-bot-add-guest-list',
@@ -60,6 +65,18 @@ export class AddGuestListComponent implements OnInit {
   tableOptions: TableOption[] = [];
   backupData: TableOption[] = [];
   marketSegments: Option[] = [];
+  bookingTypeOptions: Option<ReservationType>[] = [
+    {
+      label: 'Confirmed',
+      value: 'CONFIRMED',
+    },
+    {
+      label: 'Draft',
+      value: 'DRAFT',
+    },
+  ];
+  areaOptions: Option[] = [];
+
   readonly slotOptions: { label: string; value: number }[] = slotHours;
   startMinDate: Date = new Date();
   guestReservationId: string;
@@ -102,6 +119,7 @@ export class AddGuestListComponent implements OnInit {
 
   initForm() {
     this.useForm = this.fb.group({
+      reservationType: ['CONFIRMED', Validators.required],
       tables: ['', Validators.required], //@multipleTableBooking
       personCount: [null, Validators.min(1)],
       guest: ['', Validators.required],
@@ -118,6 +136,7 @@ export class AddGuestListComponent implements OnInit {
     });
     this.listenForTimeChanges();
     this.listenForTableChanges();
+    this.listenForReservationTypeChanges();
 
     if (this.guestReservationId) {
       this.getReservationDetails();
@@ -131,7 +150,20 @@ export class AddGuestListComponent implements OnInit {
     }
   }
 
-  listenForTableChanges() {
+  listenForReservationTypeChanges(): void {
+    this.guestReservationFormControl.reservationType.valueChanges.subscribe(
+      (response: ReservationType) => {
+        const { areaId, tables } = this.guestReservationFormControl;
+        if (response === 'DRAFT') {
+          tables.clearValidators();
+        } else {
+          tables.setValidators([Validators.required]);
+        }
+      }
+    );
+  }
+
+  listenForTableChanges(): void {
     const { areaId, tables } = this.guestReservationFormControl;
     tables.valueChanges.subscribe((data) => {
       /**
@@ -147,6 +179,7 @@ export class AddGuestListComponent implements OnInit {
     checkIn.valueChanges.pipe(debounceTime(300)).subscribe((res) => {
       this.updateCheckOutTime();
       //update seating condition
+      debugger;
       if (res > new Date().getTime()) {
         seated.patchValue(false);
       } else {
@@ -196,7 +229,7 @@ export class AddGuestListComponent implements OnInit {
           type: 'AREA',
           sort: 'updated',
           raw: 'true',
-          paginationFalse: true,
+          pagination: false,
           ...(isCurrentBooking && {
             createBooking: true,
             fromDate: this.guestReservationFormControl.checkIn.value,
@@ -216,6 +249,13 @@ export class AddGuestListComponent implements OnInit {
             : [];
 
           res.areas.forEach((item: AreaResponse) => {
+            //creating area options
+            if (!this.areaOptions.find((area) => area.value === item.id))
+              this.areaOptions.push({
+                label: item.name,
+                value: item.id,
+              });
+            //creating table options
             item.tables.forEach((table) => {
               if (isCurrentBooking) {
                 bookedTableIds.push(table.id);
@@ -260,7 +300,7 @@ export class AddGuestListComponent implements OnInit {
     }
 
     const formData = this.formService.getGuestFormData(
-      this.useForm.getRawValue() as AddGuestForm
+      this.useForm.getRawValue()
     );
 
     if (this.guestReservationId) {
@@ -360,6 +400,10 @@ export class AddGuestListComponent implements OnInit {
       keyof GuestReservationForm,
       AbstractControl
     >;
+  }
+
+  get isDraftReservation(): boolean {
+    return this.guestReservationFormControl.reservationType.value === 'DRAFT';
   }
 
   ngOnDestroy(): void {

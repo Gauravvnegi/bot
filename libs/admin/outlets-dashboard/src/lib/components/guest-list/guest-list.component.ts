@@ -26,6 +26,8 @@ import {
 } from '../../models/guest-reservation.model';
 import { debounce } from 'lodash';
 import { debounceTime, switchMap } from 'rxjs/operators';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 
 @Component({
   selector: 'hospitality-bot-guest-list',
@@ -38,8 +40,10 @@ export class GuestListComponent implements OnInit {
   readonly seatedChips: Option<ChipType>[] = seatedChips;
   readonly seatedTabGroup: Option<TabsType>[] = seatedTabGroup;
   paginationDisabled: boolean = false;
-  seatedGuestList: GuestCard[] = [];
-  waitListGuestList: GuestCard[] = [];
+  seatedGuestList: GuestReservation[] = [];
+  waitListGuestList: GuestReservation[] = [];
+
+  entityId: string;
 
   limit: number = 20;
   offset: number = 0;
@@ -61,7 +65,9 @@ export class GuestListComponent implements OnInit {
     private fb: FormBuilder,
     private componentFactoryResolver: ComponentFactoryResolver,
     private outletService: OutletTableService,
-    private adminUtilityService: AdminUtilityService
+    private adminUtilityService: AdminUtilityService,
+    private globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -71,6 +77,7 @@ export class GuestListComponent implements OnInit {
   }
 
   initForm() {
+    this.entityId = this.globalFilterService.entityId;
     this.useForm = this.fb.group({
       search: [],
       chip: [ChipType.seated],
@@ -86,9 +93,8 @@ export class GuestListComponent implements OnInit {
         {
           type: 'OUTLET',
           outletType: 'RESTAURANT',
-          limit: this.limit,
-          offset: this.offset,
           fromDate: new Date().getTime(),
+          pagination: false,
         },
       ]),
     };
@@ -98,8 +104,8 @@ export class GuestListComponent implements OnInit {
         (response) => {
           const data = new GuestReservationList().deserialize(response);
           this.backupData = data.records;
-          this.guestList = data.records;
 
+          this.initGuestList(data?.records);
           this.paginationDisabled = this.limit > data?.total;
         },
         this.handelError,
@@ -108,15 +114,28 @@ export class GuestListComponent implements OnInit {
     );
   }
 
+  initGuestList(data) {
+    data?.forEach((record) => {
+      if (record.isSeated) {
+        this.seatedGuestList.push(record);
+      } else {
+        this.waitListGuestList.push(record);
+      }
+    });
+    this.guestList = this.seatedGuestList;
+  }
+
   setChip(event: Option) {
     this.useForm.patchValue(
       { search: '', chip: ChipType[event.value] },
       { emitEvent: false }
     );
-    /**
-     *
-     * filter the guest list by chip type
-     */
+
+    if (event.value === 'waitlist') {
+      this.guestList = this.waitListGuestList;
+    } else {
+      this.guestList = this.seatedGuestList;
+    }
   }
 
   tabChange(event: { index: number }) {
@@ -135,6 +154,7 @@ export class GuestListComponent implements OnInit {
     this.guestList = this.backupData.filter(
       (data) => data.type === (activeTab as TabsType)
     );
+    this.initGuestList(this.guestList);
 
     this.loading = false;
   }
@@ -192,13 +212,35 @@ export class GuestListComponent implements OnInit {
 
   loadMore() {
     if (!this.paginationDisabled) {
-      this.limit = this.limit + 20;
-      this.initGuestReservation();
+      // this.limit = this.limit + 20;
+      // this.initGuestReservation();
     }
   }
 
   onPrintInvoice(event) {
     event.stopPropagation();
+  }
+
+  onMarkSeated(event, guest: GuestReservation) {
+    event.stopPropagation();
+
+    this.$subscription.add(
+      this.outletService
+        .markSeated(guest.id, {
+          params: `?type=OUTLET&outletType=RESTAURANT&entityId=${this.entityId}`,
+        })
+        .subscribe(
+          (res) => {
+            this.snackbarService.openSnackBarAsText(
+              'Reservation is marked seated successfully',
+              '',
+              { panelClass: 'success' }
+            );
+          },
+          this.handelError,
+          this.handelFinal
+        )
+    );
   }
 
   onTableChange(event, guest: GuestReservation) {

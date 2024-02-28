@@ -113,7 +113,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
         {
           type: 'OUTLET',
           outletType: 'RESTAURANT',
-          paginationFalse: true,
+          pagination: false,
           fromDate: new Date().getTime(),
         },
         ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),

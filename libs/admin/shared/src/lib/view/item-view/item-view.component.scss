@@ -1,42 +1,52 @@
 @import 'main';
-.item-view__main {
-  .wrapper {
-    border: 1px solid #cfcfcf;
-    text-align: center;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    row-gap: 16px;
-    padding: 16px 10px;
-    border-radius: 5px;
-
-    .item {
-      @include flex-justify-align-center;
-      width: 18%;
-      height: 37px;
-      padding: 5px;
-      font-size: 14px;
-      font-weight: 600;
+.item-view {
+  &__main {
+    .wrapper {
+      border: 1px solid #cfcfcf;
+      text-align: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      row-gap: 16px;
+      padding: 16px 10px;
       border-radius: 5px;
-      background: #f9f9f9;
-      border: 0.1px solid #eaeaea;
+
+      .item {
+        @include flex-justify-align-center;
+        width: 18%;
+        height: 37px;
+        padding: 5px;
+        font-size: 14px;
+        font-weight: 600;
+        border-radius: 5px;
+        background: #f9f9f9;
+        border: 0.1px solid #eaeaea;
+        cursor: not-allowed;
+      }
+      .reserved {
+        border: 0.1px solid #ffd7d7;
+        background: #ffeded;
+        color: #ffb3b3;
+        opacity: 0.6;
+      }
+
+      .active {
+        border: 0.1px solid #ccccff;
+        background: #e4e4ff;
+        color: #7a7aff;
+      }
+
+      .pointer {
+        cursor: pointer;
+      }
+    }
+  }
+  &__disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    &:hover {
       cursor: not-allowed;
-    }
-    .reserved {
-      border: 0.1px solid #ffd7d7;
-      background: #ffeded;
-      color: #ffb3b3;
-      opacity: 0.6;
-    }
-
-    .active {
-      border: 0.1px solid #ccccff;
-      background: #e4e4ff;
-      color: #7a7aff;
-    }
-
-    .pointer {
-      cursor: pointer;
     }
   }
 }

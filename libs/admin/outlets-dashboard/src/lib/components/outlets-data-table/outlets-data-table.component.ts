@@ -6,7 +6,10 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -50,7 +53,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   entityId: string;
   globalQueries = [];
   $subscription = new Subscription();
-  reservationTypes = [reservationTypes.card, reservationTypes.table];
+  reservationTypes = [];
   selectedReservationType: string;
   outletTableData: OutletReservation[];
 
@@ -70,7 +73,8 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     protected adminUtilityService: AdminUtilityService,
     protected snackbarService: SnackBarService,
     private resolver: ComponentFactoryResolver,
-    private formService: OutletFormService
+    private formService: OutletFormService,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb);
   }
@@ -83,6 +87,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     this.entityId = this.formService.entityId;
     this.tableFG?.addControl('reservationType', new FormControl(''));
 
+    this.reservationTypes = [reservationTypes.card, reservationTypes.table];
     this.setReservationType(this.reservationTypes[0].value);
     this.selectedTab = OrderTableType.ALL;
     this.isAllTabFilterRequired = true;
@@ -115,6 +120,8 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
           outletType: 'RESTAURANT',
           pagination: false,
           fromDate: new Date().getTime(),
+          toDate: new Date().getTime() + 1 * 60 * 1000,
+          calendarView: true,
         },
         ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
       ]),
@@ -233,10 +240,6 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     );
   }
 
-  onCardClick(reservationId: string) {
-    this.addNewOrder(undefined, reservationId);
-  }
-
   copyConfirmationNumber(number: string) {
     this._clipboard.copy(number);
     this.snackbarService.openSnackBarAsText('Booking number copied', '', {
@@ -248,8 +251,12 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
 
   handleMenuClick(value: string, rowData: OutletReservation) {}
 
-  editReservation(id: string) {
-    this.addNewOrder(id);
+  editOrder(orderId: string) {
+    this.addNewOrder(orderId);
+  }
+
+  onCardClick(id: { orderId: string; reservationId: string }) {
+    this.addNewOrder(id.orderId, id.reservationId);
   }
 
   addNewOrder(orderId?: string, reservationId?: string) {
@@ -266,8 +273,9 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     const componentRef = this.sidebarSlide.createComponent(factory);
     Object.assign(componentRef.instance, sidebarData);
     this.$subscription.add(
-      componentRef.instance.onCloseSidebar.subscribe((res) => {
+      componentRef.instance.onCloseSidebar.subscribe((res: boolean) => {
         this.sidebarVisible = false;
+        if (res) this.routesConfigService.reload();
       })
     );
     manageMaskZIndex();
@@ -276,4 +284,8 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   handleFinal = () => {
     this.loading = false;
   };
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }

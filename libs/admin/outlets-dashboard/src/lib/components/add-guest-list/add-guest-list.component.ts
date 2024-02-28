@@ -29,7 +29,7 @@ import { OutletTableService } from '../../services/outlet-table.service';
 import { Observable, Subscription, combineLatest } from 'rxjs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
-import { concatMap, debounceTime, switchMap, tap } from 'rxjs/operators';
+import { concatMap, debounceTime, skip, switchMap, tap } from 'rxjs/operators';
 import { AreaListResponse, AreaResponse } from '../../types/outlet.response';
 import { GuestFormData } from '../../models/guest-reservation.model';
 import { TableList } from 'libs/table-management/src/lib/models/data-table.model';
@@ -132,7 +132,7 @@ export class AddGuestListComponent implements OnInit {
       remark: [''],
       outletType: ['RESTAURANT'],
       areaId: ['', Validators.required],
-      seated: [true],
+      seated: [''],
       sourceName: [],
       source: [],
     });
@@ -147,6 +147,7 @@ export class AddGuestListComponent implements OnInit {
         this.useForm.patchValue({
           checkIn: this.currentTime,
           slotHours: 1800000,
+          seated: true,
         });
       });
     }
@@ -178,13 +179,11 @@ export class AddGuestListComponent implements OnInit {
 
   listenForTimeChanges(): void {
     const { checkIn, slotHours, seated } = this.guestReservationFormControl;
-    checkIn.valueChanges.pipe(debounceTime(300)).subscribe((res) => {
+    checkIn.valueChanges.pipe(debounceTime(300), skip(1)).subscribe((res) => {
       this.updateCheckOutTime();
       //update seating condition
-      if (res > this.currentTime) {
-        seated.patchValue(false);
-      } else {
-        seated.patchValue(true);
+      if (!this.guestReservationId) {
+        seated.patchValue(res > this.currentTime);
       }
     });
     slotHours.valueChanges.pipe(debounceTime(300)).subscribe((res) => {

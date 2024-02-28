@@ -52,53 +52,9 @@
       (scrolled)="loadMore()"
       [toggleScrollListener]="paginationDisabled"
     >
-      <ng-container *ngIf="!loading && guestList.length; else emptyGuest">
-        <ng-container
-          *ngFor="let guest of guestList; let i = index; trackBy: trackGuests"
-        >
-          <hospitality-bot-guest-card
-            [item]="guest"
-            (click)="onEditGuestReservation(guest)"
-          >
-            <ng-container *ngIf="isSeated; else waitlist">
-              <hospitality-bot-button
-                label="Print Invoice"
-                variant="outlined"
-                (onClick)="onPrintInvoice($event)"
-              ></hospitality-bot-button>
-              <hospitality-bot-button
-                label="Change Table"
-                variant="outlined"
-                (onClick)="onTableChange($event, guest)"
-              ></hospitality-bot-button>
-            </ng-container>
-            <ng-template #waitlist>
-              <ng-container>
-                <hospitality-bot-button
-                  label="Notified"
-                  variant="outlined"
-                ></hospitality-bot-button>
-                <hospitality-bot-button
-                  label="Seated"
-                  variant="outlined"
-                  (onClick)="handelQuickCTA($event, guest, 'SEATED')"
-                ></hospitality-bot-button>
-                <hospitality-bot-button
-                  label="Cancel"
-                  variant="outlined"
-                  (onClick)="handelQuickCTA($event, guest, 'DELETE')"
-                ></hospitality-bot-button>
-              </ng-container>
-            </ng-template>
-          </hospitality-bot-guest-card>
-
-          <!-- <ng-container *ngIf="!isSeated">
-            <div class="date__divider">
-              {{ '20/12/2024' }}
-            </div></ng-container
-          > -->
-        </ng-container>
-      </ng-container>
+      <ng-container
+        *ngTemplateOutlet="isSeated ? seated : waitlisted"
+      ></ng-container>
     </div>
   </div>
 </div>
@@ -127,3 +83,70 @@
 >
   <ng-container #sidebarSlide></ng-container>
 </p-sidebar>
+
+<ng-template #seated>
+  <ng-container *ngIf="!loading && seatedGuestList.length; else emptyGuest">
+    <ng-container
+      *ngFor="let guest of seatedGuestList; let i = index; trackBy: trackGuests"
+    >
+      <hospitality-bot-guest-card
+        [item]="guest"
+        (click)="onEditGuestReservation(guest)"
+      >
+        <ng-container>
+          <hospitality-bot-button
+            label="Print Invoice"
+            variant="outlined"
+            (onClick)="onPrintInvoice($event)"
+          ></hospitality-bot-button>
+          <hospitality-bot-button
+            label="Change Table"
+            variant="outlined"
+            (onClick)="onTableChange($event, guest)"
+          ></hospitality-bot-button>
+        </ng-container>
+      </hospitality-bot-guest-card>
+    </ng-container>
+  </ng-container>
+</ng-template>
+
+<ng-template #waitlisted>
+  <ng-container *ngIf="!loading && waitlistedDate; else emptyGuest">
+    <ng-container *ngFor="let key of waitlistedDate">
+      <ng-container>
+        <div class="date__divider">
+          {{ key }}
+        </div>
+      </ng-container>
+      <ng-container
+        *ngFor="
+          let guest of waitListGuestList[key];
+          let i = index;
+          trackBy: trackGuests
+        "
+      >
+        <hospitality-bot-guest-card
+          [item]="guest"
+          (click)="onEditGuestReservation(guest)"
+        >
+          <ng-container>
+            <hospitality-bot-button
+              label="Notified"
+              variant="outlined"
+            ></hospitality-bot-button>
+            <hospitality-bot-button
+              label="Seated"
+              variant="outlined"
+              (onClick)="handelQuickCTA($event, guest, 'SEATED')"
+            ></hospitality-bot-button>
+            <hospitality-bot-button
+              label="Cancel"
+              variant="outlined"
+              (onClick)="handelQuickCTA($event, guest, 'DELETE')"
+            ></hospitality-bot-button>
+          </ng-container>
+        </hospitality-bot-guest-card>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</ng-template>

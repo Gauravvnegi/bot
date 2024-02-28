@@ -138,6 +138,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   }
 
   initCardViewList(): void {
+    this.loading = true;
     this.subscriptionList$.add(
       forkJoin([this.getTableList(), this.getReservationList()]).subscribe(
         ([tableResponse, reservationResponse]) => {
@@ -152,7 +153,11 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
             data?.entityStateCounts,
             data?.total
           );
-        }
+        },
+        ({ error }) => {
+          this.loading = false;
+        },
+        this.handleFinal
       )
     );
   }

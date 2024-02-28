@@ -49,6 +49,8 @@ export class GuestReservation {
   preparationTime: string;
   reservationStatus: string;
   order?: Omit<PosOrderResponse, 'reservation'>;
+  from: number;
+  to: string;
 
   deserialize(value: GuestReservationResponse) {
     this.id = value.id;
@@ -64,7 +66,8 @@ export class GuestReservation {
     this.phone = value?.guest?.contactDetails?.contactNumber;
     this.isSeated = value?.currentJourney === 'SEATED';
     this.reservationStatus = value?.currentJourney;
-    this.order = value.order
+    this.order = value.order;
+    this.from = value.from;
     return this;
   }
 }

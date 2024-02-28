@@ -44,7 +44,8 @@ export class GuestListComponent implements OnInit {
   readonly seatedTabGroup: Option<TabsType>[] = seatedTabGroup;
   paginationDisabled: boolean = false;
   seatedGuestList: GuestReservation[] = [];
-  waitListGuestList: GuestReservation[] = [];
+  waitListGuestList;
+  waitlistedDate: string[] = [];
 
   entityId: string;
 
@@ -144,10 +145,28 @@ export class GuestListComponent implements OnInit {
         this.waitListGuestList.push(record);
       }
     });
+
+    this.createWaitListGroupData();
+
     this.guestList =
       this.useForm.get('chip').value === ChipType.seated
         ? this.seatedGuestList
         : this.waitListGuestList;
+  }
+
+  createWaitListGroupData() {
+    this.waitListGuestList = this.waitListGuestList.reduce((acc, guest) => {
+      const key = this.getTime(guest.from);
+
+      if (acc[key]) {
+        acc[key].push(guest);
+      } else {
+        acc[key] = [guest];
+      }
+
+      return acc;
+    }, {});
+    this.waitlistedDate = Object.keys(this.waitListGuestList);
   }
 
   setChip(event: Option) {
@@ -380,6 +399,17 @@ export class GuestListComponent implements OnInit {
 
   get isFilterHidden() {
     return this.useForm?.get('search')?.value?.length > 0;
+  }
+
+  getTime(epochDate: number): string {
+    const fullDate = new Date(epochDate);
+    const extractedDate = new Date(
+      fullDate.getFullYear(),
+      fullDate.getMonth(),
+      fullDate.getDate()
+    );
+
+    return extractedDate.toISOString().split('T')[0];
   }
 
   ngOnDestroy(): void {

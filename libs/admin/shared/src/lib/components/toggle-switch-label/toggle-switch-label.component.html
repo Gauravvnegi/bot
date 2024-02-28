@@ -1,4 +1,4 @@
-<div class="toggle-wrapper">
+<div class="toggle-wrapper" [ngClass]="{ disable: isDisabled }">
   <span *ngIf="preContent.length" class="pre-content">{{ preContent }}</span>
   <label class="toggle">
     <input

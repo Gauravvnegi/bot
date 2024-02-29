@@ -1,7 +1,10 @@
+@import 'main';
+
 .info-container {
   display: flex;
   flex-direction: column;
   gap: 1em;
+  width: 24em;
 
   .sub-container {
     display: flex;
@@ -65,4 +68,18 @@
 
 :host ::ng-deep .p-dialog .p-dialog-content {
   padding: 0 1rem 1.5rem 1rem !important;
+}
+
+::ng-deep {
+  .my-global-class .p-overlaypanel {
+    &:before {
+      content: none;
+    }
+
+    &:after {
+      content: none;
+    }
+
+    margin-top: 0px;
+  }
 }

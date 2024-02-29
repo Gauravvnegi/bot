@@ -366,9 +366,9 @@ export const dailyRevenueReportCols: Partial<ColsData<
 export const dailyRevenueReportRows = [
   { label: 'Room', name: 'room' },
   { label: 'Room Charge', name: 'roomRevenue' },
-  { label: 'Late Check Out', name: 'lateCheckOut' },
-  { label: 'Early Check In', name: 'earlyCheckIn' },
-  { label: 'Early Check Out', name: 'earlyCheckOut' },
+  { label: 'Late Check Out', name: 'lateCheckOutAmount' },
+  { label: 'Early Check In', name: 'earlyCheckInAmount' },
+  // { label: 'Early Check Out', name: 'earlyCheckOutAmount' },
   // { label: 'Room Charge(Tax Exempt)', name: 'roomCharge' },
   // { label: 'Extra Bed', name: 'extraBed' },
   { label: 'Total', name: 'totalRoom' }, //map total of room

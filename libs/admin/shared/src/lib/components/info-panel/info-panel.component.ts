@@ -111,4 +111,10 @@ export class InfoPanelComponent implements OnInit {
       });
     });
   }
+
+  addGlobalCss(condition: boolean) {
+    condition
+      ? document.documentElement.classList.add('my-global-class')
+      : document.documentElement.classList.remove('my-global-class');
+  }
 }

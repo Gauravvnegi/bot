@@ -13,7 +13,10 @@ import {
   styleUrls: ['./date-group-filter.component.scss'],
 })
 export class DateGroupFilterComponent implements OnInit {
-  @Output() onDateFilterChange = new EventEmitter<DateFilterOption>();
+  @Output() onDateFilterChange = new EventEmitter<{
+    data: DateFilterOption;
+    index: number;
+  }>();
 
   constructor() {
     this.initDateFilterOptions();
@@ -27,13 +30,13 @@ export class DateGroupFilterComponent implements OnInit {
   @Input() set activeIndex(value) {
     this._activeIndex = value;
     this.selectedDateFilter = this.dates[value].date;
-    this.onDateFilterChange.emit(this.dates[value]);
+    this.onDateFilterChange.emit({ data: this.dates[value], index: value });
   }
 
   ngOnInit(): void {
     if (this._activeIndex === undefined) {
       this.initDateFilterOptions();
-      this.onDateFilterChange.emit(this.dates[0]);
+      this.onDateFilterChange.emit({ data: this.dates[0], index: 0 });
     }
   }
 

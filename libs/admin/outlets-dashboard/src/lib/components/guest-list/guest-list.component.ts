@@ -95,8 +95,9 @@ export class GuestListComponent implements OnInit {
   /**
    * on DateFilterChanges
    */
-  onDateFilterChange(data: DateFilterOption) {
-    this.dateFilterOption = data;
+  onDateFilterChange(config: { data: DateFilterOption; index: number }) {
+    this.dateFilterOption = config.data;
+    this.selectedDateFilterIndex = config.index;
     this.initGuestReservation();
   }
 
@@ -252,8 +253,10 @@ export class GuestListComponent implements OnInit {
     const instance: AddGuestListComponent = componentRef.instance;
     instance.guestReservationId = id && id;
 
-    const closeSubscription = instance.onClose.subscribe((res: any) => {
-      this.resetFilterAndTab();
+    const closeSubscription = instance.onClose.subscribe((res: boolean) => {
+      if (res) {
+        this.resetFilterAndTab();
+      }
       componentRef.destroy();
       closeSubscription.unsubscribe();
       this.sidebarVisible = false;

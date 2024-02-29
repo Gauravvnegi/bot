@@ -50,3 +50,9 @@
     }
   }
 }
+
+.empty-view {
+  @include flex-all-center;
+  width: 100%;
+  font-weight: 500;
+}

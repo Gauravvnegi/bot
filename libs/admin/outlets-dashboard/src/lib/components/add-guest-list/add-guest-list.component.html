@@ -17,6 +17,7 @@
         [items]="tableOptions"
         selectType="single"
         [disabled]="isDraftReservation"
+        [loading]="loading"
       ></hospitality-bot-item-view>
     </div>
     <div class="content__wrapper">
@@ -30,6 +31,7 @@
           }"
           [minDate]="startMinDate"
           [disabled]="guestReservationFormControl.checkIn.disabled"
+          [loading]="loading"
         ></hospitality-bot-date>
         <hospitality-bot-select
           label="Hours"
@@ -42,6 +44,7 @@
           [settings]="{
             optionAlignment: 'horizontal'
           }"
+          [loading]="loading"
         ></hospitality-bot-select>
         <!-- <hospitality-bot-multi-select
           label="Table No./Area"
@@ -61,6 +64,7 @@
             placeholder: 'Select'
           }"
           [options]="bookingTypeOptions"
+          [loading]="loading"
         ></hospitality-bot-select>
         <hospitality-bot-select
           label="Status"
@@ -70,6 +74,7 @@
             placeholder: 'Select'
           }"
           [options]="reservationStatusOptions"
+          [loading]="loading"
         ></hospitality-bot-select>
         <hospitality-bot-select
           *ngIf="isDraftReservation"
@@ -80,6 +85,7 @@
             placeholder: 'Select'
           }"
           [options]="areaOptions"
+          [loading]="loading"
         ></hospitality-bot-select>
 
         <hospitality-bot-quick-select
@@ -144,6 +150,7 @@
             placeholder: 'Select'
           }"
           [options]="marketSegments"
+          [loading]="loading"
         ></hospitality-bot-select>
 
         <hospitality-bot-text-area

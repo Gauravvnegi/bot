@@ -234,7 +234,11 @@ export class AddGuestListComponent implements OnInit {
       const checkOutTimeEpoch = checkInTime + bookingTimeDuration;
       checkOut.patchValue(checkOutTimeEpoch);
 
-      this.getTableList(true).subscribe();
+      this.getTableList(true).subscribe(
+        () => {},
+        this.handleError,
+        this.handelTableListFinal
+      );
     }
   }
 
@@ -246,11 +250,15 @@ export class AddGuestListComponent implements OnInit {
             this.outletService.getGuestReservationById(this.guestReservationId)
           )
         )
-        .subscribe((reservation) => {
-          const data = new GuestFormData().deserialize(reservation);
-          this.useForm.patchValue(data);
-          this.updateFormValidations();
-        })
+        .subscribe(
+          (reservation) => {
+            const data = new GuestFormData().deserialize(reservation);
+            this.useForm.patchValue(data);
+            this.updateFormValidations();
+          },
+          this.handleError,
+          this.handelTableListFinal
+        )
     );
   }
 
@@ -274,6 +282,7 @@ export class AddGuestListComponent implements OnInit {
   getTableList(
     isCurrentBooking: boolean = false
   ): Observable<AreaListResponse> {
+    this.loading = true;
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
         {
@@ -440,11 +449,15 @@ export class AddGuestListComponent implements OnInit {
 
   handleFinal = () => {
     this.loading = false;
-    this.close();
+    this.close(true);
   };
 
-  close() {
-    this.onClose.emit(true);
+  handelTableListFinal = () => {
+    this.loading = false;
+  };
+
+  close(config: boolean = false): void {
+    this.onClose.emit(config);
   }
 
   get guestReservationFormControl() {

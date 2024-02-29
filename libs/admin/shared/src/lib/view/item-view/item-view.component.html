@@ -1,17 +1,34 @@
 <div class="item-view__main" [ngClass]="{ 'item-view__disabled': isDisabled }">
   <div class="wrapper">
-    <div
-      class="item"
-      [ngClass]="{
-        reserved: item?.disabled,
-        active: isActive(item),
-        pointer: !item?.disabled
-      }"
-      title="{{ item?.label }}"
-      (click)="!item?.disabled && click(item)"
-      *ngFor="let item of items; let i = index"
-    >
-      {{ item?.label }}
-    </div>
+    <ng-container *ngIf="items.length; else empty">
+      <div
+        class="item"
+        [ngClass]="{
+          reserved: item?.disabled,
+          active: isActive(item),
+          pointer: !item?.disabled
+        }"
+        title="{{ item?.label }}"
+        (click)="!item?.disabled && click(item)"
+        *ngFor="let item of items; let i = index"
+      >
+        {{ item?.label }}
+      </div>
+    </ng-container>
   </div>
 </div>
+
+<ng-template #empty>
+  <div class="empty-view">
+    <hospitality-bot-loader-bounce
+      *ngIf="isLoading; else empty"
+    ></hospitality-bot-loader-bounce>
+    <ng-template #empty>
+      <div class="empty-container">
+        <div class="content">
+          <span class="title">No Table Found</span>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</ng-template>

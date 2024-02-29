@@ -68,7 +68,7 @@
       </div>
     </div>
   </div>
-  <div class="instruction-wrapper">
+  <div class="instruction-wrapper" *ngIf="_config?.kotInstructions">
     {{ _config?.kotInstructions }}
   </div>
   <div class="bottom">

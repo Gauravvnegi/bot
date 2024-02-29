@@ -140,31 +140,27 @@ export class OrderSummaryComponent implements OnInit {
   listenForFormData() {
     this.loadingKotData = true;
     this.$subscription.add(
-      this.formService.orderFormData.subscribe(
-        (res) => {
-          if (res) {
-            const menuItems = res.kots[0].items.map((item) =>
-              new MenuItem().deserialize(item.menuItem)
-            );
-            this.currentKotIndex = res?.kots?.length;
-            let kotIndex = 0;
-            // Process all KOTs efficiently using a single loop
-            for (const kot of res.kots) {
-              kotIndex > 0 && this.addNewKOT(kotIndex); // Create KOT with unique ID
+      this.formService.orderFormData.subscribe((res) => { 
+        if (res) {
+          const menuItems = res.kots[0].items.map((item) =>
+            new MenuItem().deserialize(item.menuItem)
+          );
+          this.currentKotIndex = res?.kots?.length;
+          let kotIndex = 0;
+          // Process all KOTs efficiently using a single loop
+          for (const kot of res.kots) {
+            kotIndex > 0 && this.addNewKOT(kotIndex); // Create KOT with unique ID
 
-              const menuItems = kot.items
-                .filter((item) => item.menuItem) // Filter only items with menu items
-                .map((item) => new MenuItem().deserialize(item.menuItem)); // Deserialize menu items
+            const menuItems = kot.items
+              .filter((item) => item.menuItem) // Filter only items with menu items
+              .map((item) => new MenuItem().deserialize(item.menuItem)); // Deserialize menu items
 
-              menuItems.forEach((item) => this.createNewItemFields(item));
-              kotIndex++; // Increment the index for the next KOT
-            }
-
+            menuItems.forEach((item) => this.createNewItemFields(item));
+            kotIndex++; // Increment the index for the next KOT
           }
-        },
-        (error) => (this.loadingKotData = false),
-        () => (this.loadingKotData = false)
-      )
+          this.loadingKotData = false;
+        }
+      })
     );
   }
 

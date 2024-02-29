@@ -26,6 +26,9 @@
     padding: 18px;
     background-color: $white;
   }
+  .p-datatable .p-datatable-footer {
+    display: none;
+  }
 }
 
 :host ::ng-deep .status-toggle {

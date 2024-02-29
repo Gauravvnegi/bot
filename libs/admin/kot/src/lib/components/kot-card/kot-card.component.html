@@ -47,21 +47,23 @@
 
               <div class="details">
                 <div class="title">{{ item?.name }}</div>
-                <div class="instruction">
-                  instruction
-                  <img
+                <div class="instruction" *ngIf="item.instructions">
+                  <span class="instruction-text">
+                    {{ item.instructions }}
+                  </span>
+                  <!-- <img
                     src="assets/svg/union.svg"
                     [ngClass]="{ rotate: item?.isExpandedInstruction }"
                     (click)="toggleInstruction(i)"
-                  />
+                  /> -->
                 </div>
               </div>
             </div>
             <div className="quantity">{{ item?.quantity }}</div>
           </div>
-          <div *ngIf="item?.isExpandedInstruction" class="instrction-deatils">
+          <!-- <div *ngIf="item?.isExpandedInstruction" class="instrction-deatils">
             {{ item?.instructions }}
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

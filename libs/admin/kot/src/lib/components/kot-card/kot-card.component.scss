@@ -117,6 +117,27 @@
                   color: rgba(36, 36, 36, 0.5);
                   font-size: 11px;
                   font-weight: 500;
+
+                  &-text {
+                    overflow: visible;
+                    word-break: break-word;
+                    text-overflow: unset;
+                    white-space: normal;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 1;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                  }
+                  &-text:hover {
+                    display: block;
+                    overflow: visible;
+                    text-overflow: unset;
+                    white-space: normal;
+                    background: #f3f3f3;
+                    position: relative;
+                    word-break: break-word;
+                  }
+
                   img {
                     cursor: pointer;
                     transition: all 400ms;

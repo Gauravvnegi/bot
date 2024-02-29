@@ -68,18 +68,23 @@ export class InvoiceService extends ApiService {
 
   getInvoiceData(
     reservationId: string,
-    paymentState?: string
+    isCustomerInvoice?: boolean
   ): Observable<BillSummaryData> {
     return this.get(
       `/api/v1/reservation/${reservationId}/bill-summary` +
-        (paymentState ? `?paymentState=${paymentState}` : '')
+        (isCustomerInvoice ? `?isCustomerInvoice=${isCustomerInvoice}` : '')
     );
   }
 
-  downloadPDF(reservationId: string, paymentState?: string): Observable<any> {
+  downloadPDF(
+    reservationId: string,
+    paymentState?: string,
+    isCustomerInvoice?: boolean
+  ): Observable<any> {
     return this.get(
       `/api/v1/reservation/${reservationId}/invoice` +
-        (paymentState ? `?paymentState=${paymentState}` : '')
+        (paymentState ? `?paymentState=${paymentState}` : '') +
+        (isCustomerInvoice ? `?isCustomerInvoice=${isCustomerInvoice}` : '')
     );
   }
 

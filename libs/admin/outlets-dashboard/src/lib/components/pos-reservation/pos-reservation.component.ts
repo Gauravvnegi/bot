@@ -143,6 +143,7 @@ export class PosReservationComponent implements OnInit {
         paymentRecieved: [null],
         transactionId: [''],
       }),
+      offer: [''],
     });
 
     this.checkboxForm = this.fb.group({

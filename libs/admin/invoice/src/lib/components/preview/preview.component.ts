@@ -69,7 +69,7 @@ export class PreviewComponent implements OnInit {
 
   getInvoiceData() {
     this.isLoading = true;
-    this.invoiceService.getInvoiceData(this.reservationId).subscribe(
+    this.invoiceService.getInvoiceData(this.reservationId, true).subscribe(
       (res) => (this.isInvoiceGenerated = res.invoiceGenerated),
       () => {},
       () => (this.isLoading = false)
@@ -104,7 +104,8 @@ export class PreviewComponent implements OnInit {
     this.invoiceService
       .downloadPDF(
         this.reservationId,
-        this.isInvoiceGenerated ? 'REALISED' : null
+        this.isInvoiceGenerated ? 'REALISED' : null,
+        true
       )
       .subscribe(
         (res) => {

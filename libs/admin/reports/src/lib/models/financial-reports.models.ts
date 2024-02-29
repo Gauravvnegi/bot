@@ -273,7 +273,10 @@ export class DailyRevenueReport
   deserialize(value: DailyRevenueReportResponse[]) {
     this.records = new Array<DailyRevenueReportData>();
     value = value.map((item) => {
-      const totalRoom = item?.roomRevenue ?? 0;
+      const totalRoom =
+        (item?.roomRevenue ?? 0) +
+        (item?.lateCheckOutAmount ?? 0) +
+        (item?.earlyCheckInAmount ?? 0);
       const totalOthers = (item?.cancellation ?? 0) + (item?.noShow ?? 0) ?? 0;
       const totalRevenue = totalRoom + totalOthers + item?.inclusionOrAddOn;
       const totalPayable = (totalRevenue ?? 0) + (item?.totalTax ?? 0) ?? 0;

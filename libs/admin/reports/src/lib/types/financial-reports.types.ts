@@ -398,6 +398,8 @@ export type DailyRevenueReportResponse<
   addOn: number;
   totalOthers: number;
   totalRevenue: number;
+  lateCheckOutAmount: number;
+  earlyCheckInAmount: number;
 };
 
 type Reservation = {

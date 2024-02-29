@@ -135,6 +135,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       area: [''],
       dimension: ['sqft'],
       cuisinesType: [[]],
+      containerCharge: [[]],
 
       //not working filed
       rules: [[]],
@@ -426,7 +427,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         'Browse the menu and place your order',
         'Place your orders',
       ],
-      route: this.redirectUrl ?? 'https://www.test.menu.com/',
+      route: this.redirectUrl,
       logoUrl: this.logoUrl,
     };
 

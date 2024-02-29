@@ -7,7 +7,13 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { slotHours } from '../../constants/guest-list.const';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BookingDetailService,
@@ -16,23 +22,15 @@ import {
   QueryConfig,
   manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { AddGuestForm } from '../../types/form';
+import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
+import { Observable, Subscription } from 'rxjs';
+import { concatMap, debounceTime, skip, tap } from 'rxjs/operators';
+import { slotHours } from '../../constants/guest-list.const';
+import { GuestFormData } from '../../models/guest-reservation.model';
 import { OutletFormService } from '../../services/outlet-form.service';
 import { OutletTableService } from '../../services/outlet-table.service';
-import { Observable, Subscription, combineLatest } from 'rxjs';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
-import { concatMap, debounceTime, skip, switchMap, tap } from 'rxjs/operators';
 import { AreaListResponse, AreaResponse } from '../../types/outlet.response';
-import { GuestFormData } from '../../models/guest-reservation.model';
-import { TableList } from 'libs/table-management/src/lib/models/data-table.model';
 
 export type GuestReservationForm = {
   tables: string;

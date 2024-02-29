@@ -325,7 +325,9 @@ export class GuestListComponent implements OnInit {
       tab: TabsType.all,
     });
     this.activeIndex = 0; //need to refactor bot chips component
-    this.selectedDateFilterIndex = 0;
+    this.selectedDateFilterIndex === 0
+      ? this.initGuestReservation()
+      : (this.selectedDateFilterIndex = 0);
   }
 
   onTableChange(event, guest: GuestReservation) {
@@ -401,17 +403,6 @@ export class GuestListComponent implements OnInit {
 
   get isFilterHidden() {
     return this.useForm?.get('search')?.value?.length > 0;
-  }
-
-  getTime(epochDate: number): string {
-    const fullDate = new Date(epochDate);
-    const extractedDate = new Date(
-      fullDate.getFullYear(),
-      fullDate.getMonth(),
-      fullDate.getDate()
-    );
-
-    return extractedDate.toISOString().split('T')[0];
   }
 
   ngOnDestroy(): void {

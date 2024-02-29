@@ -11,9 +11,7 @@ import {
   FoodPackageResponse,
 } from '../types/response';
 import { MealPreferences } from 'libs/admin/outlets-dashboard/src/lib/types/menu-order';
-import {
-  OfferResponse,
-} from 'libs/admin/offers/src/lib/types/response';
+import { OfferResponse } from 'libs/admin/offers/src/lib/types/response';
 
 export class OutletList {
   id: string;
@@ -208,6 +206,7 @@ export class OutletFormData {
   menuIds?;
   foodPackageIds?;
   shortDescription: string;
+  containerCharge: string;
 
   deserialize(input: OutletForm) {
     this.status = input?.status;
@@ -237,6 +236,7 @@ export class OutletFormData {
     this.menuIds = input?.menuIds;
     this.foodPackageIds = input?.foodPackageIds;
     this.shortDescription = input?.shortDescription;
+    this.containerCharge = input?.containerCharge;
     return this;
   }
 }

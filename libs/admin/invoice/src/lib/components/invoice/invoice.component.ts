@@ -39,7 +39,6 @@ import { Subscription } from 'rxjs';
 import {
   distinctUntilChanged,
   pairwise,
-  shareReplay,
   startWith,
 } from 'rxjs/operators';
 import {

@@ -1,15 +1,12 @@
 <i
+  #icon
   class="pi pi-info-circle icon"
-  (mouseenter)="showContent = true"
-  (mouseleave)="showContent = false"
+  (mouseenter)="overlay.show($event); addGlobalCss(true)"
+  (mouseleave)="overlay.hide($event); addGlobalCss(false)"
   style="font-size: 1.8rem; color: blue; padding: 8px 0;"
 ></i>
-<p-dialog
-  header="Header"
-  [showHeader]="false"
-  [visible]="showContent"
-  [style]="{ width: '23vw' }"
->
+
+<p-overlayPanel appendTo="body" class="overlay" #overlay>
   <div class="info-container">
     <div class="sub-container">
       <div class="title-container">{{ title }}</div>
@@ -45,4 +42,4 @@
       </div>
     </div>
   </div>
-</p-dialog>
+</p-overlayPanel>

@@ -55,7 +55,6 @@ export class OutletReservationTable {
     this.date = input?.reservation?.from;
     this.totalAmount = input?.pricingDetails?.totalAmount;
     this.totalDueAmount = input.pricingDetails?.dueAmount;
-    this.nextStates = ['DRAFT'];
     const { firstName, lastName } = input?.guest || {};
     this.guestName = firstName
       ? lastName
@@ -65,7 +64,7 @@ export class OutletReservationTable {
     this.tableNumber = input?.reservation?.tableNumberOrRoomNumber;
     this.paymentMethod = 'CASH';
     this.reservationStatus = input?.status;
-    this.nextStates = input.nextStates;
+    this.nextStates = [...input.nextStates, input?.status];
     this.toTime = formatEpochTime(input?.reservation?.to);
     this.fromTime = formatEpochTime(input?.reservation?.from);
     return this;

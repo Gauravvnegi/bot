@@ -1,4 +1,3 @@
-import { Option } from 'libs/admin/shared/src/lib/types/form.type';
 import {
   Component,
   ComponentFactoryResolver,
@@ -8,29 +7,29 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { seatedChips, seatedTabGroup } from '../../constants/guest-list.const';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { GuestCard } from '../guest-card/guest-card.component';
-import { ChipType, TabsType } from '../../types/guest.type';
-import { AddGuestListComponent } from '../add-guest-list/add-guest-list.component';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   QueryConfig,
   manageMaskZIndex,
   openModal,
 } from '@hospitality-bot/admin/shared';
+import { DateFilterOption } from 'libs/admin/shared/src/lib/components/date-group-filter/date-group-filter.component';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { Option } from 'libs/admin/shared/src/lib/types/form.type';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subscription, of } from 'rxjs';
-import { OutletTableService } from '../../services/outlet-table.service';
+import { debounceTime, switchMap } from 'rxjs/operators';
+import { seatedChips, seatedTabGroup } from '../../constants/guest-list.const';
 import {
   GuestReservation,
   GuestReservationList,
 } from '../../models/guest-reservation.model';
-import { debounce } from 'lodash';
-import { debounceTime, switchMap } from 'rxjs/operators';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { OutletTableService } from '../../services/outlet-table.service';
+import { ChipType, TabsType } from '../../types/guest.type';
+import { AddGuestListComponent } from '../add-guest-list/add-guest-list.component';
 
 @Component({
   selector: 'hospitality-bot-guest-list',
@@ -44,8 +43,10 @@ export class GuestListComponent implements OnInit {
   readonly seatedTabGroup: Option<TabsType>[] = seatedTabGroup;
   paginationDisabled: boolean = false;
   seatedGuestList: GuestReservation[] = [];
-  waitListGuestList;
-  waitlistedDate: string[] = [];
+  waitListGuestList: GuestReservation[] = [];
+  selectedDateFilterIndex: number = 0;
+
+  dateFilterOption: DateFilterOption;
 
   entityId: string;
 
@@ -79,7 +80,6 @@ export class GuestListComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    this.initGuestReservation();
     this.searchGuest();
   }
 
@@ -92,6 +92,17 @@ export class GuestListComponent implements OnInit {
     });
   }
 
+  /**
+   * on DateFilterChanges
+   */
+  onDateFilterChange(data: DateFilterOption) {
+    this.dateFilterOption = data;
+    this.initGuestReservation();
+  }
+
+  /**
+   * get the guest reservation
+   */
   initGuestReservation(): void {
     this.loading = true;
 
@@ -100,8 +111,9 @@ export class GuestListComponent implements OnInit {
         {
           type: 'OUTLET',
           outletType: 'RESTAURANT',
-          fromDate: new Date().getTime(),
           pagination: false,
+          fromDate: this.dateFilterOption.from,
+          toDate: this.dateFilterOption.to,
         },
       ]),
     };
@@ -135,7 +147,7 @@ export class GuestListComponent implements OnInit {
 
   /**
    * need to refactor latter
-   * @param data
+   * filter guestReservation based on guest type
    */
   initGuestList(data) {
     data?.forEach((record) => {
@@ -146,29 +158,17 @@ export class GuestListComponent implements OnInit {
       }
     });
 
-    this.createWaitListGroupData();
-
     this.guestList =
       this.useForm.get('chip').value === ChipType.seated
         ? this.seatedGuestList
         : this.waitListGuestList;
   }
 
-  createWaitListGroupData() {
-    this.waitListGuestList = this.waitListGuestList.reduce((acc, guest) => {
-      const key = this.getTime(guest.from);
-
-      if (acc[key]) {
-        acc[key].push(guest);
-      } else {
-        acc[key] = [guest];
-      }
-
-      return acc;
-    }, {});
-    this.waitlistedDate = Object.keys(this.waitListGuestList);
-  }
-
+  /**
+   * on chips change
+   *
+   * set chips in form and change th
+   */
   setChip(event: Option) {
     this.useForm.patchValue(
       { search: '', chip: ChipType[event.value] },
@@ -322,8 +322,7 @@ export class GuestListComponent implements OnInit {
       tab: TabsType.all,
     });
     this.activeIndex = 0; //need to refactor bot chips component
-
-    this.initGuestReservation();
+    this.selectedDateFilterIndex = 0;
   }
 
   onTableChange(event, guest: GuestReservation) {

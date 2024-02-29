@@ -84,7 +84,7 @@ export class GuestFormData {
   sourceName: string;
   source: string;
   reservationType: string;
-  seated: boolean;
+  currentJourney: string;
   areaId: string;
 
   deserialize(value: GuestReservationResponse) {
@@ -99,7 +99,7 @@ export class GuestFormData {
     this.sourceName = value?.sourceName;
     this.source = value?.source;
     this.reservationType = value?.status;
-    this.seated = value?.currentJourney === 'SEATED';
+    this.currentJourney = value?.currentJourney;
     this.areaId = value?.areaId;
     return this;
   }

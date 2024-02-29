@@ -164,10 +164,10 @@ export class OutletFormService {
       marketSegment: data.marketSegment,
       outletType: data.outletType,
       areaId: data.areaId,
-      currentJourney:
-        data?.reservationType === 'CONFIRMED' && data.seated
-          ? 'SEATED'
-          : 'WAITLISTED',
+      currentJourney: data.currentJourney,
+      // data?.reservationType === 'CONFIRMED' && data.seated
+      //   ? 'SEATED'
+      //   : 'WAITLISTED',
 
       source: data.source,
       sourceName: data.sourceName,

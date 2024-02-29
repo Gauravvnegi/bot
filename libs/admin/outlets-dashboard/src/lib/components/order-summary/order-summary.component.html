@@ -161,77 +161,6 @@
                               )
                             "
                           ></hospitality-bot-input>
-                          <div class="offer-wrapper">
-                            <p *ngIf="!kotControls.value.viewKotOffer">
-                              Have an Offer?
-                              <span
-                                (click)="applyOffer(kotControls)"
-                                class="apply-btn"
-                                [ngClass]="{
-                                  'disabled-form': kotControls.value.id
-                                }"
-                                >Apply Offer</span
-                              >
-                            </p>
-                            <hospitality-bot-select
-                              *ngIf="
-                                kotControls.value.viewKotOffer &&
-                                !kotControls.value.selectedOffer
-                              "
-                              class="offer-select"
-                              controlName="kotOffer"
-                              [options]="kotControls.value.itemOffers"
-                              [props]="{
-                                placeholder: 'Select Offer'
-                              }"
-                            >
-                            </hospitality-bot-select>
-                            <ng-container
-                              *ngIf="kotControls.value.selectedOffer"
-                            >
-                              <div class="promo-code">
-                                <p>Promo Code</p>
-                                <span
-                                  class="remove-btn"
-                                  [ngClass]="{
-                                    'disabled-form': kotControls.value.id
-                                  }"
-                                  (click)="removeOffer()"
-                                  >Remove</span
-                                >
-                              </div>
-                              <div class="offer">
-                                <span class="offerName">{{
-                                  kotControls.value.selectedOffer?.label
-                                }}</span>
-                                <span
-                                  class="offerAmount"
-                                  *ngIf="
-                                    kotControls.value.selectedOffer
-                                      ?.discountType === 'PERCENTAGE'
-                                  "
-                                >
-                                  ({{
-                                    kotControls.value.selectedOffer
-                                      ?.discountValue
-                                  }}% OFF)</span
-                                >
-                                <span
-                                  class="offerAmount"
-                                  *ngIf="
-                                    kotControls.value.selectedOffer
-                                      ?.discountType === 'FLAT'
-                                  "
-                                >
-                                  ({{
-                                    kotControls.value.selectedOffer
-                                      ?.discountValue | currency: 'INR'
-                                  }}
-                                  FLAT)</span
-                                >
-                              </div>
-                            </ng-container>
-                          </div>
                         </div>
                       </p-accordionTab>
                     </p-accordion>
@@ -241,6 +170,62 @@
             </ng-container>
           </ng-container>
         </div>
+        <ng-container>
+          <div class="offer-wrapper">
+            <p *ngIf="!viewOffer">
+              Have an Offer?
+              <span
+                (click)="viewOffer = true"
+                class="apply-btn"
+                [ngClass]="{
+                  'disabled-form': orderId
+                }"
+                >Apply Offer</span
+              >
+            </p>
+            <hospitality-bot-select
+              *ngIf="viewOffer && !selectedOffer"
+              class="offer-select"
+              controlName="offer"
+              [options]="offerList"
+              [props]="{
+                placeholder: 'Select Offer'
+              }"
+            >
+            </hospitality-bot-select>
+            <ng-container *ngIf="selectedOffer">
+              <div class="promo-code">
+                <p>Promo Code</p>
+                <span
+                  class="remove-btn"
+                  [ngClass]="{
+                    'disabled-form': orderId
+                  }"
+                  (click)="viewOffer = false"
+                  >Remove</span
+                >
+              </div>
+              <div class="offer">
+                <span class="offerName">{{ selectedOffer?.label }}</span>
+                <span
+                  class="offerAmount"
+                  *ngIf="selectedOffer?.discountType === 'PERCENTAGE'"
+                >
+                  ({{ selectedOffer?.discountValue }}% OFF)</span
+                >
+                <span
+                  class="offerAmount"
+                  *ngIf="selectedOffer?.discountType === 'FLAT'"
+                >
+                  ({{
+                    selectedOffer?.discountValue | currency: 'INR'
+                  }}
+                  FLAT)</span
+                >
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
         <ng-container formGroupName="paymentInformation">
           <div class="payment-wrapper">
             <p class="payment-header">Bill Details</p>

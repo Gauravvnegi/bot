@@ -21,19 +21,6 @@
     </div>
     <div class="content__wrapper">
       <div class="form-block content">
-        <div class="full-width">
-          <hospitality-bot-toggle-switch-with-label
-            *ngIf="!isDraftReservation"
-            class="toggle"
-            [isToggleOn]="guestReservationFormControl.seated.value"
-            (onToggleSwitch)="triggerStatusChange($event)"
-            [config]="{
-              toggleOnLabel: 'Seated',
-              toggleOffLabel: 'Waitlist'
-            }"
-            [isDisabled]="guestReservationFormControl.seated.disabled"
-          ></hospitality-bot-toggle-switch-with-label>
-        </div>
         <hospitality-bot-date
           class="half-width"
           controlName="checkIn"
@@ -74,6 +61,15 @@
             placeholder: 'Select'
           }"
           [options]="bookingTypeOptions"
+        ></hospitality-bot-select>
+        <hospitality-bot-select
+          label="Status"
+          class="half-width"
+          controlName="currentJourney"
+          [props]="{
+            placeholder: 'Select'
+          }"
+          [options]="reservationStatusOptions"
         ></hospitality-bot-select>
         <hospitality-bot-select
           *ngIf="isDraftReservation"

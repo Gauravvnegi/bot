@@ -45,7 +45,7 @@ export type GuestReservationForm = {
   outletType: string;
   slotHours: number;
   areaId: string;
-  seated: boolean;
+  currentJourney: string;
   reservationType: string;
   source: string;
   sourceName: string;
@@ -53,7 +53,19 @@ export type GuestReservationForm = {
 
 type TableOption = Option & { disabled: boolean; areaId: string };
 
-type ReservationType = 'CONFIRMED' | 'DRAFT';
+const ReservationType = {
+  CONFIRMED: 'CONFIRMED',
+  DRAFT: 'DRAFT',
+} as const;
+
+type ReservationType = typeof ReservationType[keyof typeof ReservationType];
+
+const ReservationStatus = {
+  SEATED: 'SEATED',
+  WAIT_LISTED: 'WAITLISTED',
+} as const;
+
+type ReservationStatus = typeof ReservationStatus[keyof typeof ReservationStatus];
 
 @Component({
   selector: 'hospitality-bot-add-guest-list',
@@ -68,13 +80,25 @@ export class AddGuestListComponent implements OnInit {
   bookingTypeOptions: Option<ReservationType>[] = [
     {
       label: 'Confirmed',
-      value: 'CONFIRMED',
+      value: ReservationType.CONFIRMED,
     },
     {
       label: 'Draft',
-      value: 'DRAFT',
+      value: ReservationType.DRAFT,
     },
   ];
+
+  reservationStatusOptions: Option<ReservationStatus>[] = [
+    {
+      label: 'Seated',
+      value: ReservationStatus.SEATED,
+    },
+    {
+      label: 'Waitlisted',
+      value: ReservationStatus.WAIT_LISTED,
+    },
+  ];
+
   areaOptions: Option[] = [];
 
   readonly slotOptions: { label: string; value: number }[] = slotHours;
@@ -121,7 +145,7 @@ export class AddGuestListComponent implements OnInit {
 
   initForm() {
     this.useForm = this.fb.group({
-      reservationType: ['CONFIRMED', Validators.required],
+      reservationType: [ReservationType.CONFIRMED, Validators.required],
       tables: ['', Validators.required], //@multipleTableBooking
       personCount: [1, [Validators.required, Validators.min(1)]],
       guest: ['', Validators.required],
@@ -132,13 +156,11 @@ export class AddGuestListComponent implements OnInit {
       remark: [''],
       outletType: ['RESTAURANT'],
       areaId: ['', Validators.required],
-      seated: [''],
+      currentJourney: ['', Validators.required],
       sourceName: [],
       source: [],
     });
-    this.listenForTimeChanges();
-    this.listenForTableChanges();
-    this.listenForReservationTypeChanges();
+    this.listenFormValueChanges();
 
     if (this.guestReservationId) {
       this.getReservationDetails();
@@ -147,27 +169,22 @@ export class AddGuestListComponent implements OnInit {
         this.useForm.patchValue({
           checkIn: this.currentTime,
           slotHours: 1800000,
-          seated: true,
+          currentJourney: ReservationStatus.SEATED,
         });
       });
     }
   }
 
-  listenForReservationTypeChanges(): void {
-    this.guestReservationFormControl.reservationType.valueChanges.subscribe(
-      (response: ReservationType) => {
-        const { areaId, tables } = this.guestReservationFormControl;
-        if (response === 'DRAFT') {
-          tables.clearValidators();
-        } else {
-          tables.setValidators([Validators.required]);
-        }
-      }
-    );
-  }
+  listenFormValueChanges(): void {
+    const {
+      checkIn,
+      slotHours,
+      currentJourney,
+      reservationType,
+      tables,
+      areaId,
+    } = this.guestReservationFormControl;
 
-  listenForTableChanges(): void {
-    const { areaId, tables } = this.guestReservationFormControl;
     tables.valueChanges.subscribe((data) => {
       /**
        * @multipleTableBooking: need to change logic, when we enable multi table bookings,
@@ -175,19 +192,35 @@ export class AddGuestListComponent implements OnInit {
       const id = this.backupData.find((table) => table.value === data)?.areaId;
       areaId.patchValue(id);
     });
-  }
 
-  listenForTimeChanges(): void {
-    const { checkIn, slotHours, seated } = this.guestReservationFormControl;
+    // Subscription for checkIn value changes
     checkIn.valueChanges.pipe(debounceTime(300), skip(1)).subscribe((res) => {
       this.updateCheckOutTime();
+
       //update seating condition
       if (!this.guestReservationId) {
-        seated.patchValue(res > this.currentTime);
+        reservationType.value === ReservationType.CONFIRMED &&
+          currentJourney.patchValue(
+            !(res > this.currentTime)
+              ? ReservationStatus.SEATED
+              : ReservationStatus.WAIT_LISTED
+          );
       }
     });
+
+    // Subscription for slotHours value changes
     slotHours.valueChanges.pipe(debounceTime(300)).subscribe((res) => {
       this.updateCheckOutTime();
+    });
+
+    // Subscription for reservationType value changes
+    reservationType.valueChanges.subscribe((response) => {
+      if (response === ReservationType.DRAFT) {
+        tables.clearValidators();
+        currentJourney.patchValue(ReservationStatus.WAIT_LISTED);
+      } else {
+        tables.setValidators([Validators.required]);
+      }
     });
   }
 
@@ -225,13 +258,13 @@ export class AddGuestListComponent implements OnInit {
     const {
       checkIn,
       guest,
-      seated,
+      currentJourney,
       reservationType,
     } = this.guestReservationFormControl;
 
-    if (seated.value) {
+    if (currentJourney.value === ReservationStatus.SEATED) {
       this.startMinDate = new Date(checkIn.value); //min date validation
-      seated.disable();
+      currentJourney.disable();
       checkIn.disable();
       guest.disable();
       reservationType.disable();
@@ -267,6 +300,11 @@ export class AddGuestListComponent implements OnInit {
             : [];
 
           res.areas.forEach((item: AreaResponse) => {
+            if (!item.status) {
+              //skip the inactive area response
+              return;
+            }
+
             //creating area options
             if (!this.areaOptions.find((area) => area.value === item.id))
               this.areaOptions.push({
@@ -391,10 +429,6 @@ export class AddGuestListComponent implements OnInit {
       { panelClass: 'success' }
     );
   };
-
-  triggerStatusChange(event) {
-    this.guestReservationFormControl.seated.patchValue(event);
-  }
 
   /**
    * @function handleError to show the error

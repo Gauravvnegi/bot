@@ -140,7 +140,7 @@ export class OutletReservation {
     this.tableData = {
       label: table?.number,
       value: table?.id,
-      areaId: table?.area.id,
+      areaId: table?.area?.id,
     };
     this.area = table?.area?.name;
     this.bookingNumber = table?.number;

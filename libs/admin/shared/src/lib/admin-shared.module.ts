@@ -144,6 +144,7 @@ import { SearchComponent } from './components/form-component/search/search.compo
 import { CustomTabHeaderComponent } from './components/custom-tab-header/custom-tab-header.component';
 import { ChipsComponent } from './components/chips/chips.component';
 import { ItemViewComponent } from './view/item-view/item-view.component';
+import { DateGroupFilterComponent } from './components/date-group-filter/date-group-filter.component';
 
 @NgModule({
   imports: [
@@ -290,6 +291,7 @@ import { ItemViewComponent } from './view/item-view/item-view.component';
     CustomTabHeaderComponent,
     ChipsComponent,
     ItemViewComponent,
+    DateGroupFilterComponent,
   ],
 
   exports: [
@@ -424,6 +426,7 @@ import { ItemViewComponent } from './view/item-view/item-view.component';
     CustomTabHeaderComponent,
     ChipsComponent,
     ItemViewComponent,
+    DateGroupFilterComponent,
   ],
 })
 export class AdminSharedModule {}

@@ -1,0 +1,12 @@
+<div class="header__filter">
+  <ng-container *ngFor="let date of dates; let i = index">
+    <div
+      (click)="onSelectedDateRangeChange(dates[i], i)"
+      class="card"
+      [ngClass]="{ card__selected: selectedDateFilter === date.date }"
+    >
+      <span> {{ date.day }}</span>
+      <span>{{ date.date }}</span>
+    </div>
+  </ng-container>
+</div>

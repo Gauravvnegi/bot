@@ -369,7 +369,8 @@ export class PosReservationComponent implements OnInit {
       if (res) {
         const selectedArea = this.areaList.filter(
           (area) => area.value === res
-        )[0].areaId;
+        )[0]?.areaId;
+
         this.orderInfoControls.areaId.patchValue(selectedArea, {
           emitEvent: false,
         });
@@ -423,6 +424,11 @@ export class PosReservationComponent implements OnInit {
 
           (this.orderId || this.reservationId) &&
             this.areaList.unshift(this.selectedTable);
+          if (this.selectedTable) {
+            this.orderInfoControls.tableNumber.patchValue(
+              this.selectedTable.value
+            );
+          }
         })
     );
   }
@@ -530,6 +536,13 @@ export class PosReservationComponent implements OnInit {
   }
 
   createOrder() {
+    if (this.userForm.invalid) {
+      this.userForm.markAllAsTouched();
+      this.snackbarService.openSnackBarAsText(
+        'Invalid form: Please fix errors'
+      );
+      return;
+    }
     const data = this.formService.getOutletFormData(
       this.userForm.getRawValue() as MenuForm,
       this.defaultReservationData
@@ -554,6 +567,13 @@ export class PosReservationComponent implements OnInit {
   }
 
   updateOrder() {
+    if (this.userForm.invalid) {
+      this.userForm.markAllAsTouched();
+      this.snackbarService.openSnackBarAsText(
+        'Invalid form: Please fix errors'
+      );
+      return;
+    }
     const data = this.formService.getOutletUpdateData(
       this.userForm.getRawValue() as MenuForm,
       this.defaultReservationData

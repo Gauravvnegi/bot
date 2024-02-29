@@ -58,7 +58,7 @@ export class OrderSummaryComponent implements OnInit {
     this.initForm();
     this.getPaymentMethod();
     this.listenForItemsChange();
-    if (this.orderId || this.reservationId) this.listenForFormData();
+    if (this.orderId) this.listenForFormData();
   }
 
   initDetails() {
@@ -140,7 +140,7 @@ export class OrderSummaryComponent implements OnInit {
   listenForFormData() {
     this.loadingKotData = true;
     this.$subscription.add(
-      this.formService.orderFormData.subscribe((res) => {
+      this.formService.orderFormData.subscribe((res) => { 
         if (res) {
           const menuItems = res.kots[0].items.map((item) =>
             new MenuItem().deserialize(item.menuItem)
@@ -158,7 +158,6 @@ export class OrderSummaryComponent implements OnInit {
             menuItems.forEach((item) => this.createNewItemFields(item));
             kotIndex++; // Increment the index for the next KOT
           }
-
           this.loadingKotData = false;
         }
       })

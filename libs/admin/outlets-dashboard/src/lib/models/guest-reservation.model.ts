@@ -1,5 +1,4 @@
 import {
-  convertToNormalCase,
   formatEpochTime,
   getFullName,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
@@ -48,6 +47,7 @@ export class GuestReservation {
   numberOfItems: string;
   preparationTime: string;
   reservationStatus: string;
+  currentJourney: string;
   order?: Omit<PosOrderResponse, 'reservation'>;
   from: number;
   to: string;
@@ -65,7 +65,8 @@ export class GuestReservation {
     this.feedback = undefined;
     this.phone = value?.guest?.contactDetails?.contactNumber;
     this.isSeated = value?.currentJourney === 'SEATED';
-    this.reservationStatus = value?.currentJourney;
+    this.reservationStatus = value?.status;
+    this.currentJourney = value?.currentJourney;
     this.order = value.order;
     this.from = value.from;
     return this;

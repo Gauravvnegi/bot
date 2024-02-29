@@ -92,8 +92,9 @@ export type OutletPricingDetails = {
   paxTripleOccupancy: number;
   totalAmount: number;
   totalPaidAmount: number;
-  totalDueAmount: number;
+  dueAmount: number;
   taxAndFees: number;
+  payableAmount: number
   taxAndFeesPerDay: number;
   basePrice: number;
   discountedAmount: number;

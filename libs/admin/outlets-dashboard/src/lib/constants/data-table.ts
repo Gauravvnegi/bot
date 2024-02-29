@@ -4,6 +4,7 @@ import {
   PaymentData,
   PaymentStatus,
   TableStatus,
+  OrderReservationStatus,
 } from '../types/reservation-table';
 
 export const posCols: Cols[] = [
@@ -180,6 +181,24 @@ export const ReservationStatusDetails: Record<
   DRAFT: {
     label: 'Draft',
     type: 'warning',
+  },
+};
+
+export const OrderReservationStatusDetails: Record<
+  OrderReservationStatus,
+  { label: string; type: FlagType }
+> = {
+  COMPLETED: {
+    label: 'Completed',
+    type: 'active',
+  },
+  CONFIRMED: {
+    label: 'Confirmed',
+    type: 'completed',
+  },
+  CANCELED: {
+    label: 'Canceled',
+    type: 'failed',
   },
 };
 

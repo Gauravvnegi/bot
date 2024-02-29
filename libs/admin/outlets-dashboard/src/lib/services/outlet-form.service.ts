@@ -63,6 +63,8 @@ export class OutletFormService {
       guest,
     } = reservationInformation;
 
+    const selectedOffer =
+      kotInformation.kotItems[kotInformation.kotItems.length - 1].kotOffer;
     const orderData: CreateOrderData = {
       status: 'CONFIRMED',
       type: orderType,
@@ -76,10 +78,7 @@ export class OutletFormService {
           remarks: item.itemInstruction,
         })),
       })),
-      offer: {
-        id:
-          kotInformation.kotItems[kotInformation.kotItems.length - 1].kotOffer,
-      },
+      offer: selectedOffer?.length ? { id: selectedOffer } : undefined,
       outletType: EntitySubType.RESTAURANT,
       guestId: guest,
       deliveryAddress:

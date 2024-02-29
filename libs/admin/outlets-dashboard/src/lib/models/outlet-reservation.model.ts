@@ -1,4 +1,4 @@
-import { EntityState } from '@hospitality-bot/admin/shared';
+import { EntityState, Option } from '@hospitality-bot/admin/shared';
 import {
   GuestReservationListResponse,
   TableListResponse,
@@ -10,19 +10,23 @@ import {
   TableStatus,
   ReservationTableListResponse,
   PosOrderResponse,
+  OrderReservationStatus,
 } from '../types/reservation-table';
 import { GuestReservation } from './guest-reservation.model';
+import { formatEpochTime } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 export class OutletReservationTableList {
   reservationData: OutletReservationTable[];
   entityTypeCounts: EntityState<string>;
+  entityStateCounts: EntityState<string>;
   total: number;
   deserialize(input: ReservationTableListResponse) {
     this.reservationData =
       input.records.map((item) =>
         new OutletReservationTable().deserialize(item)
       ) ?? [];
-    this.entityTypeCounts = input.entityTypeCounts;
+    this.entityTypeCounts = input?.entityTypeCounts;
+    this.entityStateCounts = input?.entityStateCounts ?? {};
     this.total = input.total;
     return this;
   }
@@ -34,24 +38,23 @@ export class OutletReservationTable {
   area: string;
   bookingNumber: string;
   date: number;
-  time: string;
   paymentMethod: string;
   totalAmount: number;
   totalDueAmount: number;
   nextStates: string[];
   guestName: string;
-  reservationStatus: ReservationStatus;
+  reservationStatus: OrderReservationStatus;
   orderId: string;
+  toTime: string;
+  fromTime: string;
 
   deserialize(input: PosOrderResponse) {
     this.orderId = input?.id;
     this.area = 'A1';
     this.bookingNumber = input?.reservation?.reservationNumber ?? input?.number;
     this.date = input?.reservation?.from;
-    // this.time = input?.reservation.;
-    // this.paymentMethod = ;
     this.totalAmount = input?.pricingDetails?.totalAmount;
-    this.totalDueAmount = input.pricingDetails?.totalDueAmount;
+    this.totalDueAmount = input.pricingDetails?.dueAmount;
     this.nextStates = ['DRAFT'];
     const { firstName, lastName } = input?.guest || {};
     this.guestName = firstName
@@ -59,9 +62,12 @@ export class OutletReservationTable {
         ? `${firstName} ${lastName}`
         : firstName
       : lastName || '';
-    this.reservationStatus = input?.reservation?.status;
     this.tableNumber = input?.reservation?.tableNumberOrRoomNumber;
     this.paymentMethod = 'CASH';
+    this.reservationStatus = input?.status;
+    this.nextStates = input.nextStates;
+    this.toTime = formatEpochTime(input?.reservation?.to);
+    this.fromTime = formatEpochTime(input?.reservation?.from);
     return this;
   }
 }
@@ -121,6 +127,8 @@ export class OutletReservation {
   orderMethod: string;
   tableStatus: TableStatus;
   orderId?: string;
+  tableData: Option;
+  currentJourney: string;
 
   deserialize(
     table: TableResponse,
@@ -129,6 +137,11 @@ export class OutletReservation {
     const reservationData = reservation[table.id];
 
     this.tableNumber = `${table?.number} - ${table?.area?.name ?? ''}`;
+    this.tableData = {
+      label: table?.number,
+      value: table?.id,
+      areaId: table?.area.id,
+    };
     this.area = table?.area?.name;
     this.bookingNumber = table?.number;
     this.date = table?.created;
@@ -158,6 +171,7 @@ export class OutletReservation {
       return total + itemsWithMenuItem.length;
     }, 0);
     this.orderId = reservationData?.order?.id;
+    this.currentJourney = reservationData?.currentJourney;
 
     return this;
   }

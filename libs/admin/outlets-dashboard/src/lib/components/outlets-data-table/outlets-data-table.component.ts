@@ -6,13 +6,11 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import {
-  GlobalFilterService,
-  RoutesConfigService,
-} from '@hospitality-bot/admin/core/theme';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  Option,
   QueryConfig,
   manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
@@ -23,8 +21,8 @@ import * as FileSaver from 'file-saver';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Clipboard } from '@angular/cdk/clipboard';
 import {
+  OrderReservationStatusDetails,
   OrderTableType,
-  ReservationStatusDetails,
   posCols,
   reservationTypes,
 } from '../../constants/data-table';
@@ -63,7 +61,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
 
   selectedTab: OrderTableType;
 
-  readonly reservationStatusDetails = ReservationStatusDetails;
+  readonly reservationStatusDetails = OrderReservationStatusDetails;
 
   constructor(
     public fb: FormBuilder,
@@ -73,8 +71,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     protected adminUtilityService: AdminUtilityService,
     protected snackbarService: SnackBarService,
     private resolver: ComponentFactoryResolver,
-    private formService: OutletFormService,
-    private routesConfigService: RoutesConfigService
+    private formService: OutletFormService
   ) {
     super(fb);
   }
@@ -208,11 +205,12 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
         .subscribe((res) => {
           const data = new OutletReservationTableList().deserialize(res);
           this.values = data.reservationData;
+
           this.initFilters(
             data?.entityTypeCounts,
-            {},
+            data?.entityStateCounts,
             data.total,
-            ReservationStatusDetails
+            this.reservationStatusDetails
           );
           this.loading = false;
         })
@@ -249,17 +247,23 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
 
   handleStatus(status: ReservationStatus, reservationData: OutletReservation) {}
 
-  handleMenuClick(value: string, rowData: OutletReservation) {}
-
   editOrder(orderId: string) {
     this.addNewOrder(orderId);
   }
 
-  onCardClick(id: { orderId: string; reservationId: string }) {
-    this.addNewOrder(id.orderId, id.reservationId);
+  onCardClick(data: {
+    orderId?: string;
+    reservationId?: string;
+    selectedTable?: Option;
+  }) {
+    this.addNewOrder(data.orderId, data.reservationId, data.selectedTable);
   }
 
-  addNewOrder(orderId?: string, reservationId?: string) {
+  addNewOrder(
+    orderId?: string,
+    reservationId?: string,
+    selectedTable?: Option
+  ) {
     this.sidebarVisible = true;
     const factory = this.resolver.resolveComponentFactory(
       PosReservationComponent
@@ -268,6 +272,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
       isSidebar: true,
       orderId: orderId,
       reservationId: reservationId,
+      selectedTable: selectedTable,
     };
     this.sidebarSlide.clear();
     const componentRef = this.sidebarSlide.createComponent(factory);
@@ -275,7 +280,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     this.$subscription.add(
       componentRef.instance.onCloseSidebar.subscribe((res: boolean) => {
         this.sidebarVisible = false;
-        if (res) this.routesConfigService.reload();
+        if (res) this.initDetails();
       })
     );
     manageMaskZIndex();

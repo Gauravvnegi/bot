@@ -5,6 +5,7 @@ import {
   ReservationStatusColorConfig,
   TableStatusConfig,
 } from '../../constants/data-table';
+import { Option } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-reservation-card',
@@ -19,16 +20,18 @@ export class ReservationCardComponent implements OnInit {
   constructor() {}
 
   @Output() onCardClick = new EventEmitter<{
-    orderId: string;
-    reservationId: string;
+    orderId?: string;
+    reservationId?: string;
+    selectedTable?: Option;
   }>();
 
   ngOnInit(): void {}
 
   cardClick() {
     this.onCardClick.emit({
-      orderId: this.data.orderId,
+      orderId: this.data?.orderId,
       reservationId: this.data?.id,
+      selectedTable: this.data.tableData,
     });
   }
 }

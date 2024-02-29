@@ -27,12 +27,13 @@
                             <hospitality-bot-button
                               label="Clear"
                               variant="text"
+                              severity="reset"
                               (onClick)="clear()"
                               minWidth="50px"
                               height="20px"
                               [disabled]="kotControls.value.id"
                             ></hospitality-bot-button>
-                            <span class="amount"
+                            <span class="item-units"
                               >Qty:
                               {{
                                 getTotalItemUnits(

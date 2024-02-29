@@ -56,14 +56,14 @@
         <span>{{ data?.preparationTime }}</span>
       </div>
       <div class="journey">
-        <span
+        <!-- <span
           *ngIf="data?.reservationStatus"
           class="status"
           [ngStyle]="{
             border: '1px solid ' + statusColorConfig[data.reservationStatus]
           }"
           >{{ data?.reservationStatus | titlecase }}</span
-        >
+        > -->
         <span class="order-method">{{ data?.currentJourney }}</span>
       </div>
     </div>

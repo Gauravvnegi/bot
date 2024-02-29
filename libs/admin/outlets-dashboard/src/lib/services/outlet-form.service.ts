@@ -207,7 +207,7 @@ export class OutletFormService {
 
     formData.offer = data?.items?.filter(
       (item) => item.type === 'ITEM_OFFER'
-    )[0]?.id;
+    )[0]?.itemId;
 
     formData.kotInformation = {
       kotItems: data?.kots?.map((kot) => ({
@@ -260,7 +260,7 @@ export class OutletFormService {
 
     formData.offer = data?.order.items?.filter(
       (item) => item.type === 'ITEM_OFFER'
-    )[0]?.id;
+    )[0]?.itemId;
 
     formData.kotInformation = {
       kotItems: data?.order?.kots?.map((kot) => ({

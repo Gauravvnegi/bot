@@ -7,13 +7,14 @@ import { MenuItemResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
 export type ReservationTableListResponse = {
   total: number;
   entityTypeCounts: EntityState<string>;
+  entityStateCounts: EntityState<string>;
   records: PosOrderResponse[];
 };
 
 export type PosOrderResponse = {
   id: string;
   number: string;
-  status: ReservationStatus;
+  status: OrderReservationStatus;
   type: OrderTypes;
   reservationId: string;
   items: KotMenuItem[];
@@ -36,6 +37,7 @@ export type PosOrderResponse = {
   guest?: OutletGuest;
   reservation?: Omit<PosReservationResponse, 'order'>;
   source: 'Offline';
+  nextStates: string[];
 };
 
 export type PosReservationResponse = {
@@ -98,6 +100,8 @@ export type ReservationStatus =
   | TableStatus;
 
 export type PaymentStatus = 'PAID' | 'UNPAID';
+
+export type OrderReservationStatus = 'COMPLETED' | 'CONFIRMED' | 'CANCELED';
 
 export type PaymentData = {
   icon: string;

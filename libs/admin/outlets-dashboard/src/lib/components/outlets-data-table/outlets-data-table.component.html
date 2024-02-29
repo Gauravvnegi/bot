@@ -138,7 +138,7 @@
             <td>
               <div
                 class="center-align"
-                *ngIf="rowData?.bookingNumber; emptyCell"
+                *ngIf="rowData?.bookingNumber; else emptyCell"
               >
                 <div class="primary-text">
                   {{ rowData?.bookingNumber || '--' }}
@@ -165,12 +165,13 @@
             </td>
 
             <td>
-              <div class="center-align">
+              <div class="center-align" *ngIf="rowData?.date; else emptyCell">
                 <div class="primary-text txtSize">
                   {{ rowData?.date | date: 'dd/MM/yy' }}
                 </div>
                 <div class="secondary-text">
-                  {{ rowData?.time || '--' }}
+                  {{ rowData?.fromTime || '--' }} -
+                  {{ rowData?.toTime || '--' }}
                 </div>
               </div>
             </td>
@@ -204,17 +205,6 @@
                   (onClick)="handleStatus($event, rowData)"
                   [state]="rowData?.reservationStatus"
                   [recordSetting]="reservationStatusDetails"
-                  [menuOptions]="[
-                    {
-                      label: 'Edit Reservation',
-                      value: 'EDIT_RESERVATION'
-                    },
-                    {
-                      label: 'Clone Reservation',
-                      value: 'CLONE_RESERVATION'
-                    }
-                  ]"
-                  (onMenuItemClick)="handleMenuClick($event, rowData)"
                 >
                 </hospitality-bot-status-dropdown-toggle>
               </div>

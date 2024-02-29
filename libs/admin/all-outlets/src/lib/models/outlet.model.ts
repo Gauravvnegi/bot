@@ -91,7 +91,7 @@ export class MenuItem {
   offers: OfferResponse[];
 
   deserialize(input: MenuItemResponse) {
-    this.code = input?.code;
+    this.code = input?.itemCode;
     this.name = input?.name;
     this.description = input?.description;
     // this.type = input?.type;

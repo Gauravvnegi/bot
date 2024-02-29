@@ -369,7 +369,8 @@ export class PosReservationComponent implements OnInit {
       if (res) {
         const selectedArea = this.areaList.filter(
           (area) => area.value === res
-        )[0].areaId;
+        )[0]?.areaId;
+
         this.orderInfoControls.areaId.patchValue(selectedArea, {
           emitEvent: false,
         });
@@ -421,13 +422,13 @@ export class PosReservationComponent implements OnInit {
             return acc.concat(tableOptions);
           }, []);
 
+          (this.orderId || this.reservationId) &&
+            this.areaList.unshift(this.selectedTable);
           if (this.selectedTable) {
             this.orderInfoControls.tableNumber.patchValue(
               this.selectedTable.value
             );
           }
-          (this.orderId || this.reservationId) &&
-            this.areaList.unshift(this.selectedTable);
         })
     );
   }

@@ -29,7 +29,7 @@ export class ReservationCardComponent implements OnInit {
 
   cardClick() {
     this.onCardClick.emit({
-      orderId: this.data.orderId,
+      orderId: this.data?.orderId,
       reservationId: this.data?.id,
       selectedTable: this.data.tableData,
     });

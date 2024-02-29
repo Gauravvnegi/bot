@@ -14,6 +14,7 @@ import { PaymentMethodList } from 'libs/admin/manage-reservation/src/lib/models/
 import { Option } from '@hospitality-bot/admin/shared';
 import { MenuItem } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 import { KotItemsForm, MenuForm } from '../../types/form';
+import { OrderOffer } from '../../types/reservation-table';
 
 @Component({
   selector: 'hospitality-bot-order-summary',
@@ -36,15 +37,15 @@ export class OrderSummaryComponent implements OnInit {
   entityId: string;
 
   paymentOptions: Option[] = [];
-  itemOffers: Option[] = [];
 
   totalAmount: number = 0;
   currentKotIndex = 0;
 
-  viewOffer = false;
   loadingKotData = false;
 
-  selectedOffer: Option;
+  viewOffer = false;
+  selectedOffer: OrderOffer;
+  offerList: OrderOffer[];
 
   constructor(
     private fb: FormBuilder,
@@ -71,18 +72,14 @@ export class OrderSummaryComponent implements OnInit {
     const data = {
       items: new FormArray([]),
       kotInstruction: [''],
-      kotOffer: [''],
       viewKotInstruction: [false],
-      viewKotOffer: [false],
       id: [null],
-      itemOffers: [[]],
-      selectedOffer: [null],
     };
 
     const formGroup = this.fb.group(data);
     this.kotFormArray.push(formGroup);
 
-    if (this.orderId) formGroup.get('kotOffer').disable();
+    if (this.orderId) this.parentFormGroup.get('offer').disable();
 
     const kotItemFormGroup = this.fb.group({
       kotItems: this.kotFormArray,
@@ -94,7 +91,7 @@ export class OrderSummaryComponent implements OnInit {
       'items'
     ) as FormArray;
 
-    if (!this.orderId) this.listenForOfferChange();
+    this.listenForOfferChange();
   }
 
   // Method to add a new KOT dynamically
@@ -102,19 +99,13 @@ export class OrderSummaryComponent implements OnInit {
     const data = {
       items: new FormArray([]),
       kotInstruction: [''],
-      kotOffer: [''],
       viewKotInstruction: [false],
-      viewKotOffer: [false],
       id: [null],
-      itemOffers: [[]],
-      selectedOffer: [null],
     };
     this.kotFormArray.push(this.fb.group(data));
     this.itemFormArray = this.kotFormArray.controls[kotIndex].get(
       'items'
     ) as FormArray;
-
-    if (!this.orderId) this.listenForOfferChange();
   }
 
   createNewItemFields(newItem: MenuItem, kotIndex: number = 0) {
@@ -140,7 +131,7 @@ export class OrderSummaryComponent implements OnInit {
   listenForFormData() {
     this.loadingKotData = true;
     this.$subscription.add(
-      this.formService.orderFormData.subscribe((res) => { 
+      this.formService.orderFormData.subscribe((res) => {
         if (res) {
           const menuItems = res.kots[0].items.map((item) =>
             new MenuItem().deserialize(item.menuItem)
@@ -157,6 +148,18 @@ export class OrderSummaryComponent implements OnInit {
 
             menuItems.forEach((item) => this.createNewItemFields(item));
             kotIndex++; // Increment the index for the next KOT
+          }
+
+          const offer = res?.items.filter(
+            (item) => item.type === 'ITEM_OFFER'
+          )[0];
+
+          if (offer) {
+            this.viewOffer = true;
+            this.selectedOffer = {
+              label: offer.description,
+              value: offer.id,
+            };
           }
           this.loadingKotData = false;
         }
@@ -208,27 +211,14 @@ export class OrderSummaryComponent implements OnInit {
 
   listenForOfferChange() {
     this.$subscription.add(
-      this.kotFormArray
-        .at(this.currentKotIndex)
-        .get('kotOffer')
-        .valueChanges.subscribe((res) => {
-          if (res) {
-            const selectedOffer = this.kotFormArray
-              .at(this.currentKotIndex)
-              .value.itemOffers.find((offer) => offer.value === res);
-            this.kotFormArray
-              .at(this.currentKotIndex)
-              .patchValue({ selectedOffer: selectedOffer });
-          }
-        })
+      this.parentFormGroup.get('offer').valueChanges.subscribe((res) => {
+        if (res) {
+          this.selectedOffer = this.offerList.find(
+            (offer) => offer.value === res
+          );
+        }
+      })
     );
-  }
-
-  removeOffer() {
-    this.kotFormArray.at(this.currentKotIndex).patchValue({
-      kotOffer: [],
-      viewKotOffer: false,
-    });
   }
 
   listenForItemsChange() {
@@ -285,8 +275,8 @@ export class OrderSummaryComponent implements OnInit {
   }
 
   mapItemOffers() {
-    const itemOffers = this.selectedItems?.reduce((acc, item) => {
-      const offers = item.offers.map((offer) => ({
+    this.offerList = this.selectedItems?.reduce((acc, item) => {
+      const offers = item?.offers.map((offer) => ({
         label: offer.name,
         value: offer.id,
         offerDescription: offer.description,
@@ -307,18 +297,13 @@ export class OrderSummaryComponent implements OnInit {
 
       return acc;
     }, []);
-    this.kotFormArray
-      .at(this.currentKotIndex)
-      .patchValue({ itemOffers: itemOffers });
   }
 
   removeItemFields(index: number) {
     this.itemFormArray.removeAt(index);
     !this.itemFormArray.value.length &&
       this.kotFormArray.at(this.currentKotIndex).patchValue({
-        viewKotOffer: false,
         viewKotInstruction: false,
-        kotOffer: [],
       });
   }
 
@@ -338,11 +323,6 @@ export class OrderSummaryComponent implements OnInit {
     return totalUnits;
   }
 
-  applyOffer(formGroup?: FormGroup) {
-    formGroup &&
-      formGroup.get('viewKotOffer').patchValue(true, { emitEvent: false });
-  }
-
   trackItemControls(index: number, item: FormGroup) {
     return item.get('itemId').value;
   }
@@ -352,7 +332,7 @@ export class OrderSummaryComponent implements OnInit {
    * kot controls for instruction and offer inputs
    */
   toggleControlVisibility(
-    type: 'Instruction' | 'Offer' | 'ItemInstruction',
+    type: 'Instruction' | 'ItemInstruction',
     formGroup: FormGroup
   ) {
     const controlName =
@@ -370,6 +350,13 @@ export class OrderSummaryComponent implements OnInit {
     return (this.parentFormGroup.get('reservationInformation') as FormGroup)
       .controls as Record<
       keyof MenuForm['reservationInformation'],
+      AbstractControl
+    >;
+  }
+
+  get inputControls() {
+    return this.parentFormGroup.controls as Record<
+      keyof MenuForm,
       AbstractControl
     >;
   }

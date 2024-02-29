@@ -38,6 +38,7 @@ export type PosOrderResponse = {
   reservation?: Omit<PosReservationResponse, 'order'>;
   source: 'Offline';
   nextStates: string[];
+  selectedOffer: OrderOffer;
 };
 
 export type PosReservationResponse = {
@@ -117,3 +118,12 @@ export type TableStatus =
   | 'RUNNING_TABLE'
   | 'PRINTED_TABLE'
   | 'BLANK_TABLE';
+
+export type OrderOffer = {
+  label: string;
+  value: string;
+  offerDescription?: string;
+  validDate?: number;
+  discountType?: string;
+  discountValue?: string;
+};

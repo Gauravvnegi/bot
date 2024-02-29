@@ -52,7 +52,12 @@ export class OutletFormService {
   }
 
   getOutletFormData(data: MenuForm, reservationData?: PosReservationResponse) {
-    const { reservationInformation, paymentInformation, kotInformation } = data;
+    const {
+      reservationInformation,
+      paymentInformation,
+      kotInformation,
+      offer,
+    } = data;
     const {
       id,
       orderType,
@@ -63,8 +68,6 @@ export class OutletFormService {
       guest,
     } = reservationInformation;
 
-    const selectedOffer =
-      kotInformation.kotItems[kotInformation.kotItems.length - 1].kotOffer;
     const orderData: CreateOrderData = {
       status: 'CONFIRMED',
       type: orderType,
@@ -78,7 +81,7 @@ export class OutletFormService {
           remarks: item.itemInstruction,
         })),
       })),
-      offer: selectedOffer?.length ? { id: selectedOffer } : undefined,
+      offer: offer ? { id: offer } : undefined,
       outletType: EntitySubType.RESTAURANT,
       guestId: guest,
       deliveryAddress:
@@ -107,10 +110,13 @@ export class OutletFormService {
   }
 
   getOutletUpdateData(data: MenuForm, reservationData: PosReservationResponse) {
-    const { reservationInformation, paymentInformation, kotInformation } = data;
+    const {
+      reservationInformation,
+      paymentInformation,
+      kotInformation,
+      offer,
+    } = data;
 
-    const selectedOffer =
-      kotInformation.kotItems[kotInformation.kotItems.length - 1].kotOffer;
     const orderData: CreateOrderData = {
       status: 'CONFIRMED',
       type: reservationInformation.orderType,
@@ -126,7 +132,7 @@ export class OutletFormService {
         })),
         id: kotItem.id !== null ? kotItem.id : undefined,
       })),
-      offer: selectedOffer?.length ? { id: selectedOffer } : undefined,
+      offer: offer ? { id: offer } : undefined,
       outletType: EntitySubType.RESTAURANT,
       guestId: reservationInformation.guest,
       deliveryAddress:
@@ -199,8 +205,10 @@ export class OutletFormService {
       },
     };
 
-    // Map kot information
-    const offer = data?.items?.filter((item) => item.type === 'ITEM_OFFER')[0];
+    formData.offer = data?.items?.filter(
+      (item) => item.type === 'ITEM_OFFER'
+    )[0].id;
+
     formData.kotInformation = {
       kotItems: data?.kots?.map((kot) => ({
         items: data?.items
@@ -217,17 +225,8 @@ export class OutletFormService {
             viewItemInstruction: false,
           })),
         kotInstruction: kot?.instructions,
-        kotOffer: offer?.id,
-        viewKotOffer: !!offer,
         viewKotInstruction: false,
         id: kot?.id,
-        selectedOffer: offer
-          ? {
-              label: offer.description,
-              value: offer.id,
-              offerDescription: offer.description,
-            }
-          : undefined,
       })),
     };
 
@@ -259,10 +258,10 @@ export class OutletFormService {
       },
     };
 
-    // Map kot information
-    const offer = data?.order?.items?.filter(
+    formData.offer = data?.order.items?.filter(
       (item) => item.type === 'ITEM_OFFER'
-    )[0];
+    )[0].id;
+
     formData.kotInformation = {
       kotItems: data?.order?.kots?.map((kot) => ({
         items: data?.order?.items
@@ -279,17 +278,8 @@ export class OutletFormService {
             viewItemInstruction: false,
           })),
         kotInstruction: kot?.instructions,
-        kotOffer: offer?.id,
-        viewKotOffer: !!offer,
         viewKotInstruction: false,
         id: kot?.id,
-        selectedOffer: offer
-          ? {
-              label: offer.description,
-              value: offer.id,
-              offerDescription: offer.description,
-            }
-          : undefined,
       })),
     };
 

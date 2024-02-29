@@ -3,7 +3,7 @@
     <hospitality-bot-button
       label="Print QR Code"
       (onClick)="onPrintQrCode()"
-      [disabled]="!outletId || loading"
+      [disabled]="!outletId || loading || !this.redirectUrl"
     ></hospitality-bot-button>
   </hospitality-bot-navigation-header>
 
@@ -80,6 +80,17 @@
         [options]="cuisines"
         *ngIf="useForm.get('type').value === 'RESTAURANT'"
       ></hospitality-bot-multi-select>
+
+      <hospitality-bot-input
+        [loading]="loading"
+        class="half-width"
+        controlName="containerCharge"
+        label="Container Charge"
+        [props]="{
+          placeholder: 'Enter'
+        }"
+        *ngIf="useForm.get('type').value === 'RESTAURANT'"
+      ></hospitality-bot-input>
 
       <div class="file-upload-wrapper">
         <hospitality-bot-custom-file-upload

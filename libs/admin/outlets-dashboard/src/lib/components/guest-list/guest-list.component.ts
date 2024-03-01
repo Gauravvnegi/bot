@@ -45,6 +45,7 @@ export class GuestListComponent implements OnInit {
   seatedGuestList: GuestReservation[] = [];
   waitListGuestList: GuestReservation[] = [];
   selectedDateFilterIndex: number = 0;
+  tabFilterSelectedIndex: number = 0;
 
   dateFilterOption: DateFilterOption;
 
@@ -96,6 +97,7 @@ export class GuestListComponent implements OnInit {
    * on DateFilterChanges
    */
   onDateFilterChange(config: { data: DateFilterOption; index: number }) {
+    debugger;
     this.dateFilterOption = config.data;
     this.selectedDateFilterIndex = config.index;
     this.initGuestReservation();
@@ -191,6 +193,7 @@ export class GuestListComponent implements OnInit {
    * @returns
    */
   tabChange(event: { index: number }) {
+    this.tabFilterSelectedIndex = event.index;
     const activeTab = TabsType[Object.keys(TabsType)[event.index]] as TabsType;
     this.useForm.patchValue(
       { search: '', tab: activeTab },
@@ -324,10 +327,11 @@ export class GuestListComponent implements OnInit {
       chip: ChipType.seated,
       tab: TabsType.all,
     });
+    this.tabFilterSelectedIndex = 0; //reset tab filter selection
     this.activeIndex = 0; //need to refactor bot chips component
     this.selectedDateFilterIndex === 0
       ? this.initGuestReservation()
-      : (this.selectedDateFilterIndex = 0);
+      : (this.selectedDateFilterIndex = 0); //reset date filter
   }
 
   onTableChange(event, guest: GuestReservation) {

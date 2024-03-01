@@ -30,6 +30,7 @@
     <ng-container *ngIf="!isFilterHidden">
       <div class="tab-group">
         <hospitality-bot-tab-group
+          [selectedIndex]="tabFilterSelectedIndex"
           [listItems]="seatedTabGroup"
           (selectedTabChange)="tabChange($event)"
         ></hospitality-bot-tab-group>

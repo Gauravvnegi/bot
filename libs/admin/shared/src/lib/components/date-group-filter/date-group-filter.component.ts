@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'hospitality-bot-date-group-filter',
@@ -18,82 +11,63 @@ export class DateGroupFilterComponent implements OnInit {
     index: number;
   }>();
 
-  constructor() {
-    this.initDateFilterOptions();
-  }
-
   dates: DateFilterOption[] = [];
   selectedDateFilter: number;
-  selectedDateRange;
-  _activeIndex: number = 0;
+  _activeIndex: number;
 
-  @Input() set activeIndex(value) {
-    this._activeIndex = value;
-    this.selectedDateFilter = this.dates[value].date;
-    this.onDateFilterChange.emit({ data: this.dates[value], index: value });
+  @Input() set activeIndex(value: number) {
+    if (this._activeIndex !== value) {
+      this._activeIndex = value;
+      this.updateSelectedDateFilter(value);
+    }
   }
 
   ngOnInit(): void {
-    if (this._activeIndex === undefined) {
-      this.initDateFilterOptions();
-      this.onDateFilterChange.emit({ data: this.dates[0], index: 0 });
-    }
+    this.initDateFilterOptions();
   }
 
-  onSelectedDateRangeChange(date, index: number): void {
-    this.activeIndex = index;
+  onSelectedDateRangeChange(date: DateFilterOption, index: number): void {
+    this._activeIndex = index;
+    this.updateSelectedDateFilter(index);
   }
 
-  initDateFilterOptions() {
-    this.initDate(new Date().getTime(), 5);
-    this.selectedDateFilter = this.dates[0].date;
+  private updateSelectedDateFilter(index: number): void {
+    this.selectedDateFilter = this.dates[index]?.date;
+    this.onDateFilterChange.emit({ data: this.dates[index], index });
   }
 
-  /**
-   * @function initDate
-   * @description initialize date
-   * @param startDate
-   * @param limit
-   */
-  initDate(startDate: number, limit: number) {
-    const dates = [];
-    const currentDate = new Date(startDate);
+  private initDateFilterOptions(): void {
+    const startDate = new Date().getTime();
+    const limit = 5;
+    const dates: DateFilterOption[] = [];
 
     for (let i = 0; i < limit; i++) {
-      const nextDate = new Date(currentDate);
-      nextDate.setDate(currentDate.getDate() + i);
-      const day = nextDate.getDay();
+      const currentDate = new Date(startDate + i * 24 * 60 * 60 * 1000); // Increment by a day
+      const dayOfWeek = currentDate.toLocaleDateString('en-US', {
+        weekday: 'short',
+      });
+      const startTime = new Date(currentDate);
+      startTime.setHours(0, 0, 0, 0);
+      const endTime = new Date(currentDate);
+      endTime.setHours(23, 59, 59, 999);
 
-      const startTime = new Date(nextDate);
-      startTime.setHours(0, 0, 0, 0); // Set to midnight (12:00 AM)
-      const endTime = new Date(nextDate);
-      endTime.setHours(23, 59, 59, 999); // Set to 11:59:59 PM
-
-      const data = {
-        day: daysOfWeek[day].substring(0, 3),
-        date: nextDate.getDate(),
+      dates.push({
+        day: dayOfWeek,
+        date: currentDate.getDate(),
         from: startTime.getTime(),
         to: endTime.getTime(),
-      };
-      dates.push(data);
+      });
     }
+
     this.dates = dates;
+    this.selectedDateFilter = this.dates[0]?.date;
+    this.onDateFilterChange.emit({ data: this.dates[0], index: 0 });
   }
 }
 
-const daysOfWeek = [
-  'Sunday',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-];
-
 export type DateFilterOption = {
-  day?: string;
-  date?: number;
-  from?: number;
-  to?: number;
+  day: string;
+  date: number;
+  from: number;
+  to: number;
 };

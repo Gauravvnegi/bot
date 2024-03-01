@@ -1,6 +1,7 @@
 import { ReservationItemsPayment } from './financial-reports.types';
 
 export type GuestTypeReportData = {
+  reservationId: string;
   guestType: string;
   reservationNumber: string;
   room: string;
@@ -9,14 +10,14 @@ export type GuestTypeReportData = {
   checkOut: string;
   nights: number;
   roomCharge: string;
-  roomTax: number;
+  roomTax: string;
   otherCharges: string;
   otherTax: string;
   amount: string;
   amountPaid: string;
 };
 
-export type GuestTypeReportResponse = {};
+export type GuestTypeReportResponse = GuestLedgerResponse & {};
 
 export type GuestHistoryData = {
   guestName: string;
@@ -195,6 +196,7 @@ export type GuestLedgerResponse = {
   currentJourney: string;
   currentJourneyStatus: string;
   currentJourneyState: string;
+  reservationItemsPayment: ReservationItemsPayment;
   source: string;
   totalDueAmount: number;
   totalPaidAmount: number;

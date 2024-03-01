@@ -120,6 +120,7 @@ import {
   guestEscalationComplaintReportCols,
   guestHistoryCols,
   guestLedgerCols,
+  guestTypeReportCols,
 } from './guest-reports.const';
 import { managerFlashReportCols } from './manager-reports.const';
 import {
@@ -252,7 +253,7 @@ export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
   taxReport: getColsArray(taxReportCols),
   guestHistory: getColsArray(guestHistoryCols),
   salesByGuest: getColsArray(SalesByGuestCols),
-  guestTypeReport: getColsArray({}), //to be decided
+  guestTypeReport: getColsArray(guestTypeReportCols),
   guestLedger: getColsArray(guestLedgerCols),
   discountAllowance: getColsArray(discountAllowanceReportCols),
   companyContributionsReport: getColsArray(companyContributionsReportCols),

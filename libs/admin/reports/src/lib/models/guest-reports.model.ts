@@ -241,7 +241,31 @@ export class GuestTypeReport
   implements ReportClass<GuestTypeReportData, GuestTypeReportResponse> {
   records: GuestTypeReportData[];
 
-  deserialize(value: {} | GuestTypeReportResponse[]): this {
+  deserialize(value: GuestTypeReportResponse[]): this {
+    this.records = value.map((item) => {
+      return {
+        reservationId: item?.id,
+        guestType: 'Primary',
+        reservationNumber: item?.number,
+        room: `${item?.stayDetails?.room?.roomNumber}-${item?.stayDetails?.room?.type}`,
+        guestName: getFullName(
+          item?.guestDetails?.primaryGuest?.firstName,
+          item?.guestDetails?.primaryGuest?.lastName
+        ),
+        checkIn: getFormattedDate(item?.arrivalTime),
+        checkOut: getFormattedDate(item?.departureTime),
+        nights: item?.nightCount,
+        roomCharge: toCurrency(item?.reservationItemsPayment?.totalRoomCharge),
+        roomTax: toCurrency(item?.reservationItemsPayment?.taxAmount),
+        otherCharges: toCurrency(
+          item?.reservationItemsPayment?.totalAddOnsAmount
+        ),
+        otherTax: toCurrency(item?.reservationItemsPayment?.totalAddOnsTax),
+        amount: toCurrency(item?.paymentSummary?.totalAmount),
+        amountPaid: toCurrency(item?.paymentSummary?.paidAmount),
+      };
+    });
+
     return this;
   }
 }

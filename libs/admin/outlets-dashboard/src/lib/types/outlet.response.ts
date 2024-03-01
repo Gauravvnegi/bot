@@ -1,44 +1,6 @@
-import { EntityState } from '@hospitality-bot/admin/shared';
 import {
-  ReservationStatus,
-  PaymentStatus,
-  TableStatus,
-  KotMenuItem,
   PosOrderResponse,
 } from './reservation-table';
-import { OrderTypes } from './menu-order';
-
-export type OutletReservationListResponse = {
-  reservationData: OutletReservationResponse[];
-  entityStateCounts: EntityState<string>;
-  entityTypeCounts: EntityState<string>;
-  total: number;
-};
-
-export type OutletReservationResponse = {
-  name: string;
-  reservationTime: string;
-  adultCount: number;
-  orderNumber: number;
-  price: number;
-  preparationTime: string;
-  paymentStatus: PaymentStatus;
-  numberOfItems: number;
-  orderMethod: OrderTypes;
-  reservationStatus: ReservationStatus;
-  invoiceId: string;
-  tableNumber: string;
-  area: string;
-  bookingNumber: string;
-  date: number;
-  time: string;
-  paymentMethod: string;
-  groupId: string;
-  totalAmount: number;
-  totalDueAmount: number;
-  nextStates: string[];
-  tableStatus: TableStatus;
-};
 
 export type TableListResponse = {
   tables: TableResponse[];
@@ -72,8 +34,6 @@ export type TableResponse = {
     status: true;
   };
 };
-
-export type Table = {};
 
 export type AreaListResponse = {
   areas: AreaResponse[];
@@ -112,16 +72,6 @@ export type OutletConfigType = Record<
 interface OccupancyDetails {
   maxChildren: number;
   maxAdult: number;
-}
-
-interface Kot {
-  id: string;
-  number: string;
-  status: string;
-  instructions: string;
-  items: KotMenuItem[];
-  preparedTime: number;
-  created: number;
 }
 
 interface PricingDetails {
@@ -185,29 +135,6 @@ interface PricingDetails {
 interface OccupancyDetails {
   maxChildren: number;
   maxAdult: number;
-}
-
-interface Reservation {
-  id: string;
-  from: number;
-  to: number;
-  occupancyDetails: OccupancyDetails;
-  specialRequest: string;
-  source: string;
-  sourceName: string;
-  reservationNumber: string;
-  status: string;
-  tableNumberOrRoomNumber?: string;
-  created: number;
-  updated: number;
-  items: any[]; // Replace 'any[]' with appropriate type if known
-  outletType: string;
-  pricingDetails: PricingDetails;
-  systemAction: boolean;
-  totalReservationAmount: number;
-  printRate: boolean;
-  tableIdOrRoomId: string;
-  externalBooking: boolean;
 }
 
 export type GuestReservationResponse = {

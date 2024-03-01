@@ -247,7 +247,10 @@
                     }}
                   </span>
                 </li>
-                <li class="payment-item">
+                <li
+                  class="payment-item"
+                  *ngIf="orderInfoControls.orderType.value !== 'DINE_IN'"
+                >
                   <span>Total Container Charge</span>
                   <span
                     >{{
@@ -256,7 +259,10 @@
                     }}
                   </span>
                 </li>
-                <li class="payment-item">
+                <li
+                  class="payment-item"
+                  *ngIf="paymentSummaryControls.totalDiscount.value"
+                >
                   <span>Total Discount</span>
                   <span
                     >{{
@@ -274,7 +280,10 @@
                     }}
                   </span>
                 </li>
-                <li class="payment-item">
+                <li
+                  class="payment-item"
+                  *ngIf="paymentSummaryControls.totalPaidAmount.value"
+                >
                   <span>Total Paid Amount</span>
                   <span
                     >{{

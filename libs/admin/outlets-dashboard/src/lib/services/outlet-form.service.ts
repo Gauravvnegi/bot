@@ -7,8 +7,10 @@ import {
   MenuForm,
 } from '../types/form';
 import { EntitySubType } from '@hospitality-bot/admin/shared';
-import { ReservationStatus } from '../types/reservation-table';
-import { GuestReservationForm } from '../components/add-guest-list/add-guest-list.component';
+import {
+  GuestReservationForm,
+  ReservationType,
+} from '../components/add-guest-list/add-guest-list.component';
 import {
   PosReservationResponse,
   PosOrderResponse,
@@ -116,7 +118,10 @@ export class OutletFormService {
         amount: paymentInformation?.paymentRecieved ?? 0,
         transactionId: paymentInformation?.transactionId ?? '',
       },
-      containerCharge: paymentSummary.totalContainerCharge,
+      containerCharge:
+        orderType !== OrderTypes.DINE_IN
+          ? paymentSummary.totalContainerCharge
+          : undefined,
     };
     return orderData;
   }
@@ -175,7 +180,7 @@ export class OutletFormService {
   getGuestFormData(data: GuestReservationForm) {
     const formData: CreateReservationData = {
       occupancyDetails: { maxAdult: data.personCount },
-      status: data?.reservationType as ReservationStatus,
+      status: data?.reservationType as ReservationType,
       guestId: data.guest,
       tableIds: [data.tables], //@multipleTableBooking
       from: data.checkIn,
@@ -310,14 +315,14 @@ export class OutletFormService {
         kot.items.map((item) => ({
           itemId: item.itemId,
           unit: item.unit,
-          amount: item.unit * item.price, // Assuming price is available in item
+          amount: item.price, // Assuming price is available in item
         }))
       )
     );
 
     summaryData.outletType = EntitySubType.RESTAURANT;
     summaryData.order = { id: orderId, items: orderItems };
-    summaryData.offerId = formData?.offer ?? undefined;
+    summaryData.offerId = formData?.offer?.length ? formData.offer : undefined;
 
     return summaryData;
   }

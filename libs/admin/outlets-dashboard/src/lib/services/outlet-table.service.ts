@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { SelectedEntity } from 'libs/admin/manage-reservation/src/lib/types/reservation.type';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { dineInReservationResponse } from '../constants/data-table';
 import { CreateOrderData, CreateReservationData } from '../types/form';
 import {
   ReservationTableListResponse,
@@ -28,14 +26,6 @@ export class OutletTableService extends ApiService {
     orderId: string
   ): Observable<PosOrderResponse> {
     return this.get(`/api/v1/entity/${entityId}/order/${orderId}`);
-  }
-
-  getReservations(entityId: string): Observable<any> {
-    return this.get(`/api/v1/entity/${entityId}/inventory?type=ROOM_TYPE`).pipe(
-      map((res) => {
-        return dineInReservationResponse;
-      })
-    );
   }
 
   getPaymentMethod(entityId: string) {

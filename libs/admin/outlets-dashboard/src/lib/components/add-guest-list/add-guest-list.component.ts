@@ -56,7 +56,7 @@ const ReservationType = {
   DRAFT: 'DRAFT',
 } as const;
 
-type ReservationType = typeof ReservationType[keyof typeof ReservationType];
+export type ReservationType = typeof ReservationType[keyof typeof ReservationType];
 
 const ReservationStatus = {
   SEATED: 'SEATED',

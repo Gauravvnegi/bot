@@ -1,7 +1,8 @@
 import { EntitySubType } from '@hospitality-bot/admin/shared';
 import { MealPreferences, OrderTypes } from './menu-order';
-import { KotMenuItem, ReservationStatus } from './reservation-table';
+import { KotMenuItem, OrderReservationStatus } from './reservation-table';
 import { AddressFieldType } from 'libs/admin/guests/src/lib/types/guest.type';
+import { ReservationType } from '../components/add-guest-list/add-guest-list.component';
 
 export class MenuForm {
   reservationInformation: ReservationInformation;
@@ -56,7 +57,7 @@ export type KotItemsForm = {
 export type MenuOrderResponse = {
   id: string;
   number: string;
-  status: ReservationStatus;
+  status: ReservationType;
   type: OrderTypes;
   items: MenuItemResponse[];
   entityId: string;
@@ -117,7 +118,7 @@ export type KotItemsResponse = {
 };
 
 export type CreateOrderData = {
-  status: 'CONFIRMED' | 'DRAFT';
+  status: OrderReservationStatus;
   type: OrderTypes;
   source?: string;
   kots: {
@@ -178,7 +179,7 @@ export type CreateReservationData = {
   occupancyDetails: {
     maxAdult: number;
   };
-  status: ReservationStatus;
+  status: ReservationType;
   guestId: string;
   tableIds: string[];
   from: number;

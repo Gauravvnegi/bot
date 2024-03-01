@@ -38,11 +38,11 @@
       </div>
       <span *ngIf="data?.orderNumber" class="payment-status">
         <img
-          [src]="cardConfig[data?.paymentStatus]?.icon"
+          [src]="orderPaymentConfig[data?.paymentStatus]?.icon"
           height="15px"
           width="15px"
         />
-        {{ cardConfig[data?.paymentStatus]?.text }}
+        {{ orderPaymentConfig[data?.paymentStatus]?.text }}
       </span>
     </div> -->
     <div class="footer">

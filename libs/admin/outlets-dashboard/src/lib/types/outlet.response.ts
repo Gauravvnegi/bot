@@ -73,8 +73,6 @@ export type TableResponse = {
   };
 };
 
-export type Table = {};
-
 export type AreaListResponse = {
   areas: AreaResponse[];
   entityTypeCounts: {
@@ -114,34 +112,6 @@ interface OccupancyDetails {
   maxAdult: number;
 }
 
-interface Kot {
-  id: string;
-  number: string;
-  status: string;
-  instructions: string;
-  items: KotMenuItem[];
-  preparedTime: number;
-  created: number;
-}
-
-interface PricingDetails {
-  paxChildBelowFive: number;
-  paxChildAboveFive: number;
-  paxChild: number;
-  paxAdult: number;
-  paxDoubleOccupancy: number;
-  paxTripleOccupancy: number;
-  totalAmount: number;
-  totalPaidAmount: number;
-  totalDueAmount: number;
-  taxAndFees: number;
-  taxAndFeesPerDay: number;
-  basePrice: number;
-  discountedAmount: number;
-  containerCharge: number;
-  allowance: number;
-}
-
 interface Guest {
   id: string;
   firstName: string;
@@ -164,7 +134,7 @@ interface Guest {
   creditLimitUsed: number;
 }
 
-interface PricingDetails {
+export type PricingDetails = {
   paxChildBelowFive: number;
   paxChildAboveFive: number;
   paxChild: number;
@@ -180,34 +150,11 @@ interface PricingDetails {
   discountedAmount: number;
   containerCharge: number;
   allowance: number;
-}
+};
 
 interface OccupancyDetails {
   maxChildren: number;
   maxAdult: number;
-}
-
-interface Reservation {
-  id: string;
-  from: number;
-  to: number;
-  occupancyDetails: OccupancyDetails;
-  specialRequest: string;
-  source: string;
-  sourceName: string;
-  reservationNumber: string;
-  status: string;
-  tableNumberOrRoomNumber?: string;
-  created: number;
-  updated: number;
-  items: any[]; // Replace 'any[]' with appropriate type if known
-  outletType: string;
-  pricingDetails: PricingDetails;
-  systemAction: boolean;
-  totalReservationAmount: number;
-  printRate: boolean;
-  tableIdOrRoomId: string;
-  externalBooking: boolean;
 }
 
 export type GuestReservationResponse = {

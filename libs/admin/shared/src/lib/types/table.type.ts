@@ -96,7 +96,8 @@ export type EntityStateRecord<T extends string> = Record<
   T,
   {
     label: string;
-    type: FlagType;
+    type?: FlagType;
+    color?: string;
   }
 >;
 

@@ -117,6 +117,8 @@ export class GuestListComponent implements OnInit {
           pagination: false,
           fromDate: this.dateFilterOption.from,
           toDate: this.dateFilterOption.to,
+          entityState: this.useForm.get('chip').value,
+          guestType: this.getTabConfig(this.useForm.get('tab').value),
         },
       ]),
     };
@@ -125,21 +127,8 @@ export class GuestListComponent implements OnInit {
       this.outletService.getGuestReservationList(config).subscribe(
         (response) => {
           const data = new GuestReservationList().deserialize(response);
+          this.guestList = data.records;
           this.backupData = data.records;
-
-          this.seatedGuestList = [];
-          this.waitListGuestList = [];
-
-          if (this.useForm.get('tab').value === TabsType.all) {
-            this.initGuestList(this.backupData);
-          } else {
-            this.initGuestList(
-              this.backupData.filter(
-                (item) => item.type === this.useForm.get('tab').value
-              )
-            );
-          }
-
           // this.paginationDisabled = this.limit > data?.total;
         },
         this.handelError,
@@ -148,23 +137,15 @@ export class GuestListComponent implements OnInit {
     );
   }
 
-  /**
-   * need to refactor latter
-   * filter guestReservation based on guest type
-   */
-  initGuestList(data) {
-    data?.forEach((record) => {
-      if (record.isSeated) {
-        this.seatedGuestList.push(record);
-      } else {
-        this.waitListGuestList.push(record);
-      }
-    });
-
-    this.guestList =
-      this.useForm.get('chip').value === ChipType.seated
-        ? this.seatedGuestList
-        : this.waitListGuestList;
+  getTabConfig(tabConfig: TabsType) {
+    switch (tabConfig) {
+      case TabsType.all:
+        return 'NON_RESIDENT_GUEST,GUEST';
+      case TabsType.resident:
+        return 'GUEST';
+      case TabsType['non-resident']:
+        return 'NON_RESIDENT_GUEST';
+    }
   }
 
   /**
@@ -174,17 +155,11 @@ export class GuestListComponent implements OnInit {
    */
   setChip(event: Option) {
     this.useForm.patchValue(
-      { search: '', chip: ChipType[event.value] },
+      { search: '', chip: event.value },
       { emitEvent: false }
     );
 
-    if (event.value === 'waitlist') {
-      this.activeIndex = 1;
-      this.guestList = this.waitListGuestList;
-    } else {
-      this.activeIndex = 0;
-      this.guestList = this.seatedGuestList;
-    }
+    this.initGuestReservation();
   }
 
   /**

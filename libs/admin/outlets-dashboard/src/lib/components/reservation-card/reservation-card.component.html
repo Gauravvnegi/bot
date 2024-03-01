@@ -9,7 +9,7 @@
   <div class="header-wrapper">
     <div class="heading">{{ data?.tableNumber }}</div>
     <div class="heading-info">
-      <span>{{ data?.time }}</span>
+      <span>{{ data?.time | date: 'hh:mm a' }}</span>
       <span class="adult-icon">
         <img
           src="assets/svg/standing-up-man-grey.svg"
@@ -56,14 +56,6 @@
         <span>{{ data?.preparationTime }}</span>
       </div>
       <div class="journey">
-        <!-- <span
-          *ngIf="data?.reservationStatus"
-          class="status"
-          [ngStyle]="{
-            border: '1px solid ' + statusColorConfig[data.reservationStatus]
-          }"
-          >{{ data?.reservationStatus | titlecase }}</span
-        > -->
         <span class="order-method">{{ data?.currentJourney }}</span>
       </div>
     </div>

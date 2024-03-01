@@ -1,3 +1,6 @@
+import { PricingDetails } from './outlet.response';
+import { PosOrderResponse } from './reservation-table';
+
 interface Area {
   id: string;
   name: string;
@@ -83,73 +86,7 @@ export type TableReservationResponse = {
     systemAction: boolean;
     totalReservationAmount: number;
     printRate: boolean;
-    order: {
-      id: string;
-      number: string;
-      status: string;
-      type: string;
-      reservationId: string;
-      items: {
-        id: string;
-        amount: number;
-        description: string;
-        remarks: string;
-        transactionType: string;
-        unit: number;
-        type: string;
-        currency: string;
-        itemId: string;
-        kotId: string;
-        menuItem: MenuItem;
-        created: number;
-      }[];
-      entityId: string;
-      createdBy: string;
-      pricingDetails: {
-        totalAmount: number;
-        taxAmount: number;
-        totalDiscount: number;
-        paidAmount: number;
-        dueAmount: number;
-        payableAmount: number;
-        printRate: boolean;
-        packages: any[]; // Define appropriate type if known
-        paymentAmount: number;
-        totalCgstTax: number;
-        totalSgstTax: number;
-        totalAddOnsAmount: number;
-        totalRoomCharge: number;
-        totalRoomDiscount: number;
-        totalAddOnsTax: number;
-        totalAddOnsDiscount: number;
-        totalAllowance: number;
-        containerCharge: number;
-      };
-      kots: {
-        id: string;
-        number: string;
-        status: string;
-        instructions: string;
-        items: {
-          id: string;
-          amount: number;
-          description: string;
-          remarks: string;
-          transactionType: string;
-          unit: number;
-          type: string;
-          currency: string;
-          itemId: string;
-          kotId: string;
-          menuItem: MenuItem;
-          created: number;
-        }[];
-        created: number;
-      }[];
-      source: string;
-      created: number;
-      containerCharge: number;
-    };
+    order: PosOrderResponse;
     tableIdOrRoomId: string;
     areaId: string;
     externalBooking: boolean;

@@ -74,24 +74,6 @@ interface OccupancyDetails {
   maxAdult: number;
 }
 
-interface PricingDetails {
-  paxChildBelowFive: number;
-  paxChildAboveFive: number;
-  paxChild: number;
-  paxAdult: number;
-  paxDoubleOccupancy: number;
-  paxTripleOccupancy: number;
-  totalAmount: number;
-  totalPaidAmount: number;
-  totalDueAmount: number;
-  taxAndFees: number;
-  taxAndFeesPerDay: number;
-  basePrice: number;
-  discountedAmount: number;
-  containerCharge: number;
-  allowance: number;
-}
-
 interface Guest {
   id: string;
   firstName: string;
@@ -114,7 +96,7 @@ interface Guest {
   creditLimitUsed: number;
 }
 
-interface PricingDetails {
+export type PricingDetails = {
   paxChildBelowFive: number;
   paxChildAboveFive: number;
   paxChild: number;
@@ -130,7 +112,7 @@ interface PricingDetails {
   discountedAmount: number;
   containerCharge: number;
   allowance: number;
-}
+};
 
 interface OccupancyDetails {
   maxChildren: number;

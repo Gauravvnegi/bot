@@ -71,13 +71,13 @@ export const financialReportCols: ColsData<FinancialReportData> = {
 
 export const advanceDepositPaymentCols: ColsData<Omit<
   AdvanceDepositPaymentReportData,
-  'id'
+  'reservationId'
 >> = {
   bookingNo: {
     header: 'Res#',
     isSortDisabled: true,
   },
-  // groupId: {
+  // groupreservationId: {
   //   header: 'Group Id',
   //   isSortDisabled: true,
   // },

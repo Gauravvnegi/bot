@@ -15,7 +15,10 @@ import {
   ReservationSummaryReportData,
 } from '../types/reservation-reports.types';
 
-const reservationReportCols: ColsData<Omit<ReservationReportData, 'id'>> = {
+const reservationReportCols: ColsData<Omit<
+  ReservationReportData,
+  'reservationId'
+>> = {
   bookingNo: {
     header: 'Res/Group',
     isSortDisabled: true,
@@ -42,7 +45,10 @@ const reservationReportCols: ColsData<Omit<ReservationReportData, 'id'>> = {
   },
 };
 
-export const noShowReportCols: ColsData<NoShowReportData> = {
+export const noShowReportCols: ColsData<Omit<
+  NoShowReportData,
+  'reservationId'
+>> = {
   bookingNumber: reservationReportCols.bookingNo,
   dateOfArrival: {
     header: 'Date of Arrival',
@@ -71,7 +77,10 @@ export const noShowReportCols: ColsData<NoShowReportData> = {
   balance: reservationReportCols.balance,
 };
 
-export const cancellationReportCols: ColsData<CancellationReportPartialData> = {
+export const cancellationReportCols: ColsData<Omit<
+  CancellationReportPartialData,
+  'reservationId'
+>> = {
   bookingNumber: reservationReportCols.bookingNo,
   guestName: noShowReportCols.guestName,
   roomType: {
@@ -108,7 +117,10 @@ export const cancellationReportCols: ColsData<CancellationReportPartialData> = {
   balance: reservationReportCols.balance,
 };
 
-export const arrivalReportCols: ColsData<ArrivalReportData> = {
+export const arrivalReportCols: ColsData<Omit<
+  ArrivalReportData,
+  'reservationId'
+>> = {
   bookingNo: { ...reservationReportCols.bookingNo },
   guestName: { ...reservationReportCols.guestName },
   roomType: {
@@ -139,7 +151,10 @@ export const arrivalReportCols: ColsData<ArrivalReportData> = {
 };
 const { arrivalTime, ...rest } = arrivalReportCols;
 
-export const departureReportCols: ColsData<DepartureReportData> = {
+export const departureReportCols: ColsData<Omit<
+  DepartureReportData,
+  'reservationId'
+>> = {
   ...rest,
   departureTime: {
     header: 'Departure Time',
@@ -149,7 +164,7 @@ export const departureReportCols: ColsData<DepartureReportData> = {
 
 export const draftReservationReportCols: ColsData<Omit<
   DraftReservationReportData,
-  'id'
+  'reservationId'
 >> = {
   bookingNo: reservationReportCols.bookingNo,
   guestName: reservationReportCols.guestName,
@@ -184,7 +199,7 @@ export const draftReservationReportCols: ColsData<Omit<
 
 export const employeeWiseReservationReportCols: ColsData<Omit<
   EmployeeWiseReservationReportData,
-  'id'
+  'reservationId'
 >> = {
   userName: {
     header: 'User Name',
@@ -223,7 +238,7 @@ export const employeeWiseReservationReportCols: ColsData<Omit<
 
 export const reservationAdrReportCols: ColsData<Omit<
   ReservationAdrReportData,
-  'id'
+  'reservationId'
 >> = {
   bookingNo: reservationReportCols.bookingNo,
   guestName: reservationReportCols.guestName,
@@ -260,7 +275,7 @@ export const reservationAdrReportCols: ColsData<Omit<
 
 export const incomeSummaryReportCols: ColsData<Omit<
   IncomeSummaryReportData,
-  'id'
+  'reservationId'
 >> = {
   bookingNo: reservationReportCols.bookingNo,
   guestName: reservationReportCols.guestName,
@@ -289,7 +304,7 @@ export const incomeSummaryReportCols: ColsData<Omit<
 
 export const reservationSummaryReportCols: ColsData<Omit<
   ReservationSummaryReportData,
-  'id'
+  'reservationId'
 >> = {
   businessSource: {
     header: 'Business Source',
@@ -365,7 +380,7 @@ export const reservationSummaryReportCols: ColsData<Omit<
 
 export const housekeepingReportCols: ColsData<Omit<
   HousekeepingReportData,
-  'id'
+  'reservationId'
 >> = {
   roomNo: {
     header: 'Room No.',
@@ -406,7 +421,10 @@ export const housekeepingReportCols: ColsData<Omit<
 };
 
 //expressCheckIn
-export const expressCheckInReportCols: ColsData<ExpressCheckInData> = {
+export const expressCheckInReportCols: ColsData<Omit<
+  ExpressCheckInData,
+  'reservationId'
+>> = {
   bookingNo: {
     header: 'Res#',
     isSortDisabled: true,

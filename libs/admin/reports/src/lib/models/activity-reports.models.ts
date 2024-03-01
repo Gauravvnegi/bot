@@ -19,7 +19,7 @@ export class ReservationCreatedReport
     value &&
       value.forEach((data) => {
         this.records.push({
-          id: data.id,
+          reservationId: data.id,
           bookingNo: data.number,
           createdOn: getFormattedDate(data.created),
           roomType: data.stayDetails.room.type,
@@ -48,7 +48,7 @@ export class ReservationActivityReport
     value &&
       value.forEach((data) => {
         this.records.push({
-          id: data.id,
+          reservationId: data.id,
           bookingNo: data.number,
           roomType: data.stayDetails.room.type,
           primaryGuest: getFullName(

@@ -12,7 +12,7 @@ import { PaymentSummary } from './guest-reports.types';
 import { ReservationItemsPayment } from './financial-reports.types';
 
 export type ReservationReportData = {
-  id?: string;
+  reservationId?: string;
   bookingNo: string;
   guestName: string;
   bookingAmount: number;
@@ -43,7 +43,7 @@ export type CancellationReportPartialData = Omit<
 >;
 
 export type DraftReservationReportData = {
-  id: string;
+  reservationId: string;
   bookingNo: string;
   guestName: string;
   roomType: string;
@@ -58,7 +58,7 @@ export type DraftReservationReportData = {
 };
 
 export type EmployeeWiseReservationReportData = {
-  id?: string;
+  reservationId?: string;
   userName: string;
   bookingNo: string;
   guestName: string;
@@ -77,7 +77,7 @@ export type EmployeeWiseReservationReportResponse = ReservationResponseData & {
 };
 
 export type ReservationAdrReportData = {
-  id?: string;
+  reservationId?: string;
   bookingNo: string;
   guestName: string;
   roomType: string;
@@ -90,7 +90,7 @@ export type ReservationAdrReportData = {
 };
 
 export type IncomeSummaryReportData = {
-  id: string;
+  reservationId: string;
   bookingNo: string;
   guestName: string;
   checkIn: string;
@@ -102,7 +102,7 @@ export type IncomeSummaryReportData = {
 };
 
 export type ReservationSummaryReportData = {
-  id: string;
+  reservationId: string;
   businessSource: string;
   marketSegment: string;
   phoneNumber: string;
@@ -175,6 +175,7 @@ interface Room {
 
 //expressCheckIn
 export type ExpressCheckInData = {
+  reservationId?: string;
   bookingNo: string;
   guestName: string;
   roomType: string;

@@ -63,7 +63,7 @@ export class LodgingTaxReport
 }
 
 export class LodgingTaxReportDataModel {
-  id: string;
+  reservationId: string;
   res: string;
   guestName: string;
   checkInDate: string;
@@ -76,7 +76,7 @@ export class LodgingTaxReportDataModel {
   otherTax: string;
 
   deserialize(input: LodgingTaxReportResponse) {
-    this.id = input?.id;
+    this.reservationId = input?.id;
     this.res = input?.number;
     this.guestName = getFullName(
       input.guestDetails.primaryGuest.firstName,
@@ -126,7 +126,7 @@ export class TaxReport implements ReportClass<TaxReportData, any> {
 }
 
 export class TaxReportDataModel {
-  id: string;
+  reservationId: string;
   res: string;
   checkInDate: string;
   checkOutDate: string;
@@ -137,7 +137,7 @@ export class TaxReportDataModel {
   postTaxTotal: string;
 
   deserialize(value: TaxReportResponse) {
-    this.id = value?.id;
+    this.reservationId = value?.id;
     this.res = value.number;
     this.checkInDate = value.stayDetails.arrivalTime
       ? getFormattedDate(value.stayDetails.arrivalTime)

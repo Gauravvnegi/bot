@@ -15,7 +15,7 @@ export class AddWithdrawReport
       value &&
       value.map((data) => {
         return {
-          id: data?.reservationId,
+          reservationId: data?.reservationId,
           createdDate: getFormattedDate(data?.created),
           fundTransferredBy:
             data?.cashier?.firstName &&

@@ -4,7 +4,10 @@ import {
   RateVariationReportResponse,
 } from '../types/rate-package-reports.types';
 import { ReportClass } from '../types/reports.types';
-import { getFullName, toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import {
+  getFullName,
+  toCurrency,
+} from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 export class RateVariationReport
   implements ReportClass<RateVariationReportData, RateVariationReportResponse> {
@@ -15,7 +18,7 @@ export class RateVariationReport
       value &&
       value.map((data) => {
         return {
-          id: data?.id,
+          reservationId: data?.id,
           bookingNo: data?.number,
           folio: data?.invoiceCode,
           roomNo: data?.stayDetails?.room?.roomNumber,

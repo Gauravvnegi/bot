@@ -76,9 +76,7 @@ export class DefaultPackageComponent implements OnInit {
           ' $1'
         ),
         value:
-          key == 'pickupTime'
-            ? this.convertEpochToDate(+value * 1000, format)
-            : value,
+          key == 'pickupTime' ? this.convertEpochToDate(+value, format) : value,
       })
     );
   }

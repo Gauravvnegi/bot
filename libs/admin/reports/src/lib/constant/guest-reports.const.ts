@@ -1,9 +1,11 @@
+import { GuestTypeReport } from '../models/guest-reports.model';
 import {
   GuestComplaintReportData,
   GuestContactReportData,
   GuestEscalationComplaintReportData,
   GuestHistoryData,
   GuestLedgerData,
+  GuestTypeReportData,
   SalesByGuestData,
 } from '../types/guest-reports.types';
 import { ColsData } from '../types/reports.types';
@@ -58,20 +60,20 @@ export const guestComplaintReportDataCols: Partial<ColsData<
   },
 };
 export const guestEscalationComplaintReportCols: Partial<ColsData<
-         GuestEscalationComplaintReportData
-       >> = {
-         ...guestComplaintReportDataCols,
-         escalationLevel: {
-           header: 'Escalation Level',
-           isSortDisabled: true,
-           isSearchDisabled: true,
-         },
-         escalatedTo: {
-           header: 'Escalated To',
-           isSortDisabled: true,
-           isSearchDisabled: true,
-         },
-       };
+  GuestEscalationComplaintReportData
+>> = {
+  ...guestComplaintReportDataCols,
+  escalationLevel: {
+    header: 'Escalation Level',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  escalatedTo: {
+    header: 'Escalated To',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+};
 
 export const guestHistoryCols: ColsData<GuestHistoryData> = {
   guestName: {
@@ -253,7 +255,10 @@ export const SalesByGuestCols: ColsData<SalesByGuestData> = {
   },
 };
 
-export const guestLedgerCols: ColsData<Omit<GuestLedgerData, 'id'>> = {
+export const guestLedgerCols: ColsData<Omit<
+  GuestLedgerData,
+  'reservationId'
+>> = {
   roomNo: {
     header: 'Room No',
     isSortDisabled: true,
@@ -271,6 +276,77 @@ export const guestLedgerCols: ColsData<Omit<GuestLedgerData, 'id'>> = {
   },
   balance: {
     header: 'Balance',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+};
+
+export const guestTypeReportCols: ColsData<Omit<
+  GuestTypeReportData,
+  'reservationId'
+>> = {
+  guestType: {
+    header: 'Type',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  reservationNumber: {
+    header: 'Res#',
+    isSearchDisabled: true,
+    isSortDisabled: true,
+  },
+  room: {
+    header: 'Room',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  guestName: {
+    header: 'Guest Name',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  checkIn: {
+    header: 'Check In',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  checkOut: {
+    header: 'Check Out',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  nights: {
+    header: 'Nights',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  roomCharge: {
+    header: 'Room Charge',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  roomTax: {
+    header: 'Room Tax',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  otherCharges: {
+    header: 'Other Charges',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  otherTax: {
+    header: 'Other Tax',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  amount: {
+    header: 'Amount',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  amountPaid: {
+    header: 'Amount Paid',
     isSortDisabled: true,
     isSearchDisabled: true,
   },

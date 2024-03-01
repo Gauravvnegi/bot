@@ -6,7 +6,7 @@ import { ColsData } from '../types/reports.types';
 
 export const reservationActivityReportCols: ColsData<Omit<
   ReservationActivityReportData,
-  'id'
+  'reservationId'
 >> = {
   bookingNo: {
     header: 'Res/Group',
@@ -50,7 +50,7 @@ export const reservationActivityReportCols: ColsData<Omit<
 
 export const reservationCreatedReportCols: ColsData<Omit<
   ReservationCreatedReportData,
-  'id'
+  'reservationId'
 >> = {
   bookingNo: {
     header: 'Res/Group',

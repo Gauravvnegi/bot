@@ -13,7 +13,15 @@ import {
   OrderReservationStatus,
 } from '../types/reservation-table';
 import { GuestReservation } from './guest-reservation.model';
-import { formatEpochTime } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import {
+  formatEpochTime,
+  getFullName,
+} from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import {
+  TableReservationListResponse,
+  TableReservationResponse,
+} from '../types/table-booking.response';
+import { DateService } from '@hospitality-bot/shared/utils';
 
 export class OutletReservationTableList {
   reservationData: OutletReservationTable[];
@@ -77,25 +85,12 @@ export class OutletReservationList {
   entityTypeCounts: EntityState<string>;
   total: number;
 
-  deserialize(
-    tableValue: TableListResponse,
-    reservationData: GuestReservationListResponse
-  ) {
-    this.entityStateCounts = tableValue.entityTypeCounts;
-    this.entityStateCounts = reservationData.entityStateCounts;
+  deserialize(input: TableReservationListResponse) {
+    this.entityTypeCounts = input.entityTypeCounts;
+    this.entityStateCounts = input.entityStateCounts;
 
-    const modifiedReservationData: Record<
-      string,
-      GuestReservation
-    > = reservationData.records.reduce((acc, reservation) => {
-      acc[reservation.tableIdOrRoomId] = new GuestReservation().deserialize(
-        reservation
-      );
-      return acc;
-    }, {} as Record<string, GuestReservation>);
-
-    this.reservationData = tableValue.tables.map((table) =>
-      new OutletReservation().deserialize(table, modifiedReservationData)
+    this.reservationData = input.tables.map((table) =>
+      new OutletReservation().deserialize(table)
     );
 
     return this;
@@ -103,6 +98,7 @@ export class OutletReservationList {
 }
 
 export class OutletReservation {
+  tableValue;
   id: string;
   invoiceId: string;
   tableNumber: string;
@@ -129,11 +125,8 @@ export class OutletReservation {
   tableData: Option;
   currentJourney: string;
 
-  deserialize(
-    table: TableResponse,
-    reservation: Record<string, GuestReservation>
-  ) {
-    const reservationData = reservation[table.id];
+  deserialize(table: TableReservationResponse) {
+    const reservationData = table.booking;
 
     this.tableNumber = `${table?.number} - ${table?.area?.name ?? ''}`;
     this.tableData = {
@@ -144,23 +137,26 @@ export class OutletReservation {
     this.area = table?.area?.name;
     this.bookingNumber = table?.number;
     this.date = table?.created;
-    this.time = reservationData?.time;
+    this.time = reservationData?.from;
     this.paymentMethod = 'CASH';
     this.groupId = table?.entityId;
     this.adultCount = table?.pax;
-    this.guestName = reservationData?.name;
-    this.preparationTime = reservationData?.preparationTime;
-    this.paymentMethod = reservationData?.paymentMethod;
-    this.totalAmount = reservationData?.totalAmount;
-    this.totalDueAmount = reservationData?.totalDueAmount;
+    this.guestName = getFullName(
+      reservationData?.guest?.firstName,
+      reservationData?.guest?.lastName
+    );
+    // this.preparationTime = reservationData?.order?.p;
+    // this.paymentMethod = reservationData?.order?.pricingDetails?.ca;
+    this.totalAmount = reservationData?.order?.pricingDetails?.totalAmount;
+    this.totalDueAmount = reservationData?.order?.pricingDetails?.dueAmount;
     this.nextStates = ['DRAFT'];
-    this.orderNumber = reservationData?.orderNo;
+    this.orderNumber = reservationData?.order?.number;
     this.price = undefined;
-    this.reservationStatus = reservationData?.reservationStatus as ReservationStatus;
+    this.reservationStatus = reservationData?.status as ReservationStatus;
     this.numberOfItems = undefined;
     this.orderMethod = undefined;
     this.tableStatus = reservationData?.id
-      ? reservationData.orderNo
+      ? reservationData.order?.number
         ? 'RUNNING_TABLE'
         : 'RUNNING_KOT_TABLE'
       : 'BLANK_TABLE';

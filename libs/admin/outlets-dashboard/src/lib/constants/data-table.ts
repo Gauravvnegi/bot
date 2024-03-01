@@ -140,7 +140,7 @@ export const ReservationStatusColorConfig: Record<ReservationStatus, string> = {
 
 export const ReservationStatusDetails: Record<
   ReservationStatus,
-  { label: string; type: FlagType }
+  { label: string; type?: FlagType; color?: string }
 > = {
   COMPLETED: {
     label: 'Completed',
@@ -160,7 +160,7 @@ export const ReservationStatusDetails: Record<
   },
   BLANK_TABLE: {
     label: 'Blank Table',
-    type: 'draft',
+    color: '#D6D6D6',
   },
   PAID: {
     label: 'Paid',
@@ -168,15 +168,15 @@ export const ReservationStatusDetails: Record<
   },
   RUNNING_KOT_TABLE: {
     label: 'Running KOT Table',
-    type: 'completed',
+    color: '#FF9F40',
   },
   RUNNING_TABLE: {
     label: 'Running Table',
-    type: 'failed',
+    color: '#3166F0',
   },
   PRINTED_TABLE: {
     label: 'Printed Table',
-    type: 'warning',
+    color: '#52B33F',
   },
   DRAFT: {
     label: 'Draft',

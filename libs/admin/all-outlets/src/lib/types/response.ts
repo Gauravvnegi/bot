@@ -77,8 +77,3 @@ export type FoodPackageResponse = {
   created: number;
   updated: number;
 };
-
-
-export type TableReservationResponse = {
-  
-}

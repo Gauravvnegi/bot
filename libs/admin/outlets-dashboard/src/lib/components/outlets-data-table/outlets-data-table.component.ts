@@ -23,6 +23,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import {
   OrderReservationStatusDetails,
   OrderTableType,
+  ReservationStatusDetails,
   posCols,
   reservationTypes,
 } from '../../constants/data-table';
@@ -106,56 +107,34 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     this.selectedReservationType === 'card' && this.initCardViewList();
   }
 
-  /**
-   * reservation list in card view
-   */
-  getReservationList(): Observable<GuestReservationListResponse> {
-    const config: QueryConfig = {
-      params: this.adminUtilityService.makeQueryParams([
-        {
-          type: 'OUTLET',
-          outletType: 'RESTAURANT',
-          pagination: false,
-          fromDate: new Date().getTime(),
-          toDate: new Date().getTime() + 1 * 60 * 1000,
-          calendarView: true,
-        },
-        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
-      ]),
-    };
-    return this.outletService.getGuestReservationList(config);
-  }
-
-  getTableList(): Observable<TableListResponse> {
-    const config: QueryConfig = {
-      params: this.adminUtilityService.makeQueryParams([
-        {
-          type: 'TABLE',
-          sort: 'updated',
-          raw: 'true',
-          limit: '0',
-          offset: '0',
-        },
-      ]),
-    };
-    return this.outletService.getList<TableListResponse>(this.entityId, config);
-  }
-
   initCardViewList(): void {
     this.loading = true;
+
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
+        {
+          order: 'DESC',
+          type: 'TABLE',
+          limit: '0',
+          offset: '0',
+          entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
+          liveBookings: true,
+        },
+      ]),
+    };
+
     this.subscriptionList$.add(
-      forkJoin([this.getTableList(), this.getReservationList()]).subscribe(
-        ([tableResponse, reservationResponse]) => {
-          const data = new OutletReservationList().deserialize(
-            tableResponse,
-            reservationResponse
-          );
+      this.outletService.getLiveTableList(this.entityId, config).subscribe(
+        (response) => {
+          const data = new OutletReservationList().deserialize(response);
 
           this.values = data?.reservationData;
           this.initFilters(
             data?.entityTypeCounts,
             data?.entityStateCounts,
-            data?.total
+            data?.total,
+            ReservationStatusDetails
           );
         },
         ({ error }) => {

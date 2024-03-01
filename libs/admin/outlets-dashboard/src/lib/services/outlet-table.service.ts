@@ -16,6 +16,7 @@ import {
   GuestReservationResponse,
   TableListResponse,
 } from '../types/outlet.response';
+import { TableReservationListResponse } from '../types/table-booking.response';
 
 @Injectable()
 export class OutletTableService extends ApiService {
@@ -133,6 +134,15 @@ export class OutletTableService extends ApiService {
     return this.patch(
       `/api/v1/booking/${reservationId}/status${config?.params ?? {}}`,
       data
+    );
+  }
+
+  getLiveTableList(
+    entityId: string,
+    config: QueryConfig
+  ): Observable<TableReservationListResponse> {
+    return this.get(
+      `/api/v1/entity/${entityId}/inventory${config?.params ?? ''}`
     );
   }
 }

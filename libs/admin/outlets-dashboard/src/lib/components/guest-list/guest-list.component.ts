@@ -97,7 +97,6 @@ export class GuestListComponent implements OnInit {
    * on DateFilterChanges
    */
   onDateFilterChange(config: { data: DateFilterOption; index: number }) {
-    debugger;
     this.dateFilterOption = config.data;
     this.selectedDateFilterIndex = config.index;
     this.initGuestReservation();

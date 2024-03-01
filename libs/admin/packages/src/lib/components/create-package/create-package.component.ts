@@ -353,7 +353,7 @@ export class CreatePackageComponent implements OnInit {
     this.$subscription.add(
       this.packagesService
         .getLibraryItems<ServiceListResponse>(this.entityId, {
-          params: `?type=SERVICE&offset=${this.servicesOffSet}&limit=10&status=true&serviceType=${ServicesTypeValue.PAID}`,
+          params: `?type=SERVICE&offset=${this.servicesOffSet}&limit=10&status=true&serviceType=${ServicesTypeValue.PAID}&visibilitySource=ADMIN_PANEL`,
         })
         .subscribe(
           (res) => {

@@ -36,11 +36,7 @@ import { ServiceListResponse } from 'libs/admin/services/src/lib/types/response'
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
-import {
-  distinctUntilChanged,
-  pairwise,
-  startWith,
-} from 'rxjs/operators';
+import { distinctUntilChanged, pairwise, startWith } from 'rxjs/operators';
 import {
   addDiscountMenu,
   defaultMenu,
@@ -1719,6 +1715,7 @@ export class InvoiceComponent implements OnInit {
         return false; // Default case, return false if type is not recognized
     }
   }
+
   get isPermissionToCheckInOrOut(): boolean {
     return this.subscriptionService.show().isPermissionToEditReservation;
   }

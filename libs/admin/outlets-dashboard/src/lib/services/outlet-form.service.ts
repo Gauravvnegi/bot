@@ -28,6 +28,7 @@ export class OutletFormService {
   > = new BehaviorSubject<Omit<PosOrderResponse, 'reservation'>>(null);
   entityId: string;
   // Method to add an item to the selectedMenuItems array
+  
   addItemToSelectedItems(item: MenuItem): void {
     const currentItems = this.selectedMenuItems.value;
     const updatedItems = currentItems ? [...currentItems, item] : [item];

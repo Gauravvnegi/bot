@@ -7,6 +7,7 @@ export class MenuForm {
   reservationInformation: ReservationInformation;
   paymentInformation: PaymentInformation;
   kotInformation: KotInformation;
+  paymentSummary: OrderPaymentSummary;
   offer: string;
 }
 
@@ -78,6 +79,15 @@ export type MenuItemResponse = {
   kotId?: string;
 };
 
+export type OrderPaymentSummary = {
+  totalCharge: number;
+  totalContainerCharge: number;
+  totalDiscount: number;
+  totalPayable: number;
+  totalPaidAmount: number;
+  remainingBalance: number;
+};
+
 export type ItemType = 'ITEM_CHARGE' | 'ITEM_TAX' | 'PAID';
 
 export type OutletPricingDetails = {
@@ -145,6 +155,7 @@ export type CreateOrderData = {
     amount: number;
     transactionId: string;
   };
+  containerCharge?: number;
 };
 
 export type AddGuestForm = {

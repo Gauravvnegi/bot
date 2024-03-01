@@ -13,7 +13,11 @@ import {
   PosReservationResponse,
   PosOrderResponse,
 } from '../types/reservation-table';
-import { OrderTypes } from '../types/menu-order';
+import {
+  OrderSummaryData,
+  OrderSummaryResponse,
+  OrderTypes,
+} from '../types/menu-order';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +32,11 @@ export class OutletFormService {
   > = new BehaviorSubject<Omit<PosOrderResponse, 'reservation'>>(null);
   entityId: string;
   // Method to add an item to the selectedMenuItems array
-  
+
+  getOrderSummary: BehaviorSubject<Boolean> = new BehaviorSubject<Boolean>(
+    false
+  );
+
   addItemToSelectedItems(item: MenuItem): void {
     const currentItems = this.selectedMenuItems.value;
     const updatedItems = currentItems ? [...currentItems, item] : [item];
@@ -50,6 +58,7 @@ export class OutletFormService {
   resetData() {
     this.selectedMenuItems.next([]);
     this.orderFormData.next(null);
+    this.getOrderSummary.next(false);
   }
 
   getOutletFormData(data: MenuForm, reservationData?: PosReservationResponse) {
@@ -57,6 +66,7 @@ export class OutletFormService {
       reservationInformation,
       paymentInformation,
       kotInformation,
+      paymentSummary,
       offer,
     } = data;
     const {
@@ -106,6 +116,7 @@ export class OutletFormService {
         amount: paymentInformation?.paymentRecieved ?? 0,
         transactionId: paymentInformation?.transactionId ?? '',
       },
+      containerCharge: paymentSummary.totalContainerCharge,
     };
     return orderData;
   }
@@ -115,6 +126,7 @@ export class OutletFormService {
       reservationInformation,
       paymentInformation,
       kotInformation,
+      paymentSummary,
       offer,
     } = data;
 
@@ -155,6 +167,7 @@ export class OutletFormService {
         amount: paymentInformation?.paymentRecieved ?? 0,
         transactionId: paymentInformation?.transactionId ?? '',
       },
+      containerCharge: paymentSummary.totalContainerCharge,
     };
     return orderData;
   }
@@ -287,5 +300,38 @@ export class OutletFormService {
     this.orderFormData.next(data.order);
 
     return formData;
+  }
+
+  postOrderSummaryData(formData: MenuForm, orderId?: string) {
+    let summaryData = new OrderSummaryData();
+
+    const orderItems = [].concat(
+      ...formData?.kotInformation?.kotItems.map((kot) =>
+        kot.items.map((item) => ({
+          itemId: item.itemId,
+          unit: item.unit,
+          amount: item.unit * item.price, // Assuming price is available in item
+        }))
+      )
+    );
+
+    summaryData.outletType = EntitySubType.RESTAURANT;
+    summaryData.order = { id: orderId, items: orderItems };
+    summaryData.offerId = formData?.offer ?? undefined;
+
+    return summaryData;
+  }
+
+  mapPaymentSummary(paymentData: OrderSummaryResponse) {
+    const pricingDetails = paymentData.pricingDetails;
+    return {
+      totalCharge: pricingDetails.basePrice,
+      totalContainerCharge: pricingDetails.containerCharge,
+      totalDiscount: pricingDetails.discountedAmount,
+      totalPayable: pricingDetails.totalAmount,
+      totalPaidAmount: pricingDetails.totalPaidAmount,
+      remainingBalance: pricingDetails.totalDueAmount,
+      totalTaxes: pricingDetails.taxAndFees,
+    };
   }
 }

@@ -50,7 +50,7 @@ export class OutletReservationTable {
 
   deserialize(input: PosOrderResponse) {
     this.orderId = input?.id;
-    this.area = 'A1';
+    this.area = input.reservation?.areaName;
     this.bookingNumber = input?.reservation?.reservationNumber ?? input?.number;
     this.date = input?.reservation?.from;
     this.totalAmount = input?.pricingDetails?.totalAmount;

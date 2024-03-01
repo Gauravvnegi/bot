@@ -15,6 +15,7 @@ import { Option } from '@hospitality-bot/admin/shared';
 import { MenuItem } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 import { KotItemsForm, MenuForm } from '../../types/form';
 import { OrderOffer } from '../../types/reservation-table';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-order-summary',
@@ -92,6 +93,7 @@ export class OrderSummaryComponent implements OnInit {
     ) as FormArray;
 
     this.listenForOfferChange();
+    this.listenForKotChange();
   }
 
   // Method to add a new KOT dynamically
@@ -175,8 +177,12 @@ export class OrderSummaryComponent implements OnInit {
       .get('unit')
       .patchValue(itemControl.value.unit - 1, { emitEvent: false });
     this.totalAmount = this.totalAmount - itemControl.get('price').value;
-    itemControl.value.unit === 0 &&
+
+    if (itemControl.value.unit === 0) {
       this.formService.removeItemFromSelectedItems(itemControl.value.itemId);
+    } else {
+      this.formService.getOrderSummary.next(true);
+    }
   }
 
   /**
@@ -186,6 +192,7 @@ export class OrderSummaryComponent implements OnInit {
     itemControl
       .get('unit')
       .patchValue(itemControl.value.unit + 1, { emitEvent: false });
+    this.formService.getOrderSummary.next(true);
     this.totalAmount = this.totalAmount + itemControl.get('price').value;
   }
 
@@ -211,13 +218,17 @@ export class OrderSummaryComponent implements OnInit {
 
   listenForOfferChange() {
     this.$subscription.add(
-      this.parentFormGroup.get('offer').valueChanges.subscribe((res) => {
-        if (res) {
-          this.selectedOffer = this.offerList.find(
-            (offer) => offer.value === res
-          );
-        }
-      })
+      this.parentFormGroup
+        .get('offer')
+        .valueChanges.pipe(debounceTime(100))
+        .subscribe((res) => {
+          if (res) {
+            this.selectedOffer = this.offerList.find(
+              (offer) => offer.value === res
+            );
+            this.formService.getOrderSummary.next(true);
+          }
+        })
     );
   }
 
@@ -299,6 +310,18 @@ export class OrderSummaryComponent implements OnInit {
     }, []);
   }
 
+  listenForKotChange() {
+    this.$subscription.add(
+      this.kotInfoControls.kotItems.valueChanges
+        .pipe(debounceTime(200))
+        .subscribe((res) => {
+          if (res) {
+            this.formService.getOrderSummary.next(true);
+          }
+        })
+    );
+  }
+
   removeItemFields(index: number) {
     this.itemFormArray.removeAt(index);
     !this.itemFormArray.value.length &&
@@ -367,6 +390,16 @@ export class OrderSummaryComponent implements OnInit {
       keyof MenuForm['paymentInformation'],
       AbstractControl
     >;
+  }
+
+  get kotInfoControls() {
+    return (this.parentFormGroup.get('kotInformation') as FormGroup)
+      .controls as Record<keyof MenuForm['kotInformation'], AbstractControl>;
+  }
+
+  get paymentSummaryControls() {
+    return (this.parentFormGroup.get('paymentSummary') as FormGroup)
+      .controls as Record<keyof MenuForm['paymentSummary'], AbstractControl>;
   }
 }
 

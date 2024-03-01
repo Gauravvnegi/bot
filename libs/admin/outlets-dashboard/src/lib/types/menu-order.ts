@@ -1,3 +1,5 @@
+import { EntitySubType } from '@hospitality-bot/admin/shared';
+
 export type MenuItemCard = {
   id: string;
   itemName: string;
@@ -46,4 +48,41 @@ export const mealPreferenceConfig: Record<
     filterPreference: (item) => item === MealPreferences.NON_VEG,
   },
   // Add more preferences with their corresponding display and filter conditions
+};
+
+export class OrderSummaryData {
+  outletType: EntitySubType;
+  order: {
+    id?: string;
+    items: {
+      itemId: string;
+      unit: number;
+      amount: number;
+    }[];
+  };
+  offerId: string;
+}
+
+export type OrderSummaryResponse = {
+  name: string;
+  from: number;
+  to: number;
+  location: string;
+  pricingDetails: {
+    paxChildBelowFive: number;
+    paxChildAboveFive: number;
+    paxChild: number;
+    paxAdult: number;
+    paxDoubleOccupancy: number;
+    paxTripleOccupancy: number;
+    totalAmount: number;
+    totalPaidAmount: number;
+    totalDueAmount: number;
+    taxAndFees: number;
+    taxAndFeesPerDay: number;
+    basePrice: number;
+    discountedAmount: number;
+    containerCharge: number;
+    allowance: number;
+  };
 };

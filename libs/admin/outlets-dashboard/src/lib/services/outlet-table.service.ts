@@ -16,6 +16,7 @@ import {
   GuestReservationResponse,
   TableListResponse,
 } from '../types/outlet.response';
+import { OrderSummaryData, OrderSummaryResponse } from '../types/menu-order';
 
 @Injectable()
 export class OutletTableService extends ApiService {
@@ -50,6 +51,10 @@ export class OutletTableService extends ApiService {
 
   exportCSV(entityId, config): Observable<any> {
     return this.get(`/api/v1/outlets/export/${config.queryObj}`);
+  }
+
+  getOrderSummary(data: OrderSummaryData): Observable<OrderSummaryResponse> {
+    return this.post(`/api/v1/booking/summary?type=OUTLET`, data);
   }
 
   updateOutletItem(entityId, outletId, status): Observable<any> {

@@ -71,8 +71,9 @@ export type PosReservationResponse = {
   printRate: boolean;
   tableIdOrRoomId: string;
   externalBooking: boolean;
-  guest?: OutletGuest;
-  areaId?: string;
+  guest: OutletGuest;
+  areaId: string;
+  areaName: string;
   order?: Omit<PosOrderResponse, 'reservation'>;
 };
 

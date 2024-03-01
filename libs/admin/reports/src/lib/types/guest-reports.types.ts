@@ -1,5 +1,23 @@
 import { ReservationItemsPayment } from './financial-reports.types';
 
+export type GuestTypeReportData = {
+  guestType: string;
+  reservationNumber: string;
+  room: string;
+  guestName: string;
+  checkIn: string;
+  checkOut: string;
+  nights: number;
+  roomCharge: string;
+  roomTax: number;
+  otherCharges: string;
+  otherTax: string;
+  amount: string;
+  amountPaid: string;
+};
+
+export type GuestTypeReportResponse = {};
+
 export type GuestHistoryData = {
   guestName: string;
   firstStayed: string;
@@ -15,7 +33,7 @@ export type GuestHistoryData = {
 };
 
 export type GuestLedgerData = {
-  id: string;
+  reservationId: string;
   roomNo: string;
   name: string;
   confirmationNo: string;

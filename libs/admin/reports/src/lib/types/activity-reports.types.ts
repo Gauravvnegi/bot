@@ -1,5 +1,5 @@
 export type ReservationCreatedReportData = {
-  id?: string;
+  reservationId?: string;
   bookingNo: string;
   createdOn: string;
   roomType: string;
@@ -11,7 +11,7 @@ export type ReservationCreatedReportData = {
 };
 
 export type ReservationActivityReportData = {
-  id?: string;
+  reservationId?: string;
   bookingNo: string;
   roomType: string;
   primaryGuest: string;

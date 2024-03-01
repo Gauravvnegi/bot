@@ -58,20 +58,20 @@ export const guestComplaintReportDataCols: Partial<ColsData<
   },
 };
 export const guestEscalationComplaintReportCols: Partial<ColsData<
-         GuestEscalationComplaintReportData
-       >> = {
-         ...guestComplaintReportDataCols,
-         escalationLevel: {
-           header: 'Escalation Level',
-           isSortDisabled: true,
-           isSearchDisabled: true,
-         },
-         escalatedTo: {
-           header: 'Escalated To',
-           isSortDisabled: true,
-           isSearchDisabled: true,
-         },
-       };
+  GuestEscalationComplaintReportData
+>> = {
+  ...guestComplaintReportDataCols,
+  escalationLevel: {
+    header: 'Escalation Level',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  escalatedTo: {
+    header: 'Escalated To',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+};
 
 export const guestHistoryCols: ColsData<GuestHistoryData> = {
   guestName: {
@@ -253,7 +253,10 @@ export const SalesByGuestCols: ColsData<SalesByGuestData> = {
   },
 };
 
-export const guestLedgerCols: ColsData<Omit<GuestLedgerData, 'id'>> = {
+export const guestLedgerCols: ColsData<Omit<
+  GuestLedgerData,
+  'reservationId'
+>> = {
   roomNo: {
     header: 'Room No',
     isSortDisabled: true,

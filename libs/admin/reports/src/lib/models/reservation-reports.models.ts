@@ -37,7 +37,7 @@ class ReservationReport {
   defaultValue: ReservationReportData;
   getDefaultValues(reservationData: ReservationResponseData) {
     this.defaultValue = {
-      id: reservationData.id,
+      reservationId: reservationData.id,
       amountPaid: reservationData.totalPaidAmount,
       balance: reservationData.totalDueAmount,
       bookingAmount: reservationData.paymentSummary?.totalAmount,
@@ -54,7 +54,7 @@ class ReservationReport {
 }
 
 export class NoShows {
-  id?: string;
+  reservationId?: string;
   bookingNumber: string;
   dateOfArrival: string;
   noShowOn: string;
@@ -66,7 +66,7 @@ export class NoShows {
   amountPaid: string;
   balance: string;
   deserialize(value: ReservationResponse) {
-    this.id = value?.id;
+    this.reservationId = value?.id;
     this.bookingNumber = value?.reservationNumber;
     this.dateOfArrival = getFormattedDate(value?.arrivalTime);
     this.noShowOn = getFormattedDate(value?.from);
@@ -106,7 +106,7 @@ export class Cancellation extends NoShows {
   cancellationCharge: string;
   cancellationReason: string;
   IDeserialize(value: CancellationReportResponse): this {
-    this.id = value?.id;
+    this.reservationId = value?.id;
     this.bookingNumber = value?.number;
     const guestDetails = value?.guestDetails?.primaryGuest;
     this.guestName = getFullName(
@@ -145,7 +145,7 @@ export class CancellationReport extends ReservationReport
 }
 
 export class Arrival {
-  id?: string;
+  reservationId?: string;
   bookingNo: string;
   guestName: string;
   bookingAmount: number;
@@ -157,7 +157,7 @@ export class Arrival {
   departureTime: string;
   remark: string;
   deserialize(input: ReservationResponseData) {
-    this.id = input.id;
+    this.reservationId = input.id;
     (this.bookingAmount = input.paymentSummary.totalAmount),
       (this.bookingNo = input.number),
       (this.guestName = getFullName(
@@ -228,7 +228,7 @@ export class DraftReservationReport extends ReservationReport
     value &&
       value.forEach((reservationData) => {
         this.records.push({
-          id: reservationData.id,
+          reservationId: reservationData.id,
           bookingNo: reservationData.reservationNumber,
           guestName: getFullName(
             reservationData?.guest?.firstName,
@@ -272,7 +272,7 @@ export class EmployeeWiseReservationReport
           reservationData.reservationItemsPayment.totalSgstTax;
 
         this.records.push({
-          id: reservationData.id,
+          reservationId: reservationData.id,
           userName: getFullName(
             reservationData?.user?.firstName,
             reservationData?.user?.lastName
@@ -305,7 +305,7 @@ export class ReservationAdrReport
     value &&
       value.forEach((data) => {
         this.records.push({
-          id: data.id,
+          reservationId: data.id,
           bookingNo: data.number,
           guestName: getFullName(
             data.guestDetails.primaryGuest.firstName,
@@ -340,7 +340,7 @@ export class IncomeSummaryReport
           data.reservationItemsPayment.totalAddOnsAmount +
           data.reservationItemsPayment.totalRoomCharge;
         this.records.push({
-          id: data.id,
+          reservationId: data.id,
           bookingNo: data.number,
           guestName: getFullName(
             data.guestDetails.primaryGuest.firstName,
@@ -374,7 +374,7 @@ export class ReservationSummaryReport
       value &&
       value.map((data) => {
         return {
-          id: data.id,
+          reservationId: data.id,
           businessSource: data?.source,
           marketSegment: data?.marketSegment, //to be added in response
           phoneNumber:
@@ -442,6 +442,7 @@ export class ExpressCheckIn
     value &&
       value.forEach((data) => {
         this.records.push({
+          reservationId: data?.id,
           bookingNo: data?.number,
           guestName: getFullName(
             data.guestDetails.primaryGuest.firstName,

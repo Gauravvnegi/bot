@@ -14,6 +14,8 @@ import {
   GuestHistoryResponse,
   GuestLedgerData,
   GuestLedgerResponse,
+  GuestTypeReportData,
+  GuestTypeReportResponse,
   SalesByGuestData,
   SalesByGuestResponse,
 } from '../types/guest-reports.types';
@@ -155,7 +157,7 @@ export class GuestLedger implements ReportClass<GuestLedgerData, any> {
     value &&
       value.forEach((reservationData) => {
         this.records.push({
-          id: reservationData?.id,
+          reservationId: reservationData?.id,
           roomNo: reservationData?.stayDetails?.room?.roomNumber,
           name: getFullName(
             reservationData?.guestDetails.primaryGuest.firstName,
@@ -231,6 +233,15 @@ export class GuestComplaintReport
           jobDuration: item?.jobDuration,
         };
       });
+    return this;
+  }
+}
+
+export class GuestTypeReport
+  implements ReportClass<GuestTypeReportData, GuestTypeReportResponse> {
+  records: GuestTypeReportData[];
+
+  deserialize(value: {} | GuestTypeReportResponse[]): this {
     return this;
   }
 }

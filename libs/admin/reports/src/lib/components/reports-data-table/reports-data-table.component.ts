@@ -281,9 +281,9 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
   }
 
   onRowClick(data) {
-    if (data?.id || data?.bookingId) {
+    if (data?.reservationId || data?.guestId) {
       this.bookingDetailService.openBookingDetailSidebar({
-        ...(data.id && { bookingId: data.id }),
+        ...(data.reservationId && { bookingId: data.reservationId }),
         ...(data.guestId && { guestId: data.guestId }),
         ...(data.tabKey && { tabKey: data.tabKey }),
       });

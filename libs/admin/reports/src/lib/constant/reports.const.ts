@@ -36,6 +36,7 @@ import {
   GuestEscalationComplaintReport,
   GuestHistory,
   GuestLedger,
+  GuestTypeReport,
   SalesByGuest,
 } from '../models/guest-reports.model';
 import { ManagerFlashReport } from '../models/manager-reports.models';
@@ -181,22 +182,22 @@ export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
   taxReport: TaxReport,
   guestHistory: GuestHistory,
   salesByGuest: SalesByGuest,
-  guestTypeReport: AuditRoomDetailsReport, //to be decided
+  guestTypeReport: GuestTypeReport,
   guestLedger: GuestLedger,
   discountAllowance: DiscountAllowanceReport,
-  companyContributionsReport: CompanyContributionsReport, //to be decided
+  companyContributionsReport: CompanyContributionsReport,
   noShowSummaryReport: NoShowSummaryReport,
   mtdAndYtdReport: MtdAndYtdReport,
   directAgentBillingReport: DirectAgentBillingReport,
   directCompanyBillingReport: DirectCompanyBillingReport,
   marketSource: MarketSourceReport,
   businessAnalysisReport: BusinessAnalysisReport,
-  financialReport: FinancialReport, //to be decided
+  financialReport: FinancialReport,
   closeOutBalance: CloseOutBalanceReport,
   depositReport: DepositReport,
   postingAuditReport: PostingAuditReport,
-  folioListReport: FolioListReport, //to be decided
-  guestContactReport: GuestContactReport, //to be decided
+  folioListReport: FolioListReport,
+  guestContactReport: GuestContactReport,
   payTypeReport: PayTypeReport,
   occupancyAnalysisReport: OccupancyAnalysisReport,
   expressCheckIn: ExpressCheckIn,

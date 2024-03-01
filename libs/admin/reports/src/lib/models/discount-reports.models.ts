@@ -21,7 +21,7 @@ export class DiscountAllowanceReport
     value &&
       value.forEach((reservationData: DiscountAllowanceReportResponse) => {
         this.records.push({
-          id: reservationData?.id,
+          reservationId: reservationData?.id,
           date: getFormattedDate(reservationData.created),
           group: undefined, //to be added in response
           res: reservationData.number,
@@ -57,7 +57,7 @@ export class PromoCodeReport
       value &&
       value.map((res) => {
         return {
-          id: res?.id,
+          reservationId: res?.id,
           promoCode: res?.offer?.packageCode,
           discount: toCurrency(res?.offer?.discountedPrice),
           redemptions: getFormattedDate(res?.arrivalTime),

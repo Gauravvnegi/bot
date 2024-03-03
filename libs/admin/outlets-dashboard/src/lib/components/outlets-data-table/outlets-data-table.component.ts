@@ -15,7 +15,7 @@ import {
   manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
 import { LazyLoadEvent } from 'primeng/api';
-import { Observable, Subscription, forkJoin } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { OutletTableService } from '../../services/outlet-table.service';
 import * as FileSaver from 'file-saver';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -23,7 +23,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import {
   OrderReservationStatusDetails,
   OrderTableType,
-  ReservationStatusDetails,
+  TableReservationStatusDetails,
   posCols,
   reservationTypes,
 } from '../../constants/data-table';
@@ -32,13 +32,10 @@ import {
   OutletReservation,
   OutletReservationTableList,
 } from '../../models/outlet-reservation.model';
-import { ReservationStatus } from '../../types/reservation-table';
+import { OrderReservationStatus } from '../../types/reservation-table';
 import { PosReservationComponent } from '../pos-reservation/pos-reservation.component';
 import { OutletFormService } from '../../services/outlet-form.service';
-import {
-  GuestReservationListResponse,
-  TableListResponse,
-} from '../../types/outlet.response';
+
 @Component({
   selector: 'hospitality-bot-outlets-data-table',
   templateUrl: './outlets-data-table.component.html',
@@ -134,7 +131,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
             data?.entityTypeCounts,
             data?.entityStateCounts,
             data?.total,
-            ReservationStatusDetails
+            TableReservationStatusDetails
           );
         },
         ({ error }) => {
@@ -224,7 +221,10 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     });
   }
 
-  handleStatus(status: ReservationStatus, reservationData: OutletReservation) {}
+  handleStatus(
+    status: OrderReservationStatus,
+    reservationData: OutletReservation
+  ) {}
 
   editOrder(orderId: string) {
     this.addNewOrder(orderId);

@@ -1,18 +1,11 @@
 import { EntityState, Option } from '@hospitality-bot/admin/shared';
 import {
-  GuestReservationListResponse,
-  TableListResponse,
-  TableResponse,
-} from '../types/outlet.response';
-import {
-  ReservationStatus,
   PaymentStatus,
   TableStatus,
   ReservationTableListResponse,
   PosOrderResponse,
   OrderReservationStatus,
 } from '../types/reservation-table';
-import { GuestReservation } from './guest-reservation.model';
 import {
   formatEpochTime,
   getFullName,
@@ -21,7 +14,6 @@ import {
   TableReservationListResponse,
   TableReservationResponse,
 } from '../types/table-booking.response';
-import { DateService } from '@hospitality-bot/shared/utils';
 
 export class OutletReservationTableList {
   reservationData: OutletReservationTable[];
@@ -58,7 +50,7 @@ export class OutletReservationTable {
 
   deserialize(input: PosOrderResponse) {
     this.orderId = input?.id;
-    this.area = 'A1';
+    this.area = input.reservation?.areaName;
     this.bookingNumber = input?.reservation?.reservationNumber ?? input?.number;
     this.date = input?.reservation?.from;
     this.totalAmount = input?.pricingDetails?.totalAmount;
@@ -117,7 +109,7 @@ export class OutletReservation {
   price: number;
   preparationTime: string;
   paymentStatus: PaymentStatus;
-  reservationStatus: ReservationStatus;
+  reservationStatus: OrderReservationStatus;
   numberOfItems: number;
   orderMethod: string;
   tableStatus: TableStatus;
@@ -152,14 +144,14 @@ export class OutletReservation {
     this.nextStates = ['DRAFT'];
     this.orderNumber = reservationData?.order?.number;
     this.price = undefined;
-    this.reservationStatus = reservationData?.status as ReservationStatus;
+    this.reservationStatus = reservationData?.status as OrderReservationStatus;
     this.numberOfItems = undefined;
     this.orderMethod = undefined;
     this.tableStatus = reservationData?.id
       ? reservationData.order?.number
         ? 'RUNNING_TABLE'
         : 'RUNNING_KOT_TABLE'
-      : 'BLANK_TABLE';
+      : 'VACANT_TABLE';
     this.id = reservationData?.id;
     this.numberOfItems = reservationData?.order?.kots.reduce((total, kot) => {
       const itemsWithMenuItem = kot.items.filter((item) => item.menuItem);

@@ -32,7 +32,7 @@ import {
   Menu,
   MenuItemResponse,
 } from 'libs/admin/all-outlets/src/lib/types/outlet';
-import { Subscription } from 'rxjs';
+import { EMPTY, Subscription } from 'rxjs';
 import {
   MealPreferences,
   OrderTypes,
@@ -50,6 +50,7 @@ import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { reservationTabFilters } from '../../constants/data-table';
 import { PosReservationResponse } from '../../types/reservation-table';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
+import { debounceTime, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-pos-reservation',
@@ -122,6 +123,7 @@ export class PosReservationComponent implements OnInit {
     if (this.orderId) this.initOrderData();
     if (this.reservationId && !this.orderId) this.initReservationData();
     if (!this.reservationId && !this.orderId) this.getTableData();
+    this.getOrderSummary();
   }
 
   initForm() {
@@ -142,6 +144,15 @@ export class PosReservationComponent implements OnInit {
         paymentMethod: [''],
         paymentRecieved: [null],
         transactionId: [''],
+      }),
+      paymentSummary: this.fb.group({
+        totalCharge: [0],
+        totalContainerCharge: [0],
+        totalDiscount: [0],
+        totalPayable: [0],
+        totalPaidAmount: [0],
+        remainingBalance: [0],
+        totalTaxes: [0],
       }),
       offer: [''],
     });
@@ -365,6 +376,32 @@ export class PosReservationComponent implements OnInit {
     );
   }
 
+  getOrderSummary() {
+    this.$subscription.add(
+      this.formService.getOrderSummary
+        .pipe(
+          debounceTime(100),
+          switchMap((res) => {
+            if (!res) {
+              return EMPTY; // No need to proceed if res is falsy
+            }
+
+            const data = this.formService.postOrderSummaryData(
+              this.userForm.getRawValue() as MenuForm,
+              this.orderId
+            );
+            return this.outletTableService.getOrderSummary(data);
+          })
+        )
+        .subscribe((res) => {
+          if (res) {
+            const paymentData = this.formService.mapPaymentSummary(res);
+            this.inputControls.paymentSummary.patchValue(paymentData);
+          }
+        })
+    );
+  }
+
   listenForTableChanges() {
     this.orderInfoControls.tableNumber.valueChanges.subscribe((res) => {
       if (res) {
@@ -402,7 +439,7 @@ export class PosReservationComponent implements OnInit {
       toDate: this.globalQueries[0].toDate,
       fromDate: this.globalQueries[1].fromDate,
       entityState: 'ALL',
-      type: 'GUEST',
+      type: 'GUEST,NON_RESIDENT_GUEST',
     };
     return queries;
   }
@@ -610,6 +647,7 @@ export class PosReservationComponent implements OnInit {
   }
 
   close(isSaved: boolean = false) {
+    this.$subscription.unsubscribe();
     this.selectedCategories = [];
     this.formService.resetData();
     this.onCloseSidebar.emit(isSaved);
@@ -638,6 +676,15 @@ export class PosReservationComponent implements OnInit {
       keyof MenuForm['reservationInformation'],
       AbstractControl
     >;
+  }
+
+  get paymentSummaryControls() {
+    return (this.userForm.get('paymentSummary') as FormGroup)
+      .controls as Record<keyof MenuForm['paymentSummary'], AbstractControl>;
+  }
+
+  get inputControls() {
+    return this.userForm.controls as Record<keyof MenuForm, AbstractControl>;
   }
 
   ngOnDestroy() {

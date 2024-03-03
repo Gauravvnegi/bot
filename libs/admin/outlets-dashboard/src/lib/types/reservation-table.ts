@@ -61,7 +61,7 @@ export type PosReservationResponse = {
   source: string;
   sourceName: string;
   reservationNumber: string;
-  status: ReservationStatus;
+  status: OrderReservationStatus;
   tableNumberOrRoomNumber: string;
   created: number;
   updated: number;
@@ -71,8 +71,9 @@ export type PosReservationResponse = {
   printRate: boolean;
   tableIdOrRoomId: string;
   externalBooking: boolean;
-  guest?: OutletGuest;
-  areaId?: string;
+  guest: OutletGuest;
+  areaId: string;
+  areaName: string;
   order?: Omit<PosOrderResponse, 'reservation'>;
 };
 
@@ -91,15 +92,6 @@ export type KotMenuItem = {
   menuItem?: MenuItemResponse;
 };
 
-export type ReservationStatus =
-  | 'COMPLETED'
-  | 'CONFIRMED'
-  | 'CANCELED'
-  | 'PREPARING'
-  | 'PAID'
-  | 'DRAFT'
-  | TableStatus;
-
 export type PaymentStatus = 'PAID' | 'UNPAID';
 
 export type OrderReservationStatus = 'COMPLETED' | 'CONFIRMED' | 'CANCELED';
@@ -117,7 +109,7 @@ export type TableStatus =
   | 'RUNNING_KOT_TABLE'
   | 'RUNNING_TABLE'
   | 'PRINTED_TABLE'
-  | 'BLANK_TABLE';
+  | 'VACANT_TABLE';
 
 export type OrderOffer = {
   label: string;

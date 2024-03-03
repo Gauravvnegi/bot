@@ -226,40 +226,93 @@
             </ng-container>
           </div>
         </ng-container>
-        <ng-container formGroupName="paymentInformation">
-          <div class="payment-wrapper">
-            <p class="payment-header">Bill Details</p>
+        <div class="payment-wrapper">
+          <p class="payment-header">Bill Details</p>
+          <ng-container formGroupName="paymentSummary">
             <div class="payment-details">
               <ul>
                 <li class="payment-item">
                   <span>Total Charges</span>
-                  <span>{{ totalAmount | currency: 'INR' }} </span>
+                  <span
+                    >{{
+                      paymentSummaryControls.totalCharge.value | currency: 'INR'
+                    }}
+                  </span>
                 </li>
-                <!-- <li class="payment-item">
-                  <span>Total Container Charges</span>
-                  <span>{{ 223 | currency: 'INR' }} </span>
-                </li> -->
                 <li class="payment-item">
+                  <span>Total Taxes & Fees</span>
+                  <span
+                    >{{
+                      paymentSummaryControls.totalTaxes.value | currency: 'INR'
+                    }}
+                  </span>
+                </li>
+                <li
+                  class="payment-item"
+                  *ngIf="orderInfoControls.orderType.value !== 'DINE_IN'"
+                >
+                  <span>Total Container Charge</span>
+                  <span
+                    >{{
+                      paymentSummaryControls.totalContainerCharge.value
+                        | currency: 'INR'
+                    }}
+                  </span>
+                </li>
+                <li
+                  class="payment-item"
+                  *ngIf="paymentSummaryControls.totalDiscount.value"
+                >
                   <span>Total Discount</span>
-                  <span>{{ 0 | currency: 'INR' }} </span>
+                  <span
+                    >{{
+                      paymentSummaryControls.totalDiscount.value
+                        | currency: 'INR'
+                    }}
+                  </span>
                 </li>
                 <li class="payment-item">
                   <span>Total Payable</span>
-                  <span>{{ totalAmount | currency: 'INR' }} </span>
+                  <span
+                    >{{
+                      paymentSummaryControls.totalPayable.value
+                        | currency: 'INR'
+                    }}
+                  </span>
                 </li>
-                <li class="payment-item">
+                <li
+                  class="payment-item"
+                  *ngIf="paymentSummaryControls.totalPaidAmount.value"
+                >
                   <span>Total Paid Amount</span>
-                  <span>{{ 0 | currency: 'INR' }} </span>
+                  <span
+                    >{{
+                      paymentSummaryControls.totalPaidAmount.value
+                        | currency: 'INR'
+                    }}
+                  </span>
                 </li>
               </ul>
               <div class="remaining-balance">
                 <span>Remaining Balance</span>
-                <span>{{
-                  totalAmount - paymentControls.paymentRecieved.value
-                    | currency: 'INR'
-                }}</span>
+                <span
+                  [ngStyle]="{
+                    color:
+                      paymentSummaryControls.remainingBalance.value -
+                        paymentControls.paymentRecieved.value <
+                      0
+                        ? 'red'
+                        : ''
+                  }"
+                  >{{
+                    paymentSummaryControls.remainingBalance.value -
+                      paymentControls.paymentRecieved.value | currency: 'INR'
+                  }}</span
+                >
               </div>
             </div>
+          </ng-container>
+          <ng-container formGroupName="paymentInformation">
             <div class="form-block">
               <hospitality-bot-select-group
                 class="full-width select-group"
@@ -270,7 +323,8 @@
                 class="half-width"
                 controlName="paymentRecieved"
                 [props]="{
-                  placeholder: 'Payment Recieved'
+                  placeholder: 'Payment Recieved',
+                  type: 'number'
                 }"
               ></hospitality-bot-input>
               <hospitality-bot-input
@@ -281,8 +335,8 @@
                 }"
               ></hospitality-bot-input>
             </div>
-          </div>
-        </ng-container>
+          </ng-container>
+        </div>
       </ng-container>
     </ng-container>
   </ng-container>

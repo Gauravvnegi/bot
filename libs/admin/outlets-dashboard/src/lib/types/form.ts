@@ -1,12 +1,14 @@
 import { EntitySubType } from '@hospitality-bot/admin/shared';
 import { MealPreferences, OrderTypes } from './menu-order';
-import { KotMenuItem, ReservationStatus } from './reservation-table';
+import { KotMenuItem, OrderReservationStatus } from './reservation-table';
 import { AddressFieldType } from 'libs/admin/guests/src/lib/types/guest.type';
+import { ReservationType } from '../components/add-guest-list/add-guest-list.component';
 
 export class MenuForm {
   reservationInformation: ReservationInformation;
   paymentInformation: PaymentInformation;
   kotInformation: KotInformation;
+  paymentSummary: OrderPaymentSummary;
   offer: string;
 }
 
@@ -55,7 +57,7 @@ export type KotItemsForm = {
 export type MenuOrderResponse = {
   id: string;
   number: string;
-  status: ReservationStatus;
+  status: ReservationType;
   type: OrderTypes;
   items: MenuItemResponse[];
   entityId: string;
@@ -76,6 +78,15 @@ export type MenuItemResponse = {
   currency?: string;
   itemId: string;
   kotId?: string;
+};
+
+export type OrderPaymentSummary = {
+  totalCharge: number;
+  totalContainerCharge: number;
+  totalDiscount: number;
+  totalPayable: number;
+  totalPaidAmount: number;
+  remainingBalance: number;
 };
 
 export type ItemType = 'ITEM_CHARGE' | 'ITEM_TAX' | 'PAID';
@@ -107,7 +118,7 @@ export type KotItemsResponse = {
 };
 
 export type CreateOrderData = {
-  status: 'CONFIRMED' | 'DRAFT';
+  status: OrderReservationStatus;
   type: OrderTypes;
   source?: string;
   kots: {
@@ -145,6 +156,7 @@ export type CreateOrderData = {
     amount: number;
     transactionId: string;
   };
+  containerCharge?: number;
 };
 
 export type AddGuestForm = {
@@ -167,7 +179,7 @@ export type CreateReservationData = {
   occupancyDetails: {
     maxAdult: number;
   };
-  status: ReservationStatus;
+  status: ReservationType;
   guestId: string;
   tableIds: string[];
   from: number;

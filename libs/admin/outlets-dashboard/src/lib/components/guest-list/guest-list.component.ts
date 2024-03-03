@@ -22,7 +22,7 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subscription, of } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
-import { seatedChips, seatedTabGroup } from '../../constants/guest-list.const';
+import { chipsFilter, seatedTabGroup } from '../../constants/guest-list.const';
 import {
   GuestReservation,
   GuestReservationList,
@@ -39,7 +39,7 @@ import { AddGuestListComponent } from '../add-guest-list/add-guest-list.componen
 export class GuestListComponent implements OnInit {
   readonly chipEnum = ChipType;
   readonly tabEnum = TabsType;
-  readonly seatedChips: Option<ChipType>[] = seatedChips;
+  readonly chipsFilter: Option<ChipType>[] = chipsFilter;
   readonly seatedTabGroup: Option<TabsType>[] = seatedTabGroup;
   paginationDisabled: boolean = false;
   seatedGuestList: GuestReservation[] = [];
@@ -156,6 +156,10 @@ export class GuestListComponent implements OnInit {
     this.useForm.patchValue(
       { search: '', chip: event.value },
       { emitEvent: false }
+    );
+
+    this.activeIndex = this.chipsFilter.findIndex(
+      (chips) => chips.value === event.value
     );
 
     this.initGuestReservation();
@@ -301,6 +305,7 @@ export class GuestListComponent implements OnInit {
       chip: ChipType.seated,
       tab: TabsType.all,
     });
+
     this.tabFilterSelectedIndex = 0; //reset tab filter selection
     this.activeIndex = 0; //need to refactor bot chips component
     this.selectedDateFilterIndex === 0

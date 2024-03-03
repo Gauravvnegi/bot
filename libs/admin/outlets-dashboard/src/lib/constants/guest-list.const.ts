@@ -1,7 +1,7 @@
 import { Option } from 'libs/admin/shared/src';
 import { ChipType, TabsType } from '../types/guest.type';
 
-export const seatedChips: Option<ChipType>[] = [
+export const chipsFilter: Option<ChipType>[] = [
   {
     label: 'Seated',
     value: ChipType.seated,

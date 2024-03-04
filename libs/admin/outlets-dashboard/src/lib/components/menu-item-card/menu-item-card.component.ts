@@ -11,6 +11,8 @@ import { MenuItem } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 })
 export class MenuItemCardComponent implements OnInit {
   @Input() itemCard: MenuItem;
+  @Input() disabled: boolean;
+  
   selectedItems: MenuItem[] = [];
   parentFormGroup: FormGroup;
   readonly mealPreferenceConfig = mealPreferenceConfig;

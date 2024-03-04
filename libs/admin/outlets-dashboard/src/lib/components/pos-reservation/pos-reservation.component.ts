@@ -87,6 +87,7 @@ export class PosReservationComponent implements OnInit {
   loadingMenuItems: boolean = false;
   isPopular = true;
   initialMenuItemsLoad = false;
+  isDisabledForm = false;
 
   searchApi: string = '/api/v1/search/menu-items';
   selectedPreference: MealPreferences = MealPreferences.ALL;
@@ -207,6 +208,10 @@ export class PosReservationComponent implements OnInit {
           if (res) {
             const formData = this.formService.mapOrderData(res);
             this.userForm.patchValue(formData, { emitEvent: false });
+            if (res.status === 'CANCELED') {
+              this.checkboxForm.disable();
+              this.isDisabledForm = true;
+            }
             this.mapDefaultReservationData(res.reservation);
           }
         })
@@ -640,10 +645,11 @@ export class PosReservationComponent implements OnInit {
   handleKOT(print: boolean = false) {}
 
   resetForm() {
-    this.initForm;
+    this.initForm();
     this.selectedCategories = [];
     this.orderId = undefined;
     this.formService.resetData();
+    this.isDisabledForm = false;
   }
 
   close(isSaved: boolean = false) {

@@ -174,6 +174,7 @@
               <hospitality-bot-menu-item-card
                 class="menu-item"
                 [itemCard]="card"
+                [disabled]="isDisabledForm"
               ></hospitality-bot-menu-item-card>
             </ng-container>
           </ng-container>
@@ -208,24 +209,28 @@
       (onClick)="postToRoom()"
       minWidth="120px"
       height="40px"
+      [disabled]="isDisabledForm"
     ></hospitality-bot-button>
     <hospitality-bot-button
       label="Hold"
       (onClick)="handleSave()"
       minWidth="120px"
       height="40px"
+      [disabled]="isDisabledForm"
     ></hospitality-bot-button>
     <hospitality-bot-button
       label="Print & E-bill"
       (onClick)="handleKOT(true)"
       minWidth="120px"
       height="40px"
+      [disabled]="isDisabledForm"
     ></hospitality-bot-button>
     <hospitality-bot-button
       label="KOT & Print"
       (onClick)="handleKOT()"
       minWidth="120px"
       height="40px"
+      [disabled]="isDisabledForm"
     ></hospitality-bot-button>
     <hospitality-bot-button
       label="Cancel"

@@ -6,6 +6,7 @@ import { CreateOrderData, CreateReservationData } from '../types/form';
 import {
   ReservationTableListResponse,
   PosOrderResponse,
+  OrderReservationStatus,
 } from '../types/reservation-table';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 import {
@@ -60,6 +61,14 @@ export class OutletTableService extends ApiService {
   }
 
   updateOrder(entityId: string, orderId: string, data: CreateOrderData) {
+    return this.patch(`/api/v1/entity/${entityId}/order/${orderId}`, data);
+  }
+
+  updateOrderStatus(
+    entityId: string,
+    orderId: string,
+    data: { status: OrderReservationStatus }
+  ) {
     return this.patch(`/api/v1/entity/${entityId}/order/${orderId}`, data);
   }
 

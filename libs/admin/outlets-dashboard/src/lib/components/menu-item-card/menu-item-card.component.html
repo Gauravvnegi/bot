@@ -21,6 +21,7 @@
       (onClick)="addItem()"
       minWidth="95px"
       height="35px"
+      [disabled]="disabled"
     ></hospitality-bot-button>
     <hospitality-bot-button
       *ngIf="checkSelectedItemCTA('remove')"
@@ -30,6 +31,7 @@
       (onClick)="removeItem()"
       minWidth="95px"
       height="35px"
+      [disabled]="disabled"
     ></hospitality-bot-button>
   </div>
 </div>

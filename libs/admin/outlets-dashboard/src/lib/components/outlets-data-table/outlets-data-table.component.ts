@@ -13,6 +13,7 @@ import {
   Option,
   QueryConfig,
   manageMaskZIndex,
+  openModal,
 } from '@hospitality-bot/admin/shared';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
@@ -35,6 +36,8 @@ import {
 import { OrderReservationStatus } from '../../types/reservation-table';
 import { PosReservationComponent } from '../pos-reservation/pos-reservation.component';
 import { OutletFormService } from '../../services/outlet-form.service';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
 @Component({
   selector: 'hospitality-bot-outlets-data-table',
@@ -69,7 +72,8 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     protected adminUtilityService: AdminUtilityService,
     protected snackbarService: SnackBarService,
     private resolver: ComponentFactoryResolver,
-    private formService: OutletFormService
+    private formService: OutletFormService,
+    private dialogService: DialogService
   ) {
     super(fb);
   }
@@ -160,6 +164,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
+        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         {
           order: 'DESC',
           entityType: this.selectedTab,
@@ -224,7 +229,77 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   handleStatus(
     status: OrderReservationStatus,
     reservationData: OutletReservation
-  ) {}
+  ) {
+    let modalRef: DynamicDialogRef;
+
+    const data = {
+      content: {
+        heading: `Mark Order As ${
+          status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
+        }`,
+        descriptions: [
+          `You are about to mark this order as ${status}`,
+          `Are you Sure?`,
+        ],
+      },
+      actions: [
+        {
+          label: 'No',
+          onClick: () => {
+            modalRef.close();
+          },
+          variant: 'outlined',
+        },
+        {
+          label: 'Yes',
+          type: 'SUCCESS',
+          onClick: () => {
+            this.changeStatus(status, reservationData);
+            modalRef.close();
+          },
+          variant: 'contained',
+        },
+      ],
+    };
+
+    modalRef = openModal({
+      config: {
+        width: '35vw',
+        styleClass: 'confirm-dialog',
+        data: data,
+      },
+      component: ModalComponent,
+      dialogService: this.dialogService,
+    });
+  }
+
+  changeStatus(
+    status: OrderReservationStatus,
+    reservationData: OutletReservation
+  ) {
+    this.loading = true;
+    this.$subscription.add(
+      this.outletService
+        .updateOrderStatus(this.entityId, reservationData.orderId, {
+          status: status,
+        })
+        .subscribe(
+          (res) => {
+            this.values.find(
+              (item) => item.id === reservationData.id
+            ).reservationType = status;
+            this.initTableReservations();
+            this.snackbarService.openSnackBarAsText(
+              'Order ' + status + ' changes successfully',
+              '',
+              { panelClass: 'success' }
+            );
+          },
+          this.handleError,
+          this.handleFinal
+        )
+    );
+  }
 
   editOrder(orderId: string) {
     this.addNewOrder(orderId);
@@ -264,6 +339,14 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     );
     manageMaskZIndex();
   }
+
+  /**
+   * @function handleError to show the error
+   * @param param network error
+   */
+  handleError = ({ error }): void => {
+    this.loading = false;
+  };
 
   handleFinal = () => {
     this.loading = false;

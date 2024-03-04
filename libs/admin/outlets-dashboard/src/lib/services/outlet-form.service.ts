@@ -85,15 +85,23 @@ export class OutletFormService {
       status: 'CONFIRMED',
       type: orderType,
       source: 'Offline',
-      kots: kotInformation.kotItems.map((kotItem) => ({
-        instructions: kotItem.kotInstruction,
-        items: kotItem.items.map((item) => ({
-          itemId: item.itemId,
-          unit: item.unit,
-          amount: item.price,
-          remarks: item.itemInstruction,
-        })),
-      })),
+      kots: kotInformation.kotItems
+        .map((kotItem) => {
+          if (kotItem.items.length === 0) {
+            return undefined;
+          } else {
+            return {
+              instructions: kotItem.kotInstruction,
+              items: kotItem.items.map((item) => ({
+                itemId: item.itemId,
+                unit: item.unit,
+                amount: item.price,
+                remarks: item.itemInstruction,
+              })),
+            };
+          }
+        })
+        .filter((kot) => kot !== undefined),
       offer: offer ? { id: offer } : undefined,
       outletType: EntitySubType.RESTAURANT,
       guestId: guest,

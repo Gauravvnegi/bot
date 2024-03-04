@@ -550,6 +550,11 @@ export class PosReservationComponent implements OnInit {
     }
   }
 
+  selectedPreferenceChange(preference: MealPreferences) {
+    this.selectedPreference = preference;
+    this.getMenuItems();
+  }
+
   checkOrderType(isAddress: boolean = false) {
     const selectedOrderType = this.orderInfoControls.orderType.value;
     return selectedOrderType === OrderTypes.DINE_IN;

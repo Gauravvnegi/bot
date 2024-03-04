@@ -61,7 +61,7 @@ export class AddGuestComponent implements OnInit {
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
   selectedMember: Option;
-  guestType: GuestTypes = 'GUEST';
+  guestType: GuestTypes = 'NON_RESIDENT_GUEST';
 
   constructor(
     private fb: FormBuilder,

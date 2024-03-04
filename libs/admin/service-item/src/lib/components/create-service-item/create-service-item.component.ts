@@ -1,5 +1,10 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import {
   ModuleNames,
@@ -22,7 +27,7 @@ import { ServiceItemFormData } from '../../models/create-service-item.model';
   styleUrls: ['./create-service-item.component.scss'],
 })
 export class CreateServiceItemComponent implements OnInit {
-  useForm: FormGroup;
+  serviceItemForm: FormGroup;
   userList: Option[];
   loading: boolean = false;
   pageTitle: string = 'Create Service Item';
@@ -72,18 +77,37 @@ export class CreateServiceItemComponent implements OnInit {
   }
 
   initForm() {
-    this.useForm = this.fb.group({
+    this.serviceItemForm = this.fb.group({
       active: [true],
       itemName: ['', [Validators.required]],
       categoryId: ['', [Validators.required]],
       sla: ['', [Validators.required]],
       users: ['', [Validators.required]],
       remarks: [''],
+      defaultItemUser: ['', [Validators.required]],
     });
+
+    this.listenForFormValuesChanges();
 
     if (this.serviceItemId) {
       this.getServiceItemDetails();
     }
+  }
+
+  listenForFormValuesChanges() {
+    const { defaultItemUser, users } = this.serviceItemFormControls;
+
+    defaultItemUser.valueChanges.subscribe((newValue) => {
+      const currentValue = users.value;
+
+      const filteredValue =
+        currentValue.length &&
+        currentValue?.filter((value) => value !== newValue);
+
+      if (currentValue.length !== filteredValue.length) {
+        users.patchValue(filteredValue);
+      }
+    });
   }
 
   getServiceItemDetails() {
@@ -91,7 +115,9 @@ export class CreateServiceItemComponent implements OnInit {
       this.serviceItemService
         .getServiceItemById(this.entityId, this.serviceItemId)
         .subscribe((res) => {
-          this.useForm.patchValue(new ServiceItemFormData().deserialize(res));
+          this.serviceItemForm.patchValue(
+            new ServiceItemFormData().deserialize(res)
+          );
         })
     );
   }
@@ -129,14 +155,14 @@ export class CreateServiceItemComponent implements OnInit {
   }
 
   handleSubmit() {
-    if (this.useForm.invalid) {
-      this.useForm.markAllAsTouched();
+    if (this.serviceItemForm.invalid) {
+      this.serviceItemForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
         'Invalid form: Please fix the errors.'
       );
       return;
     }
-    let { sla, ...rest } = this.useForm.getRawValue();
+    let { sla, ...rest } = this.serviceItemForm.getRawValue();
     sla = sla / (1000 * 60);
 
     this.loading = true;
@@ -180,7 +206,7 @@ export class CreateServiceItemComponent implements OnInit {
               label: res?.name,
               value: res?.id,
             });
-            this.useForm.get('categoryId').setValue(res.id);
+            this.serviceItemForm.get('categoryId').setValue(res.id);
             this.snackbarService.openSnackBarAsText(
               'Category created successfully',
               '',
@@ -218,6 +244,20 @@ export class CreateServiceItemComponent implements OnInit {
     }
   };
 
+  get userOptions() {
+    return this.userList?.filter(
+      (user) =>
+        user?.value !== this.serviceItemForm?.get('defaultItemUser')?.value
+    );
+  }
+
+  get serviceItemFormControls() {
+    return this.serviceItemForm.controls as Record<
+      keyof ServiceItemFormData,
+      AbstractControl
+    >;
+  }
+
   handleError = (error) => {
     this.loading = false;
   };
@@ -227,7 +267,7 @@ export class CreateServiceItemComponent implements OnInit {
   };
 
   resetForm() {
-    this.useForm.reset();
+    this.serviceItemForm.reset();
   }
 
   ngOnDestroy(): void {

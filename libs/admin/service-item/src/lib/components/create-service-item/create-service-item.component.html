@@ -6,7 +6,7 @@
       *ngIf="!isSidebar; else sidebarHeader"
     >
     </hospitality-bot-navigation-header>
-    <div class="form-block" [formGroup]="useForm">
+    <div class="form-block" [formGroup]="serviceItemForm">
       <hospitality-bot-input
         [class]="isSidebar ? 'full-width' : 'half-width'"
         controlName="itemName"
@@ -36,11 +36,21 @@
         label="SLA"
         format="millisecond"
       ></hospitality-bot-time-picker>
+      <hospitality-bot-select
+        [class]="isSidebar ? 'full-width' : 'half-width'"
+        [options]="userList"
+        label="Default user"
+        controlName="defaultItemUser"
+        [props]="{
+          placeholder: 'Select Default user'
+        }"
+      ></hospitality-bot-select>
       <hospitality-bot-multi-select
         [class]="isSidebar ? 'full-width' : 'half-width'"
         controlName="users"
         label="Users"
-        [options]="userList"
+        [options]="userOptions"
+        [disabled]="!serviceItemForm.get('defaultItemUser').value"
         [props]="{
           isAsync: true
         }"
@@ -50,7 +60,6 @@
           isExtras: true
         }"
       ></hospitality-bot-multi-select>
-
       <hospitality-bot-text-area
         class="full-width"
         controlName="remarks"

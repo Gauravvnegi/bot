@@ -7,6 +7,7 @@ export class ServiceItemFormData {
   users: string[];
   remarks: string;
   active: boolean;
+  defaultItemUser: string;
 
   deserialize(input: ServiceItemResponse) {
     this.itemName = input?.itemName;
@@ -15,6 +16,7 @@ export class ServiceItemFormData {
     this.users = input?.requestItemUsers.map((item) => item.userId);
     this.remarks = input?.remarks;
     this.active = input?.active;
+    this.defaultItemUser = input?.defaultItemUser;
 
     return this;
   }

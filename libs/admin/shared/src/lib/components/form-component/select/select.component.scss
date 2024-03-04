@@ -19,6 +19,7 @@
   -webkit-box-orient: vertical;
   display: flex !important;
   align-items: flex-start;
+  flex-direction: column;
 }
 
 .selected-item {

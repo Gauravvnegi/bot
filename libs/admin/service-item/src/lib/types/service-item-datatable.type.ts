@@ -37,6 +37,7 @@ export type ServiceItemResponse = {
     closedJobs: string;
     openJobs: string;
   };
+  defaultItemUser: string;
 };
 
 export type ServiceItemListResponse = {

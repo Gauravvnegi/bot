@@ -147,11 +147,7 @@ export class OutletReservation {
     this.reservationStatus = reservationData?.status as OrderReservationStatus;
     this.numberOfItems = undefined;
     this.orderMethod = undefined;
-    this.tableStatus = reservationData?.id
-      ? reservationData.order?.number
-        ? 'RUNNING_TABLE'
-        : 'RUNNING_KOT_TABLE'
-      : 'VACANT_TABLE';
+    this.tableStatus = table?.status as TableStatus;
     this.id = reservationData?.id;
     this.numberOfItems = reservationData?.order?.kots.reduce((total, kot) => {
       const itemsWithMenuItem = kot.items.filter((item) => item.menuItem);

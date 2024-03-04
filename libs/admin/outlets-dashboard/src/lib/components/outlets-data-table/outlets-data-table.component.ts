@@ -16,7 +16,7 @@ import {
   openModal,
 } from '@hospitality-bot/admin/shared';
 import { LazyLoadEvent } from 'primeng/api';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { OutletTableService } from '../../services/outlet-table.service';
 import * as FileSaver from 'file-saver';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -38,6 +38,7 @@ import { PosReservationComponent } from '../pos-reservation/pos-reservation.comp
 import { OutletFormService } from '../../services/outlet-form.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-outlets-data-table',
@@ -63,6 +64,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   selectedTab: OrderTableType;
 
   readonly reservationStatusDetails = OrderReservationStatusDetails;
+  private cancelRequests$ = new Subject<void>();
 
   constructor(
     public fb: FormBuilder,
@@ -97,13 +99,16 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   }
 
   setReservationType(value: string) {
+    this.tabFilterItems = [];
+    this.tabFilterIdx = 0;
+    this.resetTableValues();
     this.selectedReservationType = value;
     this.tableFG.patchValue({ reservationType: value });
-    this.selectedReservationType === 'table' && this.initTableReservations();
-    this.selectedReservationType === 'card' && this.initCardViewList();
+    this.loadData();
   }
 
   loadData(event?: LazyLoadEvent): void {
+    this.cancelRequests$.next();
     this.selectedReservationType === 'table' && this.initTableReservations();
     this.selectedReservationType === 'card' && this.initCardViewList();
   }
@@ -126,23 +131,26 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     };
 
     this.subscriptionList$.add(
-      this.outletService.getLiveTableList(this.entityId, config).subscribe(
-        (response) => {
-          const data = new OutletReservationList().deserialize(response);
+      this.outletService
+        .getLiveTableList(this.entityId, config)
+        .pipe(takeUntil(this.cancelRequests$))
+        .subscribe(
+          (response) => {
+            const data = new OutletReservationList().deserialize(response);
 
-          this.values = data?.reservationData;
-          this.initFilters(
-            data?.entityTypeCounts,
-            data?.entityStateCounts,
-            data?.total,
-            TableReservationStatusDetails
-          );
-        },
-        ({ error }) => {
-          this.loading = false;
-        },
-        this.handleFinal
-      )
+            this.values = data?.reservationData;
+            this.initFilters(
+              data?.entityTypeCounts,
+              data?.entityStateCounts,
+              data?.total,
+              TableReservationStatusDetails
+            );
+          },
+          ({ error }) => {
+            this.loading = false;
+          },
+          this.handleFinal
+        )
     );
   }
 
@@ -167,7 +175,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
         ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         {
           order: 'DESC',
-          entityType: this.selectedTab,
+          entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
           includeKot: true,
           raw: true,
           offset: this.first,
@@ -183,6 +191,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.outletService
         .getTableReservations(this.entityId, this.getQueryConfig())
+        .pipe(takeUntil(this.cancelRequests$))
         .subscribe((res) => {
           const data = new OutletReservationTableList().deserialize(res);
           this.values = data.reservationData;

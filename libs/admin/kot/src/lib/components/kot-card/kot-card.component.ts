@@ -39,6 +39,7 @@ export class KotCardComponent implements OnInit {
       this.kotServices
         .updateOrder(this.entityId, this._config.orderId, {
           kots: [{ id: this._config.id, status: 'PREPARED' }],
+          reservationId: this._config.reservationId,
         })
         .subscribe((res) => {
           this.kotServices.refreshData.next(true);

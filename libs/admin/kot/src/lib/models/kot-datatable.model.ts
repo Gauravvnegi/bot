@@ -42,6 +42,7 @@ export class Kot {
   createdTime: number;
   status: string; //'PREPARING' | 'PREPARED';
   color: string;
+  reservationId: string;
 
   deserialize(order: OrderResponse, kot: KotResponse) {
     this.id = kot?.id;
@@ -58,6 +59,7 @@ export class Kot {
 
     this.createdTime = kot?.created;
     this.color = this.getColor(this.timer);
+    this.reservationId = order?.reservationId;
     this.menuItem = kot?.items.map((item) => new MenuItem().deserialize(item));
     return this;
   }

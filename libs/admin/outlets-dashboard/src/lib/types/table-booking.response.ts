@@ -39,6 +39,7 @@ export type TableReservationResponse = {
   entityId: string;
   inventoryType: string;
   frontOfficeState: string;
+  status: string;
   booking: {
     id: string;
     from: string;

@@ -29,10 +29,23 @@
   .p-datatable .p-datatable-footer {
     display: none;
   }
+
+  .p-datatable .p-datatable-tbody tr {
+    border-bottom: unset !important;
+    margin-inline: auto;
+  }
 }
 
 :host ::ng-deep .status-toggle {
   .wrapper {
     display: flex;
+  }
+}
+
+:host ::ng-deep {
+  .empty {
+    .p-datatable-tbody {
+      display: flex !important;
+    }
   }
 }

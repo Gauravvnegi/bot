@@ -237,6 +237,7 @@
     <p-table
       #dt
       class="card-view"
+      [ngClass]="{ empty: values.length === 0 }"
       [styleClass]="tableConfig.styleClass"
       [resizableColumns]="isResizableColumns"
       [autoLayout]="isAutoLayout"

@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { EntityTabFilterResponse, QueryConfig } from '@hospitality-bot/admin/shared';
+import {
+  EntityTabFilterResponse,
+  QueryConfig,
+} from '@hospitality-bot/admin/shared';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { OrderListResponse } from '../types/kot-card.type';
@@ -24,7 +27,10 @@ export class KotService extends ApiService {
   updateOrder(
     entityId: string,
     orderId: string,
-    data: { kots: { id: string; status: 'PREPARED' | 'PREPARING' }[] }
+    data: {
+      kots: { id: string; status: 'PREPARED' | 'PREPARING' }[];
+      reservationId: string;
+    }
   ): Observable<any> {
     return this.patch(`/api/v1/entity/${entityId}/order/${orderId}`, data);
   }

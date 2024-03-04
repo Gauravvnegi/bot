@@ -108,4 +108,25 @@ export class TimePickerComponent extends FormComponent {
       event.preventDefault();
     }
   }
+
+  get syncValidators() {
+    const control = this.controlContainer.control.get(this.controlName);
+    const errors = control?.errors;
+
+    const controlNames: string[] = ['hh', 'mm'];
+
+    controlNames.forEach((controlName) => {
+      const formControl = this.timePickerFG.get(controlName);
+      formControl.setErrors(errors);
+
+      const validators = control?.validator;
+      formControl.setValidators(validators);
+
+      if (control?.touched) {
+        formControl.markAsTouched();
+      }
+    });
+
+    return '';
+  }
 }

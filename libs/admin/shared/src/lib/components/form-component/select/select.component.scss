@@ -86,7 +86,7 @@
   }
 
   .p-dropdown {
-    border-color: $border-color !important;
+    border-color: $border-color;
     &::placeholder {
       font-size: 15px;
       line-height: 1.07;

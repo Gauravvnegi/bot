@@ -19,6 +19,7 @@ import { AverageStats, DistributionStats } from '../../types/response.types';
 import { AverageRequestStats } from '../../models/statistics.model';
 import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { CreateServiceItemComponent } from 'libs/admin/service-item/src/lib/components/create-service-item/create-service-item.component';
+import { getTicketCountLabel } from '../../constant/stats';
 
 @Component({
   selector: 'complaint-analytics',
@@ -37,8 +38,8 @@ export class ComplaintAnalyticsComponent implements OnInit {
   agentsOnTicket = 0;
   availableAgents = 0;
 
-  createdPerDay = 0;
-  closedPerDay = 0;
+  createdTicketCount = 0;
+  closedTicketCount = 0;
   sidebarVisible: boolean = false;
 
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
@@ -48,8 +49,10 @@ export class ComplaintAnalyticsComponent implements OnInit {
   buttonConfig = [
     { button: true, label: 'Raise Complaint', icon: 'assets/svg/requests.svg' },
   ];
-
   $subscription = new Subscription();
+
+  createdTickedLabel: string = 'Created/Day';
+  closedTickedLabel: string = 'Closed/Day';
 
   constructor(
     private globalFilterService: GlobalFilterService,
@@ -73,6 +76,14 @@ export class ComplaintAnalyticsComponent implements OnInit {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.createdTickedLabel = getTicketCountLabel(
+          'Created',
+          data['dateRange']?.value?.label
+        );
+        this.closedTickedLabel = getTicketCountLabel(
+          'Closed',
+          data['dateRange']?.value?.label
+        );
         const calenderType = {
           calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
@@ -105,8 +116,8 @@ export class ComplaintAnalyticsComponent implements OnInit {
       .getPerDayRequestStats(this.getConfig())
       .subscribe((res: AverageStats) => {
         const statsData = new AverageRequestStats().deserialize(res);
-        this.createdPerDay = statsData.createdTickets;
-        this.closedPerDay = statsData.resolvedTickets;
+        this.createdTicketCount = statsData.createdTickets;
+        this.closedTicketCount = statsData.resolvedTickets;
         statsData.averageStats.forEach((stat) => {
           this.statCard.push({
             key: stat.key,

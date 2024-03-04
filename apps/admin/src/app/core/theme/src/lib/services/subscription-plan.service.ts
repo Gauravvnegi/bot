@@ -228,6 +228,10 @@ export class SubscriptionPlanService extends ApiService {
     return this.userSubscriptionPermission.productPermission.includes(names);
   }
 
+  checkViewPermission(names: PermissionModuleNames) {
+    return this.userSubscriptionPermission.permission[names]?.canView;
+  }
+
   /**
    * View user permission will also have product
    */

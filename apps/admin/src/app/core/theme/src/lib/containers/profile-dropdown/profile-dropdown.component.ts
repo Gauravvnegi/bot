@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from '@hospitality-bot/admin/shared';
+import {
+  PermissionModuleNames,
+  UserService,
+} from '@hospitality-bot/admin/shared';
 import {
   HotelDetailService,
   ModuleNames,
@@ -65,11 +68,18 @@ export class ProfileDropdownComponent implements OnInit {
         ModuleNames.ROLES_AND_PERMISSION
       );
 
+    const isViewSitePermission = this.subscriptionPlanService.checkViewPermission(
+      PermissionModuleNames.SITE
+    );
+
     this.items = layoutConfig.profile.filter((item) => {
       if (
         // filtering out the manage site - either on mange site or sites not available or createWith not subscribed
         (item.value === UserDropdown.MANAGE_SITES &&
-          (this.onManageSite || !isSiteAvailable || !isCreateWithSubscribed)) ||
+          (this.onManageSite ||
+            !isSiteAvailable ||
+            !isCreateWithSubscribed ||
+            !isViewSitePermission)) ||
         // filtering out manage profile if not subscribed
         (item.value === UserDropdown.PROFILE && !isRolesAndPermissionSubscribed)
       ) {

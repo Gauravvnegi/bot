@@ -151,7 +151,7 @@
           *ngFor="let preference of mealPreferences"
           class="meal-preference"
           [class.selected]="selectedPreference === preference"
-          (click)="selectedPreference = preference"
+          (click)="selectedPreferenceChange(preference)"
         >
           <img
             *ngIf="mealPreferenceConfig[preference]?.image"

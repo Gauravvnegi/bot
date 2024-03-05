@@ -25,7 +25,13 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 import { Observable, Subscription } from 'rxjs';
-import { concatMap, debounceTime, skip, tap } from 'rxjs/operators';
+import {
+  concatMap,
+  debounceTime,
+  distinctUntilChanged,
+  skip,
+  tap,
+} from 'rxjs/operators';
 import { slotHours } from '../../constants/guest-list.const';
 import { GuestFormData } from '../../models/guest-reservation.model';
 import { OutletFormService } from '../../services/outlet-form.service';
@@ -192,19 +198,21 @@ export class AddGuestListComponent implements OnInit {
     });
 
     // Subscription for checkIn value changes
-    checkIn.valueChanges.pipe(debounceTime(300), skip(1)).subscribe((res) => {
-      this.updateCheckOutTime();
+    checkIn.valueChanges
+      .pipe(debounceTime(300), skip(1), distinctUntilChanged())
+      .subscribe((res) => {
+        this.updateCheckOutTime();
 
-      //update seating condition
-      if (!this.guestReservationId) {
-        reservationType.value === ReservationType.CONFIRMED &&
-          currentJourney.patchValue(
-            !(res > this.currentTime)
-              ? ReservationStatus.SEATED
-              : ReservationStatus.WAIT_LISTED
-          );
-      }
-    });
+        //update seating condition
+        if (!this.guestReservationId) {
+          reservationType.value === ReservationType.CONFIRMED &&
+            currentJourney.patchValue(
+              !(res > this.currentTime)
+                ? ReservationStatus.SEATED
+                : ReservationStatus.WAIT_LISTED
+            );
+        }
+      });
 
     // Subscription for slotHours value changes
     slotHours.valueChanges.pipe(debounceTime(300)).subscribe((res) => {
@@ -302,7 +310,7 @@ export class AddGuestListComponent implements OnInit {
       .pipe(
         tap((res) => {
           const tableList: TableOption[] = [];
-          const bookedTableIds: string[] = isCurrentBooking
+          const tableAvailableForBooking: string[] = isCurrentBooking
             ? [this.guestReservationFormControl.tables.value] //@multipleTableBooking: need to change for multiple tables bookings
             : [];
 
@@ -318,16 +326,17 @@ export class AddGuestListComponent implements OnInit {
                 label: item.name,
                 value: item.id,
               });
+
             //creating table options
             item.tables.forEach((table) => {
               if (isCurrentBooking) {
-                bookedTableIds.push(table.id);
+                tableAvailableForBooking.push(table.id);
               } else {
                 tableList.push({
                   label: table.number,
                   value: table.id,
                   areaId: item.id,
-                  disabled: !bookedTableIds.includes(table.id),
+                  disabled: false, //initially marking all table as available
                 });
               }
             });
@@ -337,7 +346,7 @@ export class AddGuestListComponent implements OnInit {
             this.tableOptions = this.backupData.map((data) => {
               return {
                 ...data,
-                disabled: !bookedTableIds.includes(data.value),
+                disabled: !tableAvailableForBooking.includes(data.value), //mark tables as unavailable which not includes in available table group
               };
             });
           } else {

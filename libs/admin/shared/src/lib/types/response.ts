@@ -164,6 +164,7 @@ export interface ReservationResponseData {
     totalSgstTax: number;
     totalRoomCharge: number;
     totalAddOnsAmount: number;
+    totalAllowance: number;
   };
   journeysStatus: Record<string, string>;
   stepsStatus: Record<string, string>;

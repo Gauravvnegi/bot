@@ -85,7 +85,7 @@ export type ReportsType = {
     | 'businessAnalysisReport'
     | 'marketSegmentReport'
     | 'occupancyAnalysisReport';
-  DISCOUNT_REPORTS: 'discountAllowance' | 'promoCodeReport';
+  DISCOUNT_REPORTS: 'discountReport' | 'promoCodeReport' | 'allowanceReport';
   DIRECT_BILLING_REPORTS:
     | 'directAgentBillingReport'
     | 'directCompanyBillingReport';

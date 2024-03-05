@@ -1,10 +1,39 @@
 import { PromoCodeReport } from '../models/discount-reports.models';
 import {
+  AllowanceReportData,
   DiscountAllowanceReportData,
   PromoCodeReportData,
 } from '../types/discount-reports.types';
 import { ColsData } from '../types/reports.types';
 
+export const allowanceReportCols: Partial<ColsData<AllowanceReportData>> = {
+  date: {
+    header: 'Date',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  res: {
+    header: 'Res#',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  createdBy: {
+    header: 'Created By',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  guestName: {
+    header: 'Guest Name',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+
+  allowance: {
+    header: 'Allowance',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+};
 export const discountAllowanceReportCols: Partial<ColsData<
   DiscountAllowanceReportData
 >> = {

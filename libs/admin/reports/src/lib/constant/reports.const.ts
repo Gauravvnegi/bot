@@ -15,6 +15,7 @@ import {
   DirectCompanyBillingReport,
 } from '../models/direct-billing-reports.models';
 import {
+  AllowanceReport,
   DiscountAllowanceReport,
   PromoCodeReport,
 } from '../models/discount-reports.models';
@@ -98,6 +99,7 @@ import {
   directCompanyBillingReportCols,
 } from './direct-billing-reports.const';
 import {
+  allowanceReportCols,
   discountAllowanceReportCols,
   promoCodeReportCols,
 } from './discount-reports.const';
@@ -185,7 +187,7 @@ export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
   salesByGuest: SalesByGuest,
   guestTypeReport: GuestTypeReport,
   guestLedger: GuestLedger,
-  discountAllowance: DiscountAllowanceReport,
+  discountReport: DiscountAllowanceReport,
   companyContributionsReport: CompanyContributionsReport,
   noShowSummaryReport: NoShowSummaryReport,
   mtdAndYtdReport: MtdAndYtdReport,
@@ -213,6 +215,7 @@ export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
   guestEscalationComplaintReport: GuestEscalationComplaintReport,
   houseCountReport: HouseCountReport,
   nightAuditOperation: undefined, //to be implemented
+  allowanceReport: AllowanceReport,
 };
 
 function getColsArray(colsData: ColsData): Cols[] {
@@ -255,7 +258,7 @@ export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
   salesByGuest: getColsArray(SalesByGuestCols),
   guestTypeReport: getColsArray(guestTypeReportCols),
   guestLedger: getColsArray(guestLedgerCols),
-  discountAllowance: getColsArray(discountAllowanceReportCols),
+  discountReport: getColsArray(discountAllowanceReportCols),
   companyContributionsReport: getColsArray(companyContributionsReportCols),
   noShowSummaryReport: getColsArray(noShowSummaryReportCols), //to be decided
   mtdAndYtdReport: getColsArray(mtdAndYtdReportCols), //to be decided
@@ -285,6 +288,7 @@ export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
   ),
   houseCountReport: getColsArray(houseCountReportCols),
   nightAuditOperation: getColsArray({}),
+  allowanceReport: getColsArray(allowanceReportCols),
 };
 
 export const reportFiltersMapping: Record<
@@ -319,7 +323,7 @@ export const reportFiltersMapping: Record<
   salesByGuest: ['fromDate', 'toDate'],
   guestTypeReport: ['fromDate', 'toDate'],
   guestLedger: ['fromDate', 'toDate'],
-  discountAllowance: ['fromDate', 'toDate'],
+  discountReport: ['fromDate', 'toDate'],
   companyContributionsReport: ['fromDate', 'toDate'],
   noShowSummaryReport: ['fromDate', 'toDate'],
   mtdAndYtdReport: ['fromDate', 'toDate'],
@@ -347,6 +351,7 @@ export const reportFiltersMapping: Record<
   guestEscalationComplaintReport: ['fromDate', 'toDate'],
   houseCountReport: ['fromDate', 'toDate'],
   nightAuditOperation: ['fromDate', 'toDate'],
+  allowanceReport: ['fromDate', 'toDate'],
 };
 
 export const rowStylesMapping: Record<RowStylesKeys, string> = {

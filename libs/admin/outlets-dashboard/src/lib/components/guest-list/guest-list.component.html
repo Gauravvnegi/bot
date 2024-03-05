@@ -66,10 +66,12 @@
         >
           <hospitality-bot-guest-card
             [item]="guest"
+            class="guest-card"
             (click)="onEditGuestReservation(guest)"
           >
             <ng-container *ngIf="isSeated; else waitlist">
               <hospitality-bot-button
+                *ngIf="guest?.orderNo"
                 label="Print Invoice"
                 variant="outlined"
                 (onClick)="onPrintInvoice($event)"

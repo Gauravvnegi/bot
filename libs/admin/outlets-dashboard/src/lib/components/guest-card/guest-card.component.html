@@ -3,11 +3,15 @@
     <div class="row">
       <span class="text"
         ><span class="text__static gray-bold-text">Table No: </span>
-        <span class="text__dynamic bold-text">{{ item.tableNo }}</span></span
+        <span class="text__dynamic bold-text">{{
+          item.tableNo || '--'
+        }}</span></span
       >
       <span class="text"
         ><span class="text__static"> Order No: </span
-        ><span class="text__dynamic bold-text">{{ item.orderNo }}</span></span
+        ><span class="text__dynamic bold-text">{{
+          item.orderNo || '--'
+        }}</span></span
       >
     </div>
     <div class="row">

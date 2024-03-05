@@ -14,6 +14,7 @@ export class DefaultPackageComponent implements OnInit {
   @Input() paidAmenityFG;
   @Input() index;
 
+  isPmsBooking = false;
   isToggleOn: boolean = false;
   metaDataList: MetaData[] = [];
   @Input() set config(value) {
@@ -25,7 +26,11 @@ export class DefaultPackageComponent implements OnInit {
     private _reservationService: ReservationService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isPmsBooking = this.parentForm.get(
+      'reservationDetails.isPmsBooking'
+    ).value;
+  }
 
   // onToggleSwitch(isAccepted: boolean) {
   //   this.updatePackageStatus(isAccepted ? 'ACCEPT' : 'REJECT');

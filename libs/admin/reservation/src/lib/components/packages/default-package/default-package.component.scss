@@ -54,7 +54,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 15px 0;
+  margin: 15px 0 0;
   .status {
     letter-spacing: 0.84px;
     color: $grayMedium;
@@ -93,4 +93,11 @@
       word-break: break-word;
     }
   }
+}
+
+.message {
+  color: $grayMedium;
+  @include light-vsm-text;
+  margin: 5px 0 10px;
+  font-size: 11px;
 }

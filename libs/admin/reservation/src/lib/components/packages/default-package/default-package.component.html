@@ -82,5 +82,8 @@
         ></hospitality-bot-toggle-switch-with-label> -->
       </div>
     </div>
+    <p *ngIf="!isPmsBooking" class="message">
+      Add on amount will be automatically adjusted to the Invoice
+    </p>
   </mat-expansion-panel>
 </mat-accordion>

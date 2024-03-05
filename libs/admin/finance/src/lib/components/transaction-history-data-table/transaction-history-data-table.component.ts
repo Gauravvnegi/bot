@@ -129,7 +129,7 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
 
   openDetailsPage(reservationId: string) {
     this.bookingDetailService.openBookingDetailSidebar({
-      tabKey: 'guest_details',
+      tabKey: 'payment_details',
       bookingId: reservationId,
     });
   }

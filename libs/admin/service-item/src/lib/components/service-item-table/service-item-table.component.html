@@ -201,10 +201,22 @@
 </ng-template>
 
 <ng-template #tabFilter>
-  <hospitality-bot-tab-group
+  <!-- <hospitality-bot-tab-group
     [selectedIndex]="tabFilterIdx"
     *ngIf="isTabFilters"
     [listItems]="tabFilterItems"
     (selectedTabChange)="onSelectedTabFilterChange($event)"
-  ></hospitality-bot-tab-group>
+  ></hospitality-bot-tab-group> -->
+
+  <div class="category-tab-wrapper" *ngIf="tableFG" [formGroup]="tableFG">
+    <hospitality-bot-select
+      [options]="tabFilterOptions"
+      class="category-tab"
+      controlName="categoryTabFilter"
+      [props]="{
+        placeholder: 'Select Category'
+      }"
+      (itemSelection)="onSelectedItemChanges($event)"
+    ></hospitality-bot-select>
+  </div>
 </ng-template>

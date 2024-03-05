@@ -96,7 +96,7 @@
     }
 
     &:hover {
-      border-color: $primary-form-color;
+      border-color: $primary-form-color !important;
     }
     &.p-focus {
       border-color: $primary-form-color;

@@ -46,3 +46,16 @@
     top: -5px;
   }
 }
+
+.category-tab-wrapper {
+  display: flex;
+  height: 63px;
+  border-bottom: 1px solid #cdcdcd;
+  align-items: center;
+  padding-left: 12px;
+
+  .category-tab {
+    min-width: 20%;
+    padding-inline: 10px;
+  }
+}

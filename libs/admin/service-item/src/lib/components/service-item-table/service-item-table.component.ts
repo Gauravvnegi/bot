@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import {
   GlobalFilterService,
   RoutesConfigService,
@@ -10,6 +10,7 @@ import {
   BaseDatatableComponent,
   ModuleNames,
   NavRouteOption,
+  Option,
   PermissionModuleNames,
   QueryConfig,
   openModal,
@@ -32,6 +33,7 @@ import {
 import { DialogService } from 'primeng/dynamicdialog';
 import { managePermissionRoutes } from 'libs/admin/roles-and-permissions/src/lib/constants/routes';
 import * as FileSaver from 'file-saver';
+import { convertToNormalCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'hospitality-bot-service-item-table',
@@ -57,6 +59,13 @@ export class ServiceItemTableComponent extends BaseDatatableComponent
   cols = cols;
   readonly serviceItemRoute = serviceItemRoutes;
 
+  defaultTabFilterOption = {
+    label: 'All',
+    value: 'ALL',
+  };
+
+  tabFilterOptions: Option[] = [this.defaultTabFilterOption];
+
   constructor(
     public fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -69,6 +78,7 @@ export class ServiceItemTableComponent extends BaseDatatableComponent
     private subscriptionPlanService: SubscriptionPlanService
   ) {
     super(fb);
+    this.tableFG.addControl('categoryTabFilter', new FormControl('ALL'));
   }
 
   ngOnInit(): void {
@@ -80,7 +90,7 @@ export class ServiceItemTableComponent extends BaseDatatableComponent
    * @function loadData Fetch data as paginates
    * @param event
    */
-  loadData(event: LazyLoadEvent): void {
+  loadData(event?: LazyLoadEvent): void {
     this.initTableValue();
   }
 
@@ -115,6 +125,16 @@ export class ServiceItemTableComponent extends BaseDatatableComponent
               data.entityStateCounts,
               data.total
             );
+
+            this.tabFilterOptions = [
+              this.defaultTabFilterOption,
+              ...Object.keys(data.entityTypeCounts).map((key) => {
+                return {
+                  label: convertToNormalCase(key),
+                  value: key,
+                };
+              }),
+            ];
           },
           this.handleError,
           this.handleFinal
@@ -126,7 +146,8 @@ export class ServiceItemTableComponent extends BaseDatatableComponent
    * To get query params
    */
   getQueryConfig(isExport: boolean = false): QueryConfig {
-    const tabFilterValue = this.tabFilterItems[this.tabFilterIdx]?.value;
+    const tabFilterValue = this.tableFG.get('categoryTabFilter').value;
+
     const config = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
@@ -138,7 +159,7 @@ export class ServiceItemTableComponent extends BaseDatatableComponent
           offset: this.first,
           limit: this.rowsPerPage,
           includeComplaintStats: true,
-          categoryName: tabFilterValue === 'ALL' ? null : tabFilterValue,
+          categoryName: tabFilterValue,
         },
       ]),
     };
@@ -166,6 +187,10 @@ export class ServiceItemTableComponent extends BaseDatatableComponent
           this.handleFinal
         )
     );
+  }
+
+  onSelectedItemChanges(event) {
+    this.loadData();
   }
 
   openTableModal(event, data: ServiceItem) {

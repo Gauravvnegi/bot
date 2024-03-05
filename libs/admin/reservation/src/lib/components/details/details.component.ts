@@ -343,6 +343,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
       reservationDetails: this._fb.group({
         bookingNumber: [''],
         bookingId: [''],
+        isPmsBooking: [false],
       }),
     });
   }

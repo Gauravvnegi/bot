@@ -452,6 +452,7 @@ export class ReservationDetailsConfig implements IDeserializable {
   hotelId: string;
   hotelNationality: string;
   entityId: string;
+  isPmsBooking: boolean;
 
   deserialize(input: any) {
     Object.assign(
@@ -460,7 +461,8 @@ export class ReservationDetailsConfig implements IDeserializable {
       set({}, 'bookingId', get(input, ['id'])),
       set({}, 'hotelId', get(input.entity, ['id'])),
       set({}, 'hotelNationality', get(input.entity?.address, ['countryCode'])),
-      set({}, 'entityId', get(input.entity, ['id']))
+      set({}, 'entityId', get(input.entity, ['id'])),
+      set({}, 'entityId', get(input, ['pmsBooking']))
     );
     return this;
   }

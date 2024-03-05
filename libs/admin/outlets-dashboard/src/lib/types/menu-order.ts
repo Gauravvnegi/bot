@@ -54,6 +54,7 @@ export class OrderSummaryData {
   outletType: EntitySubType;
   order: {
     id?: string;
+    orderType?: OrderTypes;
     items: {
       itemId: string;
       unit: number;

@@ -317,21 +317,34 @@ export class OutletFormService {
 
   postOrderSummaryData(formData: MenuForm, orderId?: string) {
     let summaryData = new OrderSummaryData();
+    const orderItems: { itemId: string; unit: number; amount: number }[] = [];
 
-    const orderItems = [].concat(
-      ...formData?.kotInformation?.kotItems.map((kot) =>
-        kot.items.map((item) => ({
-          itemId: item.itemId,
-          unit: item.unit,
-          amount: item.price, // Assuming price is available in item
-        }))
-      )
-    );
+    formData?.kotInformation?.kotItems.forEach((kot) => {
+      kot.items.forEach((item) => {
+        const existingIndex = orderItems.findIndex(
+          (el) => el.itemId === item.itemId
+        );
+        if (existingIndex !== -1) {
+          // If item already exists, update its unit
+          orderItems[existingIndex].unit += item.unit;
+        } else {
+          // Otherwise, add a new entry
+          orderItems.push({
+            itemId: item.itemId,
+            unit: item.unit,
+            amount: item.price, // Assuming price is available in item
+          });
+        }
+      });
+    });
 
     summaryData.outletType = EntitySubType.RESTAURANT;
-    summaryData.order = { id: orderId, items: orderItems };
+    summaryData.order = {
+      id: orderId,
+      items: orderItems,
+      orderType: formData.reservationInformation?.orderType,
+    };
     summaryData.offerId = formData?.offer?.length ? formData.offer : undefined;
-
     return summaryData;
   }
 

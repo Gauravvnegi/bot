@@ -57,7 +57,7 @@ export const posCols: Cols[] = [
   },
 ];
 
-export const reservationTypes = {
+export const tableTypes = {
   card: {
     name: 'Card',
     value: 'card',

@@ -26,7 +26,7 @@ import {
   OrderTableType,
   TableReservationStatusDetails,
   posCols,
-  reservationTypes,
+  tableTypes,
 } from '../../constants/data-table';
 import {
   OutletReservationList,
@@ -39,6 +39,8 @@ import { OutletFormService } from '../../services/outlet-form.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { takeUntil } from 'rxjs/operators';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { defaultFilterChipValue } from 'libs/admin/shared/src/lib/constants/datatable';
 
 @Component({
   selector: 'hospitality-bot-outlets-data-table',
@@ -50,18 +52,19 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class OutletsDataTableComponent extends BaseDatatableComponent
   implements OnInit {
+  readonly tableReservationStatusDetails = TableReservationStatusDetails;
   entityId: string;
   globalQueries = [];
   $subscription = new Subscription();
-  reservationTypes = [];
-  selectedReservationType: string;
+  tableTypes = [];
+  selectedTableType: string;
   outletTableData: OutletReservation[];
 
   sidebarVisible = false;
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
 
-  selectedTab: OrderTableType;
+  selectedTab: string;
 
   readonly reservationStatusDetails = OrderReservationStatusDetails;
   private cancelRequests$ = new Subject<void>();
@@ -82,35 +85,49 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.initDetails();
+    this.listenForGlobalFilterChanges();
   }
 
   initDetails() {
     this.entityId = this.formService.entityId;
-    this.tableFG?.addControl('reservationType', new FormControl(''));
-
-    this.reservationTypes = [reservationTypes.card, reservationTypes.table];
-    this.setReservationType(this.reservationTypes[0].value);
-    this.selectedTab = OrderTableType.ALL;
+    this.tableFG?.addControl('tableType', new FormControl(''));
+    this.tableTypes = [tableTypes.card, tableTypes.table];
+    this.selectedTab = 'ALL';
+    this.setTableType(this.tableTypes[0].value);
     this.isAllTabFilterRequired = true;
 
-    this.tableFG.patchValue({ reservationType: this.selectedReservationType });
+    this.tableFG.patchValue({ tableType: this.selectedTableType });
     this.cols = posCols;
-    this.listenForGlobalFilterChanges();
   }
 
-  setReservationType(value: string) {
-    this.tabFilterItems = [];
-    this.tabFilterIdx = 0;
+  onSelectedTabFilterChange(event: MatTabChangeEvent) {
+    this.resetTable();
+    const previousTabFilterIdx = this.tabFilterIdx;
+    this.tabFilterIdx = event.index;
+    this.selectedTab = this.tabFilterItems[event.index]?.value;
+    this.selectedFilterChips = new Set<string>([defaultFilterChipValue.value]);
+
+    /**
+     * Load data only when the currentIdx is not equal to previous
+     * idx to prevent initial api call
+     * Initial api called in @function setTableType
+     */
+    if (this.tabFilterIdx !== previousTabFilterIdx) {
+      this.loadData({});
+    }
+  }
+
+  setTableType(value: string) {
     this.resetTableValues();
-    this.selectedReservationType = value;
-    this.tableFG.patchValue({ reservationType: value });
+    this.selectedTableType = value;
+    this.tableFG.patchValue({ tableType: value });
     this.loadData();
   }
 
   loadData(event?: LazyLoadEvent): void {
     this.cancelRequests$.next();
-    this.selectedReservationType === 'table' && this.initTableReservations();
-    this.selectedReservationType === 'card' && this.initCardViewList();
+    this.selectedTableType === 'table' && this.initTableReservations();
+    this.selectedTableType === 'card' && this.initCardViewList();
   }
 
   initCardViewList(): void {
@@ -137,13 +154,12 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
         .subscribe(
           (response) => {
             const data = new OutletReservationList().deserialize(response);
-
             this.values = data?.reservationData;
             this.initFilters(
               data?.entityTypeCounts,
               data?.entityStateCounts,
               data?.total,
-              TableReservationStatusDetails
+              this.tableReservationStatusDetails
             );
           },
           ({ error }) => {
@@ -161,7 +177,6 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
           ...value['filter'].queryValue,
           ...value['dateRange'].queryValue,
         ];
-        this.loadData();
       })
     );
   }
@@ -296,7 +311,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
           (res) => {
             this.values.find(
               (item) => item.id === reservationData.id
-            ).reservationType = status;
+            ).tableType = status;
             this.initTableReservations();
             this.snackbarService.openSnackBarAsText(
               'Order ' + status + ' changes successfully',

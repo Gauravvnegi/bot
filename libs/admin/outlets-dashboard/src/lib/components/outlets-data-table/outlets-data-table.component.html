@@ -10,17 +10,17 @@
 
   <div class="action-wrapper">
     <div class="pull-right">
-      <label class="type-label" *ngFor="let option of reservationTypes">
+      <label class="type-label" *ngFor="let option of tableTypes">
         <input
           type="radio"
-          formControlName="reservationType"
+          formControlName="tableType"
           [value]="option.value"
-          (click)="setReservationType(option.value)"
+          (click)="setTableType(option.value)"
         />
         <div class="image">
           <img
             [src]="
-              selectedReservationType === option.value
+              selectedTableType === option.value
                 ? option.whiteUrl
                 : option.url
             "
@@ -34,7 +34,7 @@
       (onClick)="addNewOrder()"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
-      *ngIf="selectedReservationType === 'table'"
+      *ngIf="selectedTableType === 'table'"
       [additionalActionItems]="additionalActionItems"
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
@@ -46,7 +46,7 @@
 <div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
 
 <div class="table-container">
-  <ng-container *ngIf="selectedReservationType === 'table'">
+  <ng-container *ngIf="selectedTableType === 'table'">
     <p-table
       #dt
       [styleClass]="tableConfig.styleClass"
@@ -104,7 +104,7 @@
         let-columns="columns"
         let-rowIndex="rowIndex"
       >
-        <ng-container *ngIf="selectedReservationType === 'table'">
+        <ng-container *ngIf="selectedTableType === 'table'">
           <tr class="table-row" (click)="editOrder(rowData?.orderId)">
             <td class="table-row__checkbox">
               <p-tableCheckbox
@@ -211,7 +211,7 @@
             </td>
           </tr>
         </ng-container>
-        <ng-container *ngIf="selectedReservationType !== 'table'">
+        <ng-container *ngIf="selectedTableType !== 'table'">
           <hospitality-bot-reservation-card
             class="reservation-card"
             [data]="rowData"
@@ -233,7 +233,7 @@
       </ng-template>
     </p-table>
   </ng-container>
-  <ng-container *ngIf="selectedReservationType === 'card'">
+  <ng-container *ngIf="selectedTableType === 'card'">
     <p-table
       #dt
       class="card-view"

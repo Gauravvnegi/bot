@@ -350,6 +350,7 @@ export class PosReservationComponent implements OnInit {
     this.orderInfoControls.orderType.valueChanges.subscribe(
       (res: OrderTypes) => {
         if (res) {
+          !this.orderId && this.formService.getOrderSummary.next(true);
           switch (res) {
             case OrderTypes.DELIVERY:
               this.updateValidators(guestControl);

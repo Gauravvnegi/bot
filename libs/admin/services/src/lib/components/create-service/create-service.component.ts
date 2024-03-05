@@ -166,15 +166,14 @@ export class CreateServiceComponent implements OnInit {
   initForm(): void {
     this.useForm = this.fb.group({
       active: [true],
-      currency: ['INR'],
+      currency: ['INR', Validators.required],
       parentId: ['', Validators.required],
       entityId: [''],
       imageUrl: [[], Validators.required],
       name: ['', Validators.required],
       serviceType: [ServiceTypeOptionValue.PAID, Validators.required],
-      rate: [''],
+      rate: ['', [Validators.required, Validators.min(1)]],
       description: [''],
-
       unit: ['', Validators.required],
       enableVisibility: [[], Validators.required],
       taxIds: [[]],
@@ -213,10 +212,23 @@ export class CreateServiceComponent implements OnInit {
   }
 
   listenForServiceTypeChanges(): void {
+    const rateControl = this.useForm.get('rate');
+    const currencyControl = this.useForm.get('currency');
     this.useForm.get('serviceType').valueChanges.subscribe((res) => {
       this.isComplimentaryService = !!(
         res === ServiceTypeOptionValue.COMPLIMENTARY
       );
+
+      // Update the validity of currency and rate controls if service type is paid
+      if (res === ServiceTypeOptionValue.PAID) {
+        rateControl.setValidators([Validators.required, Validators.min(1)]);
+        currencyControl.setValidators(Validators.required);
+      } else {
+        rateControl.clearValidators();
+        rateControl.updateValueAndValidity({ emitEvent: false });
+        currencyControl.clearValidators();
+        currencyControl.updateValueAndValidity({ emitEvent: false });
+      }
     });
   }
 

@@ -81,10 +81,17 @@ export class InvoiceService extends ApiService {
     paymentState?: string,
     isCustomerInvoice?: boolean
   ): Observable<any> {
+    const queryParams = `${paymentState ? `paymentState=${paymentState}` : ''}${
+      paymentState && isCustomerInvoice !== undefined ? '&' : ''
+    }${
+      isCustomerInvoice !== undefined
+        ? `isCustomerInvoice=${isCustomerInvoice}`
+        : ''
+    }`;
     return this.get(
-      `/api/v1/reservation/${reservationId}/invoice` +
-        (paymentState ? `?paymentState=${paymentState}` : '') +
-        (isCustomerInvoice ? `?isCustomerInvoice=${isCustomerInvoice}` : '')
+      `/api/v1/reservation/${reservationId}/invoice${
+        queryParams ? '?' + queryParams : ''
+      }`
     );
   }
 

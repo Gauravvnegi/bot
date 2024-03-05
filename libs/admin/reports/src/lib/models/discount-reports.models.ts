@@ -3,6 +3,8 @@ import {
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import {
+  AllowanceReportData,
+  AllowanceReportResponse,
   DiscountAllowanceReportData,
   DiscountAllowanceReportResponse,
   PromoCodeReportData,
@@ -10,6 +12,38 @@ import {
 } from '../types/discount-reports.types';
 import { ReportClass } from '../types/reports.types';
 import { getFormattedDate } from './reservation-reports.models';
+
+export class AllowanceReport
+  implements ReportClass<AllowanceReportData, AllowanceReportResponse> {
+  records: AllowanceReportData[];
+
+  deserialize(value: AllowanceReportResponse[]) {
+    this.records = new Array<AllowanceReportData>();
+    value &&
+      value.forEach((reservationData: AllowanceReportResponse) => {
+        this.records.push({
+          reservationId: reservationData?.id,
+          date: getFormattedDate(reservationData?.created),
+          group: undefined,
+          res: reservationData?.number,
+          createdBy: getFullName(
+            reservationData?.user?.firstName,
+            reservationData?.user?.lastName
+          ),
+          guestName: getFullName(
+            reservationData?.guestDetails?.primaryGuest?.firstName,
+            reservationData?.guestDetails?.primaryGuest?.lastName
+          ),
+          reasonForDiscount: undefined,
+          allowance: toCurrency(
+            reservationData?.paymentSummary?.totalAllowance
+          ),
+          total: undefined,
+        });
+      });
+    return this;
+  }
+}
 
 export class DiscountAllowanceReport
   implements
@@ -37,7 +71,6 @@ export class DiscountAllowanceReport
           directDiscount: toCurrency(
             reservationData?.reservationItemsPayment?.totalRoomDiscount
           ),
-          allowance: undefined, //to be added in response
           total: toCurrency(
             reservationData.reservationItemsPayment.totalRoomDiscount +
               reservationData.reservationItemsPayment.totalAddOnsDiscount

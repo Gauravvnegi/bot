@@ -1,5 +1,12 @@
 import { ReservationResponseData } from 'libs/admin/shared/src/lib/types/response';
-import { ReservationReportData, User } from './reservation-reports.types';
+import { User } from './reservation-reports.types';
+
+export type AllowanceReportData = Omit<
+  DiscountAllowanceReportData,
+  'directDiscount'
+> & { allowance: string };
+
+export type AllowanceReportResponse = DiscountAllowanceReportResponse & {};
 
 export type DiscountAllowanceReportData = {
   reservationId: string;
@@ -10,7 +17,6 @@ export type DiscountAllowanceReportData = {
   guestName: string;
   reasonForDiscount: string;
   directDiscount: string;
-  allowance: string;
   total: string;
 };
 

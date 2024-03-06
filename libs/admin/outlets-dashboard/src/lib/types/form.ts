@@ -18,7 +18,7 @@ export type ReservationInformation = {
   staff?: string;
   guest: string;
   numberOfPersons?: number;
-  menu: string[];
+  menu?: string[];
   orderType: OrderTypes;
   address?: AddressFieldType;
   id?: string;

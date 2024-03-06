@@ -219,7 +219,6 @@ export class OutletFormService {
       staff: '',
       guest: data?.guest?.id,
       numberOfPersons: data?.reservation?.occupancyDetails?.maxAdult,
-      menu: data?.items?.map((item) => item?.itemId),
       orderType: data?.type,
       id: data?.reservation?.id,
       address: {
@@ -258,14 +257,13 @@ export class OutletFormService {
     };
 
     this.orderFormData.next(data);
-
     return formData;
   }
 
   mapReservationData(data: PosReservationResponse) {
     let formData = new MenuForm();
 
-    const address = data.deliveryAddress;
+    const address = data?.deliveryAddress;
     formData.reservationInformation = {
       search: '',
       tableNumber: data?.tableIdOrRoomId,
@@ -273,15 +271,15 @@ export class OutletFormService {
       guest: data?.guest?.id,
       numberOfPersons: data?.occupancyDetails?.maxAdult,
       menu: data?.order.items?.map((item) => item?.itemId),
-      orderType: data?.order.type,
-      id: data?.id,
+      orderType: data?.order?.type,
+      id: data?.id ?? '',
       address: {
         formattedAddress: `${address?.addressLine1 ?? ''}`,
         city: address?.city ?? '',
         state: address?.state ?? '',
         countryCode: address?.countryCode ?? '',
         postalCode: address?.postalCode ?? '',
-        id: address?.id,
+        id: address?.id ?? '',
       },
     };
 

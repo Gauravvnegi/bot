@@ -171,3 +171,8 @@ export enum OrderTableType {
   DINE_IN = 'DINE_IN',
   DELIVERY = 'DELIVERY',
 }
+
+export const orderMenuOptions = [
+  { label: 'Manage Invoice', value: 'MANAGE_INVOICE' },
+  { label: 'Edit Order', value: 'EDIT_ORDER' },
+];

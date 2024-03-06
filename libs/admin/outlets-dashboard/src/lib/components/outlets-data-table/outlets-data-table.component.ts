@@ -6,10 +6,15 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  EntitySubType,
+  ModuleNames,
   Option,
   QueryConfig,
   manageMaskZIndex,
@@ -23,8 +28,8 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Clipboard } from '@angular/cdk/clipboard';
 import {
   OrderReservationStatusDetails,
-  OrderTableType,
   TableReservationStatusDetails,
+  orderMenuOptions,
   posCols,
   tableTypes,
 } from '../../constants/data-table';
@@ -57,6 +62,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   globalQueries = [];
   $subscription = new Subscription();
   tableTypes = [];
+  orderMenuOptions: Option[] = [];
   selectedTableType: string;
   outletTableData: OutletReservation[];
 
@@ -78,7 +84,8 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     protected snackbarService: SnackBarService,
     private resolver: ComponentFactoryResolver,
     private formService: OutletFormService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb);
   }
@@ -98,6 +105,8 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
 
     this.tableFG.patchValue({ tableType: this.selectedTableType });
     this.cols = posCols;
+    this.orderMenuOptions = orderMenuOptions;
+    this.listenForGlobalFilterChanges();
   }
 
   onSelectedTabFilterChange(event: MatTabChangeEvent) {
@@ -106,7 +115,6 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     this.tabFilterIdx = event.index;
     this.selectedTab = this.tabFilterItems[event.index]?.value;
     this.selectedFilterChips = new Set<string>([defaultFilterChipValue.value]);
-
     /**
      * Load data only when the currentIdx is not equal to previous
      * idx to prevent initial api call
@@ -327,6 +335,27 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
 
   editOrder(orderId: string) {
     this.addNewOrder(orderId);
+  }
+
+  /**
+   * @function handleMenuClick To handle click on menu button.
+   */
+  handleMenuClick(value: string, rowData: OutletReservation) {
+    switch (value) {
+      case 'MANAGE_INVOICE':
+        this.routesConfigService.navigate({
+          subModuleName: ModuleNames.INVOICE,
+          additionalPath: rowData.orderId,
+          queryParams: {
+            entityId: this.entityId,
+            type: EntitySubType.RESTAURANT,
+          },
+        });
+        break;
+      case 'EDIT_ORDER':
+        this.editOrder(rowData.orderId);
+        break;
+    }
   }
 
   onCardClick(data: {

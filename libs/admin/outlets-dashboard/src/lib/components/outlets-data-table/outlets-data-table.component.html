@@ -20,9 +20,7 @@
         <div class="image">
           <img
             [src]="
-              selectedTableType === option.value
-                ? option.whiteUrl
-                : option.url
+              selectedTableType === option.value ? option.whiteUrl : option.url
             "
             [alt]="option.value"
           />
@@ -79,6 +77,7 @@
             *ngIf="isQuickFilters"
             [chips]="filterChips"
             (onChange)="toggleQuickReplyFilter($event)"
+            [selectedChips]="selectedFilterChips"
           ></hospitality-bot-filter-chips>
         </div>
       </ng-template>
@@ -205,6 +204,8 @@
                   (onClick)="handleStatus($event, rowData)"
                   [state]="rowData?.reservationStatus"
                   [recordSetting]="reservationStatusDetails"
+                  [menuOptions]="orderMenuOptions"
+                  (onMenuItemClick)="handleMenuClick($event, rowData)"
                 >
                 </hospitality-bot-status-dropdown-toggle>
               </div>
@@ -267,6 +268,7 @@
             *ngIf="isQuickFilters"
             [chips]="filterChips"
             (onChange)="toggleQuickReplyFilter($event)"
+            [selectedChips]="selectedFilterChips"
           ></hospitality-bot-filter-chips>
         </div>
       </ng-template>

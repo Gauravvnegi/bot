@@ -342,7 +342,7 @@ export class OutletFormService {
     summaryData.order = {
       id: orderId,
       items: orderItems,
-      orderType: formData.reservationInformation?.orderType,
+      type: formData.reservationInformation?.orderType,
     };
     summaryData.offerId = formData?.offer?.length ? formData.offer : undefined;
     return summaryData;

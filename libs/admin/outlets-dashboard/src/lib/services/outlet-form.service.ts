@@ -111,9 +111,11 @@ export class OutletFormService {
         orderType === OrderTypes.DINE_IN
           ? {
               ...reservationData, // Spread operator here if reservationData exists
-              occupancyDetails: {
-                maxAdult: numberOfPersons,
-              },
+              occupancyDetails: numberOfPersons
+                ? {
+                    maxAdult: numberOfPersons,
+                  }
+                : undefined,
               status: 'CONFIRMED',
               tableIds: [tableNumber],
               areaId: areaId,
@@ -165,16 +167,20 @@ export class OutletFormService {
         reservationInformation.orderType === OrderTypes.DELIVERY
           ? reservationInformation.address.id
           : undefined,
-      reservation: {
+      reservation: reservationInformation.orderType === OrderTypes.DINE_IN ? {
         ...reservationData,
-        occupancyDetails: { maxAdult: reservationInformation.numberOfPersons },
+        occupancyDetails: reservationInformation?.numberOfPersons
+          ? { maxAdult: reservationInformation.numberOfPersons }
+          : undefined,
         status: 'CONFIRMED',
-        tableIds: [reservationInformation.tableNumber],
+        tableIds: reservationInformation?.tableNumber
+          ? [reservationInformation?.tableNumber]
+          : undefined,
         id:
           data.reservationInformation.id !== null
             ? data.reservationInformation.id
             : undefined,
-      },
+      } : undefined,
       paymentDetails: {
         paymentMethod: paymentInformation?.paymentMethod ?? '',
         amount: paymentInformation?.paymentRecieved ?? 0,

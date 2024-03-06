@@ -250,9 +250,17 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
       this._managePermissionService
         .getUserJobDetails(userData.userId)
         .subscribe((res) => {
+          if (res.defaultServiceItemUser) {
+            this.snackbarService.openSnackBarAsText(
+              'Unable to deactivate defaultUser',
+              ''
+            );
+            return;
+          }
+
           let description = [
             `Are you sure you want to deactivate the user?`,
-            `user have ${res?.length} jobs pending`,
+            `user have ${res?.pendingJobs} jobs pending`,
           ];
           let label: string = 'Deactivate';
 

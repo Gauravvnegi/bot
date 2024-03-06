@@ -125,8 +125,13 @@ export class ManagePermissionService extends ApiService {
     );
   }
 
-  getUserJobDetails(userId: string): Observable<any> {
-    return this.get(`/api/v1/request/user/${userId}`);
+  getUserJobDetails(
+    userId: string
+  ): Observable<{
+    pendingJobs: number;
+    defaultServiceItemUser: boolean;
+  }> {
+    return this.get(`/api/v1/request/user/${userId}/stats`);
   }
 
   getUserDetailsById(userId: string): Observable<any> {

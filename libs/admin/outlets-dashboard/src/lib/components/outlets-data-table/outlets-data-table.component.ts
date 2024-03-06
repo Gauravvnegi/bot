@@ -106,7 +106,17 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     this.tableFG.patchValue({ tableType: this.selectedTableType });
     this.cols = posCols;
     this.orderMenuOptions = orderMenuOptions;
-    this.listenForGlobalFilterChanges();
+  }
+
+  listenForGlobalFilterChanges(): void {
+    this.$subscription.add(
+      this.globalFilterService.globalFilter$.subscribe((value) => {
+        this.globalQueries = [
+          ...value['filter'].queryValue,
+          ...value['dateRange'].queryValue,
+        ];
+      })
+    );
   }
 
   onSelectedTabFilterChange(event: MatTabChangeEvent) {
@@ -115,16 +125,24 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     this.tabFilterIdx = event.index;
     this.selectedTab = this.tabFilterItems[event.index]?.value;
     this.selectedFilterChips = new Set<string>([defaultFilterChipValue.value]);
+
     /**
      * Load data only when the currentIdx is not equal to previous
      * idx to prevent initial api call
      * Initial api called in @function setTableType
      */
-    if (this.tabFilterIdx !== previousTabFilterIdx) {
+    if (
+      this.tabFilterIdx !== -1 &&
+      this.tabFilterIdx !== previousTabFilterIdx
+    ) {
       this.loadData({});
     }
   }
 
+  /**
+   * @function setTableType set the table type card or list.
+   * @param value tableType value card or list
+   */
   setTableType(value: string) {
     this.resetTableValues();
     this.selectedTableType = value;
@@ -140,24 +158,9 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
 
   initCardViewList(): void {
     this.loading = true;
-
-    const config = {
-      params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
-        {
-          order: 'DESC',
-          type: 'TABLE',
-          limit: '0',
-          offset: '0',
-          entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
-          liveBookings: true,
-        },
-      ]),
-    };
-
     this.subscriptionList$.add(
       this.outletService
-        .getLiveTableList(this.entityId, config)
+        .getLiveTableList(this.entityId, this.getCardViewConfig())
         .pipe(takeUntil(this.cancelRequests$))
         .subscribe(
           (response) => {
@@ -178,31 +181,17 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     );
   }
 
-  listenForGlobalFilterChanges(): void {
-    this.$subscription.add(
-      this.globalFilterService.globalFilter$.subscribe((value) => {
-        this.globalQueries = [
-          ...value['filter'].queryValue,
-          ...value['dateRange'].queryValue,
-        ];
-      })
-    );
-  }
-
-  /**
-   * @function getQueryConfig to configuration
-   */
-  getQueryConfig(): QueryConfig {
+  getCardViewConfig() {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         {
           order: 'DESC',
+          type: 'TABLE',
+          limit: '0',
+          offset: '0',
           entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
-          includeKot: true,
-          raw: true,
-          offset: this.first,
-          limit: this.rowsPerPage,
+          liveBookings: true,
         },
       ]),
     };
@@ -228,6 +217,23 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
           this.loading = false;
         })
     );
+  }
+
+  getQueryConfig(): QueryConfig {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
+        {
+          order: 'DESC',
+          entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
+          includeKot: true,
+          raw: true,
+          offset: this.first,
+          limit: this.rowsPerPage,
+        },
+      ]),
+    };
+    return config;
   }
 
   exportCSV(): void {

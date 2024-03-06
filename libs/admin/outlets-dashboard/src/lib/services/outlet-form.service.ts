@@ -111,9 +111,11 @@ export class OutletFormService {
         orderType === OrderTypes.DINE_IN
           ? {
               ...reservationData, // Spread operator here if reservationData exists
-              occupancyDetails: {
-                maxAdult: numberOfPersons,
-              },
+              occupancyDetails: numberOfPersons
+                ? {
+                    maxAdult: numberOfPersons,
+                  }
+                : undefined,
               status: 'CONFIRMED',
               tableIds: [tableNumber],
               areaId: areaId,
@@ -165,16 +167,20 @@ export class OutletFormService {
         reservationInformation.orderType === OrderTypes.DELIVERY
           ? reservationInformation.address.id
           : undefined,
-      reservation: {
+      reservation: reservationInformation.orderType === OrderTypes.DINE_IN ? {
         ...reservationData,
-        occupancyDetails: { maxAdult: reservationInformation.numberOfPersons },
+        occupancyDetails: reservationInformation?.numberOfPersons
+          ? { maxAdult: reservationInformation.numberOfPersons }
+          : undefined,
         status: 'CONFIRMED',
-        tableIds: [reservationInformation.tableNumber],
+        tableIds: reservationInformation?.tableNumber
+          ? [reservationInformation?.tableNumber]
+          : undefined,
         id:
           data.reservationInformation.id !== null
             ? data.reservationInformation.id
             : undefined,
-      },
+      } : undefined,
       paymentDetails: {
         paymentMethod: paymentInformation?.paymentMethod ?? '',
         amount: paymentInformation?.paymentRecieved ?? 0,
@@ -219,7 +225,6 @@ export class OutletFormService {
       staff: '',
       guest: data?.guest?.id,
       numberOfPersons: data?.reservation?.occupancyDetails?.maxAdult,
-      menu: data?.items?.map((item) => item?.itemId),
       orderType: data?.type,
       id: data?.reservation?.id,
       address: {
@@ -258,14 +263,13 @@ export class OutletFormService {
     };
 
     this.orderFormData.next(data);
-
     return formData;
   }
 
   mapReservationData(data: PosReservationResponse) {
     let formData = new MenuForm();
 
-    const address = data.deliveryAddress;
+    const address = data?.deliveryAddress;
     formData.reservationInformation = {
       search: '',
       tableNumber: data?.tableIdOrRoomId,
@@ -273,15 +277,15 @@ export class OutletFormService {
       guest: data?.guest?.id,
       numberOfPersons: data?.occupancyDetails?.maxAdult,
       menu: data?.order.items?.map((item) => item?.itemId),
-      orderType: data?.order.type,
-      id: data?.id,
+      orderType: data?.order?.type,
+      id: data?.id ?? '',
       address: {
         formattedAddress: `${address?.addressLine1 ?? ''}`,
         city: address?.city ?? '',
         state: address?.state ?? '',
         countryCode: address?.countryCode ?? '',
         postalCode: address?.postalCode ?? '',
-        id: address?.id,
+        id: address?.id ?? '',
       },
     };
 

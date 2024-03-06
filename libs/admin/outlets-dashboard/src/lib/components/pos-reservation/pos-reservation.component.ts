@@ -130,7 +130,7 @@ export class PosReservationComponent implements OnInit {
   initForm() {
     this.userForm = this.fb.group({
       reservationInformation: this.fb.group({
-        orderType: [],
+        orderType: [OrderTypes.DINE_IN],
         search: [''],
         tableNumber: [''],
         staff: [''],
@@ -218,6 +218,9 @@ export class PosReservationComponent implements OnInit {
     );
   }
 
+  /**
+   * Init reservation data only here in case no order is placed
+   */
   initReservationData() {
     this.outletService
       .getReservationById(this.reservationId)
@@ -275,13 +278,14 @@ export class PosReservationComponent implements OnInit {
   }
 
   getMenuItems() {
+    this.loadingMenuItems = true;
     this.$subscription.add(
       this.outletTableService
         .getFilteredMenuItems(this.getQueryConfig())
         .subscribe(
           (res) => {
             const menuItems = new MenuItemList().deserialize(res).records;
-            if (menuItems.length) this.cardData = menuItems;
+            this.cardData = menuItems;
             this.initialMenuItemsLoad = true;
           },
           (error) => (this.loadingMenuItems = false),
@@ -494,7 +498,6 @@ export class PosReservationComponent implements OnInit {
             value: item.value,
           })
         );
-        this.orderInfoControls.orderType.patchValue(OrderTypes.DINE_IN);
       }
     });
   }
@@ -666,7 +669,7 @@ export class PosReservationComponent implements OnInit {
   }
 
   resetValidators(control: AbstractControl) {
-    control.reset();
+    // control.reset();
     control.clearValidators();
     control.updateValueAndValidity({ emitEvent: false });
     control.markAsUntouched();

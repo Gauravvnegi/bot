@@ -40,8 +40,8 @@ export class ServiceItem {
     this.sla = this.formatDuration(value?.sla);
     this.remarks = value?.remarks;
     this.status = value?.active;
-    this.complaintDue = value?.reservationServiceStats?.openJobs;
-    this.total = value?.reservationServiceStats?.total;
+    this.complaintDue = value?.complaintRequestStats?.openJobs;
+    this.total = value?.complaintRequestStats?.total;
     this.totalUsers = value?.requestItemUsers.length;
 
     this.users = value?.requestItemUsers.map((item) => {

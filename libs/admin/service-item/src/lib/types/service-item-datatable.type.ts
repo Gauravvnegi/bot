@@ -31,7 +31,7 @@ export type ServiceItemResponse = {
   requestItemUsers: RequestItemUser[];
   remarks: string;
   sla: number;
-  reservationServiceStats: {
+  complaintRequestStats: {
     itemId: string;
     total: string;
     closedJobs: string;

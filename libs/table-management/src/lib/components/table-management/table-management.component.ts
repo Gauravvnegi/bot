@@ -22,6 +22,9 @@ export class TableManagementComponent implements OnInit {
   ngOnInit(): void {}
 
   onGlobalTabFilterChanges(event: EntityTabFilterConfig) {
+    this.tableManagementService.initCustomHeaderConfig({
+      entityId: event.entityId[0],
+    });
     this.tableManagementService.onGlobalFilterChange.next(event);
   }
 }

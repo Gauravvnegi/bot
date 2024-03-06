@@ -4,6 +4,18 @@ import { Observable, throwError as observableThrowError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { has, isBoolean } from 'lodash';
 
+type HeaderConfig = {
+  [key: string]: string;
+} & {
+  headers: {
+    [key: string]: string;
+  };
+};
+
+type PredefinedHeadersConfig = Partial<{
+  entityId: string;
+}>;
+
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   // baseUrl = environment.base_url;
@@ -17,6 +29,40 @@ export class ApiService {
     headers: new HttpHeaders({}),
   };
 
+  preDefinedHeaders: { headers: { [key: string]: string } } = null;
+
+  /**
+   * @function getModifiedHeader - get the modified header
+   * @param headerConfig
+   * @returns - the modified header
+   */
+  getModifiedHeader(headerConfig: HeaderConfig) {
+    let headers = this.httpOptions.headers;
+
+    if (headerConfig?.headers) {
+      Object.entries(headerConfig.headers).forEach(
+        ([key, value]: [string, string]) => {
+          headers = headers.set(key, value);
+        }
+      );
+    }
+
+    return { ...headerConfig, headers };
+  }
+
+  /**
+   * @function initCustomHeaderConfig - Initializes the custom header config
+   * @param config - Custom header config
+   *
+   */
+  initCustomHeaderConfig(config: PredefinedHeadersConfig) {
+    this.preDefinedHeaders = {
+      headers: {
+        'entity-id': config?.entityId,
+      },
+    };
+  }
+
   /**
    * Get Base Url
    * @param uri string
@@ -29,65 +75,26 @@ export class ApiService {
    * GET request
    */
   get(uri: string, config: any = {}): Observable<any> {
-    let headers = this.httpOptions.headers;
-
-    if (config?.headers) {
-      Object.entries(config.headers).forEach(
-        ([key, value]: [string, string]) => {
-          headers = headers.set(key, value);
-        }
-      );
-    }
-
     return this.httpClient
-      .get(this.getBaseUrl() + uri, {
-        ...config,
-        headers,
-      })
+      .get(this.getBaseUrl() + uri, this.getModifiedHeader(config))
       .pipe(catchError(this.handleError));
   }
-
-  // get(uri: string, config = {}): Observable<any> {
-  //   return this.httpClient
-  //     .get(this.getBaseUrl() + uri, config)
-  //     .pipe(catchError(this.handleError));
-  // }
 
   /**
    * PATCH request
    */
   patch(uri: string, data: any, config: any = {}): Observable<any> {
-    // this.httpOptions.headers.append(
-    //   'Content-Type',
-    //   'application/json;charset=UTF-8'
-    // );
-    let headers = this.httpOptions.headers;
-
-    if (config?.headers) {
-      Object.entries(config.headers).forEach(
-        ([key, value]: [string, string]) => {
-          headers = headers.set(key, value);
-        }
-      );
-    }
     return this.httpClient
-      .patch(this.getBaseUrl() + uri, data, {
-        ...config,
-        headers,
-      })
+      .patch(this.getBaseUrl() + uri, data, this.getModifiedHeader(config))
       .pipe(catchError((err) => this.handleError(err)));
   }
 
   /**
    * PUT request
    */
-  put(uri: string, data: any): Observable<any> {
-    // this.httpOptions.headers.append(
-    //   'Content-Type',
-    //   'application/json;charset=UTF-8'
-    // );
+  put(uri: string, data: any, config: any = {}): Observable<any> {
     return this.httpClient
-      .put(this.getBaseUrl() + uri, data, this.httpOptions)
+      .put(this.getBaseUrl() + uri, data, this.getModifiedHeader(config))
       .pipe(catchError((err) => this.handleError(err)));
   }
 
@@ -95,19 +102,9 @@ export class ApiService {
    * POST request
    */
   post(uri: string, data: any, config: any = {}): Observable<any> {
-    let headers = this.httpOptions.headers;
-
-    if (config?.headers) {
-      Object.entries(config.headers).forEach(
-        ([key, value]: [string, string]) => {
-          headers = headers.set(key, value);
-        }
-      );
-    }
-
     // this.httpOptions.headers.append('oauth-token', '');
     return this.httpClient
-      .post(this.getBaseUrl() + uri, data, { ...config, headers })
+      .post(this.getBaseUrl() + uri, data, this.getModifiedHeader(config))
       .pipe(catchError((err) => this.handleError(err)));
   }
 

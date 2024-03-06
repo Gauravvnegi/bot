@@ -85,7 +85,7 @@ export class GuestListComponent implements OnInit {
   }
 
   initForm() {
-    this.entityId = this.globalFilterService.entityId;
+    if (!this.entityId) this.globalFilterService.entityId;
     this.useForm = this.fb.group({
       search: [],
       chip: [ChipType.seated],
@@ -97,9 +97,11 @@ export class GuestListComponent implements OnInit {
    * on DateFilterChanges
    */
   onDateFilterChange(config: { data: DateFilterOption; index: number }) {
-    this.dateFilterOption = config.data;
-    this.selectedDateFilterIndex = config.index;
-    this.initGuestReservation();
+    if (config.data) {
+      this.dateFilterOption = config.data;
+      this.selectedDateFilterIndex = config.index;
+      this.initGuestReservation();
+    }
   }
 
   /**
@@ -123,16 +125,18 @@ export class GuestListComponent implements OnInit {
     };
 
     this.$subscription.add(
-      this.outletService.getGuestReservationList(config).subscribe(
-        (response) => {
-          const data = new GuestReservationList().deserialize(response);
-          this.guestList = data.records;
-          this.backupData = data.records;
-          // this.paginationDisabled = this.limit > data?.total;
-        },
-        this.handelError,
-        this.handelFinal
-      )
+      this.outletService
+        .getGuestReservationList(config, this.entityId)
+        .subscribe(
+          (response) => {
+            const data = new GuestReservationList().deserialize(response);
+            this.guestList = data.records;
+            this.backupData = data.records;
+            // this.paginationDisabled = this.limit > data?.total;
+          },
+          this.handelError,
+          this.handelFinal
+        )
     );
   }
 
@@ -232,6 +236,7 @@ export class GuestListComponent implements OnInit {
     );
     const componentRef = this.sidebarSlide.createComponent(factory);
     const instance: AddGuestListComponent = componentRef.instance;
+    instance.entityId = this.entityId;
     instance.guestReservationId = id && id;
 
     const closeSubscription = instance.onClose.subscribe((res: boolean) => {

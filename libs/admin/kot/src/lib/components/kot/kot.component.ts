@@ -30,6 +30,7 @@ export class KotComponent implements OnInit {
    */
 
   onGlobalTabFilterChanges(event: EntityTabFilterResponse) {
+    this.kotService.initCustomHeaderConfig({ entityId: event.entityId[0] });
     this.kotService.OnGlobalFilterChange.next(event);
   }
 }

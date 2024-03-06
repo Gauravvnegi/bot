@@ -138,7 +138,7 @@ export class AddGuestListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
+    // this.entityId = this.globalFilterService.entityId;
     this.initOptions();
     this.initForm();
   }

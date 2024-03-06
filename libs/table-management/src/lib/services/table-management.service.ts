@@ -23,15 +23,24 @@ export class TableManagementService extends ApiService {
     areaId: string
   ): Observable<TableFormDataResponse> {
     return this.get(
-      `/api/v1/entity/${entityId}/inventory/${areaId}?type=TABLE`
+      `/api/v1/entity/${entityId}/inventory/${areaId}?type=TABLE`,
+      this.preDefinedHeaders
     );
   }
   createTable(entityId: string, data: {}): Observable<TableFormDataResponse> {
-    return this.post(`/api/v1/entity/${entityId}/inventory?type=TABLE`, data);
+    return this.post(
+      `/api/v1/entity/${entityId}/inventory?type=TABLE`,
+      data,
+      this.preDefinedHeaders
+    );
   }
 
   updateTable(entityId: string, data: {}): Observable<TableFormDataResponse> {
-    return this.put(`/api/v1/entity/${entityId}/inventory?type=TABLE`, data);
+    return this.put(
+      `/api/v1/entity/${entityId}/inventory?type=TABLE`,
+      data,
+      this.preDefinedHeaders
+    );
   }
 
   getAreaById(
@@ -39,16 +48,25 @@ export class TableManagementService extends ApiService {
     areaId: string
   ): Observable<AreaFormDataResponse> {
     return this.get(
-      `/api/v1/entity/${entityId}/inventory/${areaId}?type=AREA&raw=true`
+      `/api/v1/entity/${entityId}/inventory/${areaId}?type=AREA&raw=true`,
+      this.preDefinedHeaders
     );
   }
 
   createArea(entityId: string, data: {}): Observable<AreaFormDataResponse> {
-    return this.post(`/api/v1/entity/${entityId}/inventory?type=AREA`, data);
+    return this.post(
+      `/api/v1/entity/${entityId}/inventory?type=AREA`,
+      data,
+      this.preDefinedHeaders
+    );
   }
 
   updateArea(entityId: string, data: {}): Observable<AreaFormDataResponse> {
-    return this.patch(`/api/v1/entity/${entityId}/inventory?type=AREA`, data);
+    return this.patch(
+      `/api/v1/entity/${entityId}/inventory?type=AREA`,
+      data,
+      this.preDefinedHeaders
+    );
   }
 
   getList<T extends TableListResponse | AreaListResponse>(
@@ -56,7 +74,8 @@ export class TableManagementService extends ApiService {
     config?: QueryConfig
   ): Observable<T> {
     return this.get(
-      `/api/v1/entity/${entityId}/inventory${config?.params ?? ''}`
+      `/api/v1/entity/${entityId}/inventory${config?.params ?? ''}`,
+      this.preDefinedHeaders
     );
   }
 

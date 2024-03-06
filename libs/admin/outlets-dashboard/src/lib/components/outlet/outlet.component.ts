@@ -6,11 +6,12 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import {
-  NavRouteOptions,
   EntityTabFilterResponse,
+  NavRouteOptions,
 } from '@hospitality-bot/admin/shared';
-import { GuestListComponent } from '../guest-list/guest-list.component';
 import { OutletFormService } from '../../services/outlet-form.service';
+import { OutletTableService } from '../../services/outlet-table.service';
+import { GuestListComponent } from '../guest-list/guest-list.component';
 
 @Component({
   selector: 'hospitality-bot-outlet',
@@ -27,13 +28,17 @@ export class OutletComponent implements OnInit {
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
-    private formService: OutletFormService
+    private formService: OutletFormService,
+    private outletService: OutletTableService
   ) {}
 
   ngOnInit(): void {}
 
   onEntityTabFilterChanges(event: EntityTabFilterResponse): void {
     this.formService.entityId = event.entityId[0];
+    this.outletService.initCustomHeaderConfig({
+      entityId: event.entityId[0],
+    });
   }
 
   openGuestList() {
@@ -49,6 +54,7 @@ export class OutletComponent implements OnInit {
     );
     const componentRef = this.sidebarSlide.createComponent(factory);
     const instance: GuestListComponent = componentRef.instance;
+    instance.entityId = this.formService.entityId;
 
     const closeSubscription = instance.onClose.subscribe((res: any) => {
       componentRef.destroy();

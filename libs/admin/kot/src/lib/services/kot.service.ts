@@ -14,14 +14,20 @@ export class KotService extends ApiService {
   OnGlobalFilterChange = new BehaviorSubject<EntityTabFilterResponse>(null);
 
   getKotList(entityId: string, config: QueryConfig): Observable<any> {
-    return this.get(`/api/v1/entity/${entityId}/kot${config.params}`);
+    return this.get(
+      `/api/v1/entity/${entityId}/kot${config.params}`,
+      this.preDefinedHeaders
+    );
   }
 
   getAllOrders(
     entityId: string,
     config: QueryConfig
   ): Observable<OrderListResponse> {
-    return this.get(`/api/v1/entity/${entityId}/order${config?.params}`);
+    return this.get(
+      `/api/v1/entity/${entityId}/order${config?.params}`,
+      this.preDefinedHeaders
+    );
   }
 
   updateOrder(
@@ -32,12 +38,17 @@ export class KotService extends ApiService {
       reservationId: string;
     }
   ): Observable<any> {
-    return this.patch(`/api/v1/entity/${entityId}/order/${orderId}`, data);
+    return this.patch(
+      `/api/v1/entity/${entityId}/order/${orderId}`,
+      data,
+      this.preDefinedHeaders
+    );
   }
 
   getPendingItemSummary(entityId: string): Observable<PendingItemListResponse> {
     return this.get(
-      `/api/v1/entity/${entityId}/kot?status=PREPARING&includeSummaryItem=true`
+      `/api/v1/entity/${entityId}/kot?status=PREPARING&includeSummaryItem=true`,
+      this.preDefinedHeaders
     );
   }
 }

@@ -26,7 +26,10 @@ export class OutletTableService extends ApiService {
     entityId: string,
     orderId: string
   ): Observable<PosOrderResponse> {
-    return this.get(`/api/v1/entity/${entityId}/order/${orderId}`);
+    return this.get(
+      `/api/v1/entity/${entityId}/order/${orderId}`,
+      this.preDefinedHeaders
+    );
   }
 
   getPaymentMethod(entityId: string) {
@@ -37,31 +40,48 @@ export class OutletTableService extends ApiService {
 
   getAllCategories(menuIds: string) {
     return this.get(
-      `/api/v1/menus/categories?entityState=ACTIVE&menuIds=${menuIds}`
+      `/api/v1/menus/categories?entityState=ACTIVE&menuIds=${menuIds}`,
+      this.preDefinedHeaders
     );
   }
 
   exportCSV(entityId, config): Observable<any> {
-    return this.get(`/api/v1/outlets/export/${config.queryObj}`);
+    return this.get(
+      `/api/v1/outlets/export/${config.queryObj}`,
+      this.preDefinedHeaders
+    );
   }
 
   getOrderSummary(data: OrderSummaryData): Observable<OrderSummaryResponse> {
-    return this.post(`/api/v1/booking/summary?type=OUTLET`, data);
+    return this.post(
+      `/api/v1/booking/summary?type=OUTLET`,
+      data,
+      this.preDefinedHeaders
+    );
   }
 
   updateOutletItem(entityId, outletId, status): Observable<any> {
     return this.patch(
       `/api/v1/user/${outletId}/sites/${entityId}?status=${status}`,
-      {}
+      {},
+      this.preDefinedHeaders
     );
   }
 
   createOrder(entityId: string, data: CreateOrderData) {
-    return this.post(`/api/v1/entity/${entityId}/order`, data);
+    return this.post(
+      `/api/v1/entity/${entityId}/order`,
+      data,
+      this.preDefinedHeaders
+    );
   }
 
   updateOrder(entityId: string, orderId: string, data: CreateOrderData) {
-    return this.patch(`/api/v1/entity/${entityId}/order/${orderId}`, data);
+    return this.patch(
+      `/api/v1/entity/${entityId}/order/${orderId}`,
+      data,
+      this.preDefinedHeaders
+    );
   }
 
   updateOrderStatus(
@@ -69,22 +89,36 @@ export class OutletTableService extends ApiService {
     orderId: string,
     data: { status: OrderReservationStatus }
   ) {
-    return this.patch(`/api/v1/entity/${entityId}/order/${orderId}`, data);
+    return this.patch(
+      `/api/v1/entity/${entityId}/order/${orderId}`,
+      data,
+      this.preDefinedHeaders
+    );
   }
 
   createReservation(data: CreateReservationData) {
-    return this.post(`/api/v1/booking?type=OUTLET`, data);
+    return this.post(
+      `/api/v1/booking?type=OUTLET`,
+      data,
+      this.preDefinedHeaders
+    );
   }
 
   getTableReservations(
     entityId: string,
     config: QueryConfig
   ): Observable<ReservationTableListResponse> {
-    return this.get(`/api/v1/entity/${entityId}/order${config.params}`);
+    return this.get(
+      `/api/v1/entity/${entityId}/order${config.params}`,
+      this.preDefinedHeaders
+    );
   }
 
   getFilteredMenuItems(config: QueryConfig) {
-    return this.get(`/api/v1/menus/items${config?.params}`);
+    return this.get(
+      `/api/v1/menus/items${config?.params}`,
+      this.preDefinedHeaders
+    );
   }
 
   getList<T extends TableListResponse | AreaListResponse>(
@@ -92,22 +126,30 @@ export class OutletTableService extends ApiService {
     config?: QueryConfig
   ): Observable<T> {
     return this.get(
-      `/api/v1/entity/${entityId}/inventory${config?.params ?? ''}`
+      `/api/v1/entity/${entityId}/inventory${config?.params ?? ''}`,
+      this.preDefinedHeaders
     );
   }
 
   getGuestReservationList(
-    config: QueryConfig
+    config: QueryConfig,
+    entityId: string
   ): Observable<GuestReservationListResponse> {
-    return this.get(`/api/v1/booking${config?.params}`);
+    return this.get(`/api/v1/booking${config?.params}`, this.preDefinedHeaders);
   }
 
   getOffer(entityId: string, config: QueryConfig): Observable<any> {
-    return this.get(`/api/v1/entity/${entityId}/library/${config.params}`);
+    return this.get(
+      `/api/v1/entity/${entityId}/library/${config.params}`,
+      this.preDefinedHeaders
+    );
   }
 
   getGuestReservationById(id: string): Observable<GuestReservationResponse> {
-    return this.get(`/api/v1/booking/${id}?type=OUTLET&outletType=RESTAURANT`);
+    return this.get(
+      `/api/v1/booking/${id}?type=OUTLET&outletType=RESTAURANT`,
+      this.preDefinedHeaders
+    );
   }
 
   updateGuestReservation(
@@ -116,7 +158,8 @@ export class OutletTableService extends ApiService {
   ): Observable<GuestReservationResponse> {
     return this.put(
       `/api/v1/booking/${id}?type=OUTLET&outletType=RESTAURANT`,
-      reservation
+      reservation,
+      this.preDefinedHeaders
     );
   }
 
@@ -127,7 +170,8 @@ export class OutletTableService extends ApiService {
   ): Observable<any> {
     return this.patch(
       `/api/v1/booking/${reservationId}${config?.params ?? {}}`,
-      data
+      data,
+      this.preDefinedHeaders
     );
   }
   cancelReservation(
@@ -137,7 +181,8 @@ export class OutletTableService extends ApiService {
   ): Observable<any> {
     return this.patch(
       `/api/v1/booking/${reservationId}/status${config?.params ?? {}}`,
-      data
+      data,
+      this.preDefinedHeaders
     );
   }
 
@@ -146,7 +191,8 @@ export class OutletTableService extends ApiService {
     config: QueryConfig
   ): Observable<TableReservationListResponse> {
     return this.get(
-      `/api/v1/entity/${entityId}/inventory${config?.params ?? ''}`
+      `/api/v1/entity/${entityId}/inventory${config?.params ?? ''}`,
+      this.preDefinedHeaders
     );
   }
 }

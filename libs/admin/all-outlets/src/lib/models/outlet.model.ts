@@ -119,9 +119,8 @@ export class MenuItemList {
   entityTypeCounts: EntityState<string>;
 
   deserialize(input: MenuItemListResponse) {
-    this.records = input.records?.map((item) =>
-      new MenuItem().deserialize(item)
-    );
+    this.records =
+      input.records?.map((item) => new MenuItem().deserialize(item)) ?? [];
     this.entityStateCounts = input?.entityStateCounts ?? {};
     this.entityTypeCounts = input?.entityTypeCounts ?? {};
     this.total = input?.total ?? 0;

@@ -225,7 +225,7 @@ export class TableManagementDatableComponent extends BaseDatatableComponent
 
   navigateToAddMultipleTable() {
     this.router.navigate([tableManagementRoutes.createMultipleTable.route], {
-      queryParams: { type: 'MULTIPLE' },
+      queryParams: { type: 'MULTIPLE', entityId: this.entityId },
       relativeTo: this.route,
     });
   }
@@ -242,6 +242,7 @@ export class TableManagementDatableComponent extends BaseDatatableComponent
           ],
           {
             relativeTo: this.route,
+            queryParams: { entityId: this.entityId },
           }
         );
         break;
@@ -255,8 +256,25 @@ export class TableManagementDatableComponent extends BaseDatatableComponent
           ],
           {
             relativeTo: this.route,
+            queryParams: { entityId: this.entityId },
           }
         );
+    }
+  }
+
+  openCreateForm(data) {
+    switch (this.selectedTab) {
+      case TableValue.Table:
+        this.router.navigate([tableManagementRoutes.createTable.route], {
+          relativeTo: this.route,
+          queryParams: { entityId: this.entityId },
+        });
+        break;
+      case TableValue.Area:
+        this.router.navigate([tableManagementRoutes.createArea.route], {
+          relativeTo: this.route,
+          queryParams: { entityId: this.entityId },
+        });
     }
   }
 

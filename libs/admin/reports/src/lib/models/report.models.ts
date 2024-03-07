@@ -1,9 +1,9 @@
 import { ProductNames } from '@hospitality-bot/admin/shared';
+import { ReportsConfig } from '../types/reports.types';
 import {
   ReportConfigResponse,
   ReportMenu,
-} from '../types/report-response.types';
-import { ReportsConfig } from '../types/reports.types';
+} from 'apps/admin/src/app/core/theme/src/lib/type/report-type';
 
 export class ReportConfig {
   reportConfig: ProductReportConfig;

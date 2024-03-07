@@ -6,7 +6,6 @@ import {
   ReportType,
   ReportsMenu,
 } from '../types/reports.types';
-import { ReportConfigResponse } from '../types/report-response.types';
 
 @Injectable()
 export class ReportsService extends ApiService {
@@ -24,12 +23,6 @@ export class ReportsService extends ApiService {
         ...(isExport ? { exportType: 'csv' } : {}),
       })}`,
       isExport ? { responseType: 'blob' } : {}
-    );
-  }
-
-  getReportConfig(): Observable<ReportConfigResponse> {
-    return this.get(
-      `/api/v1/cms/master-configuration?configType=reportConfig&includeObject=reportModules`
     );
   }
 }

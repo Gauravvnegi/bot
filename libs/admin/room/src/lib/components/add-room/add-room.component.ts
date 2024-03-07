@@ -510,16 +510,12 @@ export class AddRoomComponent implements OnInit, OnDestroy {
         })
         .subscribe(
           (res) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.success.updatedRoom`,
-                  priorityMessage: '',
-                },
-                '',
-                { panelClass: 'success' }
-              )
-              .subscribe();
+            this.snackbarService.openSnackBarAsText(
+              'Room Updated Successfully',
+              '',
+
+              { panelClass: 'success' }
+            );
             this.location.back();
           },
           (error) => {}
@@ -561,16 +557,11 @@ export class AddRoomComponent implements OnInit, OnDestroy {
 
             if (res.rooms.length) {
               this.$subscription.add(
-                this.snackbarService
-                  .openSnackBarWithTranslate(
-                    {
-                      translateKey: `messages.success.addSingleRoom`,
-                      priorityMessage: '',
-                    },
-                    '',
-                    { panelClass: 'success' }
-                  )
-                  .subscribe()
+                this.snackbarService.openSnackBarAsText(
+                  'Room Created successfully',
+                  '',
+                  { panelClass: 'success' }
+                )
               );
             }
           },

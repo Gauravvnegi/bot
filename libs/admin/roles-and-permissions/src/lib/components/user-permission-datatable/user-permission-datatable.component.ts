@@ -265,7 +265,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
           let label: string = 'Deactivate';
 
           //api call to check if user have any jobs pending
-          if (!res) {
+          if (!res.pendingJobs) {
             description = [`Are you sure you want to deactivate the user?`];
           }
           if (force) {

@@ -6,7 +6,11 @@
       *ngIf="!isSidebar; else sidebarHeader"
     >
     </hospitality-bot-navigation-header>
-    <div class="form-block" [formGroup]="serviceItemForm">
+    <div
+      class="form-block"
+      [formGroup]="serviceItemForm"
+      [ngClass]="{ 'sidebar-overflow': isSidebar }"
+    >
       <hospitality-bot-input
         [class]="isSidebar ? 'full-width' : 'half-width'"
         controlName="itemName"

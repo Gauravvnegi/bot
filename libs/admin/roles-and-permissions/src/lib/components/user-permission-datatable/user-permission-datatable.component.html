@@ -195,6 +195,7 @@
         offLabel="Always"
       ></hospitality-bot-toggle-switch>
       <hospitality-bot-input
+        *ngIf="popupForm.get('status').value"
         class="hours"
         [props]="{
           type: 'number'

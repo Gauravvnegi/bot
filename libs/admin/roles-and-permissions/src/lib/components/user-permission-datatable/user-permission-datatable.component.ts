@@ -357,7 +357,8 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
         heading: 'Mark as Unavailable',
         descriptions: [
           'Are you sure you want to mark this user as unavailable?',
-          'Once marked unavailable, this user will not be assigned any task. You can always make them available again.',
+          'Once marked unavailable, this user will not be assigned to any task.',
+          'You can always make them available again.',
         ],
         actions: [
           {

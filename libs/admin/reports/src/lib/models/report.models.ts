@@ -12,7 +12,7 @@ export class ReportConfig {
     const mapper = new Map<keyof typeof ProductNames, ReportsConfig>();
 
     Object.entries(value).forEach(([key, reports]) => {
-      reports.menu.forEach((menuConfig: ReportMenu) => {
+      reports?.menu?.forEach((menuConfig: ReportMenu) => {
         menuConfig?.product.forEach((product) => {
           const reportsConfig = mapper.get(product);
 

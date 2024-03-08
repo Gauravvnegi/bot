@@ -19,6 +19,9 @@ export class ModalComponent {
   fromDate: string;
   remarksValidators: Validators[] = [Validators.required];
 
+  @Input() isDefaultRefClose = true;
+  @Output() onClose = new EventEmitter();
+
   constructor(
     private fb: FormBuilder,
     public dialogConfig: DynamicDialogConfig, //generic not supported yet,
@@ -68,10 +71,8 @@ export class ModalComponent {
     });
   }
 
-  @Output() onClose = new EventEmitter();
-
   close() {
-    this.dialogRef.close();
+    this.isDefaultRefClose && this.dialogRef.close();
     this.onClose.emit();
   }
 

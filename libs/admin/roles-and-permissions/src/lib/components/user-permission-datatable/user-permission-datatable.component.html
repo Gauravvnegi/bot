@@ -185,7 +185,13 @@
   [visible]="isPopUpVisible"
   [modal]="true"
 >
-  <hospitality-bot-modal #md *ngIf="isPopUpVisible" [content]="popUpContent">
+  <hospitality-bot-modal
+    #md
+    *ngIf="isPopUpVisible"
+    [content]="popUpContent"
+    [isDefaultRefClose]="false"
+    (onClose)="this.isPopUpVisible = false"
+  >
     <div class="popup-form" [formGroup]="popupForm">
       <hospitality-bot-toggle-switch
         class="status"
@@ -201,6 +207,12 @@
           type: 'number'
         }"
         controlName="hours"
+        [min]="1"
+        [props]="{
+          errorMessages: {
+            pattern: 'Invalid hours'
+          }
+        }"
       ></hospitality-bot-input>
     </div>
   </hospitality-bot-modal>

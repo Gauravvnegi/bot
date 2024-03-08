@@ -93,7 +93,10 @@ export type ReportsType = {
   FOLIO_REPORTS: 'folioListReport';
   RATE_PACKAGE_REPORTS: 'rateVariation';
   FUND_REPORTS: 'addWithdrawalFundReport';
-  COMPLAINT: 'serviceItemWiseComplaintReport' | 'categoryWiseComplaintReport';
+  COMPLAINT_REPORT:
+    | 'serviceItemWiseComplaintReport'
+    | 'categoryWiseComplaintReport';
+  ORDER_REPORT: 'orderSummary';
 };
 
 export type ReportsTypeValues = ReportsType[keyof ReportsType];

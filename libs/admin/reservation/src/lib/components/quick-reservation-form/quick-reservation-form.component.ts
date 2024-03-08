@@ -400,7 +400,7 @@ export class QuickReservationFormComponent implements OnInit {
       toDate: this.reservationInfoControls.to.value,
       fromDate: this.reservationInfoControls.from.value,
       entityState: 'ALL',
-      type: 'GUEST',
+      type: 'GUEST,NON_RESIDENT_GUEST',
     };
     return queries;
   }

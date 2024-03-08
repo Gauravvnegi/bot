@@ -165,6 +165,8 @@ import {
   categoryWiseComplaintReportCols,
   serviceItemWiseComplaintReportCols,
 } from './complaint-report.const';
+import { OrderSummaryReport } from '../models/order-reports.models';
+import { orderSummaryReportCols } from './order-reports.const';
 
 export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
   noShowReport: NoShowReport,
@@ -226,6 +228,7 @@ export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
   allowanceReport: AllowanceReport,
   serviceItemWiseComplaintReport: ServiceItemWiseComplaintReport,
   categoryWiseComplaintReport: CategoryWiseComplaintReport,
+  orderSummary: OrderSummaryReport,
 };
 
 function getColsArray(colsData: ColsData): Cols[] {
@@ -303,6 +306,7 @@ export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
     serviceItemWiseComplaintReportCols
   ),
   categoryWiseComplaintReport: getColsArray(categoryWiseComplaintReportCols),
+  orderSummary: getColsArray(orderSummaryReportCols),
 };
 
 export const reportFiltersMapping: Record<
@@ -368,6 +372,7 @@ export const reportFiltersMapping: Record<
   allowanceReport: ['fromDate', 'toDate'],
   serviceItemWiseComplaintReport: ['fromDate', 'toDate'],
   categoryWiseComplaintReport: ['fromDate', 'toDate'],
+  orderSummary: ['fromDate', 'toDate'],
 };
 
 export const rowStylesMapping: Record<RowStylesKeys, string> = {

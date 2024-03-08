@@ -5,12 +5,22 @@
 >
   <label *ngIf="label" class="label label__static">{{ label }}</label>
   <div class="input">
-    <div class="state-label">{{ offLabel }}</div>
+    <div
+      class="state-label"
+      [ngClass]="{ 'highlighted-label': isHighlightedLabel && !value }"
+    >
+      {{ offLabel }}
+    </div>
     <p-inputSwitch
       [inputId]="controlName"
       [formControlName]="controlName"
       [disabled]="isDisabled"
     ></p-inputSwitch>
-    <div class="state-label">{{ onLabel }}</div>
+    <div
+      class="state-label"
+      [ngClass]="{ 'highlighted-label': isHighlightedLabel && value }"
+    >
+      {{ onLabel }}
+    </div>
   </div>
 </div>

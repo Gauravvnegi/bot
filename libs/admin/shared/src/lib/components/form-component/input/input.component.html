@@ -52,7 +52,7 @@
     </ng-template>
   </ng-container>
 
-  <small *ngIf="error" class="p-error"> {{ error }}</small>
+  <small *ngIf="error && isErrorVisible" class="p-error"> {{ error }}</small>
 
   <label *ngIf="label && float" [for]="controlName" class="label">{{
     label

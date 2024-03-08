@@ -24,11 +24,10 @@ export const cols: Cols[] = [
     isSearchDisabled: true,
   },
   {
-    field: 'availability',
+    field: 'availableStatus.label',
     header: 'Availability',
     sortType: 'string',
     isSearchDisabled: true,
-    isSortDisabled: true,
   },
   {
     field: 'status',

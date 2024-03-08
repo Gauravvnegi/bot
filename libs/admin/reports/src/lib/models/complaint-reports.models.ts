@@ -21,7 +21,6 @@ export class ServiceItemWiseComplaintReport
       value?.records?.length &&
       value.records?.map((item) => {
         return {
-          complaintId: item?.id,
           name: item?.itemName,
           sla: item?.sla,
           totalComplaints: item?.complaintRequestStats?.total,

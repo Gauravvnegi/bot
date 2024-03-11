@@ -13,7 +13,7 @@ export class ListingService extends ApiService {
    * @returns get api of topic list.
    */
   getTopicList(id: string, config): Observable<any> {
-    return this.get(`/api/v1/entity/${id}/topics/${config.queryObj}`);
+    return this.get(`/api/v1/entity/${id}/topics${config.queryObj}`);
   }
 
   /**

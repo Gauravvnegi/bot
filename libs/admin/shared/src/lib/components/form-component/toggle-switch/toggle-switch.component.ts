@@ -11,10 +11,15 @@ import { FormComponent } from '../form.components';
 export class ToggleSwitchComponent extends FormComponent {
   @Input() onLabel = 'Active';
   @Input() offLabel = 'Inactive';
+  @Input() isHighlightedLabel = false;
 
   alignment: Alignment = 'horizontal';
 
   constructor(public controlContainer: ControlContainer) {
     super(controlContainer);
+  }
+
+  get value(): boolean {
+    return this.inputControl.value;
   }
 }

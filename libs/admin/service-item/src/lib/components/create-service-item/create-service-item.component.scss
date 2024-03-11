@@ -3,3 +3,8 @@
 .form-block {
   @include form-block;
 }
+
+.sidebar-overflow {
+  overflow: auto;
+  height: calc(100vh - 52px);
+}

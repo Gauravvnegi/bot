@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Option, UserService, openModal } from '@hospitality-bot/admin/shared';
 import * as FileSaver from 'file-saver';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
@@ -265,7 +265,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
           let label: string = 'Deactivate';
 
           //api call to check if user have any jobs pending
-          if (!res) {
+          if (!res.pendingJobs) {
             description = [`Are you sure you want to deactivate the user?`];
           }
           if (force) {
@@ -346,7 +346,13 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   initPopupForm() {
     this.popupForm = this.fb.group({
       status: [],
-      hours: [],
+      hours: ['1', [Validators.pattern(/^\d+$/)]],
+    });
+
+    this.popupForm.get('hours').valueChanges.subscribe((value: number) => {
+      if (!value) {
+        this.popupForm.get('hours').setValue(1);
+      }
     });
   }
 
@@ -357,7 +363,8 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
         heading: 'Mark as Unavailable',
         descriptions: [
           'Are you sure you want to mark this user as unavailable?',
-          'Once marked unavailable, this user will not be assigned any task. You can always make them available again.',
+          'Once marked unavailable, this user will not be assigned to any task.',
+          'You can always make them available again.',
         ],
         actions: [
           {
@@ -370,6 +377,18 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
           {
             label: 'Unavailable',
             onClick: () => {
+              if (
+                this.popupForm.invalid &&
+                this.popupForm.get('status').value
+              ) {
+                this.snackbarService.openSnackBarAsText(
+                  'Please enter valid hours format',
+                  '',
+                  {}
+                );
+                return;
+              }
+
               this.updateUserAvailability(false, data);
             },
             variant: 'contained',
@@ -393,10 +412,14 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
       ]),
     };
 
-    return this._managePermissionService
+    this._managePermissionService
       .updateUserAvailability(userDetails.userId, config)
       .subscribe(() => {
         this.isPopUpVisible = false;
+        this.popupForm.setValue({
+          status: false,
+          hours: '1',
+        });
         this.loadInitialData();
       });
   }

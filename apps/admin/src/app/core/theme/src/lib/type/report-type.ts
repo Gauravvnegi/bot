@@ -31,4 +31,5 @@ export type ReportConfigResponse = {
   SOURCE_REPORTS: ReportCategory;
   FOLIO_REPORTS: ReportCategory;
   RATE_PACKAGE_REPORTS: ReportCategory;
+  COMPLAINT_REPORTS: ReportCategory;
 };

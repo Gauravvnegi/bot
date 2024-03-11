@@ -6,6 +6,7 @@ export type TableForm<T> = {
 };
 
 export type TableFormDataResponse = {
+  errorMessages: string[];
   tables: {
     created: number;
     entityId: string;

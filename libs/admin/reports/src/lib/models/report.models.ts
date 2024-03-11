@@ -1,9 +1,9 @@
 import { ProductNames } from '@hospitality-bot/admin/shared';
+import { ReportsConfig } from '../types/reports.types';
 import {
   ReportConfigResponse,
   ReportMenu,
-} from '../types/report-response.types';
-import { ReportsConfig } from '../types/reports.types';
+} from 'apps/admin/src/app/core/theme/src/lib/type/report-type';
 
 export class ReportConfig {
   reportConfig: ProductReportConfig;
@@ -12,7 +12,7 @@ export class ReportConfig {
     const mapper = new Map<keyof typeof ProductNames, ReportsConfig>();
 
     Object.entries(value).forEach(([key, reports]) => {
-      reports.menu.forEach((menuConfig: ReportMenu) => {
+      reports?.menu?.forEach((menuConfig: ReportMenu) => {
         menuConfig?.product.forEach((product) => {
           const reportsConfig = mapper.get(product);
 

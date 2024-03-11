@@ -9,6 +9,7 @@ import {
   ModuleNames,
   NavRouteOption,
   Option,
+  openModal,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
@@ -38,6 +39,8 @@ import {
   AreaListResponse,
   TableFormSubmissionType,
 } from '../../types/table-datable.type';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-edit-table',
@@ -69,7 +72,8 @@ export class EditTableComponent implements OnInit {
     private route: ActivatedRoute,
     private tableManagementService: TableManagementService,
     private globalFilterService: GlobalFilterService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private dialogService: DialogService
   ) {
     this.tableId = this.route.snapshot.paramMap.get(
       tableManagementParmId.TABLE
@@ -82,11 +86,9 @@ export class EditTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.entityId =
-      this.tableManagementService.entityId ?? this.globalFilterService.entityId;
-
-    if (this.route?.snapshot?.queryParams?.type)
-      this.formSubmissionType = this.route?.snapshot?.queryParams?.type;
+    const { entityId, type } = this.route.snapshot.queryParams;
+    if (entityId) this.entityId = entityId ?? this.globalFilterService.entityId;
+    if (type) this.formSubmissionType = type;
 
     this.initForm();
     this.initNavRoutes();
@@ -216,7 +218,15 @@ export class EditTableComponent implements OnInit {
     this.$subscription.add(
       this.tableManagementService
         .updateTable(this.entityId, { table: data })
-        .subscribe((res) => {}, this.handleError, this.handleSuccess)
+        .subscribe(
+          (res) => {
+            this.routesConfigService.navigate({
+              subModuleName: ModuleNames.TABLE_MANAGEMENT,
+            });
+          },
+          this.handleError,
+          this.handleSuccess
+        )
     );
   }
 
@@ -229,7 +239,31 @@ export class EditTableComponent implements OnInit {
     this.$subscription.add(
       this.tableManagementService
         .createTable(this.entityId, tableFormData)
-        .subscribe((res) => {}, this.handleError, this.handleSuccess)
+        .subscribe(
+          (res) => {
+            if (res.errorMessages.length) {
+              const modalData: Partial<ModalComponent> = {
+                heading: 'Rooms not added',
+                descriptions: res.errorMessages,
+              };
+
+              openModal({
+                config: {
+                  styleClass: 'confirm-dialog',
+                  data: modalData,
+                },
+                dialogService: this.dialogService,
+                component: ModalComponent,
+              });
+            } else {
+              this.routesConfigService.navigate({
+                subModuleName: ModuleNames.TABLE_MANAGEMENT,
+              });
+            }
+          },
+          this.handleError,
+          this.handleSuccess
+        )
     );
   }
 
@@ -240,9 +274,6 @@ export class EditTableComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
-    this.routesConfigService.navigate({
-      subModuleName: ModuleNames.TABLE_MANAGEMENT,
-    });
   };
 
   handleError = ({ error }): void => {

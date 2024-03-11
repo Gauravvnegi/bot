@@ -14,14 +14,12 @@
     <hospitality-bot-button
       *ngIf="selectedTab === TableValue.Table"
       label="+ Add Table"
-      [routerLink]="tableManagementRoutes.createTable.route"
-      preserveQueryParams="true"
+      (onClick)="openCreateForm(TableValue.Table)"
     ></hospitality-bot-button>
     <hospitality-bot-button
       *ngIf="selectedTab === TableValue.Area"
       label="+ Add Area"
-      [routerLink]="tableManagementRoutes.createArea.route"
-      preserveQueryParams="true"
+      (onClick)="openCreateForm(TableValue.Area)"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
       [additionalActionItems]="additionalActionItems"

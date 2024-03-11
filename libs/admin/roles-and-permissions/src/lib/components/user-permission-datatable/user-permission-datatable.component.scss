@@ -194,6 +194,19 @@ tr > td {
 
   .hours {
     display: block;
-    width: 68px;
+    width: 76px;
+  }
+}
+
+:host ::ng-deep {
+  .p-inputswitch-slider {
+    background: #5f38f9 !important;
+  }
+
+  .on {
+    .offLable {
+      background-color: black !important;
+      opacity: 1;
+    }
   }
 }

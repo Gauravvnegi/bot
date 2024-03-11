@@ -20,6 +20,7 @@
         type: 'number',
         placeholder: 'HH'
       }"
+      [isErrorVisible]="false"
       (onKeyDown)="handleKeyPress($event, 'HH')"
     ></hospitality-bot-input>
 
@@ -33,8 +34,10 @@
         placeholder: 'MM'
       }"
       (onKeyDown)="handleKeyPress($event, 'MM')"
+      [isErrorVisible]="false"
     ></hospitality-bot-input>
   </div>
+  <small *ngIf="error" class="p-error"> {{ error }}</small>
 </div>
 
 <div [hidden]="true">{{ syncValidators }}</div>

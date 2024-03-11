@@ -1,5 +1,10 @@
 @import 'main';
 
+.body {
+  overflow: auto;
+  height: calc(100vh - 120px);
+}
+
 .form-block {
   @include form-block;
   box-shadow: unset;

@@ -24,6 +24,8 @@ import { PackageData, PackageFormData } from '../../types/package';
 import { PackageResponse } from '../../types/response';
 import { packagesRoutes } from '../../constant/routes';
 
+type ServiceItemOption = Option & { price: number };
+
 @Component({
   selector: 'hospitality-bot-create-package',
   templateUrl: './create-package.component.html',
@@ -50,13 +52,14 @@ export class CreatePackageComponent implements OnInit {
 
   /* service options variable */
   servicesOffSet = 0;
+  servicesLimit = 20;
   loadingServices = false;
   noMoreServices = false;
 
   // ** All the dropdown value to be from configuration api **
 
   categories: Option[] = [];
-  services: (Option & { price: number })[] = [];
+  services: ServiceItemOption[] = [];
   currencies: Option[];
   discountType: Option[] = [];
   visibilities: Option[] = [];
@@ -160,7 +163,7 @@ export class CreatePackageComponent implements OnInit {
                 if (
                   this.services.findIndex(
                     (service) => service.value === item.value
-                  ) > -1
+                  ) === -1
                 ) {
                   this.services.push(item);
                   this.selectedServicePrice[item.value] = item.price;
@@ -353,7 +356,7 @@ export class CreatePackageComponent implements OnInit {
     this.$subscription.add(
       this.packagesService
         .getLibraryItems<ServiceListResponse>(this.entityId, {
-          params: `?type=SERVICE&offset=${this.servicesOffSet}&limit=10&status=true&serviceType=${ServicesTypeValue.PAID}&visibilitySource=ADMIN_PANEL`,
+          params: `?type=SERVICE&offset=${this.servicesOffSet}&limit=${this.servicesLimit}&status=true&serviceType=${ServicesTypeValue.PAID}&visibilitySource=ADMIN_PANEL`,
         })
         .subscribe(
           (res) => {
@@ -370,8 +373,11 @@ export class CreatePackageComponent implements OnInit {
                 };
               });
 
-            this.services = [...this.services, ...data];
-            this.noMoreServices = data.length < 10;
+            this.services = this.getUniqueOptions([...this.services, ...data]);
+
+            this.noMoreServices =
+              res.entityStateCounts['ACTIVE'] <= this.servicesLimit;
+
             this.loadingServices = false;
           },
           this.handleError,
@@ -413,7 +419,7 @@ export class CreatePackageComponent implements OnInit {
           this.handleFinal
         );
     } else {
-      this.servicesOffSet = 0;
+      this.servicesLimit = 20;
       this.services = [];
       this.getServices();
     }
@@ -423,7 +429,7 @@ export class CreatePackageComponent implements OnInit {
    * @function loadMoreServices load more services options
    */
   loadMoreServices() {
-    this.servicesOffSet = this.servicesOffSet + 10;
+    this.servicesLimit = this.servicesLimit + 10;
     this.getServices();
   }
 
@@ -505,6 +511,16 @@ export class CreatePackageComponent implements OnInit {
 
   resetForm() {
     this.useForm.reset();
+  }
+
+  getUniqueOptions(data: ServiceItemOption[]): ServiceItemOption[] {
+    const uniqueMap = new Map();
+
+    for (const item of data) {
+      uniqueMap.set(item.value, item);
+    }
+
+    return Array.from(uniqueMap.values());
   }
 
   /**

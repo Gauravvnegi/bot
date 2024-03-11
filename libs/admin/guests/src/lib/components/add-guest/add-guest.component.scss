@@ -3,6 +3,10 @@
 .form-block {
   @include form-block;
 }
+.body {
+  overflow: auto;
+  height: calc(100vh - 120px);
+}
 
 :host ::ng-deep .fixed {
   left: 0 !important;

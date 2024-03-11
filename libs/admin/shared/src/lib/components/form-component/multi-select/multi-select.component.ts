@@ -32,7 +32,7 @@ export class MultiSelectComponent extends FormComponent {
     super(controlContainer);
   }
 
-  dictionary: Record<string, string> = {};
+  // dictionary: Record<string, string> = {};
 
   handleClear(value: string) {
     if (!this.isDisabled && this.inputControl.status !== 'DISABLED')
@@ -41,9 +41,8 @@ export class MultiSelectComponent extends FormComponent {
       );
   }
 
-  set options(input: Option[]) {
-    this.menuOptions = input;
-    this.dictionary = input?.reduce((prev, { label, value }) => {
+  get dictionary(): Record<string, string> {
+    return this.menuOptions?.reduce((prev, { label, value }) => {
       prev[value] = label;
       return prev;
     }, {});

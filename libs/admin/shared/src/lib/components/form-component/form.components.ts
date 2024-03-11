@@ -38,6 +38,8 @@ export class FormComponent implements OnInit {
   inputPrompt: string; // To add input-save after add cta
   isAutoFocusFilter: boolean = true; // To focus on search input
 
+  @Input() isErrorVisible: boolean = true;
+
   @Output() onCreate = new EventEmitter(); // createPrompt on click emitter
   @Output() onFocus = new EventEmitter(); //handle focus
   @Output() onBlur = new EventEmitter(); //handle focus

@@ -1,4 +1,12 @@
 {
   "editor.formatOnSave": true,
-  "cSpell.words": ["disriealze"]
+  "cSpell.words": [
+    "disriealze"
+  ],
+  "testing.openTesting": "neverOpen",
+  "jest.outputConfig": {
+    "revealOn": "run",
+    "revealWithFocus": "none",
+    "clearOnRun": "none"
+  }
 }

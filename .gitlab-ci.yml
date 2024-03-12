@@ -17,6 +17,7 @@ Deploy_Admin:
   script:
     - docker build -t $CI_IMAGE_NAME .
     - docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
     - docker push $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
     - cat "$DEPLOYMENT_FILE" > deployment.yaml
     - cat "$KUBE_CONFIG_FILE" > k8s-config.yaml
@@ -39,6 +40,7 @@ Deploy_Web:
   script:
     - docker build -t $CI_IMAGE_NAME .
     - docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
     - docker push $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
     - cat "$DEPLOYMENT_FILE" > deployment.yaml
     - cat "$KUBE_CONFIG_FILE" > k8s-config.yaml
@@ -50,3 +52,6 @@ Deploy_Web:
   
   tags:
     - k8s-dev
+
+
+

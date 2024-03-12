@@ -1,4 +1,7 @@
-import { ReservationCurrentStatus } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
+import {
+  ReservationCurrentStatus,
+  RoomReservation,
+} from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
 import { IGCellInfo } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 
 export enum actionType {
@@ -88,4 +91,28 @@ export function calculateJourneyTime(
     parseInt(journeySeconds);
 
   return { currentTime: currentEpochTime, defaultTime: defaultJourneyEpoch };
+}
+
+export function getBookingIndicators(data: RoomReservation): string[] {
+  const indicators: string[] = [];
+
+  if (data) {
+    if (data?.groupCode) {
+      indicators.push('assets/images/group-booking.svg');
+    }
+    // if (data.paymentStatus === 'pending') {
+    //     indicators.push('assets/images/payment-pending.svg');
+    // }
+    // if (data.guestType === 'VIP') {
+    //     indicators.push('assets/images/VIP.svg');
+    // }
+    // if (data.guestType === 'single lady') {
+    //     indicators.push('assets/images/single-lady.svg');
+    // }
+    // if (data.bookingType === 'day') {
+    //     indicators.push('assets/images/day-booking.svg');
+    // }
+  }
+
+  return indicators;
 }

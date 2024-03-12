@@ -31,11 +31,6 @@
   width: 25px;
 }
 
-:host ::ng-deep {
-  .p-datatable {
-    @include tableHeadingStickyPosition(114px);
-  }
-}
 
 :host ::ng-deep .status-toggle {
   .wrapper {

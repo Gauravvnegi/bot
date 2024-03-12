@@ -14,12 +14,13 @@ import { EditContentComponent } from './components/edit-content/edit-content.com
 import { TemplateListContainerComponent } from './components/template-list-container/template-list-container.component';
 import { TopicTemplatesComponent } from './components/topic-templates/topic-templates.component';
 import { ScheduleCampaignComponent } from './components/schedule-campaign/schedule-campaign.component';
+import { CampaignFormViewComponent } from './components/campaign-form-view/campaign-form-view.component';
 
 const appRoutes: Route[] = [
   { path: '', component: CampaignComponent },
-  { path: 'view/:id', component: ViewCampaignComponent },
-  { path: 'create', component: EditCampaignComponent },
-  { path: 'edit/:id', component: EditCampaignComponent },
+  { path: 'view-campaign/:id', component: CampaignFormViewComponent },
+  { path: 'create-campaign', component: CampaignFormViewComponent },
+  { path: 'edit-campaign/:id', component: CampaignFormViewComponent },
 ];
 
 @NgModule({
@@ -42,5 +43,6 @@ export class AdminCampaignRoutingModule {
     TemplateListContainerComponent,
     TopicTemplatesComponent,
     ScheduleCampaignComponent,
+    CampaignFormViewComponent,
   ];
 }

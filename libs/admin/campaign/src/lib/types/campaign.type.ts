@@ -13,3 +13,5 @@ export type MessageObj = {
   key: string;
   message: string;
 };
+
+export type CampaignType = 'whatsapp' | 'email';

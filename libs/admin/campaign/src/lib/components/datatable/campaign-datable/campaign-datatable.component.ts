@@ -1,7 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -11,12 +14,12 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import * as FileSaver from 'file-saver';
-import { LazyLoadEvent, SortEvent } from 'primeng/api';
+import { LazyLoadEvent, MenuItem, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { campaignConfig } from '../../../constant/campaign';
 import { Campaigns, Campaign } from '../../../data-model/campaign.model';
 import { CampaignService } from '../../../services/campaign.service';
-import { MessageObj } from '../../../types/campaign.type';
+import { CampaignType, MessageObj } from '../../../types/campaign.type';
 import { campaignStatus } from '../../../constants/response';
 import { MenuOptions } from '../../../constants/camapign';
 
@@ -45,10 +48,13 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   menuOptions = MenuOptions;
   navRoutes: NavRouteOption[] = [
     {
-      label: 'Library',
+      label: 'Emark-it',
       link: './',
     },
   ];
+
+  campaignCta: MenuItem[] = [];
+
   constructor(
     public fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -57,13 +63,15 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     private router: Router,
     private route: ActivatedRoute,
     private campaignService: CampaignService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb);
   }
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
+    this.initDetails();
   }
 
   /**
@@ -85,6 +93,23 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         ...this.getSelectedQuickReplyFilters(),
       ]);
     });
+  }
+
+  initDetails() {
+    this.campaignCta = [
+      {
+        label: 'Email',
+        command: () => {
+          this.openCreateCampaign();
+        },
+      },
+      {
+        label: 'Whatsapp',
+        command: () => {
+          this.openCreateCampaign('whatsapp');
+        },
+      },
+    ];
   }
 
   /**
@@ -233,8 +258,14 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   /**
    * @function openCreateCampaign to create campaign page.
    */
-  openCreateCampaign(): void {
-    this.router.navigate(['create'], { relativeTo: this.route });
+  openCreateCampaign(campaignType: CampaignType = 'email'): void {
+    // this.router.navigate(['create'], { relativeTo: this.route });
+    this.routesConfigService.navigate({
+      additionalPath: 'create-campaign',
+      queryParams: {
+        campaignType: campaignType,
+      },
+    });
   }
 
   /**

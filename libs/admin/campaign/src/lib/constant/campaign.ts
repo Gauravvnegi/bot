@@ -168,3 +168,10 @@ export const campaignConfig = {
     },
   ],
 };
+
+export const triggerOptions = [
+  { label: 'Does not repeat', value: 'DOES_NOT_REPEAT' },
+  { label: 'Daily', value: 'DAILY' },
+  { label: 'Weekly', value: 'WEEKLY' },
+  { label: 'Triggered', value: 'TRIGGERED' },
+];

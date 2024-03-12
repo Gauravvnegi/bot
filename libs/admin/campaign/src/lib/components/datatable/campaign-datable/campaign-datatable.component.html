@@ -2,10 +2,14 @@
   [formGroup]="tableFG"
 >
   <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes" [isBack]="false">
-      <hospitality-bot-button
-      (click)="openCreateCampaign()"
-      label=" {{ 'campaign.create' | translate }}"
-    ></hospitality-bot-button>
+    <hospitality-bot-tiered-menu-button
+      class="tiered-menu-btn"
+      label="+ Create Campaign"
+      [splitButton]="true"
+      (clicked)="openCreateCampaign()"
+      [openNewWindow]="true"
+      [items]="campaignCta"
+    ></hospitality-bot-tiered-menu-button>
     <hospitality-bot-export-list
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"

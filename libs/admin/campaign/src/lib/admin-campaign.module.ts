@@ -10,6 +10,7 @@ import { EmailService } from './services/email.service';
 import { CampaignService } from './services/campaign.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
+import { ListingService } from 'libs/admin/listing/src/lib/services/listing.service';
 
 @NgModule({
   imports: [
@@ -21,6 +22,6 @@ import { HttpClient } from '@angular/common/http';
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['campaign'])),
   ],
   declarations: [...AdminCampaignRoutingModule.components],
-  providers: [EmailService, CampaignService],
+  providers: [EmailService, CampaignService, ListingService],
 })
 export class AdminCampaignModule {}

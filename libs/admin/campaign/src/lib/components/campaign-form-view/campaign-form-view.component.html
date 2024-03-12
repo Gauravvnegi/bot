@@ -1,0 +1,29 @@
+<hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+  <!-- [dateTime]="draftDate | date" -->
+</hospitality-bot-navigation-header>
+
+<div class="form-block" [formGroup]="useForm">
+  <div class="form-header">Campaign Details</div>
+
+  <hospitality-bot-input
+    class="half-width"
+    controlName="campaignName"
+    label="Campaign Name"
+    [props]="{
+      placeholder: 'Enter Campaign Name'
+    }"
+  ></hospitality-bot-input>
+  <hospitality-bot-select
+    class="half-width"
+    controlName="campaignName"
+    label="Topic"
+  ></hospitality-bot-select>
+  <hospitality-bot-input
+    class="half-width"
+    controlName="campaignName"
+    label="Recipient"
+    [props]="{
+      placeholder: 'Enter Campaign Name'
+    }"
+  ></hospitality-bot-input>
+</div>

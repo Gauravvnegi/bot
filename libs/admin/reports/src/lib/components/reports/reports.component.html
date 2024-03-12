@@ -1,40 +1,40 @@
 <p-sidebar
-  styleClass="reports-menu"
-  [visible]="showMenu"
-  [position]="'left'"
-  [showCloseIcon]="false"
-  (onHide)="showMenu = false"
+    styleClass="reports-menu"
+    [visible]="showMenu"
+    [position]="'left'"
+    [showCloseIcon]="false"
+    (onHide)="showMenu = false"
 >
-  <div class="menu-header">
-    <div>{{ reportTitle }}</div>
-    <!-- <i
+    <div class="menu-header">
+        <div>{{ reportTitle }}</div>
+        <!-- <i
       class="pi pi-angle-double-left"
       (click)="toggleMenu()"
       aria-hidden="true"
     ></i> -->
-    <img src="assets/svg/arrow-left-menu.svg" (click)="toggleMenu()" />
-  </div>
-  <div class="menu-container">
-    <div
-      class="menu-option"
-      [ngClass]="{ selected: reportOption.value === selectedReport?.value }"
-      *ngFor="let reportOption of reportsMenuOptions"
-      (click)="selectReport(reportOption)"
-    >
-      {{ reportOption.label }}
+        <img src="assets/svg/arrow-left-menu.svg" alt="" (click)="toggleMenu()" />
     </div>
-  </div>
+    <div class="menu-container">
+        <div
+            class="menu-option"
+            [ngClass]="{ selected: reportOption.value === selectedReport?.value }"
+            *ngFor="let reportOption of reportsMenuOptions"
+            (click)="selectReport(reportOption)"
+        >
+            {{ reportOption.label }}
+        </div>
+    </div>
 </p-sidebar>
 <hospitality-bot-navigation-header
-[routes]="navRoutes"
-[isBack]="false"
-[onlyNavRoutes]="true"
-(routeNumber)="handleNavClick($event)"
+    [routes]="navRoutes"
+    [isBack]="false"
+    [onlyNavRoutes]="true"
+    (routeNumber)="handleNavClick($event)"
 ></hospitality-bot-navigation-header>
 <ng-container *ngIf="!isLoading; else loader">
-<hospitality-bot-reports-data-table></hospitality-bot-reports-data-table>
+    <hospitality-bot-reports-data-table></hospitality-bot-reports-data-table>
 </ng-container>
 
 <ng-template #loader>
-  <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
+    <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
 </ng-template>

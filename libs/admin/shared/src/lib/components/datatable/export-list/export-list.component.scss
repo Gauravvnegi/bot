@@ -87,3 +87,7 @@
     }
   }
 }
+
+:host ::ng-deep .pi-chevron-down:before {
+  color: $grayMedium;
+}

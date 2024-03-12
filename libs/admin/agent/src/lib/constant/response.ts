@@ -2,12 +2,12 @@ import { MemberSortTypes, SortingOrder } from '../types/agent';
 
 export const SortBy: Record<MemberSortTypes, SortingOrder> = {
   'A-Z': {
-    sort: 'firstName',
+    sort: 'firstName,lastName',
     order: 'ASC',
   },
 
   'Z-A': {
-    sort: 'firstName',
+    sort: 'firstName,lastName',
     order: 'DESC',
   },
   Latest: {

@@ -59,7 +59,9 @@ export class ManageReservationService extends ApiService {
   }
 
   getReservationDataById(bookingId: string, entityId: string): Observable<any> {
-    return this.get(`/api/v1/booking/${bookingId}?entityId=${entityId}`);
+    return this.get(
+      `/api/v1/booking/${bookingId}?entityId=${entityId}&raw=true`
+    );
   }
 
   updateReservation<T, K>(

@@ -61,7 +61,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   entityId: string;
   globalQueries = [];
   $subscription = new Subscription();
-  tableTypes = [];
+  // tableTypes = [];
   orderMenuOptions: Option[] = [];
   selectedTableType: string;
   outletTableData: OutletReservation[];
@@ -97,15 +97,14 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
 
   initDetails() {
     this.entityId = this.formService.entityId;
-    this.tableFG?.addControl('tableType', new FormControl(''));
-    this.tableTypes = [tableTypes.card, tableTypes.table];
     this.selectedTab = 'ALL';
-    this.setTableType(this.tableTypes[0].value);
     this.isAllTabFilterRequired = true;
-
-    this.tableFG.patchValue({ tableType: this.selectedTableType });
     this.cols = posCols;
     this.orderMenuOptions = orderMenuOptions;
+    // this.tableFG?.addControl('tableType', new FormControl(''));
+    // this.tableTypes = [tableTypes.card, tableTypes.table];
+    // this.setTableType(this.tableTypes[0].value);
+    // this.tableFG.patchValue({ tableType: this.selectedTableType });
   }
 
   listenForGlobalFilterChanges(): void {
@@ -146,7 +145,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   setTableType(value: string) {
     this.resetTableValues();
     this.selectedTableType = value;
-    this.tableFG.patchValue({ tableType: value });
+    // this.tableFG.patchValue({ tableType: value });
     this.loadData();
   }
 

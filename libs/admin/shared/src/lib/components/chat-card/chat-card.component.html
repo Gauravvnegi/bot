@@ -1,161 +1,140 @@
 <div class="card-wrapper">
-  <div class="card-wrapper_image">
-    <img [src]="userImg" *ngIf="userImg" />
-    <div
-      *ngIf="profileNickName && !muted; else defaultOrMute"
-      class="card-wrapper_image-nickName"
-      [style.background]="backgroundColor"
-    >
-      {{ profileNickName }}
-    </div>
-
-    <ng-template #defaultOrMute>
-      <ng-container
-        *ngTemplateOutlet="muted ? muteAvatar : defaultAvatar"
-      ></ng-container>
-    </ng-template>
-
-    <ng-template #defaultAvatar>
-      <img src="assets/svg/defaultUser.svg" alt="default" />
-    </ng-template>
-
-    <ng-template #muteAvatar>
-      <img class="mute-avatar" src="assets/images/mute.svg" alt="default" />
-    </ng-template>
-  </div>
-  <div class="card-wrapper_information">
-    <div class="card-wrapper_information_roomInfoWrapper">
-      <div class="card-wrapper_information_roomInfoWrapper_roomNumber">
-        {{ cardType !== 'feedback' ? 'RNO:' : '' }}
-        {{ roomNo || '---' }}
-      </div>
-      <div
-        class="card-wrapper_information_roomInfoWrapper_rating"
-        *ngIf="cardType === 'feedback' || rating"
-        [style.background]="getRatingColorCode(rating)"
-      >
-        {{ rating }}
-      </div>
-      <div
-        class="card-wrapper_information_roomInfoWrapper_status"
-        *ngIf="priority"
-        [ngClass]="{
-          'priority-low': priority === 'Low',
-          'priority-medium': priority === 'Medium',
-          'priority-high': priority === 'High',
-          'priority-asap': priority === 'ASAP'
-        }"
-      >
-        {{ priority }}
-      </div>
-    </div>
-    <div class="card-wrapper_information_name">
-      {{ name || '---' }}
-    </div>
-    <div *ngIf="subTitle" class="card-wrapper_information_subtitle">
-      {{ subTitle }}
-    </div>
-    <div class="card-wrapper_information_remark">{{ remark || '---' }}</div>
-
-    <div class="content-wrap" *ngIf="taskStatus">
-      <div class="content-wrap-r2">
+    <div class="card-wrapper_image">
+        <img [src]="userImg" *ngIf="userImg" />
         <div
-          [ngClass]="{
-            'status-text-initiated': taskStatus?.action === 'IN_PROGRESS',
-            'status-text-reject': taskStatus?.action === 'CANCELED',
-            'status-text-success': taskStatus?.action === 'RESOLVED',
-            'status-text-reject': taskStatus?.action === 'TIMEOUT'
-          }"
+            *ngIf="profileNickName && !muted; else defaultOrMute"
+            class="card-wrapper_image-nickName"
+            [style.background]="backgroundColor"
         >
-          {{ taskStatus?.name || taskStatus?.action || '------' }}
+            {{ profileNickName }}
         </div>
-        <div class="content-wrap-r2-divider"></div>
-        <div
-          [ngClass]="{
-            'priority-low-text': priority === 'Low',
-            'priority-medium-text': priority === 'Medium',
-            'priority-high-text': priority === 'High',
-            'priority-asap-text': priority === 'ASAP'
-          }"
-        >
-          {{ 'SLA' }}: {{ taskStatus?.sla }}
+
+        <ng-template #defaultOrMute>
+            <ng-container *ngTemplateOutlet="muted ? muteAvatar : defaultAvatar"></ng-container>
+        </ng-template>
+
+        <ng-template #defaultAvatar>
+            <img src="assets/svg/defaultUser.svg" alt="default" />
+        </ng-template>
+
+        <ng-template #muteAvatar>
+            <img class="mute-avatar" src="assets/images/mute.svg" alt="default" />
+        </ng-template>
+    </div>
+    <div class="card-wrapper_information">
+        <div class="card-wrapper_information_roomInfoWrapper">
+            <div class="card-wrapper_information_roomInfoWrapper_roomNumber">
+                {{ cardType !== 'feedback' ? 'RNO:' : '' }}
+                {{ roomNo || '---' }}
+            </div>
+            <div
+                class="card-wrapper_information_roomInfoWrapper_rating"
+                *ngIf="cardType === 'feedback' || rating"
+                [style.background]="getRatingColorCode(rating)"
+            >
+                {{ rating }}
+            </div>
+            <div
+                class="card-wrapper_information_roomInfoWrapper_status"
+                *ngIf="priority"
+                [ngClass]="{
+                    'priority-low': priority === 'Low',
+                    'priority-medium': priority === 'Medium',
+                    'priority-high': priority === 'High',
+                    'priority-asap': priority === 'ASAP'
+                }"
+            >
+                {{ priority }}
+            </div>
         </div>
-        <div class="content-wrap-r2-divider"></div>
-        <div class="content-wrap-job-duration">JD: {{ taskStatus?.jd }}m</div>
-      </div>
-    </div>
-    <div class="content-wrap" *ngIf="important || muted">
-      <div class="content-wrap-r2 mute-status">
-        <!-- for message pin -->
-        <img
-          (click)="onUnPinClick($event)"
-          *ngIf="important"
-          src="assets/images/pin-blue.svg"
-          alt="pin"
-          class="pin"
-        />
-      </div>
-    </div>
-    <div
-      class="card-wrapper_information_department"
-      *ngIf="cardType === 'feedback' || department"
-    >
-      {{ department.userName }} ({{ department.label }})
-    </div>
-  </div>
+        <div class="card-wrapper_information_name">
+            {{ name || '---' }}
+        </div>
+        <div *ngIf="subTitle" class="card-wrapper_information_subtitle">
+            {{ subTitle }}
+        </div>
+        <div class="card-wrapper_information_remark">{{ remark || '---' }}</div>
 
-  <div
-    *ngIf="cardType === 'feedback' || cardType === 'message'"
-    class="card-wrapper_time"
-    [ngClass]="cardType === 'feedback' ? 'feedback_time' : ''"
-  >
-    {{ time }}
-    <div
-      class="card-wrapper_time_unread-count"
-      *ngIf="unReadCount && cardType === 'message'"
-    >
-      {{ unReadCount }}
-    </div>
-    <div
-      class="card-wrapper_time_serviceTag"
-      *ngIf="serviceTag && cardType === 'feedback'"
-    >
-      {{ convertToTitleCase(serviceTag) }}
-    </div>
-  </div>
-
-  <div class="time-left__wrapper" *ngIf="taskStatus">
-    <div
-      *ngIf="
-        taskStatus?.timeLeft &&
-          !isSelected &&
-          taskStatus?.action !== 'RESOLVED' &&
-          taskStatus?.action !== 'CANCELLED';
-        else timeOut
-      "
-      class="time-left"
-    >
-      <div>Time Left:</div>
-      <!-- <div appCountdown [config]="{ value: taskStatus.timeLeft }"></div> -->
-      <div>
-        {{ formatTime(taskStatus.timeLeft) }}
-      </div>
+        <div class="content-wrap" *ngIf="taskStatus">
+            <div class="content-wrap-r2">
+                <div
+                    [ngClass]="{
+                        'status-text-initiated': taskStatus?.action === 'IN_PROGRESS',
+                        'status-text-reject': taskStatus?.action === 'CANCELED',
+                        'status-text-success': taskStatus?.action === 'RESOLVED',
+                        'status-text-reject': taskStatus?.action === 'TIMEOUT'
+                    }"
+                >
+                    {{ taskStatus?.name || taskStatus?.action || '------' }}
+                </div>
+                <div class="content-wrap-r2-divider"></div>
+                <div
+                    [ngClass]="{
+                        'priority-low-text': priority === 'Low',
+                        'priority-medium-text': priority === 'Medium',
+                        'priority-high-text': priority === 'High',
+                        'priority-asap-text': priority === 'ASAP'
+                    }"
+                >
+                    {{ 'SLA' }}: {{ taskStatus?.sla }}
+                </div>
+                <div class="content-wrap-r2-divider"></div>
+                <div class="content-wrap-job-duration">JD: {{ taskStatus?.jd }}m</div>
+            </div>
+        </div>
+        <div class="content-wrap" *ngIf="important || muted">
+            <div class="content-wrap-r2 mute-status">
+                <!-- for message pin -->
+                <img
+                    (click)="onUnPinClick($event)"
+                    *ngIf="important"
+                    src="assets/images/pin-blue.svg"
+                    alt="pin"
+                    class="pin"
+                />
+            </div>
+        </div>
+        <div class="card-wrapper_information_department" *ngIf="cardType === 'feedback' || department">
+            {{ department.userName }} ({{ department.label }})
+        </div>
     </div>
 
     <div
-      *ngIf="!cardType === 'feedback'"
-      class="card-wrapper_time"
-      [ngStyle]="{ float: 'right' }"
+        *ngIf="cardType === 'feedback' || cardType === 'message'"
+        class="card-wrapper_time"
+        [ngClass]="cardType === 'feedback' ? 'feedback_time' : ''"
     >
-      {{ time }}
+        {{ time }}
+        <div class="card-wrapper_time_unread-count" *ngIf="unReadCount && cardType === 'message'">
+            {{ unReadCount }}
+        </div>
+        <div class="card-wrapper_time_serviceTag" *ngIf="serviceTag && cardType === 'feedback'">
+            {{ convertToTitleCase(serviceTag) }}
+        </div>
     </div>
-  </div>
+
+    <div
+        class="time-left__wrapper"
+        *ngIf="taskStatus && taskStatus?.action !== 'RESOLVED' && taskStatus?.action !== 'CANCELLED'"
+    >
+        <div *ngIf="taskStatus?.timeLeft && !isSelected; else timeOut" class="time-left">
+            <div>Time Left:</div>
+            <!-- <div appCountdown [config]="{ value: taskStatus.timeLeft }"></div> -->
+            <div>
+                {{ formatTime(taskStatus.timeLeft) }}
+            </div>
+        </div>
+
+        <div *ngIf="!cardType === 'feedback'" class="card-wrapper_time" [ngStyle]="{ float: 'right' }">
+            {{ time }}
+        </div>
+    </div>
 </div>
 
 <ng-template #timeOut>
-  <div class="time-left" *ngIf="!isSelected && taskStatus?.timeLeft === 0">
-    <div>
-      Timed Out
+    <div class="time-left" *ngIf="!isSelected && taskStatus?.timeLeft === 0">
+        <div>
+            Timed Out
+        </div>
     </div>
-  </div>
 </ng-template>

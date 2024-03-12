@@ -1,0 +1,22 @@
+<ng-container [formGroup]="tableFG">
+  <div class="pull-right">
+    <label class="type-label" *ngFor="let option of selectedTableTypes">
+      <input
+        type="radio"
+        formControlName="tableType"
+        [value]="option.value"
+        (click)="setTableType(option.value)"
+      />
+      <div class="image">
+        <img
+          [src]="
+            tableFG.get('tableType').value === option.value
+              ? option.whiteUrl
+              : option.url
+          "
+          [alt]="option.value"
+        />
+      </div>
+    </label>
+  </div>
+</ng-container>

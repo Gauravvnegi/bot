@@ -145,6 +145,7 @@ import { CustomTabHeaderComponent } from './components/custom-tab-header/custom-
 import { ChipsComponent } from './components/chips/chips.component';
 import { ItemViewComponent } from './view/item-view/item-view.component';
 import { DateGroupFilterComponent } from './components/date-group-filter/date-group-filter.component';
+import { TableSwitchComponent } from './components/table-switch/table-switch.component';
 
 @NgModule({
   imports: [
@@ -292,6 +293,7 @@ import { DateGroupFilterComponent } from './components/date-group-filter/date-gr
     ChipsComponent,
     ItemViewComponent,
     DateGroupFilterComponent,
+    TableSwitchComponent,
   ],
 
   exports: [
@@ -427,6 +429,7 @@ import { DateGroupFilterComponent } from './components/date-group-filter/date-gr
     ChipsComponent,
     ItemViewComponent,
     DateGroupFilterComponent,
+    TableSwitchComponent,
   ],
 })
 export class AdminSharedModule {}

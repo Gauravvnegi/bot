@@ -9,7 +9,11 @@
   </div>
 
   <div class="action-wrapper">
-    <div class="pull-right">
+    <hospitality-bot-table-switch
+      tableGroup="outlet"
+      (onChange)="setTableType($event)"
+    ></hospitality-bot-table-switch>
+    <!-- <div class="pull-right">
       <label class="type-label" *ngFor="let option of tableTypes">
         <input
           type="radio"
@@ -26,7 +30,7 @@
           />
         </div>
       </label>
-    </div>
+    </div> -->
     <hospitality-bot-button
       label="+ Add New Order"
       (onClick)="addNewOrder()"

@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ReservationTableValue } from '../constants/reservation-table';
-import {
-  RoomReservationFormData,
-  SourceData,
-} from '../types/forms.types';
+import { RoomReservationFormData, SourceData } from '../types/forms.types';
 import { ReservationForm, ReservationInformation } from '../constants/form';
 import { Option, QueryConfig } from '@hospitality-bot/admin/shared';
 import { AbstractControl } from '@angular/forms';
@@ -154,7 +151,7 @@ export class FormService {
               : '';
           }
 
-          if (roomType.id.length) {
+          if (roomType?.id?.length) {
             bookingItem.id = roomType.id;
           }
 

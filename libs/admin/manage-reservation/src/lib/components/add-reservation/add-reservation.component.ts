@@ -144,8 +144,10 @@ export class AddReservationComponent extends BaseReservationComponent
     // Remove id property from roomInformation for cloned reservation
     let updatedRoomInformation = (isCloneReservation
       ? Array.isArray(roomInformation)
-        ? roomInformation.map(({ id, ...roomWithoutId }) => roomWithoutId)
-        : { ...roomInformation, id: '' }
+        ? roomInformation.map(
+            ({ id, roomNumber, roomNumbers, ...roomWithoutId }) => roomWithoutId
+          )
+        : { ...roomInformation, id: '', roomNumber: '', roomNumbers: [] }
       : [roomInformation]) as RoomInformation[];
 
     this.roomTypeValues = updatedRoomInformation;

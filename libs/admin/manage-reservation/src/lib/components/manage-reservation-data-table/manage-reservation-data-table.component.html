@@ -152,6 +152,9 @@
             *ngIf="rowData?.roomType; else emptyCell"
             [roomStatus]="rowData?.roomStatus"
           >
+            <ng-container *ngFor="let item of getBookingIndicators(rowData)">
+              <img [src]="item" alt="Booking Indicator" />
+            </ng-container>
             <div>
               {{ rowData?.roomNumber || '--' }}&nbsp;-&nbsp;{{
                 rowData.roomType || '--'

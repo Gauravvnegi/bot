@@ -59,6 +59,7 @@ export class RoomReservation {
   journeysStatus: Record<JourneyType, JourneyState>;
   invoiceId: string;
   agentName?: string;
+  groupCode?: string;
 
   deserialize(input: RoomReservationResponse) {
     this.id = input.id;
@@ -83,6 +84,7 @@ export class RoomReservation {
     this.totalAmount = input.pricingDetails.totalAmount;
     this.totalPaidAmount = input.pricingDetails.totalPaidAmount;
     this.totalDueAmount = input.pricingDetails.totalDueAmount;
+    this.groupCode = input?.groupCode;
     // if (input?.bookingItems) {
     //   this.bookingItems = input?.bookingItems;
     //   this.roomTypes =

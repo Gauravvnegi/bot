@@ -43,6 +43,7 @@ import {
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import {
+  getBookingIndicators,
   reservationMenuOptions,
   reservationStatusColorCode,
 } from '../../constants/reservation';
@@ -252,6 +253,7 @@ export class ReservationCalendarViewComponent implements OnInit {
           reservation.status === ReservationCurrentStatus.CHECKEDOUT,
         additionContent: reservation?.companyName ?? '',
         options: this.getMenuOptions(reservation),
+        icons: getBookingIndicators(reservation),
       }));
 
       // Map data for unavailable rooms
@@ -904,7 +906,9 @@ export class ReservationCalendarViewComponent implements OnInit {
           this.snackbarService.openSnackBarAsText(
             'Status changes successfully',
             '',
-            { panelClass: 'success' }
+            {
+              panelClass: 'success',
+            }
           );
         },
         () => {}

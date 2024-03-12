@@ -1,100 +1,97 @@
 <div class="container">
-  <div class="body" [id]="fa.referenceId">
-    <hospitality-bot-navigation-header
-      [heading]="pageTitle"
-      [routes]="navRoutes"
-      *ngIf="!isSidebar; else sidebarHeader"
-    >
-    </hospitality-bot-navigation-header>
-    <div
-      class="form-block"
-      [formGroup]="serviceItemForm"
-      [ngClass]="{ 'sidebar-overflow': isSidebar }"
-    >
-      <hospitality-bot-input
-        [class]="isSidebar ? 'full-width' : 'half-width'"
-        controlName="itemName"
-        label="Name"
-        [props]="{
-          placeholder: 'Enter'
-        }"
-      ></hospitality-bot-input>
-      <hospitality-bot-select
-        [class]="isSidebar ? 'full-width' : 'half-width'"
-        [options]="categoryList"
-        label="Category Name"
-        controlName="categoryId"
-        [props]="{
-          isAsync: true,
-          createPrompt: '+ Add New Category',
-          inputPrompt: isSidebar ? 'Category Name' : undefined,
-          placeholder: 'Select Category'
-        }"
-        [stopEmission]="true"
-        (onCreate)="createCategory($event)"
-      ></hospitality-bot-select>
+    <div class="body" [id]="fa.referenceId">
+        <hospitality-bot-navigation-header
+            [heading]="pageTitle"
+            [routes]="navRoutes"
+            *ngIf="!isSidebar; else sidebarHeader"
+        >
+        </hospitality-bot-navigation-header>
+        <div class="form-block" [formGroup]="serviceItemForm" [ngClass]="{ 'sidebar-overflow': isSidebar }">
+            <hospitality-bot-input
+                [class]="isSidebar ? 'full-width' : 'half-width'"
+                controlName="itemName"
+                label="Name"
+                maxLength="60"
+                [props]="{
+                    placeholder: 'Enter'
+                }"
+            ></hospitality-bot-input>
+            <hospitality-bot-select
+                [class]="isSidebar ? 'full-width' : 'half-width'"
+                [options]="categoryList"
+                label="Category Name"
+                controlName="categoryId"
+                [props]="{
+                    isAsync: true,
+                    createPrompt: '+ Add New Category',
+                    inputPrompt: 'Category Name',
+                    placeholder: 'Select Category'
+                }"
+                [stopEmission]="true"
+                (onCreate)="createCategory($event)"
+            ></hospitality-bot-select>
 
-      <hospitality-bot-time-picker
-        class="half-width"
-        controlName="sla"
-        label="SLA"
-        format="millisecond"
-      ></hospitality-bot-time-picker>
-      <hospitality-bot-select
-        [class]="isSidebar ? 'full-width' : 'half-width'"
-        [options]="userList"
-        label="Default user"
-        controlName="defaultItemUser"
-        [props]="{
-          placeholder: 'Select Default user'
-        }"
-      ></hospitality-bot-select>
-      <hospitality-bot-multi-select
-        [class]="isSidebar ? 'full-width' : 'half-width'"
-        controlName="users"
-        label="Users"
-        [options]="userOptions"
-        [disabled]="!serviceItemForm.get('defaultItemUser').value"
-        [props]="{
-          isAsync: true
-        }"
-        [loading]="loading"
-        [stopEmission]="true"
-        [settings]="{
-          isExtras: true
-        }"
-      ></hospitality-bot-multi-select>
-      <hospitality-bot-text-area
-        class="full-width"
-        controlName="remarks"
-        label="Remarks"
-        [props]="{
-          placeholder: 'Enter'
-        }"
-      >
-      </hospitality-bot-text-area>
+            <hospitality-bot-time-picker
+                class="half-width"
+                controlName="sla"
+                label="SLA"
+                format="millisecond"
+            ></hospitality-bot-time-picker>
+            <hospitality-bot-select
+                [class]="isSidebar ? 'full-width' : 'half-width'"
+                [options]="userList"
+                label="Default user"
+                controlName="defaultItemUser"
+                [props]="{
+                    placeholder: 'Select Default user'
+                }"
+            ></hospitality-bot-select>
+            <hospitality-bot-multi-select
+                [class]="isSidebar ? 'full-width' : 'half-width'"
+                controlName="users"
+                label="Users"
+                [options]="userOptions"
+                [disabled]="!serviceItemForm.get('defaultItemUser').value"
+                [props]="{
+                    isAsync: true
+                }"
+                [loading]="loading"
+                [stopEmission]="true"
+                [settings]="{
+                    isExtras: true
+                }"
+            ></hospitality-bot-multi-select>
+            <hospitality-bot-text-area
+                class="full-width"
+                controlName="remarks"
+                label="Remarks"
+                [props]="{
+                    placeholder: 'Enter'
+                }"
+            >
+            </hospitality-bot-text-area>
 
-      <hospitality-bot-form-action
-        class="full-width"
-        (onPreAction)="close()"
-        (onPostAction)="handleSubmit()"
-        [config]="{
-          preLabel: 'Cancel',
-          postLabel: 'Save'
-        }"
-        [isFixed]="isSidebar"
-        #fa
-      >
-      </hospitality-bot-form-action>
+            <hospitality-bot-form-action
+                class="full-width"
+                (onPreAction)="close()"
+                (onPostAction)="handleSubmit()"
+                [config]="{
+                    preLabel: 'Cancel',
+                    postLabel: 'Save'
+                }"
+                [isFixed]="isSidebar"
+                #fa
+            >
+            </hospitality-bot-form-action>
+        </div>
     </div>
-  </div>
 </div>
 
 <ng-template #sidebarHeader>
-  <div class="sidebar-slide-header">
-    <span class="title">{{ pageTitle }}</span>
-    <span class="close-icon" (click)="closeSidebar()">
-      <img class="close-sidebar-icon" src="assets/svg/close-sidebar.svg" />
-    </span>
-  </div>
+    <div class="sidebar-slide-header">
+        <span class="title">{{ pageTitle }}</span>
+        <span class="close-icon" (click)="closeSidebar()">
+            <img class="close-sidebar-icon" alt="close" src="assets/svg/close-sidebar.svg" />
+        </span>
+    </div>
 </ng-template>

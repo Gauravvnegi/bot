@@ -1,46 +1,21 @@
-<hospitality-bot-navigation-header
-  [heading]="pageTitle"
-  [routes]="navRoutes"
-  [dateTime]="draftDate"
->
-</hospitality-bot-navigation-header>
-
 <div class="wrapper">
   <div class="manually-add full-width">
-    <div
-      class="manually-add-templates"
-      (click)="openTemplateList('SAVEDTEMPLATE')"
-    >
-      <img
-        [src]="campaignConfiguration.images.saved.url"
-        [alt]="campaignConfiguration.images.saved.alt"
-      />
+    <div class="manually-add-templates" (click)="openTemplateList('SAVEDTEMPLATE')">
+      <img [src]="campaignConfig.images.saved.url" [alt]="campaignConfig.images.saved.alt" />
       <div>
-        {{ 'template.saved' | translate }}
+        Saved Template
       </div>
     </div>
-    <div
-      class="manually-add-templates"
-      (click)="openTemplateList('PREDESIGNTEMPLATE')"
-    >
-      <img
-        [src]="campaignConfiguration.images.inbuilt.url"
-        [alt]="campaignConfiguration.images.inbuilt.alt"
-      />
+    <div class="manually-add-templates" (click)="openTemplateList('PREDESIGNTEMPLATE')">
+      <img [src]="campaignConfig.images.inbuilt.url" [alt]="campaignConfig.images.inbuilt.alt" />
       <div>
-        {{ 'template.inbuilt' | translate }}
+        In-Built Template
       </div>
     </div>
-    <div
-      class="manually-add-templates"
-      [routerLink]="['/pages/library/template/create']"
-    >
-      <img
-        [src]="campaignConfiguration.images.editTemplate.url"
-        [alt]="campaignConfiguration.images.editTemplate.alt"
-      />
+    <div class="manually-add-templates" [routerLink]="['/pages/library/template/create']">
+      <img [src]="campaignConfig.images.editTemplate.url" [alt]="campaignConfig.images.editTemplate.alt" />
       <div>
-        {{ 'template.createHtml' | translate }}
+        Create New (HTML Editor)
       </div>
     </div>
   </div>

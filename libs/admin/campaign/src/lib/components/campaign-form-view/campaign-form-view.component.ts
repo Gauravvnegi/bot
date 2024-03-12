@@ -1,23 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
-import { CampaignType } from '../../types/campaign.type';
+import { AdminUtilityService, NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
+import { CampaignForm, CampaignType } from '../../types/campaign.type';
 import { campaignRoutes } from '../../constant/route';
 import { Observable, Subscription } from 'rxjs';
-import {
-  GlobalFilterService,
-  RoutesConfigService,
-} from '@hospitality-bot/admin/core/theme';
+import { GlobalFilterService, RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 import { filter, map, take } from 'rxjs/operators';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { triggerOptions } from '../../constant/campaign';
-import { ListingService } from 'libs/admin/listing/src/lib/services/listing.service';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { triggerOptions, eventOptions } from '../../constant/campaign';
 import { Topics } from 'libs/admin/listing/src/lib/data-models/listing.model';
+import { CampaignService } from '../../services/campaign.service';
 
 @Component({
   selector: 'hospitality-bot-campaign-form-view',
   templateUrl: './campaign-form-view.component.html',
-  styleUrls: ['./campaign-form-view.component.scss'],
+  styleUrls: ['./campaign-form-view.component.scss']
 })
 export class CampaignFormViewComponent implements OnInit {
   useForm: FormGroup;
@@ -29,6 +26,7 @@ export class CampaignFormViewComponent implements OnInit {
   campaignType: CampaignType;
 
   triggerOptions: Option[] = [];
+  eventOptions: Option[] = [];
   private $subscription = new Subscription();
 
   topicList: Observable<Option[]>;
@@ -37,8 +35,9 @@ export class CampaignFormViewComponent implements OnInit {
     private route: ActivatedRoute,
     private routesConfigService: RoutesConfigService,
     private fb: FormBuilder,
-    private listingService: ListingService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private campaignService: CampaignService,
+    private adminUtilityService: AdminUtilityService
   ) {}
 
   ngOnInit(): void {
@@ -54,11 +53,8 @@ export class CampaignFormViewComponent implements OnInit {
 
   initDetails() {
     this.triggerOptions = triggerOptions;
-    const { title } = campaignRoutes[
-      this.campaignType === 'email'
-        ? 'createEmailCampaign'
-        : 'createWhatsappCampaign'
-    ];
+    this.eventOptions = eventOptions;
+    const { title } = campaignRoutes[this.campaignType === 'email' ? 'createEmailCampaign' : 'createWhatsappCampaign'];
     this.pageTitle = title;
     this.entityId = this.globalFilterService.entityId;
     this.topicList = this.getTopicList();
@@ -81,25 +77,30 @@ export class CampaignFormViewComponent implements OnInit {
   initForm() {
     this.useForm = this.fb.group({
       campaignName: ['', [Validators.required]],
-      topic: [''],
+      topic: ['', [Validators.required]],
       recipient: [''],
+      triggers: [''],
       event: [''],
       startDate: [new Date()],
-      triggers: [''],
-      endDate: [''],
+      endDate: [new Date()],
+      campaignState: ['DOES_NOT_REPEAT']
     });
   }
 
   getTopicList() {
-    return this.listingService
-      .getTopicList(this.entityId, '?entityState=ACTIVE')
-      .pipe(
-        map((response) => {
-          const data = new Topics()
-            .deserialize(response)
-            .records.map((item) => ({ label: item.name, value: item.id }));
-          return data;
-        })
-      );
+    return this.campaignService.getTopicList(this.entityId, { queryObj: '?entityState=ACTIVE' }).pipe(
+      map((response) => {
+        const data = new Topics().deserialize(response).records.map((item) => ({ label: item.name, value: item.id }));
+        return data;
+      })
+    );
+  }
+
+  handleSend() {}
+
+  handleSave() {}
+
+  get inputControls() {
+    return this.useForm.controls as Record<keyof CampaignForm, AbstractControl>;
   }
 }

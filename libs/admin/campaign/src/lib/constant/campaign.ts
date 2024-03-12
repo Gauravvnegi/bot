@@ -16,7 +16,7 @@ export const campaignConfig = {
             value: 'ALL',
             total: 0,
             isSelected: true,
-            type: 'default',
+            type: 'default'
           },
           {
             label: 'Active',
@@ -24,7 +24,7 @@ export const campaignConfig = {
             value: 'ACTIVE',
             total: 0,
             isSelected: false,
-            type: 'new',
+            type: 'new'
           },
           {
             label: 'In-Active ',
@@ -32,7 +32,7 @@ export const campaignConfig = {
             value: 'INACTIVE',
             total: 0,
             isSelected: false,
-            type: 'failed',
+            type: 'failed'
           },
           {
             label: 'Draft',
@@ -40,7 +40,7 @@ export const campaignConfig = {
             value: 'DRAFT',
             total: 0,
             isSelected: false,
-            type: 'warning',
+            type: 'warning'
           },
           {
             label: 'Sent',
@@ -48,7 +48,7 @@ export const campaignConfig = {
             value: 'SENT',
             total: 0,
             isSelected: false,
-            type: 'completed',
+            type: 'completed'
           },
           {
             label: 'Archive',
@@ -56,11 +56,11 @@ export const campaignConfig = {
             value: 'ARCHIVE',
             total: 0,
             isSelected: false,
-            type: 'initiated',
-          },
+            type: 'initiated'
+          }
         ],
-        lastPage: 0,
-      },
+        lastPage: 0
+      }
     ],
 
     cols: [
@@ -68,13 +68,13 @@ export const campaignConfig = {
         field: 'name',
         header: 'Name',
         sortType: 'string',
-        width: '20%',
+        width: '20%'
       },
       {
         field: 'templateName',
         header: 'Template Name',
         sortType: 'string',
-        width: '15%',
+        width: '15%'
       },
       {
         field: 'stats',
@@ -82,45 +82,45 @@ export const campaignConfig = {
         isSortDisabled: true,
         sortType: 'string',
         isSearchDisabled: true,
-        width: '26%',
+        width: '26%'
       },
       {
         field: 'status',
         header: 'Action',
         sortType: 'number',
         isSearchDisabled: true,
-        width: '13%',
-      },
+        width: '13%'
+      }
     ],
     templateTypes: [
       { name: 'Saved Template', type: 'SAVEDTEMPLATE' },
-      { name: 'Pre-defined Template', type: 'PREDESIGNTEMPLATE' },
-    ],
+      { name: 'Pre-defined Template', type: 'PREDESIGNTEMPLATE' }
+    ]
   },
   listings: {
     data: [],
-    totalRecords: 0,
+    totalRecords: 0
   },
   subscribers: {
     data: [],
-    totalRecords: 0,
+    totalRecords: 0
   },
 
   chipValue: {
-    all: 'All',
+    all: 'All'
   },
 
   topicConfig: {
     limit: 50,
-    active: 'ACTIVE',
+    active: 'ACTIVE'
   },
 
   rowsPerPage: {
-    rows: 5,
+    rows: 5
   },
 
   templateCard: {
-    limit: 3,
+    limit: 3
   },
 
   modes: ['backdrop', 'edit', 'view'],
@@ -128,11 +128,11 @@ export const campaignConfig = {
   add: 'add',
 
   validator: {
-    length: 200,
+    length: 200
   },
 
   autosave: {
-    time: 20000,
+    time: 20000
   },
 
   images: {
@@ -153,25 +153,30 @@ export const campaignConfig = {
     preview: { url: 'assets/svg/default_img.svg', alt: 'preview' },
     calendar: { url: 'assets/svg/calendar.svg', alt: 'calendar' },
     time: { url: 'assets/svg/time.svg', alt: 'time' },
-    shared: { url: 'assets/svg/shared_template.svg', alt: 'shared' },
+    shared: { url: 'assets/svg/shared_template.svg', alt: 'shared' }
   },
   dropDownTabFilter: [
     {
       label: 'Subscribers Groups',
       value: 'SUBSCRIBERGROUP',
-      chips: [],
+      chips: []
     },
     {
       label: 'Listing',
       value: 'LISTING',
-      chips: [],
-    },
-  ],
+      chips: []
+    }
+  ]
 };
 
 export const triggerOptions = [
   { label: 'Does not repeat', value: 'DOES_NOT_REPEAT' },
   { label: 'Daily', value: 'DAILY' },
   { label: 'Weekly', value: 'WEEKLY' },
-  { label: 'Triggered', value: 'TRIGGERED' },
+  { label: 'Triggered', value: 'TRIGGERED' }
+];
+
+export const eventOptions = [
+  { label: 'Checked-out', value: 'CHECKED_OUT' },
+  { label: 'Checked-in', value: 'CHECKED_IN' }
 ];

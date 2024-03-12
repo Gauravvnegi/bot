@@ -1,7 +1,9 @@
-<div
-  [formGroup]="tableFG"
->
+<div [formGroup]="tableFG">
   <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes" [isBack]="false">
+    <hospitality-bot-table-switch
+      tableGroup="campaign"
+      (onChange)="setTableType($event)"
+    ></hospitality-bot-table-switch>
     <hospitality-bot-tiered-menu-button
       class="tiered-menu-btn"
       label="+ Create Campaign"
@@ -69,26 +71,14 @@
     ></tr>
   </ng-template>
   <!-- **************************************BODY********************************* -->
-  <ng-template
-    pTemplate="body"
-    let-rowData
-    let-columns="columns"
-    let-rowIndex="rowIndex"
-  >
+  <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
     <tr class="table-row" (click)="openEditCampaign(rowData, $event)">
       <td class="table-row__checkbox">
-        <p-tableCheckbox
-          [value]="rowData"
-          [index]="rowIndex"
-          (click)="onCheckboxClicked($event)"
-        ></p-tableCheckbox>
+        <p-tableCheckbox [value]="rowData" [index]="rowIndex" (click)="onCheckboxClicked($event)"></p-tableCheckbox>
       </td>
       <td class="name">
         <div class="template_image_wrapper">
-          <div
-            class="text"
-            *ngIf="rowData.name || rowData.topicName; else emptyCell"
-          >
+          <div class="text" *ngIf="rowData.name || rowData.topicName; else emptyCell">
             <div class="template-name">{{ rowData.name }}</div>
           </div>
         </div>
@@ -110,10 +100,7 @@
         </ng-container>
         <ng-template #chipStats>
           <div class="stats-container">
-            <div
-              class="stat-chip {{ key }}"
-              *ngFor="let key of getStatsCampaignChips(rowData)"
-            >
+            <div class="stat-chip {{ key }}" *ngFor="let key of getStatsCampaignChips(rowData)">
               <div>{{ key | titlecase }}</div>
               <div class="stat-chip__value {{ key }}__value">
                 {{ rowData.statsCampaign[key] }}
@@ -130,10 +117,7 @@
       </td>
 
       <td>
-        <div
-          class="cell-content status-toggle"
-          (click)="onCheckboxClicked($event)"
-        >
+        <div class="cell-content status-toggle" (click)="onCheckboxClicked($event)">
           <hospitality-bot-status-dropdown-toggle
             class="toggle-btn"
             (onClick)="updateCampaignStatus($event, rowData)"
@@ -168,8 +152,7 @@
     [isLoading]="loading"
     link="create"
     [content]="{
-      description:
-        'No Campaign found. Tap the +Create campaign to create campaign',
+      description: 'No Campaign found. Tap the +Create campaign to create campaign',
       actionName: '+Create Campaign',
       imageSrc: 'assets/images/empty-table-service.png'
     }"

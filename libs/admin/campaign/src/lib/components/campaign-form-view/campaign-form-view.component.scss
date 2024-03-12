@@ -1,0 +1,23 @@
+@import 'main';
+
+.form-block {
+  @include form-block;
+}
+
+.form-header {
+  @include bold-sm-text;
+  width: 100%;
+}
+
+.data-separator {
+  border: none;
+  margin: 10px 0px;
+  background: $dataSeparator;
+  opacity: 0.4;
+  width: 100%;
+  height: 1px;
+}
+
+.group-header {
+  @include bold-sm-text;
+}

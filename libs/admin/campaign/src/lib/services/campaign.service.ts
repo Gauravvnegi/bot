@@ -22,9 +22,7 @@ export class CampaignService extends ApiService {
    * @returns get api to get listing.
    */
   getListings(entityId: string, config: QueryConfig) {
-    return this.get(
-      `/api/v1/marketing/entity/${entityId}/listing${config.queryObj}`
-    );
+    return this.get(`/api/v1/marketing/entity/${entityId}/listing${config.queryObj}`);
   }
 
   /**
@@ -45,10 +43,7 @@ export class CampaignService extends ApiService {
    * @returns patch api of update status.
    */
   updateCampaignStatus(entityId: string, data, campaignId: string) {
-    return this.patch(
-      `/api/v1/cms/${entityId}/campaign/${campaignId}/toggle`,
-      data
-    );
+    return this.patch(`/api/v1/cms/${entityId}/campaign/${campaignId}/toggle`, data);
   }
 
   /**
@@ -59,10 +54,7 @@ export class CampaignService extends ApiService {
    * @returns post api for cloning campaign.
    */
   cloneCampaign(entityId: string, data, campaignId: string) {
-    return this.post(
-      `/api/v1/cms/${entityId}/campaign/${campaignId}/clone`,
-      data
-    );
+    return this.post(`/api/v1/cms/${entityId}/campaign/${campaignId}/clone`, data);
   }
 
   /**
@@ -73,10 +65,7 @@ export class CampaignService extends ApiService {
    * @returns patch api for archive campaign.
    */
   archiveCampaign(entityId: string, data, campaignId: string) {
-    return this.patch(
-      `/api/v1/cms/${entityId}/campaign/${campaignId}/archieve`,
-      data
-    );
+    return this.patch(`/api/v1/cms/${entityId}/campaign/${campaignId}/archieve`, data);
   }
   /**
    * @function exportCSV To export CSV report of the table.
@@ -86,12 +75,9 @@ export class CampaignService extends ApiService {
    */
   exportCSV(entityId: string, config: QueryConfig) {
     console.log('config', config);
-    return this.get(
-      `/api/v1/cms/${entityId}/campaign/export${config.queryObj}`,
-      {
-        responseType: 'blob',
-      }
-    );
+    return this.get(`/api/v1/cms/${entityId}/campaign/export${config.queryObj}`, {
+      responseType: 'blob'
+    });
   }
 
   /**
@@ -111,9 +97,7 @@ export class CampaignService extends ApiService {
    * @returns get api of get template by content type.
    */
   getTemplateByContentType(entityId: string, config: QueryConfig) {
-    return this.get(
-      `/api/v1/entity/${entityId}/templates/topic${config.queryObj}`
-    );
+    return this.get(`/api/v1/entity/${entityId}/templates/topic${config.queryObj}`);
   }
 
   /**
@@ -123,14 +107,8 @@ export class CampaignService extends ApiService {
    * @param config dynamically getting global query filter into api.
    * @returns get api of getting tempate by topic id.
    */
-  getTemplateListByTopicId(
-    entityId: string,
-    topicId: string,
-    config: QueryConfig
-  ) {
-    return this.get(
-      `/api/v1/entity/${entityId}/templates/topic/${topicId}${config.queryObj}`
-    );
+  getTemplateListByTopicId(entityId: string, topicId: string, config: QueryConfig) {
+    return this.get(`/api/v1/entity/${entityId}/templates/topic/${topicId}${config.queryObj}`);
   }
 
   /**
@@ -166,7 +144,7 @@ export class CampaignService extends ApiService {
     }
     return this.post(`/api/v1/cms/${entityId}/campaign?isDraft=true`, {
       ...data,
-      isDraft: true,
+      isDraft: true
     });
   }
 
@@ -180,21 +158,21 @@ export class CampaignService extends ApiService {
     receivers.individual?.forEach((item) => {
       data.push({
         data: { name: item.name },
-        type: 'email',
+        type: 'email'
       });
     });
 
     receivers.listing?.forEach((item) =>
       data.push({
         data: { id: item.receiverId, name: item.name },
-        type: 'listing',
+        type: 'listing'
       })
     );
 
     receivers.subscribers?.forEach((item) =>
       data.push({
         data: { id: item.receiverId, name: item.name },
-        type: 'subscribers',
+        type: 'subscribers'
       })
     );
     return data;
@@ -207,8 +185,6 @@ export class CampaignService extends ApiService {
    * @returns get api of search receiver.
    */
   searchReceivers(entityId, searchKey) {
-    return this.get(
-      `/api/v1/marketing/entity/${entityId}/search?key=${searchKey}`
-    );
+    return this.get(`/api/v1/marketing/entity/${entityId}/search?key=${searchKey}`);
   }
 }

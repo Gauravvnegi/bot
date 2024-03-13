@@ -1,83 +1,89 @@
-<hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
-  <!-- [dateTime]="draftDate | date" -->
-</hospitality-bot-navigation-header>
+<div>
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+    <!-- [dateTime]="draftDate | date" -->
+  </hospitality-bot-navigation-header>
 
-<div class="form-block" [formGroup]="useForm" [id]="fa.referenceId">
-  <div class="form-header">Campaign Details</div>
+  <div class="form-block" [formGroup]="useForm" [id]="fa.referenceId">
+    <div class="form-header">Campaign Details</div>
 
-  <hospitality-bot-input
-    class="half-width"
-    controlName="campaignName"
-    label="Campaign Name"
-    [props]="{
-      placeholder: 'Enter Campaign Name'
-    }"
-  ></hospitality-bot-input>
-  <hospitality-bot-select
-    class="half-width"
-    controlName="topic"
-    label="Topic"
-    [options]="topicList | async"
-    [props]="{
-      placeholder: 'Select Topic'
-    }"
-  ></hospitality-bot-select>
-  <hospitality-bot-input
-    class="half-width"
-    controlName="recipient"
-    label="Recipient"
-    [props]="{
-      placeholder: 'Enter'
-    }"
-  ></hospitality-bot-input>
-  <hr class="data-separator" />
-  <div class="group-header half-width">When</div>
-  <hospitality-bot-select
-    class="half-width"
-    controlName="campaignState"
-    [options]="triggerOptions"
-  ></hospitality-bot-select>
-  <hospitality-bot-select
-    *ngIf="inputControls.campaignState.value !== 'DOES_NOT_REPEAT'"
-    class="half-width"
-    controlName="event"
-    label="Event"
-    [options]="eventOptions"
-    [props]="{
-      placeholder: 'Select Event'
-    }"
-  ></hospitality-bot-select>
-  <div *ngIf="inputControls.campaignState.value !== 'DOES_NOT_REPEAT'" class="half-width"></div>
-  <hospitality-bot-date
-    class="half-width"
-    controlName="startDate"
-    label="Start Date"
-    [settings]="{ enableTime: true }"
-  ></hospitality-bot-date>
-  <hospitality-bot-date
-    *ngIf="inputControls.campaignState.value !== 'DOES_NOT_REPEAT'"
-    class="half-width"
-    controlName="endDate"
-    label="End Date"
-    [settings]="{ enableTime: true }"
-  ></hospitality-bot-date>
-  <hr class="data-separator" />
-  <div class="group-header half-width">Add Content</div>
-  <hospitality-bot-create-content class="full-width"></hospitality-bot-create-content>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="campaignName"
+      label="Campaign Name"
+      [props]="{
+        placeholder: 'Enter Campaign Name'
+      }"
+    ></hospitality-bot-input>
+    <hospitality-bot-select
+      class="half-width"
+      controlName="topic"
+      label="Topic"
+      [options]="topicList | async"
+      [props]="{
+        placeholder: 'Select Topic'
+      }"
+    ></hospitality-bot-select>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="recipient"
+      label="Recipient"
+      [props]="{
+        placeholder: 'Enter'
+      }"
+    ></hospitality-bot-input>
+    <hr class="data-separator" />
+    <div class="group-header half-width">When</div>
+    <hospitality-bot-select
+      class="half-width"
+      controlName="campaignState"
+      [options]="triggerOptions"
+    ></hospitality-bot-select>
+    <hospitality-bot-select
+      *ngIf="inputControls.campaignState.value !== 'DOES_NOT_REPEAT'"
+      class="half-width"
+      controlName="event"
+      label="Event"
+      [options]="eventOptions"
+      [props]="{
+        placeholder: 'Select Event'
+      }"
+    ></hospitality-bot-select>
+    <div
+      *ngIf="inputControls.campaignState.value !== 'DOES_NOT_REPEAT'"
+      class="half-width"
+    ></div>
+    <hospitality-bot-date
+      class="half-width"
+      controlName="startDate"
+      label="Start Date"
+      [settings]="{ enableTime: true }"
+    ></hospitality-bot-date>
+    <hospitality-bot-date
+      *ngIf="inputControls.campaignState.value !== 'DOES_NOT_REPEAT'"
+      class="half-width"
+      controlName="endDate"
+      label="End Date"
+      [settings]="{ enableTime: true }"
+    ></hospitality-bot-date>
+    <hr class="data-separator" />
+    <div class="group-header half-width">Add Content</div>
+    <hospitality-bot-create-content
+      class="full-width"
+    ></hospitality-bot-create-content>
+    <hospitality-bot-form-action
+      class="full-width"
+      (onPostAction)="handleSave()"
+      (onPreAction)="handleSend()"
+      [isSticky]="true"
+      [isFixed]="true"
+      [config]="{
+        postLabel: 'Save',
+        preLabel: 'Send',
+        preVariant: 'outlined',
+        preSeverity: 'primary'
+      }"
+      #fa
+    >
+    </hospitality-bot-form-action>
+  </div>
 </div>
-
-<hospitality-bot-form-action
-  class="full-width"
-  (onPostAction)="handleSave()"
-  (onPreAction)="handleSend()"
-  [isSticky]="true"
-  [isFixed]="true"
-  [config]="{
-    postLabel: 'Save',
-    preLabel: 'Send',
-    preVariant: 'outlined',
-    preSeverity: 'primary'
-  }"
-  #fa
->
-</hospitality-bot-form-action>

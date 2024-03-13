@@ -1,12 +1,15 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService, RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
   NavRouteOption,
-  sharedConfig
+  sharedConfig,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
@@ -25,10 +28,11 @@ import { MenuOptions } from '../../../constants/camapign';
   templateUrl: './campaign-datatable.component.html',
   styleUrls: [
     '../../../../../../shared/src/lib/components/datatable/datatable.component.scss',
-    './campaign-datatable.component.scss'
-  ]
+    './campaign-datatable.component.scss',
+  ],
 })
-export class CampaignDatatableComponent extends BaseDatatableComponent implements OnInit, OnDestroy {
+export class CampaignDatatableComponent extends BaseDatatableComponent
+  implements OnInit, OnDestroy {
   tableName = campaignConfig.datatable.title;
   campaignStatus = campaignStatus;
   actionButtons = true;
@@ -45,8 +49,8 @@ export class CampaignDatatableComponent extends BaseDatatableComponent implement
   navRoutes: NavRouteOption[] = [
     {
       label: 'Emark-it',
-      link: './'
-    }
+      link: './',
+    },
   ];
 
   campaignCta: MenuItem[] = [];
@@ -75,15 +79,18 @@ export class CampaignDatatableComponent extends BaseDatatableComponent implement
    */
   listenForGlobalFilters(): void {
     this.globalFilterService.globalFilter$.subscribe((data) => {
-      this.globalQueries = [...data['filter'].queryValue, ...data['dateRange'].queryValue];
+      this.globalQueries = [
+        ...data['filter'].queryValue,
+        ...data['dateRange'].queryValue,
+      ];
       this.entityId = this.globalFilterService.entityId;
       this.loadInitialData([
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
-          entityType: this.selectedTab
+          entityType: this.selectedTab,
         },
-        ...this.getSelectedQuickReplyFilters()
+        ...this.getSelectedQuickReplyFilters(),
       ]);
     });
   }
@@ -94,14 +101,14 @@ export class CampaignDatatableComponent extends BaseDatatableComponent implement
         label: 'Email',
         command: () => {
           this.openCreateCampaign();
-        }
+        },
       },
       {
         label: 'Whatsapp',
         command: () => {
           this.openCreateCampaign('whatsapp');
-        }
-      }
+        },
+      },
     ];
   }
 
@@ -132,7 +139,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent implement
   setRecords(data: Record<string, any>): void {
     const modData = new Campaigns().deserialize(data);
     this.values = modData.records;
-    this.initFilters(modData.entityTypeCounts, modData.entityStateCounts, modData.totalRecord, this.campaignStatus);
+    this.initFilters(
+      modData.entityTypeCounts,
+      modData.entityStateCounts,
+      modData.totalRecord,
+      this.campaignStatus
+    );
     this.loading = false;
   }
 
@@ -142,10 +154,13 @@ export class CampaignDatatableComponent extends BaseDatatableComponent implement
    * @param defaultProps The default table props to control data fetching.
    * @returns The observable with Campaign list.
    */
-  fetchDataFrom(queries, defaultProps = { offset: this.first, limit: this.rowsPerPage }): Observable<any> {
+  fetchDataFrom(
+    queries,
+    defaultProps = { offset: this.first, limit: this.rowsPerPage }
+  ): Observable<any> {
     queries.push(defaultProps);
     const config = {
-      queryObj: this.adminUtilityService.makeQueryParams(queries)
+      queryObj: this.adminUtilityService.makeQueryParams(queries),
     };
     return this.campaignService.getHotelCampaign(config, this.entityId);
   }
@@ -157,24 +172,26 @@ export class CampaignDatatableComponent extends BaseDatatableComponent implement
    */
   updateCampaignStatus(status: boolean, userData): void {
     const data = {
-      active: status
+      active: status,
     };
     this.loading = true;
     this.$subscription.add(
-      this.campaignService.updateCampaignStatus(this.entityId, data, userData.id).subscribe(
-        (_response) => {
-          this.loadData();
-          this.showMessage(
-            {
-              key: 'messages.success.status_updated',
-              message: ''
-            },
-            'success'
-          );
-          this.changePage(this.currentPage);
-        },
-        ({ error }) => () => (this.loading = false)
-      )
+      this.campaignService
+        .updateCampaignStatus(this.entityId, data, userData.id)
+        .subscribe(
+          (_response) => {
+            this.loadData();
+            this.showMessage(
+              {
+                key: 'messages.success.status_updated',
+                message: '',
+              },
+              'success'
+            );
+            this.changePage(this.currentPage);
+          },
+          ({ error }) => () => (this.loading = false)
+        )
     );
   }
 
@@ -186,20 +203,22 @@ export class CampaignDatatableComponent extends BaseDatatableComponent implement
   cloneCampaign(campaignId: string, data): void {
     this.loading = true;
     this.$subscription.add(
-      this.campaignService.cloneCampaign(this.entityId, data, campaignId).subscribe(
-        (_response) => {
-          this.showMessage(
-            {
-              key: 'messages.success.campaignCloned',
-              message: 'Campaign Cloned'
-            },
-            'success'
-          );
-          this.changePage(this.currentPage);
-        },
-        ({ error }) => this.showMessage(error),
-        () => (this.loading = false)
-      )
+      this.campaignService
+        .cloneCampaign(this.entityId, data, campaignId)
+        .subscribe(
+          (_response) => {
+            this.showMessage(
+              {
+                key: 'messages.success.campaignCloned',
+                message: 'Campaign Cloned',
+              },
+              'success'
+            );
+            this.changePage(this.currentPage);
+          },
+          ({ error }) => this.showMessage(error),
+          () => (this.loading = false)
+        )
     );
   }
 
@@ -211,20 +230,22 @@ export class CampaignDatatableComponent extends BaseDatatableComponent implement
   archiveCampaign(campaignId: string, data): void {
     this.loading = true;
     this.$subscription.add(
-      this.campaignService.archiveCampaign(this.entityId, data, campaignId).subscribe(
-        (_response) => {
-          this.showMessage(
-            {
-              key: 'messages.success.campaignArchived',
-              message: 'Campaign Archived.'
-            },
-            'success'
-          );
-          this.changePage(this.currentPage);
-        },
-        ({ error }) => this.showMessage({ ...error, key: '' }),
-        () => (this.loading = false)
-      )
+      this.campaignService
+        .archiveCampaign(this.entityId, data, campaignId)
+        .subscribe(
+          (_response) => {
+            this.showMessage(
+              {
+                key: 'messages.success.campaignArchived',
+                message: 'Campaign Archived.',
+              },
+              'success'
+            );
+            this.changePage(this.currentPage);
+          },
+          ({ error }) => this.showMessage({ ...error, key: '' }),
+          () => (this.loading = false)
+        )
     );
   }
 
@@ -240,12 +261,9 @@ export class CampaignDatatableComponent extends BaseDatatableComponent implement
    * @function openCreateCampaign to create campaign page.
    */
   openCreateCampaign(campaignType: CampaignType = 'email'): void {
-    // this.router.navigate(['create'], { relativeTo: this.route });
+    this.campaignService.campaignType = campaignType;
     this.routesConfigService.navigate({
       additionalPath: 'create-campaign',
-      queryParams: {
-        campaignType: campaignType
-      }
     });
   }
 
@@ -254,9 +272,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent implement
    */
   openEditCampaign(campaign: Campaign, event: MouseEvent): void {
     event.stopPropagation();
-    this.router.navigate([`${campaign.isDraft ? 'edit' : 'view'}/${campaign.id}`], {
-      relativeTo: this.route
-    });
+    this.router.navigate(
+      [`${campaign.isDraft ? 'edit' : 'view'}/${campaign.id}`],
+      {
+        relativeTo: this.route,
+      }
+    );
   }
 
   /**
@@ -280,13 +301,13 @@ export class CampaignDatatableComponent extends BaseDatatableComponent implement
           ...this.globalQueries,
           {
             order: sharedConfig.defaultOrder,
-            entityType: this.selectedTab
+            entityType: this.selectedTab,
           },
-          ...this.getSelectedQuickReplyFilters()
+          ...this.getSelectedQuickReplyFilters(),
         ],
         {
           offset: this.first,
-          limit: this.rowsPerPage
+          limit: this.rowsPerPage,
         }
       ).subscribe(
         (data) => this.setRecords(data),
@@ -313,14 +334,18 @@ export class CampaignDatatableComponent extends BaseDatatableComponent implement
    * @param event The event for sort click action.
    */
   customSort(event: SortEvent): void {
-    const col = campaignConfig.datatable.cols.find((data) => data.field === event.field);
+    const col = campaignConfig.datatable.cols.find(
+      (data) => data.field === event.field
+    );
 
     const field =
       event.field[event.field.length - 1] === ')'
         ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
         : event.field;
 
-    event.data.sort((data1, data2) => this.sortOrder(event, field, data1, data2, col));
+    event.data.sort((data1, data2) =>
+      this.sortOrder(event, field, data1, data2, col)
+    );
   }
 
   /**
@@ -333,15 +358,19 @@ export class CampaignDatatableComponent extends BaseDatatableComponent implement
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
-          entityType: this.selectedTab
+          entityType: this.selectedTab,
         },
         ...this.getSelectedQuickReplyFilters(),
-        ...this.selectedRows.map((item) => ({ ids: item.id }))
-      ])
+        ...this.selectedRows.map((item) => ({ ids: item.id })),
+      ]),
     };
     this.$subscription.add(
       this.campaignService.exportCSV(this.entityId, config).subscribe(
-        (response) => FileSaver.saveAs(response, `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`),
+        (response) =>
+          FileSaver.saveAs(
+            response,
+            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+          ),
         ({ error }) => (this.loading = false)
       )
     );
@@ -373,7 +402,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent implement
       .openSnackBarWithTranslate(
         {
           translateKey: messageObj.key,
-          priorityMessage: messageObj.message
+          priorityMessage: messageObj.message,
         },
         '',
         { panelClass }

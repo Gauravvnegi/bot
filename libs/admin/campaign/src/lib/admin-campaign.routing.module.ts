@@ -19,7 +19,21 @@ import { CampaignFormViewComponent } from './components/campaign-form-view/campa
 const appRoutes: Route[] = [
   { path: '', component: CampaignComponent },
   { path: 'view-campaign/:id', component: CampaignFormViewComponent },
-  { path: 'create-campaign', component: CampaignFormViewComponent },
+  {
+    path: 'create-campaign',
+    component: CampaignFormViewComponent,
+  },
+  {
+    path: 'create-campaign',
+    component: CampaignComponent,
+    children: [
+      {
+        path: 'template',
+        component: TemplateListContainerComponent,
+        pathMatch: 'full',
+      },
+    ],
+  },
   { path: 'edit-campaign/:id', component: CampaignFormViewComponent },
 ];
 

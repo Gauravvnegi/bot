@@ -17,24 +17,35 @@ import { ScheduleCampaignComponent } from './components/schedule-campaign/schedu
 import { CampaignFormViewComponent } from './components/campaign-form-view/campaign-form-view.component';
 
 const appRoutes: Route[] = [
-  { path: '', component: CampaignComponent },
-  { path: 'view-campaign/:id', component: CampaignFormViewComponent },
   {
-    path: 'create-campaign',
-    component: CampaignFormViewComponent,
-  },
-  {
-    path: 'create-campaign',
+    path: '',
     component: CampaignComponent,
     children: [
       {
-        path: 'template',
-        component: TemplateListContainerComponent,
-        pathMatch: 'full',
+        path: '',
+        component: CampaignDatatableComponent,
+      },
+      {
+        path: 'create-campaign',
+        component: CampaignComponent,
+        children: [
+          {
+            path: '',
+            component: CampaignFormViewComponent,
+          },
+          {
+            path: 'template',
+            component: TemplateListContainerComponent,
+            pathMatch: 'full',
+          },
+          {
+            path: ':campaignId',
+            component: CampaignFormViewComponent,
+          },
+        ],
       },
     ],
   },
-  { path: 'edit-campaign/:id', component: CampaignFormViewComponent },
 ];
 
 @NgModule({

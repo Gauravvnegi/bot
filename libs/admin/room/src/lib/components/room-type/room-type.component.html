@@ -59,8 +59,7 @@
         <div class="room-des">
           <p>Room Description</p>
           <hospitality-bot-template-editor
-            [parentFG]="useForm"
-            [name]="'description'"
+            controlName="description"
             [height]="250"
           ></hospitality-bot-template-editor>
         </div>
@@ -450,8 +449,7 @@
               ></hospitality-bot-prefix-field>
 
               <hospitality-bot-template-editor
-                [parentFG]="ratePlanGroup"
-                [name]="'description'"
+                controlName="description"
                 [height]="250"
                 class="full-width"
               ></hospitality-bot-template-editor>

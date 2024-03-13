@@ -7,7 +7,7 @@
   ></ng-container>
   <ng-template #richTextTemplate>
     <div [formGroup]="parentFG">
-      <ckeditor [formControlName]="name" [config]="ckeConfig"></ckeditor>
+      <ckeditor [formControlName]="controlName" [config]="ckeConfig"></ckeditor>
     </div>
     <div class="text-field" (click)="changeField(false)">
       Plain Text
@@ -39,11 +39,11 @@
 </ng-template>
 <ng-template #notHybridField>
   <div [formGroup]="parentFG">
-    <ckeditor [formControlName]="name" [config]="ckeConfig"></ckeditor>
+    <ckeditor [formControlName]="controlName" [config]="ckeConfig"></ckeditor>
   </div>
 </ng-template>
 <mat-error
-  *ngIf="parentFG.get(name).touched && parentFG.get(name).hasError('required')"
+  *ngIf="parentFG.get(controlName).touched && parentFG.get(controlName).hasError('required')"
   class="message-error"
 >
   Message is required

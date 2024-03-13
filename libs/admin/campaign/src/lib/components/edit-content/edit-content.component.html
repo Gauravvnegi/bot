@@ -15,8 +15,7 @@
         <ng-container [ngSwitch]="currentMode">
           <ng-container *ngSwitchCase="'backdrop'">
             <hospitality-bot-template-editor
-              [parentFG]="campaignFG"
-              [name]="'message'"
+              controlName="message"
               [template]="template"
               [hybrid]="false"
             ></hospitality-bot-template-editor>
@@ -46,16 +45,14 @@
           </ng-container>
           <ng-container *ngSwitchCase="'view'">
             <hospitality-bot-template-editor
-              [parentFG]="campaignFG"
-              [name]="'message'"
+              controlName="message"
               [template]="template"
               [disabled]="true"
             ></hospitality-bot-template-editor>
           </ng-container>
           <ng-container *ngSwitchCase="'edit'">
             <hospitality-bot-template-editor
-              [parentFG]="campaignFG"
-              [name]="'message'"
+              controlName="description"
               [template]="template"
             ></hospitality-bot-template-editor>
           </ng-container>
@@ -89,8 +86,7 @@
       </div>
       <div class="ck-editor__container">
         <hospitality-bot-template-editor
-          [parentFG]="campaignFG"
-          [name]="'message'"
+          controlName="message"
           [template]="template"
           [disabled]="true"
           [hybrid]="false"

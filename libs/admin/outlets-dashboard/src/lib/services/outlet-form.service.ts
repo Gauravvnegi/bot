@@ -167,20 +167,23 @@ export class OutletFormService {
         reservationInformation.orderType === OrderTypes.DELIVERY
           ? reservationInformation.address.id
           : undefined,
-      reservation: reservationInformation.orderType === OrderTypes.DINE_IN ? {
-        ...reservationData,
-        occupancyDetails: reservationInformation?.numberOfPersons
-          ? { maxAdult: reservationInformation.numberOfPersons }
+      reservation:
+        reservationInformation.orderType === OrderTypes.DINE_IN
+          ? {
+              ...reservationData,
+              occupancyDetails: reservationInformation?.numberOfPersons
+                ? { maxAdult: reservationInformation.numberOfPersons }
+                : undefined,
+              status: 'CONFIRMED',
+              tableIds: reservationInformation?.tableNumber
+                ? [reservationInformation?.tableNumber]
+                : undefined,
+              id:
+                data.reservationInformation.id !== null
+                  ? data.reservationInformation.id
+                  : undefined,
+            }
           : undefined,
-        status: 'CONFIRMED',
-        tableIds: reservationInformation?.tableNumber
-          ? [reservationInformation?.tableNumber]
-          : undefined,
-        id:
-          data.reservationInformation.id !== null
-            ? data.reservationInformation.id
-            : undefined,
-      } : undefined,
       paymentDetails: {
         paymentMethod: paymentInformation?.paymentMethod ?? '',
         amount: paymentInformation?.paymentRecieved ?? 0,
@@ -343,7 +346,7 @@ export class OutletFormService {
     });
 
     summaryData.outletType = EntitySubType.RESTAURANT;
-    summaryData.order = {
+    summaryData.outletOrder = {
       id: orderId,
       items: orderItems,
       type: formData.reservationInformation?.orderType,

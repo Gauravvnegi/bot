@@ -52,7 +52,7 @@ export const mealPreferenceConfig: Record<
 
 export class OrderSummaryData {
   outletType: EntitySubType;
-  order: {
+  outletOrder: {
     id?: string;
     type?: OrderTypes;
     items: {

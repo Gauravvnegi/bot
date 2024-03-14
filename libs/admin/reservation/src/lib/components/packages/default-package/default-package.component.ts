@@ -27,9 +27,9 @@ export class DefaultPackageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isPmsBooking = this.parentForm.get(
-      'reservationDetails.isPmsBooking'
-    ).value;
+    this._reservationService.isPmsBooking.subscribe((res) => {
+      this.isPmsBooking = res;
+    });
   }
 
   // onToggleSwitch(isAccepted: boolean) {

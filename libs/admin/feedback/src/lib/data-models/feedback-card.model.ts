@@ -37,7 +37,7 @@ export class FeedbackRecord {
   feedback;
   feedbackId: string;
   id: string;
-  jobDuration: number;
+  jobDuration: string;
   remarks: Remark[];
   sla: number;
   status: string;
@@ -59,7 +59,7 @@ export class FeedbackRecord {
       set({}, 'created', get(input, ['created'])),
       set({}, 'feedbackId', get(input, ['feedbackId'])),
       set({}, 'id', get(input, ['id'])),
-      set({}, 'jobDuration', get(input, ['jobDuration'])),
+      // set({}, 'jobDuration', get(input, ['jobDuration'])),
       set({}, 'sla', get(input, ['sla'])),
       set({}, 'status', get(input, ['status'])),
       set({}, 'timeOut', get(input, ['timeOut'])),
@@ -74,6 +74,7 @@ export class FeedbackRecord {
     input.remarks?.forEach((remark) =>
       this.remarks.push(new Remark().deserialize(remark))
     );
+    this.jobDuration = `${input?.jobDuration}m`;
     this.feedback =
       feedbackType === feedback.types.transactional
         ? new Feedback().deserialize(input.feedback, outlets)
@@ -107,13 +108,14 @@ export class FeedbackRecord {
   }
 
   getSLA() {
-    if (this.sla) {
-      if (this.sla > 60 || this.sla < -60)
-        return `${Math.floor(this.sla / 60)}h ${Math.trunc(
-          (this.sla > 0 ? this.sla : this.sla * -1) % 60
-        )}m`;
-      return `${this.sla}m`;
-    } else '------';
+    return this.sla;
+    // if (this.sla) {
+    //   if (this.sla > 60 || this.sla < -60)
+    //     return `${Math.floor(this.sla / 60)}h ${Math.trunc(
+    //       (this.sla > 0 ? this.sla : this.sla * -1) % 60
+    //     )}m`;
+    //   return `${this.sla}m`;
+    // } else '------';
   }
 
   getStatus(array) {

@@ -118,6 +118,7 @@ export class ComplaintBifurcationComponent implements OnInit {
     const chartData = new RequestStats()
       .deserialize(data)
       .requestStats.filter((stat) => stat.label !== 'Timed-out');
+
     chartData.forEach((stat) => {
       this.request.push({
         label: stat.label,
@@ -132,8 +133,11 @@ export class ComplaintBifurcationComponent implements OnInit {
 
   getFocusedStats(data: RequestResponse): void {
     this.statCard = [];
-    const statCardData = new RequestStats().deserialize(data);
-    statCardData.requestStats.map((stat) => {
+    const statCardData = new RequestStats()
+      .deserialize(data)
+      .requestStats.filter((stat) => stat.label !== 'Cancelled');
+
+    statCardData.map((stat) => {
       this.statCard.push({
         label: stat.label,
         score: stat.value,

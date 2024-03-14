@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Notification } from '../../../data-models/notifications.model';
 import { NotificationService } from '../../../services/notification.service';
 import { RoutesConfigService } from '../../../services/routes-config.service';
-import { ModuleNames } from 'libs/admin/shared/src/index';
+import { BookingDetailService, ModuleNames } from 'libs/admin/shared/src/index';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
@@ -17,7 +17,8 @@ export class NotificationDetailComponent {
     private notificationService: NotificationService,
     private routesConfigService: RoutesConfigService,
     private dialogRef: DynamicDialogRef,
-    private dialogConfig: DynamicDialogConfig
+    private dialogConfig: DynamicDialogConfig,
+    private bookingDetailService: BookingDetailService
   ) {
     /**
      * @remark extracting data from dialog config
@@ -48,7 +49,6 @@ export class NotificationDetailComponent {
         });
         break;
 
-
       case 'IN-HOUSE REQUEST':
         // requestId is not coming from backend
         this.notificationService.$requestNotification.next(data['requestId']);
@@ -71,6 +71,14 @@ export class NotificationDetailComponent {
         this.routesConfigService.navigate({
           subModuleName: ModuleNames.FRONT_DESK_DASHBOARD,
         });
+        break;
+
+      case 'REQUEST':
+        if (data['reservationId'])
+          this.bookingDetailService.openBookingDetailSidebar({
+            ...(data['reservationId'] && { bookingId: data['reservationId'] }),
+            ...(data.tabKey && { tabKey: 'package_details' }),
+          });
         break;
 
       default:

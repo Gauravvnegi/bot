@@ -135,7 +135,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       area: [''],
       dimension: ['sqft'],
       cuisinesType: [[]],
-      containerCharge: [[]],
+      containerCharge: [''],
 
       //not working filed
       rules: [[]],

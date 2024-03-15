@@ -77,7 +77,7 @@ export class NotificationDetailComponent {
         if (data['reservationId'])
           this.bookingDetailService.openBookingDetailSidebar({
             ...(data['reservationId'] && { bookingId: data['reservationId'] }),
-            ...(data.tabKey && { tabKey: 'package_details' }),
+            tabKey: 'package_details',
           });
         break;
 

@@ -8,7 +8,7 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Option } from '@hospitality-bot/admin/shared';
+import { Option, getUniqueOptions } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/services/notification.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -102,15 +102,12 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
         if (response) {
           this.data = new InhouseData().deserialize(response);
 
-          if (this.data?.assignedToDefaultItemUser) {
-            this.assigneeList = [
-              {
-                label: this.data.assigneeName,
-                value: this.data?.assigneeId,
-              },
-            ];
-          } else {
-          }
+          this.assigneeList = [
+            {
+              label: this.data.assigneeName,
+              value: this.data?.assigneeId,
+            },
+          ];
 
           this.requestFG.patchValue({
             status: response.action,
@@ -162,13 +159,17 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
         })
         .subscribe(
           (response) => {
-            this.assigneeList =
-              response?.requestItemUsers?.map((item) => {
+            this.assigneeList.push(
+              ...(response?.requestItemUsers?.map((item) => {
                 return {
                   label: item.firstName + ' ' + item.lastName,
                   value: item.userId,
                 };
-              }) ?? [];
+              }) ?? [])
+            );
+
+            this.assigneeList = getUniqueOptions(this.assigneeList);
+
             this.isAssigneeLoading = false;
           },
           (error) => {

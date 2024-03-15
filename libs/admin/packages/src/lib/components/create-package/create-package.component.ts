@@ -10,6 +10,7 @@ import {
   ConfigService,
   DiscountType,
   ModuleNames,
+  getUniqueOptions,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ServicesTypeValue } from 'libs/admin/room/src/lib/constant/form';
@@ -23,6 +24,7 @@ import { PackagesService } from '../../services/packages.service';
 import { PackageData, PackageFormData } from '../../types/package';
 import { PackageResponse } from '../../types/response';
 import { packagesRoutes } from '../../constant/routes';
+import { convertToNormalCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 type ServiceItemOption = Option & { price: number };
 
@@ -373,7 +375,7 @@ export class CreatePackageComponent implements OnInit {
                 };
               });
 
-            this.services = this.getUniqueOptions([...this.services, ...data]);
+            this.services = getUniqueOptions([...this.services, ...data]);
 
             this.noMoreServices =
               res.entityStateCounts['ACTIVE'] <= this.servicesLimit;
@@ -511,16 +513,6 @@ export class CreatePackageComponent implements OnInit {
 
   resetForm() {
     this.useForm.reset();
-  }
-
-  getUniqueOptions(data: ServiceItemOption[]): ServiceItemOption[] {
-    const uniqueMap = new Map();
-
-    for (const item of data) {
-      uniqueMap.set(item.value, item);
-    }
-
-    return Array.from(uniqueMap.values());
   }
 
   /**

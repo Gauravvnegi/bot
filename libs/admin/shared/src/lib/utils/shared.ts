@@ -1,4 +1,5 @@
 import { DiscountType } from '../constants';
+import { Option } from '@hospitality-bot/admin/shared';
 
 type DiscountCalcValues = {
   price: number;
@@ -141,4 +142,17 @@ export function generateUniqueId() {
     }
   );
   return uniqueId;
+}
+
+/**
+ * @function getUniqueOptions
+ * @param data original data
+ * @returns uninque option
+ */
+export function getUniqueOptions<T extends Option>(data: T[]): T[] {
+  const uniqueMap = new Map();
+  for (const item of data) {
+    uniqueMap.set(item.value, item);
+  }
+  return Array.from(uniqueMap.values());
 }

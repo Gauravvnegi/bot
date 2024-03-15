@@ -1,132 +1,131 @@
 <div class="wrapper">
-  <div class="header">
-    <span class="title">Add contact</span>
-
-    <div class="close-popup-icon" (click)="close()">
-      <i class="fa fa-times" aria-hidden="true"></i>
-    </div>
-  </div>
-
-  <p-table
-    class="contact-table"
-    *ngIf="contactFA?.controls"
-    #dt
-    [styleClass]="tableConfig.styleClass"
-    [resizableColumns]="isResizableColumns"
-    [autoLayout]="isAutoLayout"
-    [loading]="loading"
-    [columns]="cols"
-    [value]="contactFA?.controls"
-    [paginator]="false"
-    [rows]="rowsPerPage"
-    [showCurrentPageReport]="showCurrentPageReport"
-    [rowsPerPageOptions]="rowsPerPageOptions"
-    [(first)]="first"
-    [totalRecords]="totalRecords"
-    [filterDelay]="0"
-    [(selection)]="selectedRows"
-    (onRowSelect)="onRowSelect($event)"
-    (onRowUnselect)="onRowUnselect($event)"
-    (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
-    (sortFunction)="customSort($event)"
-    [customSort]="isCustomSort"
-    (onFilter)="onDataFilter()"
+  <hospitality-bot-modal-header
+    [tableName]="tableName"
+    (onModalClose)="close()"
   >
-    <!-- *******************************EMPTY TABLE VIEW******************************* -->
-    <ng-template pTemplate="emptymessage">
-      <tr hospitality-bot-empty-view [noOfColumns]="cols.length - 1"></tr>
-    </ng-template>
+  </hospitality-bot-modal-header>
 
-    <!-- *******************************HEADER WITH SEARCH******************************* -->
-    <ng-template pTemplate="header" let-columns #header>
-      <tr
-        hospitality-bot-table-header
-        [columns]="columns"
-        [showCheckbox]="isSelectable"
-        (search)="handleFieldSearch($event)"
-      ></tr>
-    </ng-template>
-    <!-- **************************************BODY********************************* -->
-    <ng-template
-      pTemplate="body"
-      let-rowData
-      let-columns="columns"
-      let-rowIndex="rowIndex"
+  <div class="table-wrapper">
+    <p-table
+      class="contact-table"
+      *ngIf="contactFA?.controls"
+      #dt
+      [styleClass]="tableConfig.styleClass"
+      [resizableColumns]="isResizableColumns"
+      [autoLayout]="isAutoLayout"
+      [loading]="loading"
+      [columns]="cols"
+      [value]="contactFA?.controls"
+      [paginator]="false"
+      [rows]="rowsPerPage"
+      [showCurrentPageReport]="showCurrentPageReport"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      [(first)]="first"
+      [totalRecords]="totalRecords"
+      [filterDelay]="0"
+      [(selection)]="selectedRows"
+      (onRowSelect)="onRowSelect($event)"
+      (onRowUnselect)="onRowUnselect($event)"
+      (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
+      (sortFunction)="customSort($event)"
+      [customSort]="isCustomSort"
+      (onFilter)="onDataFilter()"
     >
-      <tr class="table-row" [formGroup]="rowData">
-        <td>
-          <div class="cell-content" *ngIf="rowData; else emptyCell">
-            <hospitality-bot-input
-              class="half-width"
-              controlName="email"
-              [props]="{
-                placeholder: 'Email'
-              }"
-            ></hospitality-bot-input>
-          </div>
-        </td>
-        <td>
-          <div class="cell-content" *ngIf="rowData; else emptyCell">
-            <hospitality-bot-select
-              [options]="salutationList"
-              controlName="salutation"
-            ></hospitality-bot-select>
-          </div>
-        </td>
-        <td>
-          <div class="cell-content" *ngIf="rowData; else emptyCell">
-            <hospitality-bot-input
-              class="half-width"
-              controlName="firstName"
-              [props]="{
-                placeholder: 'First Name'
-              }"
-            ></hospitality-bot-input>
-          </div>
-        </td>
-        <td>
-          <div class="cell-content" *ngIf="rowData; else emptyCell">
-            <hospitality-bot-input
-              class="half-width"
-              controlName="lastName"
-              [props]="{
-                placeholder: 'Last Name'
-              }"
-            ></hospitality-bot-input>
-          </div>
-        </td>
-        <td>
-          <div class="cell-content" *ngIf="rowData; else emptyCell">
-            <hospitality-bot-input
-              class="half-width"
-              controlName="companyName"
-              maxLength="60"
-              [props]="{
-                placeholder: 'Company Name'
-              }"
-            ></hospitality-bot-input>
-          </div>
-        </td>
-        <td>
-          <div class="cell-content" *ngIf="rowData; else emptyCell">
-            <hospitality-bot-input
-              class="half-width"
-              controlName="mobile"
-              [props]="{
-                placeholder: 'Mobile No.',
-                type: 'number'
-              }"
-            ></hospitality-bot-input>
-          </div>
-        </td>
-        <td (click)="removeContactField(rowData)">
-          <div class="remove-table">
-            <i class="fa fa-times" aria-hidden="true"></i>
-          </div>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
+      <!-- *******************************EMPTY TABLE VIEW******************************* -->
+      <ng-template pTemplate="emptymessage">
+        <tr hospitality-bot-empty-view [noOfColumns]="cols.length - 1"></tr>
+      </ng-template>
+
+      <!-- *******************************HEADER WITH SEARCH******************************* -->
+      <ng-template pTemplate="header" let-columns #header>
+        <tr
+          hospitality-bot-table-header
+          [columns]="columns"
+          [showCheckbox]="isSelectable"
+          (search)="handleFieldSearch($event)"
+        ></tr>
+      </ng-template>
+      <!-- **************************************BODY********************************* -->
+      <ng-template
+        pTemplate="body"
+        let-rowData
+        let-columns="columns"
+        let-rowIndex="rowIndex"
+      >
+        <tr class="table-row" [formGroup]="rowData">
+          <td>
+            <div class="cell-content" *ngIf="rowData; else emptyCell">
+              <hospitality-bot-input
+                class="half-width"
+                controlName="email"
+                [props]="{
+                  placeholder: 'Email'
+                }"
+              ></hospitality-bot-input>
+            </div>
+          </td>
+          <td>
+            <div class="cell-content" *ngIf="rowData; else emptyCell">
+              <hospitality-bot-select
+                [options]="salutationList"
+                controlName="salutation"
+              ></hospitality-bot-select>
+            </div>
+          </td>
+          <td>
+            <div class="cell-content" *ngIf="rowData; else emptyCell">
+              <hospitality-bot-input
+                class="half-width"
+                controlName="firstName"
+                [props]="{
+                  placeholder: 'First Name'
+                }"
+              ></hospitality-bot-input>
+            </div>
+          </td>
+          <td>
+            <div class="cell-content" *ngIf="rowData; else emptyCell">
+              <hospitality-bot-input
+                class="half-width"
+                controlName="lastName"
+                [props]="{
+                  placeholder: 'Last Name'
+                }"
+              ></hospitality-bot-input>
+            </div>
+          </td>
+          <td>
+            <div class="cell-content" *ngIf="rowData; else emptyCell">
+              <hospitality-bot-input
+                class="half-width"
+                controlName="companyName"
+                [props]="{
+                  placeholder: 'Company Name'
+                }"
+              ></hospitality-bot-input>
+            </div>
+          </td>
+          <td>
+            <div class="cell-content" *ngIf="rowData; else emptyCell">
+              <hospitality-bot-input
+                class="half-width"
+                controlName="mobile"
+                [props]="{
+                  placeholder: 'Mobile No.',
+                  type: 'number'
+                }"
+              ></hospitality-bot-input>
+            </div>
+          </td>
+          <td (click)="removeContactField(rowData)">
+            <div class="remove-table">
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 
   <hospitality-bot-button
     class="add-more"

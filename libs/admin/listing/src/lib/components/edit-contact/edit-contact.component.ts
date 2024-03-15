@@ -22,6 +22,7 @@ export class EditContactComponent extends BaseDatatableComponent
   contactFA: FormArray;
   isSelectable: boolean = false;
   isSearchable: boolean = false;
+  tableName: string = 'Add Contact';
 
   readonly salutationList = contactConfig.datatable.salutationList;
   readonly cols = contactConfig.datatable.cols;

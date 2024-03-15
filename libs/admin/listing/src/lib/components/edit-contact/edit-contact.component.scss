@@ -75,24 +75,8 @@ td {
 
 .wrapper {
   display: flex;
-  padding: 25px;
+  // padding: 25px;
   flex-direction: column;
-
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    .title {
-      font-size: 14px;
-      font-size: 26px;
-      font-weight: 600;
-    }
-
-    .close-popup-icon {
-      cursor: pointer;
-    }
-  }
 
   .add-more {
     margin-left: auto;
@@ -101,9 +85,22 @@ td {
   .submit {
     margin-inline: auto;
   }
+
+  .table-wrapper{
+    overflow-y: auto;
+    max-height: 60vh;
+  }
+
+  .contact-table{
+    display: block;
+    padding: 25px;
+
+  }
 }
 
 :host ::ng-deep {
+
+
   .p-datatable .p-datatable-thead tr th {
     padding: 10px 1% !important;
   }
@@ -120,5 +117,10 @@ td {
   }
   .p-datatable .p-datatable-thead {
     top: 0px !important;
+  }
+
+  .p-datatable-thead > tr > th:last-child {
+    background-color: #ffff !important;
+
   }
 }

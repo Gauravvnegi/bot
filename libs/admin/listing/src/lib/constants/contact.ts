@@ -5,57 +5,57 @@ export const contactConfig = {
       {
         field: 'email',
         header: 'Email',
-
         sortType: 'string',
-
         width: '17.5%',
+        isSearchDisabled: true,
+        isSortDisabled: true,
       },
       {
         field: 'salutation',
         header: 'Salutation',
-
         sortType: 'string',
-
         width: '15%',
+        isSearchDisabled: true,
+        isSortDisabled: true,
       },
       {
         field: 'firstName',
         header: 'First Name',
-
         sortType: 'string',
-
         width: '15%',
+        isSearchDisabled: true,
+        isSortDisabled: true,
       },
       {
         field: 'lastName',
         header: 'Last Name',
-
         sortType: 'string',
-
         width: '15%',
+        isSearchDisabled: true,
+        isSortDisabled: true,
       },
       {
         field: 'companyName',
         header: 'Company Name',
-
         sortType: 'string',
-
         width: '17.5%',
+        isSearchDisabled: true,
+        isSortDisabled: true,
       },
       {
         field: 'mobile',
         header: 'Mobile',
-
         sortType: 'number',
-
         width: '20%',
+        isSearchDisabled: true,
+        isSortDisabled: true,
       },
     ],
     dialogWidth: '550',
     salutationList: [
-      { name: 'Mr.', value: 'Mr.' },
-      { name: 'Mrs.', value: 'Mrs.' },
-      { name: 'Miss', value: 'Miss' },
+      { label: 'Mr.', value: 'Mr.' },
+      { label: 'Mrs.', value: 'Mrs.' },
+      { label: 'Miss', value: 'Miss' },
     ],
     fileUploadData: {
       fileSize: 3145728,

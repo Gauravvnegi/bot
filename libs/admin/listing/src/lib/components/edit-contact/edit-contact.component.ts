@@ -1,27 +1,38 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Regex } from '@hospitality-bot/admin/shared';
+import { BaseDatatableComponent, Regex } from '@hospitality-bot/admin/shared';
 import { contactConfig } from '../../constants/contact';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-edit-contact',
   templateUrl: './edit-contact.component.html',
-  styleUrls: ['./edit-contact.component.scss'],
+  styleUrls: [
+    './edit-contact.component.scss',
+    '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
+  ],
 })
-export class EditContactComponent implements OnInit {
+export class EditContactComponent extends BaseDatatableComponent
+  implements OnInit {
   @Input() listId: string;
   @Input() contacts = [];
   @Output() onContactClosed = new EventEmitter();
   @Input() add: boolean;
   @Input() entityId: string;
   contactFA: FormArray;
-  salutationList = contactConfig.datatable.salutationList;
+  isSelectable: boolean = false;
+  isSearchable: boolean = false;
+
+  readonly salutationList = contactConfig.datatable.salutationList;
+  readonly cols = contactConfig.datatable.cols;
+
   constructor(
-    private _fb: FormBuilder,
+    public fb: FormBuilder,
     private dialogConfig: DynamicDialogConfig,
     private dialogRef: DynamicDialogRef
   ) {
+    super(fb);
+
     /**
      * @Remarks Extracting data from he dialog service
      */
@@ -40,13 +51,13 @@ export class EditContactComponent implements OnInit {
   }
 
   createFA(): void {
-    this.contactFA = this._fb.array([]);
+    this.contactFA = this.fb.array([]);
   }
 
   createContactFG(): FormGroup {
-    return this._fb.group({
+    return this.fb.group({
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
-      salutation: ['', [Validators.required]],
+      salutation: ['Mr.', [Validators.required]],
       firstName: ['', [Validators.required, Validators.pattern(Regex.NAME)]],
       lastName: ['', [Validators.required, Validators.pattern(Regex.NAME)]],
       companyName: [''],
@@ -69,9 +80,12 @@ export class EditContactComponent implements OnInit {
    * @param index The index number for which remove contact action will be done.
    * @returns Return true if there is only one contact field.
    */
-  removeContactField(index: number) {
+  removeContactField(formGroup: FormGroup) {
     if (this.contactFA.controls.length === 1) return;
-    this.contactFA.removeAt(index);
+    this.contactFA.controls = this.contactFA.controls.filter(
+      (data) => data !== formGroup
+    );
+    this.contactFA.updateValueAndValidity();
   }
 
   /**

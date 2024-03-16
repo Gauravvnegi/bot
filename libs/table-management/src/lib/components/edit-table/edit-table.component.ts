@@ -63,7 +63,7 @@ export class EditTableComponent implements OnInit {
 
   areaList: Option[] = [];
   isLoadingAreaList: boolean = false;
-  noMoreRoomTypes: boolean = false;
+  noMoreRoomTypes: boolean = true;
 
   constructor(
     private fb: FormBuilder,

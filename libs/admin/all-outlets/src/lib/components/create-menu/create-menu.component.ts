@@ -34,6 +34,7 @@ export class CreateMenuComponent extends OutletBaseComponent implements OnInit {
       },
     },
   ];
+  isScrollToBottom: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -44,11 +45,14 @@ export class CreateMenuComponent extends OutletBaseComponent implements OnInit {
     private pageReloadService: PageReloadService,
     protected routesConfigService: RoutesConfigService
   ) {
-    super(router, route , routesConfigService);
+    super(router, route, routesConfigService);
+    this.isScrollToBottom = this.router?.getCurrentNavigation()?.extras?.state?.isScrollToBottom;
   }
 
   ngOnInit(): void {
     this.pageReloadService.enablePageReloadConfirmation();
+    if (this.isScrollToBottom) this.scrollToBottom();
+
     this.initForm();
     // this.initOptionsConfig();
     this.initRoutes('menu');
@@ -99,7 +103,13 @@ export class CreateMenuComponent extends OutletBaseComponent implements OnInit {
         this.outletService
           .addMenu(data, this.outletId)
           .subscribe((res: MenuResponse) => {
-            this.handleSuccess(res?.id);
+            if (res?.id) {
+              this.router.navigate([res?.id], {
+                relativeTo: this.route,
+                replaceUrl: true,
+                state: { isScrollToBottom: true },
+              });
+            }
           }, this.handleError)
       );
     }
@@ -112,11 +122,7 @@ export class CreateMenuComponent extends OutletBaseComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
-    this.pageReloadService.disablePageReloadConfirmation();
-    this.router.navigate([id], {
-      relativeTo: this.route,
-      replaceUrl: true,
-    });
+    this.routesConfigService.goBack();
   };
 
   handleReset() {
@@ -126,6 +132,14 @@ export class CreateMenuComponent extends OutletBaseComponent implements OnInit {
   handleDownload() {}
 
   handlePrintMenu() {}
+
+  scrollToBottom() {
+    const mainLayout = document.getElementById('main-layout');
+    mainLayout.scrollTo({
+      top: mainLayout.scrollHeight,
+      behavior: 'smooth', // Optional, for smooth scrolling
+    });
+  }
 
   /**
    * @function handleError to show the error

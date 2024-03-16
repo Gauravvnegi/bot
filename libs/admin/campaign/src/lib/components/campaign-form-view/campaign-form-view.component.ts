@@ -7,7 +7,7 @@ import {
   GlobalFilterService,
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
-import { filter, map, take } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 import {
   AbstractControl,
   FormBuilder,
@@ -15,7 +15,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { triggerOptions, eventOptions } from '../../constant/campaign';
-import { Topics } from 'libs/admin/listing/src/lib/data-models/listing.model';
 import { CampaignService } from '../../services/campaign.service';
 
 @Component({
@@ -65,7 +64,7 @@ export class CampaignFormViewComponent implements OnInit {
     ];
     this.pageTitle = title;
     this.entityId = this.globalFilterService.entityId;
-    this.topicList = this.getTopicList();
+    this.topicList = this.campaignService.mapTopicList(this.entityId);
     this.initNavRoutes();
   }
 
@@ -85,27 +84,16 @@ export class CampaignFormViewComponent implements OnInit {
   initForm() {
     this.useForm = this.fb.group({
       campaignName: ['', [Validators.required]],
-      topic: ['', [Validators.required]],
+      topic: [''],
       recipient: [''],
       triggers: [''],
       event: [''],
       startDate: [new Date()],
       endDate: [new Date()],
       campaignState: ['DOES_NOT_REPEAT'],
+      template: [''],
+      message: [''],
     });
-  }
-
-  getTopicList() {
-    return this.campaignService
-      .getTopicList(this.entityId, { queryObj: '?entityState=ACTIVE' })
-      .pipe(
-        map((response) => {
-          const data = new Topics()
-            .deserialize(response)
-            .records.map((item) => ({ label: item.name, value: item.id }));
-          return data;
-        })
-      );
   }
 
   handleSend() {}

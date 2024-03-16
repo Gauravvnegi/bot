@@ -1,49 +1,30 @@
-<div class="container">
-  <header class="header">
-    <div class="header__back">
-      <mat-icon class="material-icons" matSuffix (click)="goBack()"
-        >keyboard_backspace</mat-icon
-      >
-      <div class="template-name">
-        <mat-select
-          [value]="templateType"
-          (selectionChange)="templateTypeSelection($event.value)"
-        >
-          <mat-option
-            *ngFor="let template of templateTypes"
-            [value]="template.type"
-            >{{ template.name }}</mat-option
-          >
-        </mat-select>
-      </div>
-    </div>
-    <div class="header__preDesigned">
-      <div class="topic">Topic</div>
-      <div class="mt-20">
-        <mat-form-field>
-          <mat-select [value]="selectedTopic">
-            <mat-option [value]="'ALL'" (click)="getTemplateForAllTopics()"
-              >All</mat-option
-            >
-            <mat-option
-              *ngFor="let topic of topicList"
-              [value]="topic.name"
-              (click)="getTemplateByTopicId(topic)"
-            >
-              {{ topic.name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-  </header>
+<hospitality-bot-navigation-header
+  heading="Template"
+></hospitality-bot-navigation-header>
 
-  <ng-container *ngFor="let template of templateTopicList; last as isLast">
+<div class="container" [formGroup]="templateForm">
+  <div class="form-block">
+    <hospitality-bot-select
+      class="one-third-width"
+      label="Template"
+      [options]="templateTypes"
+      controlName="template"
+    ></hospitality-bot-select>
+    <div class="one-third-width"></div>
+    <hospitality-bot-select
+      class="one-third-width"
+      controlName="topic"
+      label="Topic"
+      [options]="topicList | async"
+    ></hospitality-bot-select>
+  </div>
+
+  <ng-container
+    *ngFor="let template of templateTopicList | async; last as isLast"
+  >
     <hospitality-bot-topic-templates
       [entityId]="entityId"
-      [templateType]="templateType"
       [template]="template"
-      (selectedTemplate)="setTemplate($event)"
     ></hospitality-bot-topic-templates>
     <div *ngIf="!isLast" class="line"></div>
   </ng-container>

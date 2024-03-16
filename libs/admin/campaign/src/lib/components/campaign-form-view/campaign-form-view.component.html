@@ -5,7 +5,6 @@
 
   <div class="form-block" [formGroup]="useForm" [id]="fa.referenceId">
     <div class="form-header">Campaign Details</div>
-
     <hospitality-bot-input
       class="half-width"
       controlName="campaignName"
@@ -68,8 +67,15 @@
     <hr class="data-separator" />
     <div class="group-header half-width">Add Content</div>
     <hospitality-bot-create-content
+      *ngIf="!inputControls.message?.value?.length"
       class="full-width"
     ></hospitality-bot-create-content>
+    <hospitality-bot-template-editor
+      *ngIf="inputControls.message?.value?.length"
+      class="full-width"
+      controlName="message"
+      [hybrid]="false"
+    ></hospitality-bot-template-editor>
     <hospitality-bot-form-action
       class="full-width"
       (onPostAction)="handleSave()"

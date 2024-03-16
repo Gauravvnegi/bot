@@ -1,18 +1,14 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { AdminUtilityService } from '@hospitality-bot/admin/shared';
-import { SnackBarService } from '@hospitality-bot/shared/material';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AdminUtilityService, Option } from '@hospitality-bot/admin/shared';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { campaignConfig } from '../../constant/campaign';
-import { Topics } from '../../data-model/email.model';
 import { CampaignService } from '../../services/campaign.service';
+import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
+import { TemplateType } from '../../types/campaign.type';
+import { TopicTemplatesData } from '../../types/template.type';
+import { map, tap } from 'rxjs/operators';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-template-list-container',
@@ -21,43 +17,62 @@ import { CampaignService } from '../../services/campaign.service';
 })
 export class TemplateListContainerComponent implements OnInit, OnDestroy {
   private $subscription = new Subscription();
-  @Input() entityId: string;
-  @Input() templateType: string;
-  @Output() change = new EventEmitter();
+  templateForm: FormGroup;
+  entityId: string;
   templateTypes = campaignConfig.datatable.templateTypes;
-  topicList = [];
-  templateTopicList = [];
+
+  topicList: Observable<Option[]>;
+  templateTopicList: Observable<TopicTemplatesData[]>;
   selectedTopic: string;
+
   constructor(
+    private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
     private campaignService: CampaignService,
-    private snackbarService: SnackBarService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    private globalFilterService: GlobalFilterService
   ) {}
 
   ngOnInit(): void {
-    this.getTopicList();
+    this.initForm();
+    this.initDetails();
     this.getTemplateForAllTopics();
   }
 
-  /**
-   * @function getTopicList function to get topic list.
-   */
-  getTopicList() {
-    const config = {
-      queryObj: this.adminUtilityService.makeQueryParams([
-        {
-          limit: campaignConfig.topicConfig.limit,
-          entityState: campaignConfig.topicConfig.active,
-        },
-      ]),
-    };
-    this.$subscription.add(
-      this.campaignService.getTopicList(this.entityId, config).subscribe(
-        (response) => {
-          this.topicList = new Topics().deserialize(response).records;
-        } 
-      )
+  initForm() {
+    this.templateForm = this.fb.group({
+      template: [''],
+      topic: [''],
+    });
+  }
+
+  initDetails() {
+    this.entityId = this.globalFilterService.entityId;
+    this.topicList = this.campaignService.mapTopicList(this.entityId);
+    this.listenChanges();
+  }
+
+  listenChanges() {
+    this.listenForTopicChanges();
+    this.listenForTemplateChanges();
+    this.listenForTemplateType();
+  }
+
+  listenForTemplateType() {
+    this.campaignService.templateData.subscribe((res) => {
+      if (res) this.inputControls.template.patchValue(res);
+    });
+  }
+
+  listenForTopicChanges() {
+    this.inputControls.topic.valueChanges.subscribe((res) =>
+      this.getTemplateByTopicId(res)
+    );
+  }
+
+  listenForTemplateChanges() {
+    this.inputControls.template.valueChanges.subscribe((res) =>
+      this.templateTypeSelection(res)
     );
   }
 
@@ -70,78 +85,67 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
         {
           entityState: campaignConfig.topicConfig.active,
           limit: campaignConfig.templateCard.limit,
-          templateType: this.templateType,
+          templateType: this.inputControls.template.value,
         },
       ]),
     };
-    this.$subscription.add(
-      this.campaignService
-        .getTemplateByContentType(this.entityId, config)
-        .subscribe((response) => {
-          this.templateTopicList = response;
-        })
-    );
+
+    this.templateTopicList = this.campaignService
+      .getTemplateByContentType(this.entityId, config)
+      .pipe(map((response) => response));
   }
 
   /**
    * @function getTemplateByTopicId function to get template across a particular topic id.
    * @param topic topic data.
    */
-  getTemplateByTopicId(topic) {
+  getTemplateByTopicId(topicId: string) {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
           entityState: campaignConfig.topicConfig.active,
           limit: campaignConfig.templateCard.limit,
-          templateType: this.templateType,
+          templateType: this.inputControls.template.value,
         },
       ]),
     };
-    this.$subscription.add(
-      this.campaignService
-        .getTemplateListByTopicId(this.entityId, topic.id, config)
-        .subscribe((response) => {
-          this.templateTopicList = [
-            {
-              templates: response.records,
-              topicId: topic.id,
-              topicName: topic.name,
-              totalTemplate: response.total,
-            },
-          ];
-        })
-    );
+    this.templateTopicList = this.campaignService
+      .getTemplateListByTopicId(this.entityId, topicId, config)
+      .pipe(
+        map((response) => [
+          {
+            templates: response.records,
+            topicId: response.topicId,
+            topicName: response.topicName,
+            totalTemplate: response.total,
+          },
+        ])
+      );
   }
 
   /**
    * @function templateTypeSelection function to select template type.
    * @param value template type value.
    */
-  templateTypeSelection(value) {
-    this.templateType = value;
+  templateTypeSelection(value: TemplateType) {
+    this.inputControls.template.patchValue(value);
     this.selectedTopic = campaignConfig.chipValue.all;
     this.getTemplateForAllTopics();
   }
 
-  /**
-   * @function setTemplate function to set template.
-   * @param event event object of set template.
-   */
-  setTemplate(event) {
-    this.change.emit(event);
-  }
 
-  /**
-   * @function goBack function to go back to previous page.
-   */
-  goBack() {
-    this.change.emit({ status: false });
-  }
 
   /**
    * @function ngOnDestroy unsubscribe subscription
    */
   ngOnDestroy() {
     this.$subscription.unsubscribe();
+  }
+
+  get inputControls() {
+    return this.templateForm.controls as Record<
+      keyof { topic: string; template: string },
+      AbstractControl
+    >;
   }
 }

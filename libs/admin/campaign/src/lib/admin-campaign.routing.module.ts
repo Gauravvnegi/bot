@@ -37,6 +37,14 @@ const appRoutes: Route[] = [
             path: 'template',
             component: TemplateListContainerComponent,
             pathMatch: 'full',
+            // component: CampaignComponent,
+            // children: [
+            //   {
+            //     path: '',
+            //     component: TemplateListContainerComponent,
+            //     pathMatch: 'full',
+            //   },
+            // ],
           },
           {
             path: ':campaignId',

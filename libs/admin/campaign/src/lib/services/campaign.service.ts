@@ -1,10 +1,32 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { CampaignType, QueryConfig } from '../types/campaign.type';
+import {
+  CampaignType,
+  QueryConfig,
+  TemplateType,
+} from '../types/campaign.type';
+import { map } from 'rxjs/operators';
+import { Topics } from 'libs/admin/listing/src/lib/data-models/listing.model';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class CampaignService extends ApiService {
   campaignType: CampaignType;
+
+  templateData = new BehaviorSubject<TemplateType>(null);
+
+  mapTopicList(entityId: string) {
+    return this.getTopicList(entityId, {
+      queryObj: '?entityState=ACTIVE',
+    }).pipe(
+      map((response) => {
+        const data = new Topics()
+          .deserialize(response)
+          .records.map((item) => ({ label: item.name, value: item.id }));
+        return data;
+      })
+    );
+  }
 
   /**
    * @function getTopicList to get topic list.

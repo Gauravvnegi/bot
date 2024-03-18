@@ -195,4 +195,11 @@ export class OutletTableService extends ApiService {
       this.preDefinedHeaders
     );
   }
+
+  searchBooking(config: QueryConfig): Observable<any> {
+    return this.get(
+      `/api/v1/search/bookings${config?.params ?? ''}`,
+      this.preDefinedHeaders
+    );
+  }
 }

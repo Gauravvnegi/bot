@@ -45,6 +45,7 @@ export class KotTableComponent extends BaseDatatableComponent
   countData: Record<string, number>;
   timeFilterConfiguration: Record<string, (value: number) => boolean>;
   filterChips: KotFilter[];
+  globalQueries: any[];
 
   constructor(
     fb: FormBuilder,
@@ -62,16 +63,35 @@ export class KotTableComponent extends BaseDatatableComponent
       if (res) {
         this.orderConfig = new OrderConfigData().deserialize(res?.orderConfig);
         this.timeFilterConfiguration = this.orderConfig.kotFilterConfigurations;
-        this.listenForGlobalFilterChange();
+        this.listenForEntityFilterChange();
+        this.listenForGlobalFilters();
       }
     });
     this.listenForRefreshData();
   }
 
-  listenForGlobalFilterChange() {
+  listenForEntityFilterChange() {
     this.kotService.OnGlobalFilterChange.subscribe((res) => {
       this.cancelRequests$.next();
       this.entityId = res.entityId[0];
+      if (this.globalQueries) this.initTableValue();
+    });
+  }
+
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
+    this.globalFilterService.globalFilter$.subscribe((data) => {
+      this.entityId = this.globalFilterService.entityId;
+
+      //set-global query every time global filter changes
+      this.globalQueries = [
+        ...data['filter'].queryValue,
+        ...data['dateRange'].queryValue,
+      ];
+      //fetch-api for records
+      this.cancelRequests$.next();
       this.initTableValue();
     });
   }
@@ -145,12 +165,14 @@ export class KotTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
         {
           offset: this.first,
           limit: this.rowsPerPage,
           order: 'DESC',
           includeKot: true,
           entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
+          entityState: 'CONFIRMED',
         },
       ]),
     };

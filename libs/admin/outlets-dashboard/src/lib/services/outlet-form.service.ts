@@ -246,7 +246,7 @@ export class OutletFormService {
 
     formData.kotInformation = {
       kotItems: data?.kots?.map((kot) => ({
-        items: data?.items
+        items: kot?.items
           ?.filter((item) => item?.menuItem)
           .map((item) => ({
             id: item?.id,

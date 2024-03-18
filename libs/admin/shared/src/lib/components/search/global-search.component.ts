@@ -30,7 +30,7 @@ export class GlobalSearchComponent extends FormComponent {
   listenSearch() {
     this.controlContainer.control
       .get(this.controlName)
-      .valueChanges.pipe(debounceTime(1000))
+      .valueChanges.pipe(debounceTime(300))
       .subscribe((searchKey) => {
         this.onSearch.emit(searchKey.trim());
       });

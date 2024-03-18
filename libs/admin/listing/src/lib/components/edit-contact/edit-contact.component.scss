@@ -86,21 +86,18 @@ td {
     margin-inline: auto;
   }
 
-  .table-wrapper{
+  .table-wrapper {
     overflow-y: auto;
     max-height: 60vh;
   }
 
-  .contact-table{
+  .contact-table {
     display: block;
     padding: 25px;
-
   }
 }
 
 :host ::ng-deep {
-
-
   .p-datatable .p-datatable-thead tr th {
     padding: 10px 1% !important;
   }
@@ -121,6 +118,5 @@ td {
 
   .p-datatable-thead > tr > th:last-child {
     background-color: #ffff !important;
-
   }
 }

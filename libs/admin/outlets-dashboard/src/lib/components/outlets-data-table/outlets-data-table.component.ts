@@ -31,7 +31,6 @@ import {
   TableReservationStatusDetails,
   orderMenuOptions,
   posCols,
-  tableTypes,
 } from '../../constants/data-table';
 import {
   OutletReservationList,
@@ -114,6 +113,9 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
           ...value['filter'].queryValue,
           ...value['dateRange'].queryValue,
         ];
+        if (this.selectedTableType === 'table') {
+          this.loadData();
+        }
       })
     );
   }
@@ -142,7 +144,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
    * @function setTableType set the table type card or list.
    * @param value tableType value card or list
    */
-  setTableType(value: string) {
+  setTableType(value: 'table' | 'card') {
     this.resetTableValues();
     this.selectedTableType = value;
     // this.tableFG.patchValue({ tableType: value });
@@ -221,6 +223,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
         ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         {
           order: 'DESC',

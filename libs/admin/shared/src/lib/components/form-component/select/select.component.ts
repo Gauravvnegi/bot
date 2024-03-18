@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
 import { FormComponent } from '../form.components';
 import { MultiSelectSettings } from '../multi-select/multi-select.component';
@@ -13,6 +13,7 @@ export class SelectComponent extends FormComponent {
   menuClass = 'p-dropdown-items-wrapper';
   searchInputClass = 'p-dropdown-filter';
   optionAlignment: 'vertical' | 'horizontal' = 'vertical';
+  isAppendToBody: boolean = false;
 
   @Input() isGroupOptions: boolean = false; // To group options
 

@@ -1,13 +1,11 @@
-import {
-  formatEpochTime,
-  getFullName,
-} from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { getFullName } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { TabsType } from '../types/guest.type';
 import {
   GuestReservationListResponse,
   GuestReservationResponse,
 } from '../types/outlet.response';
 import { PosOrderResponse } from '../types/reservation-table';
+import { getFormattedDateWithTime } from '@hospitality-bot/admin/shared';
 
 export class GuestReservationList {
   total: number;
@@ -56,7 +54,7 @@ export class GuestReservation {
     this.id = value.id;
     this.tableNo = value?.tableNumberOrRoomNumber;
     this.orderNo = value?.order?.number;
-    this.time = formatEpochTime(value?.from);
+    this.time = getFormattedDateWithTime(value?.from);
     this.timeLimit = undefined;
     this.people = value?.occupancyDetails?.maxAdult ?? 0;
     this.name = getFullName(value?.guest?.firstName, value?.guest?.lastName);
@@ -87,6 +85,7 @@ export class GuestFormData {
   reservationType: string;
   currentJourney: string;
   areaId: string;
+  guestName: string;
 
   deserialize(value: GuestReservationResponse) {
     this.tables = value?.tableIdOrRoomId; //@multipleTableBooking: need to change for multiple tables bookings: [...]
@@ -102,6 +101,10 @@ export class GuestFormData {
     this.reservationType = value?.status;
     this.currentJourney = value?.currentJourney;
     this.areaId = value?.areaId;
+    this.guestName = getFullName(
+      value?.guest?.firstName,
+      value?.guest?.lastName
+    );
     return this;
   }
 }

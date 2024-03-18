@@ -1,5 +1,5 @@
 <div class="item-view__main" [ngClass]="{ 'item-view__disabled': isDisabled }">
-  <div class="wrapper">
+  <div class="wrapper input" [ngClass]="inputNgClasses">
     <ng-container *ngIf="items.length; else empty">
       <div
         class="item"
@@ -16,6 +16,7 @@
       </div>
     </ng-container>
   </div>
+  <small *ngIf="error" class="p-error"> {{ error }}</small>
 </div>
 
 <ng-template #empty>

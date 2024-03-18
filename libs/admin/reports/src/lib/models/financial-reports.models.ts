@@ -23,11 +23,9 @@ import {
 } from '../types/financial-reports.types';
 import { ReportClass, RowStyles } from '../types/reports.types';
 import {
+  currencyToNumber,
   getFormattedDate,
   getFormattedDateWithTime,
-} from './reservation-reports.models';
-import {
-  currencyToNumber,
   getFullName,
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';

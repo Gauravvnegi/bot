@@ -1,5 +1,5 @@
 import {
-  formatEpochTime,
+  getFormattedDateWithTime,
   getFullName,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { TabsType } from '../types/guest.type';
@@ -56,7 +56,7 @@ export class GuestReservation {
     this.id = value.id;
     this.tableNo = value?.tableNumberOrRoomNumber;
     this.orderNo = value?.order?.number;
-    this.time = formatEpochTime(value?.from);
+    this.time = getFormattedDateWithTime(value?.from);
     this.timeLimit = undefined;
     this.people = value?.occupancyDetails?.maxAdult ?? 0;
     this.name = getFullName(value?.guest?.firstName, value?.guest?.lastName);

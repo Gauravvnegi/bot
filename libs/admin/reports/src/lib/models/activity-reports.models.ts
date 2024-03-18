@@ -4,8 +4,8 @@ import {
   ReservationCreatedReportData,
 } from '../types/activity-reports.types';
 import { ReportClass } from '../types/reports.types';
-import { getFormattedDate } from './reservation-reports.models';
 import {
+  getFormattedDate,
   getFullName,
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';

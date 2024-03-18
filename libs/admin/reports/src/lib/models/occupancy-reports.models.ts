@@ -5,7 +5,7 @@ import {
   HouseCountReportResponse,
 } from '../types/occupany-reports.types';
 import { ReportClass, RowStyles } from '../types/reports.types';
-import { getFormattedDate } from './reservation-reports.models';
+import { getFormattedDate } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 export class HistoryAndForecastReportData extends RowStyles {
   date: number | string;

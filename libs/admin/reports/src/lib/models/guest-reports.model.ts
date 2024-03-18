@@ -1,5 +1,6 @@
 import {
   convertToNormalCase,
+  getFormattedDate,
   getFullName,
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
@@ -20,7 +21,6 @@ import {
   SalesByGuestResponse,
 } from '../types/guest-reports.types';
 import { ReportClass } from '../types/reports.types';
-import { getFormattedDate } from './reservation-reports.models';
 
 export class GuestHistory implements ReportClass<GuestHistoryData, any> {
   records: GuestHistoryData[];

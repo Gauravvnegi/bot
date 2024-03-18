@@ -53,21 +53,23 @@ export function formatEpochTime(epochTime: number): string {
 }
 
 /**
- * @function getFormattedDateWithTime
+ * @function getFormattedDate
  * @param time - Epoch time in milliseconds
- * @returns A string representing the date and time in the format: "YYYY-MM-DD, HH:MM:SS"
+ * @returns A string representing the date and time in the format: "MMM DD, YYYY, hh:mm:ss AM/PM"
  */
 export function getFormattedDateWithTime(time: number) {
   if (!time) return; // Return undefined if time is not provided
   const currentDate = new Date(time);
-  const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-  const date = currentDate.getDate().toString().padStart(2, '0');
+  const monthAbbreviated = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+  }).format(currentDate);
+  const date = currentDate.getDate();
   const year = currentDate.getFullYear();
-  const hours = currentDate.getHours().toString().padStart(2, '0');
+  const hours = (currentDate.getHours() % 12 || 12).toString().padStart(2, '0'); // Convert to 12-hour format
   const minutes = currentDate.getMinutes().toString().padStart(2, '0');
   const seconds = currentDate.getSeconds().toString().padStart(2, '0');
-
-  return `${year}-${month}-${date}, ${hours}:${minutes}:${seconds}`;
+  const ampm = currentDate.getHours() >= 12 ? 'PM' : 'AM'; // Determine if it's AM or PM
+  return `${monthAbbreviated} ${date}, ${year}, ${hours}:${minutes} ${ampm}`;
 }
 
 /**

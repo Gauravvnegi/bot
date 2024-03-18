@@ -9,7 +9,7 @@ import { ControlContainer } from '@angular/forms';
 })
 export class CheckboxComponent extends FormComponent implements OnInit {
   @Input() value: boolean = false;
-  @Input() isDisabled: boolean;
+  @Input() isDisabled: boolean = false;
   @Output() change = new EventEmitter<CheckboxEvent>(null);
   inputId: string;
 

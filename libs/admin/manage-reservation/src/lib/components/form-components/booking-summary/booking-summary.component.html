@@ -113,7 +113,7 @@
           Give this service priority status, featuring it prominently on the
           landing page as a highlighted service.</label
         > -->
-        <div class="checkbox">
+        <!-- <div class="checkbox">
           <input
             #checkbox
             type="checkbox"
@@ -121,7 +121,15 @@
             (change)="triggerPrintRate($event.target)"
           />
           <label (click)="checkbox.click()" for="checkbox"> Print Rate</label>
-        </div>
+        </div> -->
+
+        <hospitality-bot-checkbox
+          label="Print Rate"
+          [value]="inputControls.printRate.value"
+          (change)="triggerPrintRate($event)"
+        >
+        </hospitality-bot-checkbox>
+
         <div class="bk-summary_btn-wrapper">
           <hospitality-bot-button
             *ngIf="reservationId"

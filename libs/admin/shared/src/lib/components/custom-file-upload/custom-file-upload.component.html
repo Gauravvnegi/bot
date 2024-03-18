@@ -57,7 +57,7 @@
               !this.featureValueIndex?.includes(i) && this.exceedFeatureLimit
           }"
         >
-          <input
+          <!-- <input
             #checkbox
             [disabled]="
               !this.featureValueIndex?.includes(i) && this.exceedFeatureLimit
@@ -67,8 +67,19 @@
             (change)="processCheckboxChange($event, i)"
           />
           <label (click)="checkbox.click()" for="checkbox">
-            Make Featured Image</label
-          ><br />
+            Make Featured Image</label -->
+
+          <hospitality-bot-checkbox
+            class="checkbox-control"
+            [isDisabled]="
+              !this.featureValueIndex?.includes(i) && this.exceedFeatureLimit
+            "
+            [value]="featureValueIndex?.includes(i)"
+            (change)="processCheckboxChange($event, i)"
+            label="Make Featured Image"
+          >
+          </hospitality-bot-checkbox>
+          <br />
         </div>
         <div
           class="upload-button"

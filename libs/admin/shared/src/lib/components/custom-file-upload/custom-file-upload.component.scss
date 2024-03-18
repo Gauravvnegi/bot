@@ -49,6 +49,25 @@
   gap: 20px;
 }
 
+:host ::ng-deep .checkbox-control {
+  height: 20px;
+  display: block;
+  .checkbox-wrapper {
+    .checkbox-label {
+      font-size: 14px;
+    }
+  }
+  .checkbox {
+    height: 1.2em;
+    width: 1.2em;
+  }
+}
+
+.checkbox {
+  height: 20px;
+  margin: 5px 0;
+}
+
 .box {
   width: 245px;
   height: 186px;
@@ -81,6 +100,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 20px;
+  height: 52px;
 }
 
 .btn {

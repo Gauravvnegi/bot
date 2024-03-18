@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { GuestPostData } from '../models/guest-table.model';
+import { GuestPostData, UpdateGuestPayload } from '../models/guest-table.model';
 import { FileData } from '../models/reservation-table.model';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 import { JourneyTypes } from '../types/reservation-types';
+import { GuestResponse } from '../types/guest.response';
 
 @Injectable()
 export class ReservationService extends ApiService {
@@ -166,6 +167,12 @@ export class ReservationService extends ApiService {
     return this.put(`/api/v1/reservation/${reservationId}/guests`, data);
   }
 
+  updateGuest(
+    guestId: string,
+    data: UpdateGuestPayload
+  ): Observable<GuestResponse> {
+    return this.patch(`/api/v1/members/${guestId}`, data);
+  }
   /**
    * @function getFeedbackPdf To get feedback pdf for a feedback.
    * @param id The feedback id.

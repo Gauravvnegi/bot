@@ -272,6 +272,39 @@ type PostGuestDetails = {
   };
 };
 
+export class UpdateGuestPayload {
+  id: string;
+  salutation: string;
+  firstName: string;
+  lastName: string;
+  contactDetails: {
+    cc: string;
+    contactNumber: string;
+    emailId: string;
+  };
+  age: number;
+  companyId: string;
+  gender: string;
+  dateOfBirth: string;
+  address: {};
+  type: string;
+
+  deserialize(data: GuestDetail) {
+    this.id = data?.id;
+    this.firstName = data?.firstName;
+    this.lastName = data?.lastName;
+    this.contactDetails = {
+      cc: data?.countryCode,
+      contactNumber: data?.phoneNumber,
+      emailId: data?.email,
+    };
+    this.age = data?.age;
+    this.salutation = data?.title;
+
+    return this;
+  }
+}
+
 export class GuestDetailsUpdateModel {
   primaryGuest: PostGuestDetails;
 
@@ -287,13 +320,16 @@ export class GuestDetailsUpdateModel {
       if (guest.isPrimary) {
         this.primaryGuest = guestDetails;
       }
-
       if (guest.role === 'sharer') {
         this.sharerGuests.push(guestDetails);
       }
 
       if (guest.role === 'kids') {
         this.kids.push(guestDetails);
+      }
+
+      if (!guest.isPrimary && !guest.role) {
+        this.primaryGuest = guestDetails; //for Non-Resident Guest
       }
     });
 
@@ -339,4 +375,24 @@ export type GuestSuModel = {
   isPrimary: boolean;
   age: string;
   role: 'kids' | 'sharer' | '';
+};
+
+export type GuestDetail = {
+  id: string;
+  title: string;
+  firstName: string;
+  lastName: string;
+  countryCode: string;
+  phoneNumber: string;
+  email: string;
+  isPrimary: boolean;
+  nationality: string;
+  isInternational: boolean;
+  selectedDocumentType: string;
+  age: number;
+  status: string;
+  remarks: string | null;
+  label: string;
+  role: string;
+  documents: Document[];
 };

@@ -1,6 +1,5 @@
 import {
   currencyToNumber,
-  getFormattedDate,
   getFullName,
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
@@ -14,6 +13,7 @@ import {
   TaxReportData,
   TaxReportResponse,
 } from '../types/tax-reports.types';
+import { getFormattedDate } from '@hospitality-bot/admin/shared';
 
 export class MonthlyTaxReport
   implements ReportClass<MonthlyTaxReportData, MonthlyTaxReportResponse> {

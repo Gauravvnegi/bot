@@ -4,8 +4,6 @@ import {
   ReservationResponseData,
 } from 'libs/admin/shared/src/lib/types/response';
 import {
-  getFormattedDate,
-  getFormattedDateWithTime,
   getFullName,
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
@@ -30,6 +28,10 @@ import {
   ReservationReportData,
   ReservationSummaryReportData,
 } from '../types/reservation-reports.types';
+import {
+  getFormattedDate,
+  getFormattedDateWithTime,
+} from '@hospitality-bot/admin/shared';
 
 /**
  * @class Default Reservation Report class

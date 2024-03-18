@@ -1,5 +1,4 @@
 import {
-  getFormattedDate,
   getFullName,
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
@@ -10,6 +9,7 @@ import {
   DirectCompanyBillingReportResponse,
 } from '../types/direct-billings-reports.types';
 import { ReportClass } from '../types/reports.types';
+import { getFormattedDate } from '@hospitality-bot/admin/shared';
 
 export class DirectAgentBillingReport
   implements

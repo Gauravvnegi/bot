@@ -106,39 +106,3 @@ export function getFullName(firstName: string, lastName: string) {
     ? `${firstName} ${lastName}`
     : firstName || lastName || undefined;
 }
-
-/**
- * @function formatEpochTime
- * @param epochTime
- * @returns
- */
-export function formatEpochTime(epochTime: number): string {
-  return new Date(epochTime).toLocaleTimeString('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-}
-
-export function getFormattedDateWithTime(time: number) {
-  if (!time) return;
-  const currentDate = new Date(time);
-  const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-  const date = currentDate.getDate().toString().padStart(2, '0');
-  const year = currentDate.getFullYear();
-  const hours = currentDate.getHours().toString().padStart(2, '0');
-  const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-  const seconds = currentDate.getSeconds().toString().padStart(2, '0');
-
-  return `${year}-${month}-${date}, ${hours}:${minutes}:${seconds}`;
-}
-
-export function getFormattedDate(time: number) {
-  if (!time) return;
-  const currentDate = new Date(time);
-  const monthAbbreviated = new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-  }).format(currentDate);
-  const date = currentDate.getDate();
-  const year = currentDate.getFullYear();
-  return `${monthAbbreviated} ${date}, ${year}`;
-}

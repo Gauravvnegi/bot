@@ -1,6 +1,5 @@
 import {
   currencyToNumber,
-  getFormattedDate,
   getFullName,
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
@@ -10,6 +9,7 @@ import {
 } from '../types/folio-reports.types';
 import { ReportClass } from '../types/reports.types';
 import { getPaymentMethodAmount } from './financial-reports.models';
+import { getFormattedDate } from '@hospitality-bot/admin/shared';
 
 export class FolioListReport
   implements ReportClass<FolioListReportData, FolioListReportResponse> {

@@ -1,6 +1,5 @@
 import {
   convertToNormalCase,
-  getFormattedDate,
   getFullName,
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
@@ -21,6 +20,7 @@ import {
   SalesByGuestResponse,
 } from '../types/guest-reports.types';
 import { ReportClass } from '../types/reports.types';
+import { getFormattedDate } from '@hospitality-bot/admin/shared';
 
 export class GuestHistory implements ReportClass<GuestHistoryData, any> {
   records: GuestHistoryData[];

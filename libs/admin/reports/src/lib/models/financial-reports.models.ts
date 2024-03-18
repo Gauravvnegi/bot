@@ -24,11 +24,13 @@ import {
 import { ReportClass, RowStyles } from '../types/reports.types';
 import {
   currencyToNumber,
-  getFormattedDate,
-  getFormattedDateWithTime,
   getFullName,
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import {
+  getFormattedDate,
+  getFormattedDateWithTime,
+} from '@hospitality-bot/admin/shared';
 
 export class FinancialReport
   implements ReportClass<FinancialReportData, FinancialReportResponse> {

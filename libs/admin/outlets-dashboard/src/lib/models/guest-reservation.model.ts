@@ -1,13 +1,11 @@
-import {
-  getFormattedDateWithTime,
-  getFullName,
-} from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { getFullName } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { TabsType } from '../types/guest.type';
 import {
   GuestReservationListResponse,
   GuestReservationResponse,
 } from '../types/outlet.response';
 import { PosOrderResponse } from '../types/reservation-table';
+import { getFormattedDateWithTime } from '@hospitality-bot/admin/shared';
 
 export class GuestReservationList {
   total: number;

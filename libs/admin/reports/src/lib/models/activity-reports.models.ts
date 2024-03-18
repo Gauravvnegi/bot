@@ -5,10 +5,10 @@ import {
 } from '../types/activity-reports.types';
 import { ReportClass } from '../types/reports.types';
 import {
-  getFormattedDate,
   getFullName,
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { getFormattedDate } from '@hospitality-bot/admin/shared';
 
 export class ReservationCreatedReport
   implements

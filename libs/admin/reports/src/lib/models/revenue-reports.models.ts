@@ -1,6 +1,5 @@
 import {
   currencyToNumber,
-  getFormattedDateWithTime,
   getFullName,
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
@@ -10,6 +9,7 @@ import {
   CashierReportResponse,
   PayTypeReportResponse,
 } from '../types/revenue-reports.types';
+import { getFormattedDateWithTime } from '@hospitality-bot/admin/shared';
 
 export class Cashier extends RowStyles {
   index: string;

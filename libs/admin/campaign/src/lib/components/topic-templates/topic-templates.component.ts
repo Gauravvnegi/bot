@@ -15,6 +15,8 @@ import { CampaignForm } from '../../types/campaign.type';
   styleUrls: ['./topic-templates.component.scss'],
 })
 export class TopicTemplatesComponent implements OnInit, OnDestroy {
+  readonly campaignConfiguration = campaignConfig;
+
   @Input() template: TopicTemplatesData;
   @Input() entityId: string;
   parentFG: FormGroup;
@@ -71,14 +73,6 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
           }
         )
     );
-  }
-
-  /**
-   * @function campaignConfiguration returns campaignConfig object.
-   * @returns campaignConfig object.
-   */
-  get campaignConfiguration() {
-    return campaignConfig;
   }
 
   /**

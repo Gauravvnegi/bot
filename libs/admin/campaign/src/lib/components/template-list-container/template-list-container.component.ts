@@ -7,7 +7,7 @@ import { CampaignService } from '../../services/campaign.service';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { TemplateType } from '../../types/campaign.type';
 import { TopicTemplatesData } from '../../types/template.type';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
@@ -59,9 +59,9 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
   }
 
   listenForTemplateType() {
-    this.campaignService.templateData.subscribe((res) => {
-      if (res) this.inputControls.template.patchValue(res);
-    });
+    this.campaignService.templateData.subscribe(
+      (res) => res && this.inputControls.template.patchValue(res)
+    );
   }
 
   listenForTopicChanges() {
@@ -128,12 +128,9 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
    * @param value template type value.
    */
   templateTypeSelection(value: TemplateType) {
-    this.inputControls.template.patchValue(value);
     this.selectedTopic = campaignConfig.chipValue.all;
     this.getTemplateForAllTopics();
   }
-
-
 
   /**
    * @function ngOnDestroy unsubscribe subscription

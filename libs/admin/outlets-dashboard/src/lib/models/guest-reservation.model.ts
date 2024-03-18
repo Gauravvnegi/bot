@@ -85,6 +85,7 @@ export class GuestFormData {
   reservationType: string;
   currentJourney: string;
   areaId: string;
+  guestName: string;
 
   deserialize(value: GuestReservationResponse) {
     this.tables = value?.tableIdOrRoomId; //@multipleTableBooking: need to change for multiple tables bookings: [...]
@@ -100,6 +101,10 @@ export class GuestFormData {
     this.reservationType = value?.status;
     this.currentJourney = value?.currentJourney;
     this.areaId = value?.areaId;
+    this.guestName = getFullName(
+      value?.guest?.firstName,
+      value?.guest?.lastName
+    );
     return this;
   }
 }

@@ -7,7 +7,7 @@
   height: 80px;
 }
 
-// *** over ride the table style ***
+// // *** over ride the table style ***
 :host ::ng-deep .p-datatable {
   @include tableCellPadding(0.8em);
 }

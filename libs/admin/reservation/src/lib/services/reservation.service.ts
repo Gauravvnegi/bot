@@ -12,6 +12,7 @@ export class ReservationService extends ApiService {
 
   $allDocsAreConfirmed = new Subject<boolean>();
 
+  isPmsBooking = new BehaviorSubject(false);
   getReservationDetails(reservationId): Observable<any> {
     return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
   }

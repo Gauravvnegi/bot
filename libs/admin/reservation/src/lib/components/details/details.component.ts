@@ -285,6 +285,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
               response?.paymentSummary?.printRate !== undefined
                 ? response?.paymentSummary?.printRate
                 : true;
+            this._reservationService.isPmsBooking.next(response?.pmsBooking);
             this.checkInOptions = [
               {
                 label: 'Generate Link',

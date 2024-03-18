@@ -81,16 +81,17 @@
         *ngIf="useForm.get('type').value === 'RESTAURANT'"
       ></hospitality-bot-multi-select>
 
-      <hospitality-bot-input
-        [loading]="loading"
+      <hospitality-bot-prefix-field
+        *ngIf="useForm.get('type').value === 'RESTAURANT'"
         class="half-width"
-        controlName="containerCharge"
+        preControlName="currency"
+        postControlName="containerCharge"
+        [options]="currencies"
         label="Container Charge"
         [props]="{
-          placeholder: 'Enter'
+          placeholder: 'Enter Container Charge'
         }"
-        *ngIf="useForm.get('type').value === 'RESTAURANT'"
-      ></hospitality-bot-input>
+      ></hospitality-bot-prefix-field>
 
       <div class="file-upload-wrapper">
         <hospitality-bot-custom-file-upload

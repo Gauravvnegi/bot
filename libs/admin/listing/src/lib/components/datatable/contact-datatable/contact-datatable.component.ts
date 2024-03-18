@@ -213,6 +213,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
       config: {
         styleClass: 'confirm-dialog',
         data: modalData,
+        width: '90em',
       },
       component: EditContactComponent,
       dialogService: this.dialogService,

@@ -1,4 +1,4 @@
-import { PaymentType } from 'libs/admin/finance/src/lib/types/history';
+import { PaymentType } from "libs/admin/finance/src/lib/types/history";
 
 export type CountryCodeResponse = {
   countryName: string;
@@ -73,6 +73,7 @@ export interface ReservationResponseData {
   created: number;
   arrivalTime: number;
   departureTime: number;
+  remarks: string;
   number: string;
   pmsStatus: string;
   state: string;

@@ -34,8 +34,8 @@ export class InputComponent extends FormComponent {
         this.inputLength = value?.length ?? 0;
         this.subtitle = `${this.inputLength}/${this.maxLength}`;
       };
-      calculateInput(control.value);
-      control.valueChanges.subscribe((value) => {
+      calculateInput(control?.value);
+      control?.valueChanges.subscribe((value) => {
         calculateInput(value);
       });
     }

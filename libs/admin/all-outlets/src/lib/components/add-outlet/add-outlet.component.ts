@@ -55,6 +55,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
   hours: Option[] = [];
   days: Option[] = [];
   dimensions: Option[] = [];
+  currencies: Option[] = [{ label: 'INR', value: 'INR' }];
 
   @HostListener('window:beforeunload', ['$event'])
   handleBeforeUnload(event: BeforeUnloadEvent) {
@@ -135,7 +136,8 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       area: [''],
       dimension: ['sqft'],
       cuisinesType: [[]],
-      containerCharge: [[]],
+      currency: ['INR'],
+      containerCharge: [''],
 
       //not working filed
       rules: [[]],

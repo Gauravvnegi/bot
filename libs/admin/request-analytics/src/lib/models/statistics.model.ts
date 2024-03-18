@@ -92,9 +92,9 @@ export class RequestStats {
       input.requestStats
     ) as (keyof RequestStat)[];
 
-    const colors = ['#beaeff', '#5f38f9', 'rgb(197, 197, 197)', '#5f38f9'];
+    const colors = ['#ff9f40', '#36A2EB', '#FF6384', '#4BC0C0'];
     this.requestStats = requestStatKeys
-      .filter((requestKey) => requestKey !== 'CANCELLED')
+      // .filter((requestKey) => requestKey !== 'CANCELLED')
       .map((requestKey, index) => {
         return {
           label:

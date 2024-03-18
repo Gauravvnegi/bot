@@ -73,73 +73,54 @@ td {
   }
 }
 
-:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-infix {
-  border: solid 2px $grayLight;
-  border-radius: 4px;
+.wrapper {
+  display: flex;
+  // padding: 25px;
+  flex-direction: column;
+
+  .add-more {
+    margin-left: auto;
+  }
+
+  .submit {
+    margin-inline: auto;
+  }
+
+  .table-wrapper{
+    overflow-y: auto;
+    max-height: 60vh;
+  }
+
+  .contact-table{
+    display: block;
+    padding: 25px;
+
+  }
 }
 
-:host ::ng-deep .mat-form-field-label-wrapper {
-  margin-left: 9px;
-  top: -6px;
-}
+:host ::ng-deep {
 
-:host ::ng-deep input.mat-input-element {
-  padding-top: 5px;
-  padding-bottom: 4px;
-}
 
-:host ::ng-deep .mat-input-element {
-  color: $black;
-  padding-left: 5px;
-}
+  .p-datatable .p-datatable-thead tr th {
+    padding: 10px 1% !important;
+  }
 
-:host ::ng-deep .mat-form-field-underline {
-  height: 0px !important;
-}
+  .p-datatable .p-datatable-tbody tr td {
+    padding: 10px 0.3em !important;
+  }
 
-:host ::ng-deep .mat-form-field-ripple {
-  height: 1px;
-  width: 173px;
-  margin-left: 3px;
-  margin-top: -2px;
-}
+  .p-datatable .p-datatable-tbody tr {
+    border-bottom: none !important;
+  }
+  .p-datatable {
+    border: none !important;
+  }
+  .p-datatable .p-datatable-thead {
+    top: 0px !important;
+  }
 
-:host
-  ::ng-deep
-  .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float
-  .mat-form-field-label,
-.mat-form-field-appearance-legacy.mat-form-field-can-float
-  .mat-input-server:focus
-  + .mat-form-field-label-wrapper
-  .mat-form-field-label {
-  display: none;
-}
+  .p-datatable-thead > tr > th:last-child {
+    background-color: #ffff !important;
 
-.close-popup-icon {
-  margin: 10px;
-  cursor: pointer;
-  text-align: right;
-}
-
-:host ::ng-deep .mat-form-field-ripple {
-  display: none;
-}
-
-:host ::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-ripple,
-.mat-form-field.mat-form-field-invalid .mat-form-field-ripple.mat-accent {
-  display: none;
-}
-
-:host
-  ::ng-deep
-  .mat-form-field-type-mat-select:not(.mat-form-field-disabled)
-  .mat-form-field-flex {
-  cursor: pointer;
-  width: 100px;
-}
-
-:host ::ng-deep .mat-select-value {
-  padding-left: 5px;
-  padding-top: 2px;
-  padding-bottom: 2px;
+  }
 }

@@ -224,7 +224,7 @@ export class OutletFormService {
     const address = data.deliveryAddress;
     formData.reservationInformation = {
       search: '',
-      tableNumber: data?.reservation?.tableIdOrRoomId,
+      tableNumber: data?.reservation?.tableIdOrRoomId ?? '',
       staff: '',
       guest: data?.guest?.id,
       numberOfPersons: data?.reservation?.occupancyDetails?.maxAdult,
@@ -275,7 +275,7 @@ export class OutletFormService {
     const address = data?.deliveryAddress;
     formData.reservationInformation = {
       search: '',
-      tableNumber: data?.tableIdOrRoomId,
+      tableNumber: data?.tableIdOrRoomId ?? '',
       staff: '',
       guest: data?.guest?.id,
       numberOfPersons: data?.occupancyDetails?.maxAdult,

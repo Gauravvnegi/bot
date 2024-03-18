@@ -60,7 +60,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   entityId: string;
   globalQueries = [];
   $subscription = new Subscription();
-  // tableTypes = [];
+
   orderMenuOptions: Option[] = [];
   selectedTableType: string;
   outletTableData: OutletReservation[];
@@ -100,10 +100,6 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     this.isAllTabFilterRequired = true;
     this.cols = posCols;
     this.orderMenuOptions = orderMenuOptions;
-    // this.tableFG?.addControl('tableType', new FormControl(''));
-    // this.tableTypes = [tableTypes.card, tableTypes.table];
-    // this.setTableType(this.tableTypes[0].value);
-    // this.tableFG.patchValue({ tableType: this.selectedTableType });
   }
 
   listenForGlobalFilterChanges(): void {
@@ -147,7 +143,6 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   setTableType(value: 'table' | 'card') {
     this.resetTableValues();
     this.selectedTableType = value;
-    // this.tableFG.patchValue({ tableType: value });
     this.loadData();
   }
 
@@ -395,7 +390,10 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     this.$subscription.add(
       componentRef.instance.onCloseSidebar.subscribe((res: boolean) => {
         this.sidebarVisible = false;
-        if (res) this.initDetails();
+        if (res) {
+          this.initDetails();
+          this.loadData();
+        }
       })
     );
     manageMaskZIndex();

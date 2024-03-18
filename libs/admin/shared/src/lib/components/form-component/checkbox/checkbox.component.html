@@ -1,5 +1,10 @@
 <div class="checkbox-wrapper" (click)="toggleSelectAll()">
-  <input type="checkbox" (change)="toggleSelectAll()" class="d-none" />
+  <input
+    type="checkbox"
+    (change)="toggleSelectAll()"
+    class="d-none"
+    [disabled]="isDisabled"
+  />
   <div class="checkbox">
     <img
       *ngIf="value"

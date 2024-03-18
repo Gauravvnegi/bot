@@ -125,6 +125,7 @@ export class CreateOfferComponent implements OnInit {
       enableVisibility: [[''], Validators.required],
       enableOnMicrosite: [false],
       priority: ['LOW'],
+      isPriorityHigh: [false],
       entityId: [],
     });
     this.useForm.get('entityId').setValue(this.entityId);
@@ -132,6 +133,17 @@ export class CreateOfferComponent implements OnInit {
     this.initFormSubscription();
 
     if (this.offerId) this.getOfferById();
+    this.listenForPriorityChange();
+  }
+
+  listenForPriorityChange() {
+    this.useForm.get('isPriorityHigh').valueChanges.subscribe((res) => {
+      if (res) {
+        this.useForm.get('priority').setValue('HIGH');
+      } else {
+        this.useForm.get('priority').setValue('LOW');
+      }
+    });
   }
 
   initNavRoutes() {
@@ -317,19 +329,21 @@ export class CreateOfferComponent implements OnInit {
     );
   }
 
-  onCheckboxClick(event: HTMLInputElement) {
-    if (event.checked) {
-      this.useForm.patchValue({
-        priority: 'HIGH',
-        enableOnMicrosite: true,
-      });
-    } else {
-      this.useForm.patchValue({
-        priority: 'LOW',
-        enableOnMicrosite: false,
-      });
-    }
-  }
+  // onCheckboxClick(event: { checked: boolean }): void {
+  //   if (event.checked) {
+  //     console.log(event.checked, 'Checked');
+  //     this.useForm.patchValue({
+  //       priority: 'HIGH',
+  //       enableOnMicrosite: true,
+  //     });
+  //   } else {
+  //     console.log(event.checked, 'UnChecked');
+  //     this.useForm.patchValue({
+  //       priority: 'LOW',
+  //       enableOnMicrosite: false,
+  //     });
+  //   }
+  // }
 
   handleSubmit() {
     if (this.useForm.invalid) {

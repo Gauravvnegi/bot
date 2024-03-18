@@ -180,8 +180,10 @@ export class CreateServiceComponent implements OnInit {
       hsnCode: [''],
       enableOnMicrosite: [true],
       priority: ['LOW'],
+      isPriorityHigh: [false],
     });
     this.useForm.get('entityId').setValue(this.entityId);
+    this.listenForPriorityChange();
 
     // this.updateFormControlSubscription();
 
@@ -209,6 +211,16 @@ export class CreateServiceComponent implements OnInit {
           }, this.handleError)
       );
     }
+  }
+
+  listenForPriorityChange() {
+    this.useForm.get('isPriorityHigh').valueChanges.subscribe((res) => {
+      if (res) {
+        this.useForm.get('priority').setValue('HIGH');
+      } else {
+        this.useForm.get('priority').setValue('LOW');
+      }
+    });
   }
 
   listenForServiceTypeChanges(): void {

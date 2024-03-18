@@ -9,6 +9,7 @@ import { ControlContainer } from '@angular/forms';
 })
 export class CheckboxComponent extends FormComponent implements OnInit {
   @Input() value: boolean = false;
+  @Input() isDisabled: boolean = false;
   @Output() change = new EventEmitter<CheckboxEvent>(null);
   inputId: string;
 
@@ -17,12 +18,14 @@ export class CheckboxComponent extends FormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initInputControl();
-    this.value = this?.inputControl?.value;
+    if (this.controlName) {
+      this.initInputControl();
+      this.value = this?.inputControl?.value;
 
-    this.inputControl?.valueChanges?.subscribe((res: boolean) => {
-      this.value = res;
-    });
+      this.inputControl?.valueChanges?.subscribe((res: boolean) => {
+        this.value = res;
+      });
+    }
   }
   toggleSelectAll(): void {
     this.value = !this.value;

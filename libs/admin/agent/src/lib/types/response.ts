@@ -21,14 +21,7 @@ export type AgentTableResponse = AdditionalFeature & {
   isVerified: boolean;
   status?: boolean;
   code?: string;
-  address: {
-    addressLine1: string;
-    city: string;
-    state: string;
-    countryCode: string;
-    postalCode: string;
-    id?: string;
-  };
+  address: GuestAddress;
   companyId?: string;
   agencyName?: string;
   creditLimit: number;
@@ -47,4 +40,13 @@ export type AgentListResponse = {
   total: number;
   entityTypeCounts: EntityState<string>;
   entityStateCounts: EntityState<string>;
+};
+
+export type GuestAddress = {
+  addressLine1: string;
+  city: string;
+  state: string;
+  countryCode: string;
+  postalCode: string;
+  id?: string;
 };

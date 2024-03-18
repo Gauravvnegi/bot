@@ -105,8 +105,7 @@ export class OutletFormService {
       offer: offer ? { id: offer } : undefined,
       outletType: EntitySubType.RESTAURANT,
       guestId: guest,
-      deliveryAddress:
-        orderType === OrderTypes.DELIVERY ? address.id : undefined,
+      deliveryAddress: orderType === OrderTypes.DELIVERY ? address : undefined,
       reservation:
         orderType === OrderTypes.DINE_IN
           ? {
@@ -165,7 +164,7 @@ export class OutletFormService {
       guestId: reservationInformation.guest,
       deliveryAddress:
         reservationInformation.orderType === OrderTypes.DELIVERY
-          ? reservationInformation.address.id
+          ? reservationInformation.address
           : undefined,
       reservation:
         reservationInformation.orderType === OrderTypes.DINE_IN
@@ -230,14 +229,7 @@ export class OutletFormService {
       numberOfPersons: data?.reservation?.occupancyDetails?.maxAdult,
       orderType: data?.type,
       id: data?.reservation?.id,
-      address: {
-        formattedAddress: `${address?.addressLine1 ?? ''}`,
-        city: address?.city ?? '',
-        state: address?.state ?? '',
-        countryCode: address?.countryCode ?? '',
-        postalCode: address?.postalCode ?? '',
-        id: address?.id,
-      },
+      address: address?.id ?? '',
     };
 
     formData.offer = data?.items?.filter(
@@ -282,14 +274,7 @@ export class OutletFormService {
       menu: data?.order.items?.map((item) => item?.itemId),
       orderType: data?.order?.type,
       id: data?.id ?? '',
-      address: {
-        formattedAddress: `${address?.addressLine1 ?? ''}`,
-        city: address?.city ?? '',
-        state: address?.state ?? '',
-        countryCode: address?.countryCode ?? '',
-        postalCode: address?.postalCode ?? '',
-        id: address?.id ?? '',
-      },
+      address: address?.id ?? '',
     };
 
     formData.offer = data?.order.items?.filter(

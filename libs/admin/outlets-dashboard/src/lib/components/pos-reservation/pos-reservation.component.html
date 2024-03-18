@@ -127,13 +127,14 @@
           label="No. of Person"
         ></hospitality-bot-input>
       </ng-container>
-      <hospitality-bot-address-component
+      <hospitality-bot-select
         *ngIf="orderInfoControls.orderType.value === 'DELIVERY'"
         label="Delivery Address"
         class="half-width address"
         controlName="address"
+        [options]="addressList"
       >
-      </hospitality-bot-address-component>
+      </hospitality-bot-select>
     </div>
   </ng-container>
 

@@ -4,7 +4,6 @@ import {
   Input,
   OnInit,
   Output,
-  SimpleChanges,
 } from '@angular/core';
 import { FormProps, Option } from '../../types/form.type';
 import { Router } from '@angular/router';
@@ -109,8 +108,10 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
     this._qsProps = values;
     const selectedOption = values?.selectedOption;
     if (selectedOption) {
-      this.menuOptions = [...this.menuOptions, selectedOption];
-      this.removeDuplicate([...this.menuOptions]);
+      this.menuOptions = this.removeDuplicate([
+        ...this.menuOptions,
+        selectedOption,
+      ]);
       this.controlContainer.control
         .get(this.controlName)
         .patchValue(selectedOption.value, {
@@ -141,34 +142,6 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.listenControl();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    // if (
-    //   changes['props']?.previousValue &&
-    //   !changes['props']?.previousValue?.selectedOption
-    // ) {
-    //   const selectedOption = changes['props']?.currentValue?.selectedOption;
-    //   // Get items again when selected option is patched.
-    //   if (selectedOption) {
-    //     this.menuOptions = [...this.menuOptions, selectedOption];
-    //     this.removeDuplicate([...this.menuOptions]);
-    //     this.controlContainer.control
-    //       .get(this.controlName)
-    //       .patchValue(selectedOption?.value, {
-    //         emitEvent: false,
-    //       });
-    //   }
-    // }
-    // if (
-    //   changes['reinitialize']?.previousValue !== undefined &&
-    //   changes['reinitialize']?.previousValue !==
-    //     changes['reinitialize']?.currentValue
-    // ) {
-    //   this.resetApiData = true;
-    //   this.offSet = 0;
-    //   this.getItems();
-    // }
   }
 
   /**

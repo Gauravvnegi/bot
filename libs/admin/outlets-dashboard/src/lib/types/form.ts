@@ -20,7 +20,7 @@ export type ReservationInformation = {
   numberOfPersons?: number;
   menu?: string[];
   orderType: OrderTypes;
-  address?: AddressFieldType;
+  address?: string;
   id?: string;
   areaId?: string;
 };

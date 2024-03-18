@@ -70,7 +70,6 @@ export class NoShows {
   amountPaid: string;
   balance: string;
   deserialize(value: ReservationResponseData) {
-    // debugger;
     this.reservationId = value?.number;
     this.bookingNumber = value?.number;
     this.dateOfArrival = getFormattedDate(value?.arrivalTime);

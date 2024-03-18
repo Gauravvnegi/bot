@@ -1,4 +1,8 @@
-import { EntityState, Option } from '@hospitality-bot/admin/shared';
+import {
+  EntityState,
+  Option,
+  formatEpochTime,
+} from '@hospitality-bot/admin/shared';
 import {
   PaymentStatus,
   TableStatus,
@@ -6,10 +10,7 @@ import {
   PosOrderResponse,
   OrderReservationStatus,
 } from '../types/reservation-table';
-import {
-  formatEpochTime,
-  getFullName,
-} from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { getFullName } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import {
   TableReservationListResponse,
   TableReservationResponse,

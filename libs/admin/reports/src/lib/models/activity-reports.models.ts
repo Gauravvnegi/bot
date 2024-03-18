@@ -4,11 +4,11 @@ import {
   ReservationCreatedReportData,
 } from '../types/activity-reports.types';
 import { ReportClass } from '../types/reports.types';
-import { getFormattedDate } from './reservation-reports.models';
 import {
   getFullName,
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { getFormattedDate } from '@hospitality-bot/admin/shared';
 
 export class ReservationCreatedReport
   implements

@@ -21,7 +21,7 @@ import { Option } from 'libs/admin/shared/src/lib/types/form.type';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subscription, of } from 'rxjs';
-import { debounceTime, switchMap } from 'rxjs/operators';
+import { debounceTime, switchMap, tap } from 'rxjs/operators';
 import { chipsFilter, seatedTabGroup } from '../../constants/guest-list.const';
 import {
   GuestReservation,
@@ -68,6 +68,7 @@ export class GuestListComponent implements OnInit {
   guestList: GuestReservation[] = [];
 
   activeIndex: number = 0;
+  isFilterHidden: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -81,7 +82,6 @@ export class GuestListComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    this.searchGuest();
   }
 
   initForm() {
@@ -91,6 +91,7 @@ export class GuestListComponent implements OnInit {
       chip: [ChipType.seated],
       tab: [TabsType.all],
     });
+    this.listenForSearch();
   }
 
   /**
@@ -185,33 +186,47 @@ export class GuestListComponent implements OnInit {
     this.initGuestReservation();
   }
 
+  listenForSearch() {
+    this.useForm
+      .get('search')
+      .valueChanges.pipe(debounceTime(300))
+      .subscribe((res) => {
+        if (res) {
+          this.searchGuest(res);
+        } else {
+          this.isFilterHidden = false;
+          this.resetFilterAndTab();
+        }
+      });
+  }
+
   /**
    * @function searchGuest
    * @description search for a guest
    */
-  searchGuest() {
+  searchGuest(searchTerm: string) {
     this.loading = true;
-    this.useForm
-      .get('search')
-      .valueChanges.pipe(
-        debounceTime(1000),
-        switchMap((searchTerm) => {
-          searchTerm = searchTerm?.toLowerCase();
 
-          const filteredValues = this.backupData.filter(
-            (guest) =>
-              guest?.name?.toLowerCase()?.includes(searchTerm) ||
-              guest?.tableNo?.toLowerCase()?.includes(searchTerm) ||
-              guest?.orderNo?.toLowerCase()?.includes(searchTerm)
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          key: searchTerm,
+        },
+      ]),
+    };
+
+    if (searchTerm) {
+      this.outletService.searchBooking(config).subscribe(
+        (res) => {
+          this.isFilterHidden = true;
+          this.guestList = res.map((item) =>
+            new GuestReservation().deserialize(item)
           );
-          return of(filteredValues);
-        })
-      )
-      .subscribe(
-        (results) => (this.guestList = results),
+        },
         this.handelError,
         this.handelFinal
       );
+    }
   }
 
   /**
@@ -305,11 +320,14 @@ export class GuestListComponent implements OnInit {
   }
 
   resetFilterAndTab() {
-    this.useForm.patchValue({
-      search: '',
-      chip: ChipType.seated,
-      tab: TabsType.all,
-    });
+    this.useForm.patchValue(
+      {
+        search: '',
+        chip: ChipType.seated,
+        tab: TabsType.all,
+      },
+      { emitEvent: false }
+    );
 
     this.tabFilterSelectedIndex = 0; //reset tab filter selection
     this.activeIndex = 0; //need to refactor bot chips component
@@ -389,9 +407,9 @@ export class GuestListComponent implements OnInit {
     this.loading = false;
   };
 
-  get isFilterHidden() {
-    return this.useForm?.get('search')?.value?.length > 0;
-  }
+  // get isFilterHidden() {
+  //   return this.useForm?.get('search')?.value?.length > 0;
+  // }
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();

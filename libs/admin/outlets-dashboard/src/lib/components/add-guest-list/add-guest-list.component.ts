@@ -259,6 +259,10 @@ export class AddGuestListComponent implements OnInit {
         .subscribe(
           (reservation) => {
             const data = new GuestFormData().deserialize(reservation);
+            this.selectedGuest = {
+              label: data?.guestName,
+              value: data?.guest, //i.e guest id
+            };
             this.useForm.patchValue(data);
             this.updateFormValidations();
           },
@@ -397,10 +401,10 @@ export class AddGuestListComponent implements OnInit {
   }
 
   guestChange(event) {
-    this.selectedGuest = {
-      label: `${event.firstName} ${event.lastName}`,
-      value: event.id,
-    };
+    // this.selectedGuest = {
+    //   label: `${event.firstName} ${event.lastName}`,
+    //   value: event.id,
+    // };
   }
 
   onAddGuest() {

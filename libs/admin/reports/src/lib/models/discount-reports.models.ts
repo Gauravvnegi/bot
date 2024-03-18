@@ -11,7 +11,7 @@ import {
   PromoCodeReportResponse,
 } from '../types/discount-reports.types';
 import { ReportClass } from '../types/reports.types';
-import { getFormattedDate } from './reservation-reports.models';
+import { getFormattedDate } from '@hospitality-bot/admin/shared';
 
 export class AllowanceReport
   implements ReportClass<AllowanceReportData, AllowanceReportResponse> {

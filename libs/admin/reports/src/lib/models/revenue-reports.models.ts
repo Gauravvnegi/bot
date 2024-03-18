@@ -9,10 +9,7 @@ import {
   CashierReportResponse,
   PayTypeReportResponse,
 } from '../types/revenue-reports.types';
-import {
-  getFormattedDate,
-  getFormattedDateWithTime,
-} from './reservation-reports.models';
+import { getFormattedDateWithTime } from '@hospitality-bot/admin/shared';
 
 export class Cashier extends RowStyles {
   index: string;

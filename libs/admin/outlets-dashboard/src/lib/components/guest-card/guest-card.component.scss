@@ -39,7 +39,7 @@
   }
 
   .right {
-    width: 100px;
+    width: 153px;
   }
 
   .tiny-text {
@@ -76,6 +76,10 @@
 .flex-end {
   align-items: flex-end;
   flex-direction: column;
+}
+
+.justify-end {
+  justify-content: flex-end;
 }
 
 :host ::ng-deep {

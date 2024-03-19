@@ -312,7 +312,7 @@ export class FormComponent implements OnInit {
   }
 
   get menuNode() {
-    return document.querySelector(`.${this.menuClass}`);
+    return document.querySelector(`.${this.fieldClass} .${this.menuClass}`);
   }
 
   /**

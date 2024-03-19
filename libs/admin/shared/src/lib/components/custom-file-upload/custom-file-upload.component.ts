@@ -125,16 +125,14 @@ export class CustomFileUploadComponent
    * @param index
    *
    */
-  processCheckboxChange(event, index) {
-    if (event.target.checked) {
+  processCheckboxChange(event: { checked: boolean }, index: number) {
+    if (event.checked) {
       this.featureValueIndex.push(index);
-
       if (this.featureValueIndex.length >= 4) {
         this.exceedFeatureLimit = true;
       }
     } else {
       this.exceedFeatureLimit = false;
-
       this.featureValueIndex = this.featureValueIndex?.filter(
         (item) => item !== index
       );

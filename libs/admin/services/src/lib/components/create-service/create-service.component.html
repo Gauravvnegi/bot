@@ -61,7 +61,7 @@
       }"
       [isFeatureView]="true"
     ></hospitality-bot-custom-file-upload>
-    <div class="full-width checkbox">
+    <!-- <div class="full-width checkbox">
       <input
         #checkbox
         type="checkbox"
@@ -72,7 +72,13 @@
         Give this service priority status, featuring it prominently on the
         landing page as a highlighted service.</label
       >
-    </div>
+    </div> -->
+
+    <hospitality-bot-checkbox
+      label="Give this service priority status, featuring it prominently on the
+      landing page as a highlighted service."
+      controlName="isPriorityHigh"
+    ></hospitality-bot-checkbox>
 
     <div class="des-template">
       <div class="des-template__label">Description</div>

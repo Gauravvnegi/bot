@@ -19,6 +19,7 @@
   &__content {
     height: calc(100vh - 120px);
     overflow: auto;
+    padding-bottom: 10px;
   }
 
   .content__wrapper {

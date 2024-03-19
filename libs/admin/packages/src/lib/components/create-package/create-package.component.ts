@@ -123,6 +123,7 @@ export class CreatePackageComponent implements OnInit {
       enableVisibility: [[''], Validators.required],
       enableOnMicrosite: [false],
       priority: ['LOW'],
+      isPriorityHigh: [false],
     });
 
     const { startDate, endDate } = this.useForm.controls;
@@ -190,6 +191,17 @@ export class CreatePackageComponent implements OnInit {
 
     /* Value changes subscription */
     this.initFormSubscription();
+    this.listenForPriorityChange();
+  }
+
+  listenForPriorityChange() {
+    this.useForm.get('isPriorityHigh').valueChanges.subscribe((res) => {
+      if (res) {
+        this.useForm.get('priority').setValue('HIGH');
+      } else {
+        this.useForm.get('priority').setValue('LOW');
+      }
+    });
   }
 
   /**
@@ -436,6 +448,7 @@ export class CreatePackageComponent implements OnInit {
   }
 
   onCheckboxClick(event: HTMLInputElement) {
+    debugger;
     if (event.checked) this.useForm.get('priority').setValue('HIGH');
     else this.useForm.get('priority').setValue('LOW');
   }

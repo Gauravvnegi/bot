@@ -2,12 +2,12 @@ import {
   DraftReservationReportResponse,
   ReservationResponse,
   ReservationResponseData,
-} from "libs/admin/shared/src/lib/types/response";
+} from 'libs/admin/shared/src/lib/types/response';
 import {
   getFullName,
   toCurrency,
-} from "libs/admin/shared/src/lib/utils/valueFormatter";
-import { ReportClass } from "../types/reports.types";
+} from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { ReportClass } from '../types/reports.types';
 import {
   AddOnRequestReportData,
   AddOnRequestReportResponse,
@@ -27,7 +27,11 @@ import {
   ReservationAdrReportData,
   ReservationReportData,
   ReservationSummaryReportData,
-} from "../types/reservation-reports.types";
+} from '../types/reservation-reports.types';
+import {
+  getFormattedDate,
+  getFormattedDateWithTime,
+} from '@hospitality-bot/admin/shared';
 
 /**
  * @class Default Reservation Report class
@@ -66,7 +70,6 @@ export class NoShows {
   amountPaid: string;
   balance: string;
   deserialize(value: ReservationResponseData) {
-    // debugger;
     this.reservationId = value?.number;
     this.bookingNumber = value?.number;
     this.dateOfArrival = getFormattedDate(value?.arrivalTime);
@@ -114,8 +117,8 @@ export class Cancellation extends NoShows {
       guestDetails?.firstName,
       guestDetails?.lastName
     );
-    this.roomType = `${value?.stayDetails?.room?.roomNumber ?? " "} - ${
-      value?.stayDetails?.room?.type ?? ""
+    this.roomType = `${value?.stayDetails?.room?.roomNumber ?? ' '} - ${
+      value?.stayDetails?.room?.type ?? ''
     }`;
 
     this.checkIn = getFormattedDate(value?.arrivalTime);
@@ -166,23 +169,23 @@ export class Arrival {
         input.guestDetails.primaryGuest.lastName
       ));
 
-    this.roomType = `${input?.stayDetails?.room?.roomNumber ?? "-"} - ${
-      input.stayDetails.room.type ?? "-"
+    this.roomType = `${input?.stayDetails?.room?.roomNumber ?? '-'} - ${
+      input.stayDetails.room.type ?? '-'
     }`; // need to ask which key should be mapped
     this.checkIn = input?.arrivalTime
       ? getFormattedDate(input.arrivalTime)
-      : "";
+      : '';
     this.checkOut = input?.departureTime
       ? getFormattedDate(input.departureTime)
-      : "";
-    this.status = input?.pmsStatus ?? "";
+      : '';
+    this.status = input?.pmsStatus ?? '';
     this.arrivalTime = input?.arrivalTime
       ? getFormattedDateWithTime(input.arrivalTime)
-      : "";
+      : '';
     this.departureTime = input?.departureTime
       ? getFormattedDateWithTime(input.departureTime)
-      : "";
-    this.remark = input?.specialRequest ?? ""; // need to verify from backend
+      : '';
+    this.remark = input?.specialRequest ?? ''; // need to verify from backend
     return this;
   }
 }
@@ -237,9 +240,9 @@ export class DraftReservationReport extends ReservationReport
           ),
 
           roomType: `${
-            reservationData.bookingItems[0].roomDetails.roomNumber ?? "-"
+            reservationData.bookingItems[0].roomDetails.roomNumber ?? '-'
           }-${
-            reservationData.bookingItems[0].roomDetails.roomTypeLabel ?? "-"
+            reservationData.bookingItems[0].roomDetails.roomTypeLabel ?? '-'
           }`,
           checkIn: getFormattedDate(reservationData.from),
           checkOut: getFormattedDate(reservationData.to),
@@ -480,41 +483,4 @@ export class AddOnRequestReport
       });
     return this;
   }
-}
-
-export function getFormattedDate(time: number) {
-  if (!time) return;
-  const currentDate = new Date(time);
-  const monthAbbreviated = new Intl.DateTimeFormat("en-US", {
-    month: "short",
-  }).format(currentDate);
-  const date = currentDate.getDate();
-  const year = currentDate.getFullYear();
-  return `${monthAbbreviated} ${date}, ${year}`;
-}
-
-export function getFormattedDateWithTime(time: number) {
-  if (!time) return;
-  const currentDate = new Date(time);
-  const month = (currentDate.getMonth() + 1).toString().padStart(2, "0"); // Adding 1 because months are zero-based
-  const date = currentDate.getDate().toString().padStart(2, "0");
-  const year = currentDate.getFullYear();
-  const hours = currentDate.getHours().toString().padStart(2, "0");
-  const minutes = currentDate.getMinutes().toString().padStart(2, "0");
-  const seconds = currentDate.getSeconds().toString().padStart(2, "0");
-
-  return `${year}-${month}-${date}, ${hours}:${minutes}:${seconds}`;
-}
-
-function calculateNumberOfNights(
-  checkinTimestamp: number,
-  checkoutTimestamp: number
-) {
-  const checkinDate = new Date(checkinTimestamp);
-  const checkoutDate = new Date(checkoutTimestamp);
-  const differenceInMilliseconds =
-    checkoutDate.getTime() - checkinDate.getTime();
-  const differenceInDays = differenceInMilliseconds / 86400000;
-  const numberOfNights = Math.ceil(differenceInDays);
-  return numberOfNights;
 }

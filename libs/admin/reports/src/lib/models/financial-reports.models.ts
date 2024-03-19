@@ -23,14 +23,14 @@ import {
 } from '../types/financial-reports.types';
 import { ReportClass, RowStyles } from '../types/reports.types';
 import {
-  getFormattedDate,
-  getFormattedDateWithTime,
-} from './reservation-reports.models';
-import {
   currencyToNumber,
   getFullName,
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import {
+  getFormattedDate,
+  getFormattedDateWithTime,
+} from '@hospitality-bot/admin/shared';
 
 export class FinancialReport
   implements ReportClass<FinancialReportData, FinancialReportResponse> {

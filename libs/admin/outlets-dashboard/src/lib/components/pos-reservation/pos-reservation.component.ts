@@ -51,6 +51,7 @@ import { reservationTabFilters } from '../../constants/data-table';
 import { PosReservationResponse } from '../../types/reservation-table';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 import { debounceTime, switchMap } from 'rxjs/operators';
+import { GuestAddress } from 'libs/admin/agent/src/lib/types/response';
 
 @Component({
   selector: 'hospitality-bot-pos-reservation',
@@ -77,6 +78,8 @@ export class PosReservationComponent implements OnInit {
   menuOptions: Menu[] = [];
   staffList: Option[] = [];
   orderTypes: Option[] = [];
+  addressList: Option[] = [];
+
   selectedGuest: Option;
   globalQueries = [];
 
@@ -132,10 +135,10 @@ export class PosReservationComponent implements OnInit {
       reservationInformation: this.fb.group({
         orderType: [OrderTypes.DINE_IN],
         search: [''],
-        tableNumber: [''],
+        tableNumber: ['', [Validators.required]],
         staff: [''],
-        guest: [''],
-        numberOfPersons: [null],
+        guest: ['', [Validators.required]],
+        numberOfPersons: [null, [Validators.required, Validators.min(1)]],
         menu: [[]],
         address: [''],
         id: [null],
@@ -212,6 +215,11 @@ export class PosReservationComponent implements OnInit {
               this.checkboxForm.disable();
               this.isDisabledForm = true;
             }
+            this.updateOrderValidators(
+              formData.reservationInformation.orderType
+            );
+
+            this.mapGuestAddress(res.deliveryAddress);
             this.mapDefaultReservationData(res.reservation);
           }
         })
@@ -242,7 +250,9 @@ export class PosReservationComponent implements OnInit {
               { reservationInformation: reservationInformation },
               { emitEvent: false }
             );
+            this.updateOrderValidators(reservationInformation.orderType);
           }
+          this.mapGuestAddress(res?.deliveryAddress);
           this.mapDefaultReservationData(res);
         }
       });
@@ -345,45 +355,46 @@ export class PosReservationComponent implements OnInit {
   }
 
   listenForOrderTypeChanges() {
+    this.orderInfoControls.orderType.valueChanges.subscribe(
+      (res: OrderTypes) => {
+        if (res) this.updateOrderValidators(res);
+      }
+    );
+  }
+
+  updateOrderValidators(orderType: OrderTypes) {
     const addressControl = this.orderInfoControls.address;
     const tableControl = this.orderInfoControls.tableNumber;
     const numberOfPersons = this.orderInfoControls.numberOfPersons;
     const guestControl = this.orderInfoControls.guest;
 
-    this.updateValidators(guestControl, [Validators.required]);
-    this.orderInfoControls.orderType.valueChanges.subscribe(
-      (res: OrderTypes) => {
-        if (res) {
-          !this.orderId && this.formService.getOrderSummary.next(true);
-          switch (res) {
-            case OrderTypes.DELIVERY:
-              this.updateValidators(guestControl);
-              this.updateValidators(addressControl, [Validators.required]);
-              this.resetValidators(numberOfPersons);
-              this.resetValidators(tableControl);
-              break;
+    !this.orderId && this.formService.getOrderSummary.next(true);
+    switch (orderType) {
+      case OrderTypes.DELIVERY:
+        this.updateValidators(guestControl);
+        this.updateValidators(addressControl, [Validators.required]);
+        this.resetValidators(numberOfPersons);
+        this.resetValidators(tableControl);
+        break;
 
-            case OrderTypes.DINE_IN:
-              this.updateValidators(guestControl);
-              this.updateValidators(numberOfPersons, [
-                Validators.required,
-                Validators.min(1),
-              ]);
-              this.updateValidators(tableControl, [Validators.required]);
-              this.resetValidators(addressControl);
-              break;
+      case OrderTypes.DINE_IN:
+        this.updateValidators(guestControl);
+        this.updateValidators(numberOfPersons, [
+          Validators.required,
+          Validators.min(1),
+        ]);
+        this.updateValidators(tableControl, [Validators.required]);
+        this.resetValidators(addressControl);
+        break;
 
-            case OrderTypes.KIOSK:
-            case OrderTypes.TAKE_AWAY:
-              this.updateValidators(guestControl);
-              this.resetValidators(addressControl);
-              this.resetValidators(tableControl);
-              this.resetValidators(numberOfPersons);
-              break;
-          }
-        }
-      }
-    );
+      case OrderTypes.KIOSK:
+      case OrderTypes.TAKE_AWAY:
+        this.updateValidators(guestControl);
+        this.resetValidators(addressControl);
+        this.resetValidators(tableControl);
+        this.resetValidators(numberOfPersons);
+        break;
+    }
   }
 
   getOrderSummary() {
@@ -512,16 +523,18 @@ export class PosReservationComponent implements OnInit {
     this.selectedGuest = {
       label: `${guest.firstName} ${guest.lastName}`,
       value: guest.id,
+      address: guest?.address,
     };
-    const guestAddress = {
-      formattedAddress: `${guest.address?.addressLine1 ?? ''}`,
-      city: guest.address?.city ?? '',
-      state: guest.address?.state ?? '',
-      countryCode: guest.address?.countryCode ?? '',
-      postalCode: guest.address?.postalCode ?? '',
-      id: guest.address?.id,
-    };
-    this.orderInfoControls.address.patchValue(guestAddress);
+    this.mapGuestAddress();
+  }
+
+  mapGuestAddress(guestAddress?: GuestAddress) {
+    const address = this.selectedGuest?.address ?? guestAddress;
+    this.addressList = address?.addressLine1
+      ? [{ label: address.addressLine1, value: address?.id }]
+      : [];
+    this.addressList.length &&
+      this.orderInfoControls.address.patchValue(address?.id);
   }
 
   showGuests() {
@@ -532,15 +545,19 @@ export class PosReservationComponent implements OnInit {
     componentRef.instance.isSidebar = true;
     componentRef.instance.guestType = 'NON_RESIDENT_GUEST';
     this.$subscription.add(
-      componentRef.instance.onCloseSidebar.subscribe((res) => {
-        if (typeof res !== 'boolean') {
-          this.selectedGuest = {
-            label: `${res.firstName} ${res.lastName}`,
-            value: res.id,
-          };
+      componentRef.instance.onCloseSidebar.subscribe(
+        (res: GuestType | boolean) => {
+          if (typeof res !== 'boolean') {
+            this.selectedGuest = {
+              label: `${res.firstName} ${res.lastName}`,
+              value: res.id,
+              address: res.address,
+            };
+            this.mapGuestAddress();
+          }
+          this.sidebarVisible = false;
         }
-        this.sidebarVisible = false;
-      })
+      )
     );
     manageMaskZIndex();
   }

@@ -1,11 +1,13 @@
-import { formatDateToCustomString } from '@hospitality-bot/admin/shared';
+import {
+  formatDateToCustomString,
+  getFormattedDate,
+} from '@hospitality-bot/admin/shared';
 import {
   HistoryAndForecastReportResponse,
   HouseCountReportData,
   HouseCountReportResponse,
 } from '../types/occupany-reports.types';
 import { ReportClass, RowStyles } from '../types/reports.types';
-import { getFormattedDate } from './reservation-reports.models';
 
 export class HistoryAndForecastReportData extends RowStyles {
   date: number | string;

@@ -304,7 +304,7 @@ export class UserProfileComponent implements OnInit {
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       profileUrl: [''],
       permissionConfigs: this._fb.array([]),
-      reportingTo: [''],
+      reportingTo: ['', [Validators.required]],
       status: [true],
     });
   }

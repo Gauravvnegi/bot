@@ -16,7 +16,7 @@ import {
   OccupancyAnalysisReportResponse,
 } from '../types/analytics-reports.types';
 import { ReportClass } from '../types/reports.types';
-import { getFormattedDate } from './reservation-reports.models';
+import { getFormattedDate } from '@hospitality-bot/admin/shared';
 
 export class CompanyContributionsReport
   implements

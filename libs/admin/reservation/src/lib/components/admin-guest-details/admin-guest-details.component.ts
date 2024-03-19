@@ -1,15 +1,5 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  Output,
-  EventEmitter,
-  AfterViewInit,
-} from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
-import { ReservationService } from '../../services/reservation.service';
-import { SnackBarService } from 'libs/shared/material/src';
-import { isEmpty } from 'lodash';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   ConfigService,
   CountryCodeList,
@@ -17,7 +7,10 @@ import {
   guestSalutation,
   kidAgesList,
 } from '@hospitality-bot/admin/shared';
-import { GuestDetailsUpdateModel } from '../../models/guest-table.model';
+import { SnackBarService } from 'libs/shared/material/src';
+import { isEmpty } from 'lodash';
+import { UpdateGuestPayload } from '../../models/guest-table.model';
+import { ReservationService } from '../../services/reservation.service';
 @Component({
   selector: 'hospitality-bot-admin-guest-details',
   templateUrl: './admin-guest-details.component.html',
@@ -90,21 +83,20 @@ export class AdminGuestDetailsComponent implements OnInit {
       this.editGuestIndex = -1;
     } else if (isSave) {
       this.isUpdatingGuest = true;
-      const reservationId = this.parentForm
-        .get('reservationDetails')
-        .get('bookingId').value;
 
-      const data = new GuestDetailsUpdateModel().deserialize(
-        this.guestFA.value
+      const payloadData = new UpdateGuestPayload().deserialize(
+        this.guestFA.value[idx]
       );
 
       this._reservationService
-        .updateGuestDetails(reservationId, data)
+        .updateGuest(payloadData?.id, payloadData)
         .subscribe(
           (res) => {
             const currentGuestDetails = this.guestFA.at(idx).value;
 
-            this._reservationService.$reinitializeGuestDetails.next(true);
+            if (res?.type !== 'NON_RESIDENT_GUEST') {
+              this._reservationService.$reinitializeGuestDetails.next(true);
+            }
 
             const label = currentGuestDetails.label;
             this.snackbarService.openSnackBarAsText(

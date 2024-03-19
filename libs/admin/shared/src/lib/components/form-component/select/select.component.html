@@ -13,6 +13,7 @@
   >
 
   <p-dropdown
+    #dropdown
     class="input"
     [ngClass]="inputNgClasses"
     [disabled]="isDisabled || null"
@@ -34,6 +35,7 @@
     [filterMatchMode]="stopEmission ? 'contains' : 'notEquals'"
     [resetFilterOnHide]="true"
     [group]="isGroupOptions"
+    [appendTo]="isAppendToBody ? 'body' : null"
   >
     <ng-template let-option pTemplate="item">
       <div

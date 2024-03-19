@@ -27,10 +27,12 @@ export class CheckboxComponent extends FormComponent implements OnInit {
       });
     }
   }
+
   toggleSelectAll(): void {
     this.value = !this.value;
     this.change.emit({ checked: this.value });
-    this.controlContainer.control.get(this.controlName).setValue(this.value);
+    if (this.controlName)
+      this.controlContainer.control.get(this.controlName).setValue(this.value);
   }
 }
 

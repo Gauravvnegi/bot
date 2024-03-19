@@ -1,7 +1,6 @@
 import { EntitySubType } from '@hospitality-bot/admin/shared';
 import { MealPreferences, OrderTypes } from './menu-order';
 import { KotMenuItem, OrderReservationStatus } from './reservation-table';
-import { AddressFieldType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { ReservationType } from '../components/add-guest-list/add-guest-list.component';
 
 export class MenuForm {

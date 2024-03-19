@@ -93,7 +93,6 @@ export class OrderSummaryComponent implements OnInit {
     ) as FormArray;
 
     this.listenForOfferChange();
-    this.listenForKotChange();
   }
 
   // Method to add a new KOT dynamically
@@ -252,7 +251,7 @@ export class OrderSummaryComponent implements OnInit {
 
           // Add and remove menu items
           const existingIds = this.itemFormArray.value.map(
-            (item) => item.itemId
+            (item: KotItemsForm) => item.itemId
           );
           const newItems = res?.filter(
             (item) => !existingIds.includes(item.itemId)
@@ -271,6 +270,7 @@ export class OrderSummaryComponent implements OnInit {
           this.selectedItems.length && this.mapItemOffers();
 
           if (newItems.length > 0 || removedItems.length > 0) {
+            this.formService.getOrderSummary.next(true);
             newItems.forEach((newItem) => {
               this.createNewItemFields(newItem);
             });
@@ -308,18 +308,6 @@ export class OrderSummaryComponent implements OnInit {
 
       return acc;
     }, []);
-  }
-
-  listenForKotChange() {
-    this.$subscription.add(
-      this.kotInfoControls.kotItems.valueChanges
-        .pipe(debounceTime(200))
-        .subscribe((res) => {
-          if (res) {
-            this.formService.getOrderSummary.next(true);
-          }
-        })
-    );
   }
 
   removeItemFields(index: number) {

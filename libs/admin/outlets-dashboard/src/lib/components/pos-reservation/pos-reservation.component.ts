@@ -221,6 +221,7 @@ export class PosReservationComponent implements OnInit {
 
             this.mapGuestAddress(res.deliveryAddress);
             this.mapDefaultReservationData(res.reservation);
+            this.formService.getOrderSummary.next(true);
           }
         })
     );
@@ -237,6 +238,7 @@ export class PosReservationComponent implements OnInit {
           if (res.order) {
             const formData = this.formService.mapReservationData(res);
             this.userForm.patchValue(formData, { emitEvent: false });
+            this.formService.getOrderSummary.next(true);
           } else {
             const reservationInformation = {
               tableNumber: res?.tableIdOrRoomId,
@@ -401,7 +403,7 @@ export class PosReservationComponent implements OnInit {
     this.$subscription.add(
       this.formService.getOrderSummary
         .pipe(
-          debounceTime(100),
+          debounceTime(200),
           switchMap((res) => {
             if (!res) {
               return EMPTY; // No need to proceed if res is falsy
@@ -411,6 +413,7 @@ export class PosReservationComponent implements OnInit {
               this.userForm.getRawValue() as MenuForm,
               this.orderId
             );
+            if (!data.outletOrder.items.length) return EMPTY;
             return this.outletTableService.getOrderSummary(data);
           })
         )

@@ -164,7 +164,6 @@
           {{ mealPreferenceConfig[preference]?.title }}
         </span>
       </div>
-
       <div class="menu-items">
         <ng-container *ngIf="!loadingMenuItems; else loader">
           <ng-container *ngIf="getCards().length; else emptyCardView">

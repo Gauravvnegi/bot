@@ -521,8 +521,10 @@ export class PosReservationComponent implements OnInit {
 
   mapGuestData(guest: GuestType) {
     this.selectedGuest = {
-      label: `${guest.firstName} ${guest.lastName}`,
-      value: guest.id,
+      label: guest?.label
+        ? guest.label
+        : `${guest?.firstName} ${guest?.lastName}`,
+      value: guest.value ? guest.value : guest.id,
       address: guest?.address,
     };
     this.mapGuestAddress();
@@ -548,12 +550,7 @@ export class PosReservationComponent implements OnInit {
       componentRef.instance.onCloseSidebar.subscribe(
         (res: GuestType | boolean) => {
           if (typeof res !== 'boolean') {
-            this.selectedGuest = {
-              label: `${res.firstName} ${res.lastName}`,
-              value: res.id,
-              address: res.address,
-            };
-            this.mapGuestAddress();
+            this.mapGuestData(res);
           }
           this.sidebarVisible = false;
         }

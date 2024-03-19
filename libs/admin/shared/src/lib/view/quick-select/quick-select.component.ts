@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormProps, Option } from '../../types/form.type';
 import { Router } from '@angular/router';
 import { ApiService } from '@hospitality-bot/shared/utils';
@@ -15,6 +9,7 @@ import { FormComponent } from '../../components/form-component/form.components';
 import { MultiSelectSettings } from '../../components/form-component/multi-select/multi-select.component';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { convertToTitleCase } from '../../utils/valueFormatter';
+import { getUniqueOptions } from '../../utils/shared';
 
 @Component({
   selector: 'hospitality-bot-quick-select',
@@ -108,7 +103,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
     this._qsProps = values;
     const selectedOption = values?.selectedOption;
     if (selectedOption) {
-      this.menuOptions = this.removeDuplicate([
+      this.menuOptions = getUniqueOptions([
         ...this.menuOptions,
         selectedOption,
       ]);
@@ -245,7 +240,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
             let data = this.getOptions(res, this.dataModel);
             this.menuOptions = this.resetApiData
               ? data
-              : this.removeDuplicate([
+              : getUniqueOptions([
                   ...this.menuOptions,
                   ...data,
                   ...(this._qsProps.selectedOption
@@ -395,19 +390,6 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
       //The case when you want to redirect
       this.route.navigate([this._qsProps.promptLink]);
     }
-  }
-
-  removeDuplicate([...items]) {
-    const seen = new Set();
-    const filteredItems = items.filter((item) => {
-      const key = item.value; // Customize this key based on your needs
-      if (!seen.has(key)) {
-        seen.add(key);
-        return true;
-      }
-      return false;
-    });
-    return filteredItems;
   }
 
   /**

@@ -1,0 +1,34 @@
+<div
+  [class]="controlName"
+  [ngClass]="wrapperNgClasses"
+  [formGroup]="controlContainer.control"
+>
+  <label
+    *ngIf="label"
+    class="labelc"
+    [ngClass]="{
+      float__label: float,
+      label__static: !float,
+      'float-inside__label': floatInsideLabel
+    }"
+    [for]="controlName"
+    >{{ label }}</label
+  >
+  <p-chips
+    class="input"
+    [ngClass]="inputNgClasses"
+    [placeholder]="placeholder"
+    [formControlName]="controlName"
+    [inputId]="controlName"
+    [addOnBlur]="true"
+    (onFocus)="handleFocus()"
+  >
+    <ng-template let-item pTemplate="item">
+      <div>
+        {{ item }}
+      </div>
+    </ng-template>
+  </p-chips>
+  <ng-content></ng-content>
+  <small *ngIf="error" class="p-error">{{ error }}</small>
+</div>

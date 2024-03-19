@@ -1,3 +1,5 @@
+import { IList } from 'libs/admin/listing/src/lib/data-models/listing.model';
+
 export type QueryConfig = {
   queryObj: string;
 };
@@ -32,10 +34,12 @@ const TemplateType = {
 
 export type TemplateType = typeof TemplateType[keyof typeof TemplateType];
 
+// export type ConstType<T extends Record<string, unknown>> = T[keyof T];
+
 export type CampaignForm = {
   campaignName: string;
   topic: string;
-  recipient: string;
+  to: string[];
   event: string;
   startDate: number;
   triggers: string;
@@ -44,4 +48,12 @@ export type CampaignForm = {
   template: TemplateType;
   message: string;
   templateTopic: string;
+  cc?: string;
+  bcc?: string;
 };
+
+export type RecipientType = 'LISTING' | 'SUBSCRIBER';
+
+export type ListType<T extends RecipientType> = T extends 'LISTING'
+  ? IList
+  : { name: string; id: string };

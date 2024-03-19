@@ -146,6 +146,9 @@ import { ChipsComponent } from './components/chips/chips.component';
 import { ItemViewComponent } from './view/item-view/item-view.component';
 import { DateGroupFilterComponent } from './components/date-group-filter/date-group-filter.component';
 import { TableSwitchComponent } from './components/table-switch/table-switch.component';
+import { DualPlotComponent } from './components/dual-plot/dual-plot.component';
+import { GaugeChartModule } from 'angular-gauge-chart';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   imports: [
@@ -183,6 +186,8 @@ import { TableSwitchComponent } from './components/table-switch/table-switch.com
     ConfirmDialogModule,
     ToastModule,
     TabViewModule,
+    GaugeChartModule,
+    ChartsModule,
   ],
   declarations: [
     DatatableComponent,
@@ -294,6 +299,7 @@ import { TableSwitchComponent } from './components/table-switch/table-switch.com
     ItemViewComponent,
     DateGroupFilterComponent,
     TableSwitchComponent,
+    DualPlotComponent,
   ],
 
   exports: [
@@ -430,6 +436,7 @@ import { TableSwitchComponent } from './components/table-switch/table-switch.com
     ItemViewComponent,
     DateGroupFilterComponent,
     TableSwitchComponent,
+    DualPlotComponent,
   ],
 })
 export class AdminSharedModule {}

@@ -44,6 +44,7 @@ export class GuestFactory {
         countryCode: input.address?.countryCode ?? '',
         postalCode: input.address?.postalCode ?? '',
       },
+      type: input?.type,
     });
   }
 }

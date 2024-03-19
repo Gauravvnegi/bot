@@ -21,7 +21,7 @@ import { Option } from 'libs/admin/shared/src/lib/types/form.type';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subscription, of } from 'rxjs';
-import { debounceTime, switchMap, tap } from 'rxjs/operators';
+import { debounceTime, filter, switchMap, tap } from 'rxjs/operators';
 import { chipsFilter, seatedTabGroup } from '../../constants/guest-list.const';
 import {
   GuestReservation,
@@ -189,7 +189,10 @@ export class GuestListComponent implements OnInit {
   listenForSearch() {
     this.useForm
       .get('search')
-      .valueChanges.pipe(debounceTime(300))
+      .valueChanges.pipe(
+        debounceTime(300),
+        filter((value: string) => value.length >= 3 || value.length === 0)
+      )
       .subscribe((res) => {
         if (res) {
           this.searchGuest(res);

@@ -448,7 +448,6 @@ export class CreatePackageComponent implements OnInit {
   }
 
   onCheckboxClick(event: HTMLInputElement) {
-    debugger;
     if (event.checked) this.useForm.get('priority').setValue('HIGH');
     else this.useForm.get('priority').setValue('LOW');
   }

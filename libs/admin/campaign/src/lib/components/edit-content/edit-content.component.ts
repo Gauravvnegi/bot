@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { ControlContainer, FormGroup } from '@angular/forms';
 import { campaignConfig } from '../../constant/campaign';
-import { Campaign } from '../../data-model/campaign.model';
 
 @Component({
   selector: 'hospitality-bot-edit-content',
@@ -9,21 +8,16 @@ import { Campaign } from '../../data-model/campaign.model';
   styleUrls: ['./edit-content.component.scss'],
 })
 export class EditContentComponent implements OnInit {
-  @Input() campaignFG: FormGroup;
-  @Input() campaignDetails: Campaign;
+  campaignFG: FormGroup;
+  @Input() controlName: string;
   @Input() viewMode = false;
-  @Output() addContent = new EventEmitter();
   modes = campaignConfig.modes;
   currentMode = campaignConfig.currentMode;
-  constructor() {}
 
-  ngOnInit(): void {}
+  constructor(private controlContainer: ControlContainer) {}
 
-  /**
-   * @function openAddContent function to add open-content.
-   */
-  openAddContent() {
-    this.addContent.emit();
+  ngOnInit(): void {
+    this.campaignFG = this.controlContainer.control as FormGroup;
   }
 
   /**

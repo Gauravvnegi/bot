@@ -1,21 +1,14 @@
-<ng-container *ngIf="!viewMode; else viewModeContent">
+<ng-container *ngIf="!viewMode; else viewModeContent" [formGroup]="campaignFG">
   <div class="field full-width">
-    <div class="one-fourth">{{ 'content.add' | translate }} :</div>
     <div
-      class="ck-editor one-third-width"
-      *ngIf="campaignFG?.get('message')?.value; else createTemplate"
+      class="ck-editor full-width"
+      *ngIf="campaignFG?.get('message')?.value"
     >
-      <div class="info-container" *ngIf="campaignDetails">
-        <div>
-          {{ campaignDetails.templateName }}
-        </div>
-        <div>{{ campaignDetails.topicName }}</div>
-      </div>
       <div class="ck-editor__container">
         <ng-container [ngSwitch]="currentMode">
           <ng-container *ngSwitchCase="'backdrop'">
             <hospitality-bot-template-editor
-              controlName="message"
+              [controlName]="controlName"
               [template]="template"
               [hybrid]="false"
             ></hospitality-bot-template-editor>
@@ -45,48 +38,29 @@
           </ng-container>
           <ng-container *ngSwitchCase="'view'">
             <hospitality-bot-template-editor
-              controlName="message"
+              [controlName]="controlName"
               [template]="template"
               [disabled]="true"
             ></hospitality-bot-template-editor>
           </ng-container>
           <ng-container *ngSwitchCase="'edit'">
             <hospitality-bot-template-editor
-              controlName="description"
+              [controlName]="controlName"
               [template]="template"
             ></hospitality-bot-template-editor>
           </ng-container>
         </ng-container>
       </div>
     </div>
-    <ng-template #createTemplate>
-      <div class="add-content">
-        <div>
-          <img
-            [src]="campaignConfiguration.images.preview.url"
-            [alt]="campaignConfiguration.images.preview.alt"
-          />
-        </div>
-        <div class="add-content__btn" (click)="openAddContent()">
-          {{ 'content.add' | translate }}
-        </div>
-      </div>
-    </ng-template>
   </div>
 </ng-container>
 <ng-template #viewModeContent>
   <div class="field full-width">
     <div class="one-fourth">{{ 'content.view' | translate }} :</div>
-    <div class="ck-editor one-third-width">
-      <div class="info-container" *ngIf="campaignDetails">
-        <div>
-          {{ campaignDetails.templateName }}
-        </div>
-        <div>{{ campaignDetails.topicName }}</div>
-      </div>
+    <div class="ck-editor full-width">
       <div class="ck-editor__container">
         <hospitality-bot-template-editor
-          controlName="message"
+          [controlName]="controlName"
           [template]="template"
           [disabled]="true"
           [hybrid]="false"

@@ -54,6 +54,7 @@ export type CampaignForm = {
   templateId: string;
   from: string;
   recipients: Option[];
+  subject: string;
 };
 
 export type RecipientType = 'LISTING' | 'SUBSCRIBER';
@@ -83,4 +84,5 @@ export class PostCampaignForm {
   dateTime?: number;
   cc?: string[];
   bcc?: string[];
+  isDraft: boolean;
 }

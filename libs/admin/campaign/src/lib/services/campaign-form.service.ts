@@ -11,13 +11,18 @@ import {
 export class CampaignFormService {
   constructor() {}
 
-  posFormData(formData: CampaignForm, campaignType: CampaignType) {
+  posFormData(
+    formData: CampaignForm,
+    campaignType: CampaignType,
+    action: 'send' | 'save'
+  ) {
     let data = new PostCampaignForm();
 
     const individualRecipients = formData.to.filter(
       (item) => !formData.recipients.some((val) => val.label === item)
     );
 
+    const isEmailType = campaignType === 'EMAIL';
     data = {
       channel: campaignType,
       to: {
@@ -33,6 +38,8 @@ export class CampaignFormService {
       tags: formData.campaignTags,
       cc: formData?.cc?.length ? formData?.cc : undefined,
       bcc: formData?.bcc?.length ? formData?.bcc : undefined,
+      isDraft: action === 'save',
+      subject: isEmailType ? { text: formData.subject } : undefined,
     };
 
     return data;

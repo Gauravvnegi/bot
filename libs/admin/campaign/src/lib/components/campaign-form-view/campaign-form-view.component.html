@@ -49,27 +49,29 @@
           disableInput: inputControls?.to?.value?.length
         }"
       ></hospitality-bot-to-receiver-field>
-      <div
-        *ngIf="!inputControls?.bcc?.value || !inputControls?.cc?.value"
-        class="control-btn"
-      >
-        <hospitality-bot-button
-          *ngIf="!inputControls?.cc?.value"
-          label="+ Cc"
-          (click)="addControl('cc')"
-          height="20px"
-          minWidth="20px"
-          variant="text"
-        ></hospitality-bot-button>
-        <hospitality-bot-button
-          *ngIf="!inputControls?.bcc?.value"
-          label="+ Bcc"
-          (click)="addControl('bcc')"
-          variant="text"
-          height="20px"
-          minWidth="20px"
-        ></hospitality-bot-button>
-      </div>
+      <ng-container *ngIf="campaignType === 'EMAIL'">
+        <div
+          *ngIf="!inputControls?.bcc?.value || !inputControls?.cc?.value"
+          class="control-btn"
+        >
+          <hospitality-bot-button
+            *ngIf="!inputControls?.cc?.value"
+            label="+ Cc"
+            (click)="addControl('cc')"
+            height="20px"
+            minWidth="20px"
+            variant="text"
+          ></hospitality-bot-button>
+          <hospitality-bot-button
+            *ngIf="!inputControls?.bcc?.value"
+            label="+ Bcc"
+            (click)="addControl('bcc')"
+            variant="text"
+            height="20px"
+            minWidth="20px"
+          ></hospitality-bot-button>
+        </div>
+      </ng-container>
     </div>
     <div *ngIf="inputControls?.cc?.value" class="full-width reciever-wrapper">
       <hospitality-bot-chip-list
@@ -115,6 +117,18 @@
         (onClick)="removeControl('bcc')"
       ></hospitality-bot-button>
     </div>
+    <hospitality-bot-input
+      *ngIf="campaignType === 'EMAIL'"
+      class="full-width"
+      controlName="subject"
+      label="Subject"
+      [props]="{
+        placeholder: 'Enter Subject',
+        errorMessages: {
+          required: 'This is a required field.'
+        }
+      }"
+    ></hospitality-bot-input>
     <hr class="data-separator" />
     <div class="group-header one-third-width">When</div>
     <div class="one-third-width"></div>
@@ -147,6 +161,7 @@
       controlName="startDate"
       label="Start Date"
       [settings]="{ enableTime: true }"
+      [minDate]="minDate"
     ></hospitality-bot-date>
     <hospitality-bot-date
       *ngIf="inputControls.campaignState.value !== 'DOES_NOT_REPEAT'"
@@ -154,6 +169,7 @@
       controlName="endDate"
       label="End Date"
       [settings]="{ enableTime: true }"
+      [minDate]="minDate"
     ></hospitality-bot-date>
     <hr class="data-separator" />
     <div class="group-header half-width">Add Content</div>
@@ -162,16 +178,20 @@
       class="full-width"
       [campaignType]="campaignType"
     ></hospitality-bot-create-content>
-    <hospitality-bot-template-editor
+    <hospitality-bot-edit-content
       *ngIf="inputControls.message?.value?.length"
       class="full-width"
       controlName="message"
+    ></hospitality-bot-edit-content>
+    <!-- <hospitality-bot-template-editor
+      class="full-width"
+      controlName="message"
       [hybrid]="false"
-    ></hospitality-bot-template-editor>
+    ></hospitality-bot-template-editor> -->
     <hospitality-bot-form-action
       class="full-width"
-      (onPostAction)="handleSave()"
-      (onPreAction)="handleSend()"
+      (onPostAction)="handleSubmit('save')"
+      (onPreAction)="handleSubmit('send')"
       [isSticky]="true"
       [isFixed]="true"
       [config]="{

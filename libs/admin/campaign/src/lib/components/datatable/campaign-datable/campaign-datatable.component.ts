@@ -53,6 +53,8 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     },
   ];
 
+  tableType: 'campaignType' | 'campaignDetails' = 'campaignType';
+
   campaignCta: MenuItem[] = [];
 
   constructor(
@@ -112,7 +114,11 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     ];
   }
 
-  setTableType(value: string) {}
+  setTableType(value: 'campaignType' | 'campaignDetails') {
+    this.tableType = value;
+    this.selectedTab = 'ALL';
+    this.loadData();
+  }
 
   /**
    * @function loadInitialData To load the initial data for datatable.
@@ -139,8 +145,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   setRecords(data: Record<string, any>): void {
     const modData = new Campaigns().deserialize(data);
     this.values = modData.records;
+    let entityTypeCounts =
+      this.tableType === 'campaignDetails'
+        ? modData.entityTypeCounts
+        : modData.entityChannelCounts;
     this.initFilters(
-      modData.entityTypeCounts,
+      entityTypeCounts,
       modData.entityStateCounts,
       modData.totalRecord,
       this.campaignStatus
@@ -274,12 +284,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    */
   openEditCampaign(campaign: Campaign, event: MouseEvent): void {
     event.stopPropagation();
-    this.router.navigate(
-      [`${campaign.isDraft ? 'edit' : 'view'}/${campaign.id}`],
-      {
-        relativeTo: this.route,
-      }
-    );
+    this.routesConfigService.navigate({
+      additionalPath: `create-campaign/${campaign.id}`,
+      queryParams: {
+        campaignType: campaign.channel,
+      },
+    });
   }
 
   /**
@@ -297,21 +307,29 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   loadData(): void {
     this.loading = true;
     // this.updatePaginations(event);
-    this.$subscription.add(
-      this.fetchDataFrom(
-        [
-          ...this.globalQueries,
-          {
-            order: sharedConfig.defaultOrder,
-            entityType: this.selectedTab,
-          },
-          ...this.getSelectedQuickReplyFilters(),
-        ],
-        {
-          offset: this.first,
-          limit: this.rowsPerPage,
+
+    let queryParams = [
+      ...this.globalQueries,
+      {
+        order: sharedConfig.defaultOrder,
+        entityType: this.selectedTab,
+      },
+      ...this.getSelectedQuickReplyFilters(),
+    ];
+
+    if (this.tableType === 'campaignType') {
+      queryParams = queryParams.map((param) => {
+        if (param.entityType) {
+          return { ...param, channel: param.entityType, entityType: undefined };
         }
-      ).subscribe(
+        return param;
+      });
+    }
+    this.$subscription.add(
+      this.fetchDataFrom(queryParams, {
+        offset: this.first,
+        limit: this.rowsPerPage,
+      }).subscribe(
         (data) => this.setRecords(data),
         ({ error }) => {
           this.values = [];
@@ -399,7 +417,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @function showMessage To show the translated message.
    * @param messageObj The message object.
    */
-  showMessage(messageObj: MessageObj, panelClass = 'danger'): void {
+  showMessage(messageObj: MessageObj, panelClass = 'error'): void {
     this.snackbarService
       .openSnackBarWithTranslate(
         {

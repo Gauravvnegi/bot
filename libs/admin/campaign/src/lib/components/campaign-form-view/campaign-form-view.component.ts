@@ -39,6 +39,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
   pageTitle: string;
   campaignType: CampaignType;
 
+  minDate = new Date();
   navRoutes: NavRouteOptions = [];
   triggerOptions: Option[] = [];
   eventOptions: Option[] = [];
@@ -75,6 +76,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
         if (res.campaignType) {
           this.campaignType = res.campaignType;
           this.initDetails();
+          this.setValidators();
         }
       })
     );
@@ -120,6 +122,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
       startDate: [new Date()],
       endDate: [new Date()],
       campaignState: ['DOES_NOT_REPEAT'],
+      subject: [''],
       campaignTags: [[]],
       template: [''],
       message: [''],
@@ -152,7 +155,21 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
     this.useForm.removeControl(controlName);
   }
 
-  handleSend() {
+  setValidators() {
+    if (this.campaignType === 'EMAIL') {
+      this.inputControls.subject.setValidators([Validators.required]);
+    } else {
+      this.resetValidators(this.inputControls.subject);
+    }
+  }
+
+  resetValidators(control: AbstractControl) {
+    control.clearValidators();
+    control.updateValueAndValidity({ emitEvent: false });
+    control.markAsUntouched();
+  }
+
+  handleSubmit(action: 'send' | 'save') {
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
@@ -163,7 +180,8 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
 
     const formData = this.campaignFormService.posFormData(
       this.useForm.getRawValue() as CampaignForm,
-      this.campaignType
+      this.campaignType,
+      action
     );
     this.$subscription.add(
       this.campaignService
@@ -179,8 +197,6 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
         })
     );
   }
-
-  handleSave() {}
 
   get inputControls() {
     return this.useForm.controls as Record<keyof CampaignForm, AbstractControl>;

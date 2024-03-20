@@ -7,9 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  AdminUtilityService,
-} from '@hospitality-bot/admin/shared';
+import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { campaignConfig } from '../../constant/campaign';
@@ -38,6 +36,7 @@ export class ToDropdownComponent implements OnInit, OnDestroy {
 
   tabFilterIdx = 0;
   offset = 0;
+  limit = 5;
 
   tabFilterItems = campaignConfig.dropDownTabFilter;
   subscribers = campaignConfig.subscribers;
@@ -90,7 +89,7 @@ export class ToDropdownComponent implements OnInit, OnDestroy {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         {
-          limit: campaignConfig.rowsPerPage.rows,
+          limit: this.limit,
           entityState: campaignConfig.topicConfig.active,
           offset: this.offset,
         },
@@ -105,7 +104,7 @@ export class ToDropdownComponent implements OnInit, OnDestroy {
             data: listingData.records,
             totalRecords: listingData.total,
           };
-          this.offset = this.offset + campaignConfig.rowsPerPage.rows;
+          this.limit = this.limit + campaignConfig.rowsPerPage.rows;
         })
     );
   }

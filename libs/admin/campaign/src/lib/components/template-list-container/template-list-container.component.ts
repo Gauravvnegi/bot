@@ -82,7 +82,10 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
           this.campaignForm = formData as CampaignForm;
           if (this.campaignType === 'EMAIL')
             this.inputControls?.template.patchValue(
-              this.campaignForm?.template
+              this.campaignForm?.template,
+              {
+                emitEvent: false,
+              }
             );
           this.inputControls?.topic.patchValue(this.campaignForm.topic, {
             emitEvent: false,
@@ -96,7 +99,7 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
 
   listenChanges() {
     this.listenForTopicChanges();
-    this.listenForTemplateChanges();
+    if (this.campaignType === 'EMAIL') this.listenForTemplateChanges();
   }
 
   listenForTopicChanges() {

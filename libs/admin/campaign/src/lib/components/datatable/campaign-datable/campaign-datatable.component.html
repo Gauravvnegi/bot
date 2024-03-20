@@ -95,6 +95,16 @@
             class="text"
             *ngIf="rowData.name || rowData.topicName; else emptyCell"
           >
+            <img
+              *ngIf="rowData.channel === 'WHATSAPP'"
+              src="assets/svg/whatsapp-campaign.svg"
+              alt="Whatsapp"
+            />
+            <img
+              *ngIf="rowData.channel === 'EMAIL'"
+              src="assets/svg/email-campaign.svg"
+              alt="Email"
+            />
             <div class="template-name">{{ rowData.name }}</div>
           </div>
         </div>

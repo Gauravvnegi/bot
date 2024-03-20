@@ -149,6 +149,7 @@ import { TableSwitchComponent } from './components/table-switch/table-switch.com
 import { DualPlotComponent } from './components/dual-plot/dual-plot.component';
 import { GaugeChartModule } from 'angular-gauge-chart';
 import { ChartsModule } from 'ng2-charts';
+import { DoughnutComponent } from './components/doughnut/doughnut.component';
 
 @NgModule({
   imports: [
@@ -300,6 +301,7 @@ import { ChartsModule } from 'ng2-charts';
     DateGroupFilterComponent,
     TableSwitchComponent,
     DualPlotComponent,
+    DoughnutComponent,
   ],
 
   exports: [
@@ -437,6 +439,7 @@ import { ChartsModule } from 'ng2-charts';
     DateGroupFilterComponent,
     TableSwitchComponent,
     DualPlotComponent,
+    DoughnutComponent,
   ],
 })
 export class AdminSharedModule {}

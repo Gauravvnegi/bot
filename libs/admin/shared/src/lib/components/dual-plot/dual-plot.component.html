@@ -26,15 +26,15 @@
   </div>
   <div class="line-chart">
     <canvas
-      *skeleton="chart == undefined; height: '65vh'; width: '100%'"
+      *skeleton="DualPlotData == undefined; height: '65vh'; width: '100%'"
       baseChart
       class="line-chart__canvas"
-      [datasets]="chart.data"
-      [labels]="chart.labels"
-      [options]="chart.options"
-      [colors]="chart.colors"
-      [legend]="chart.legend"
-      [chartType]="chart.type"
+      [datasets]="DualPlotData.data"
+      [labels]="DualPlotData.labels"
+      [options]="DualPlotData.options"
+      [colors]="DualPlotData.colors"
+      [legend]="DualPlotData.legend"
+      [chartType]="DualPlotData.type"
     >
     </canvas>
   </div>

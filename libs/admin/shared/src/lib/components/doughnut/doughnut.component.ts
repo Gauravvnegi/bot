@@ -45,28 +45,28 @@ const DefaultDoughnutConfig = {
 };
 
 const doughnutTransparentGraphDefaultConfig = {
-  Labels: ['NO DATA'],
-  Data: [],
+  Labels: ['No Data'],
+  Data: [[100]],
   Type: 'doughnut',
   Legend: false,
   Colors: [
     {
-      backgroundColor: ['transparent'],
-      borderColor: ['transparent'],
+      backgroundColor: ['#D5D1D1'],
+      borderColor: ['#D5D1D1'],
     },
   ],
   Options: DefaultDoughnutConfig,
 };
 
 const doughnutGraphDefaultConfig = {
-  Labels: ['NO DATA'],
-  Data: [],
+  Labels: ['No Data'],
+  Data: [[100]],
   Type: 'doughnut',
   Legend: false,
   Colors: [
     {
-      backgroundColor: ['#e61042'],
-      borderColor: ['#e61042'],
+      backgroundColor: ['#D5D1D1'],
+      borderColor: ['#D5D1D1'],
     },
   ],
   Options: DefaultDoughnutConfig,
@@ -82,7 +82,7 @@ export class DoughnutComponent implements OnInit {
   doughnutGraphData: DoughnutChartData = doughnutGraphDefaultConfig;
   doughnutTransparentGraphData: DoughnutChartData = doughnutTransparentGraphDefaultConfig;
 
-  @Input() label: string = 'Doughnut';
+  @Input() label: string;
   @Input() loading: boolean = false;
   @Input() selectedColor: string = '#e61042';
 
@@ -139,72 +139,3 @@ export class DoughnutComponent implements OnInit {
     }
   }
 }
-
-// const doughnutGraphData = {
-//   Labels: [
-//     'Maintenance',
-//     'Wifi Services',
-//     'Reservations',
-//     'Front Office',
-//     'Food & Beverage',
-//     'House Keeping',
-//   ],
-//   Data: [[2, 2, 2, 2, 2, 2]],
-//   Type: 'doughnut',
-//   Legend: false,
-//   Colors: [
-//     {
-//       backgroundColor: [
-//         '#e61042',
-//         '#b2b7bc',
-//         '#99a6b5',
-//         '#909090',
-//         '#7e7e7e',
-//         '#696969',
-//       ],
-//       borderColor: [
-//         '#e61042',
-//         'transparent',
-//         'transparent',
-//         'transparent',
-//         'transparent',
-//         'transparent',
-//       ],
-//     },
-//   ],
-//   Options: DefaultDoughnutConfig,
-// };
-
-// const doughnutTransparentGraphData = {
-//   Labels: [
-//     'Maintenance',
-//     'Wifi Services',
-//     'Reservations',
-//     'Front Office',
-//     'Food & Beverage',
-//     'House Keeping',
-//   ],
-//   Data: [[2, 2, 2, 2, 2, 2]],
-//   Type: 'doughnut',
-//   Legend: false,
-//   Colors: [
-//     {
-//       backgroundColor: [
-//         '#e61042',
-//         'transparent',
-//         'transparent',
-//         'transparent',
-//         'transparent',
-//         'transparent',
-//       ],
-//       borderColor: [
-//         '#e61042',
-//         'transparent',
-//         'transparent',
-//         'transparent',
-//         'transparent',
-//       ],
-//     },
-//   ],
-//   Options: DefaultDoughnutConfig,
-// };

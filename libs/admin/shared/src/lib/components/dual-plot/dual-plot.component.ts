@@ -1,6 +1,12 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DualPlotChartConfig } from '../../types/chart.type';
+import {
+  DualPlotChartConfig,
+  DualPlotFilterOptions,
+  DualPlotGraphColor,
+  DualPlotGraphDataset,
+  DualPlotOptions,
+} from '../../types/chart.type';
 import { BaseChartDirective } from 'ng2-charts';
 
 const GraphType = {
@@ -29,13 +35,6 @@ const chartTypeConfig: ChartTypeConfig[] = [
     backgroundColor: '#DEFFF3',
   },
 ];
-
-type DualPlotFilterOptions = {
-  label: string;
-  color: string;
-  icon: string;
-};
-
 @Component({
   selector: 'hospitality-bot-dual-plot',
   templateUrl: './dual-plot.component.html',
@@ -47,11 +46,29 @@ export class DualPlotComponent implements OnInit {
   chartTypeOption = chartTypeConfig;
 
   @Input() graphType: GraphType = GraphType.LINE;
-  @Input() isSwitchAble: boolean = true;
-  @Input() chart: DualPlotChartConfig;
-  @Input() label: string = 'Graph';
+  @Input() isSwitchAble: boolean = false;
+  @Input() label: string;
   @Input() icon: string;
   @Input() filterOptions: DualPlotFilterOptions;
+
+  @Input() options: DualPlotOptions = defaultDualPlotOptions; //to customize graph design
+  @Input() colors: DualPlotGraphColor[] = defaultDualPlotColors; //plotted graph colors
+  @Input() datasets: DualPlotGraphDataset[] = []; //graph data
+
+  @Input() set config(value: DualPlotChartConfig) {
+    if (value) {
+      Object.assign(this, value);
+    }
+  }
+
+  DualPlotData: DualPlotChartConfig = {
+    data: this.datasets,
+    labels: [],
+    options: this.options,
+    colors: this.colors,
+    legend: false,
+    type: 'line' as any,
+  };
 
   constructor(private fb: FormBuilder) {}
 
@@ -66,7 +83,7 @@ export class DualPlotComponent implements OnInit {
   }
 
   setChartType(config: ChartTypeConfig) {
-    this.chart.type = config.value;
+    this.DualPlotData.type = config.value;
   }
 
   onFilterCLick(index: number) {
@@ -93,108 +110,66 @@ export class DualPlotComponent implements OnInit {
   }
 }
 
-// const chart = {
-//   data: [
-//     {
-//       backgroundColor: ['#DEFFF3'],
-//       borderColor: ['#0C8054'] as any,
-//       data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     },
-//   ],
-//   labels: [
-//     '01 Mar',
-//     '02 Mar',
-//     '03 Mar',
-//     '04 Mar',
-//     '05 Mar',
-//     '06 Mar',
-//     '07 Mar',
-//     '08 Mar',
-//     '09 Mar',
-//     '10 Mar',
-//     '11 Mar',
-//     '12 Mar',
-//     '13 Mar',
-//   ],
-//   options: {
-//     responsive: true,
-//     elements: {
-//       line: {
-//         tension: 0,
-//       },
-//       point: {
-//         radius: 4,
-//         borderWidth: 2,
-//         hitRadius: 5,
-//         hoverRadius: 5,
-//         hoverBorderWidth: 2,
-//       },
-//     },
-//     scales: {
-//       xAxes: [
-//         {
-//           gridLines: {
-//             display: false,
-//           },
-//         },
-//       ],
-//       yAxes: [
-//         {
-//           gridLines: {
-//             display: true,
-//           },
-//           ticks: {
-//             min: 0,
-//           },
-//         },
-//       ],
-//     },
-//     tooltips: {
-//       backgroundColor: 'white',
-//       bodyFontColor: 'black',
-//       borderColor: '#f4f5f6',
-//       borderWidth: 3,
-//       titleFontColor: 'black',
-//       titleMarginBottom: 5,
-//       xPadding: 10,
-//       yPadding: 10,
-//     },
-//   },
-//   colors: [
-//     {
-//       borderColor: '#0C8054',
-//       backgroundColor: '#DEFFF3',
-//       pointBackgroundColor: 'white',
-//       pointBorderColor: '#0C8054',
-//       pointHoverBackgroundColor: 'white',
-//       pointHoverBorderColor: '#0C8054',
-//     },
-//     {
-//       borderColor: '#ef1d45',
-//       backgroundColor: '#DEFFF3',
-//       pointBackgroundColor: 'white',
-//       pointBorderColor: '#ef1d45',
-//       pointHoverBackgroundColor: 'white',
-//       pointHoverBorderColor: '#ef1d45',
-//     },
-//   ],
-//   legend: false,
-//   type: 'line' as any,
-// };
+const defaultDualPlotOptions: DualPlotOptions = {
+  responsive: true,
+  elements: {
+    line: {
+      tension: 0,
+    },
+    point: {
+      radius: 4,
+      borderWidth: 2,
+      hitRadius: 5,
+      hoverRadius: 5,
+      hoverBorderWidth: 2,
+    },
+  },
+  scales: {
+    xAxes: [
+      {
+        gridLines: {
+          display: false,
+        },
+      },
+    ],
+    yAxes: [
+      {
+        gridLines: {
+          display: true,
+        },
+        ticks: {
+          min: 0,
+        },
+      },
+    ],
+  },
+  tooltips: {
+    backgroundColor: 'white',
+    bodyFontColor: 'black',
+    borderColor: '#f4f5f6',
+    borderWidth: 3,
+    titleFontColor: 'black',
+    titleMarginBottom: 5,
+    xPadding: 10,
+    yPadding: 10,
+  },
+};
 
-// const filterOptions = [
-//   {
-//     label: 'Sent',
-//     borderColor: '#0749fc',
-//     backgroundColor: '#0749fc',
-//     dashed: true,
-//     icon: 'assets/svg/sent.svg',
-//   },
-//   {
-//     label: 'Delivered',
-//     borderColor: '#f2509b',
-//     backgroundColor: '#f2509b',
-//     dashed: false,
-//     icon: 'assets/svg/sent.svg',
-//   },
-// ];
+const defaultDualPlotColors: DualPlotGraphColor[] = [
+  {
+    borderColor: '#0C8054',
+    backgroundColor: '#DEFFF3',
+    pointBackgroundColor: 'white',
+    pointBorderColor: '#0C8054',
+    pointHoverBackgroundColor: 'white',
+    pointHoverBorderColor: '#0C8054',
+  },
+  {
+    borderColor: '#ef1d45',
+    backgroundColor: '#DEFFF3',
+    pointBackgroundColor: 'white',
+    pointBorderColor: '#ef1d45',
+    pointHoverBackgroundColor: 'white',
+    pointHoverBorderColor: '#ef1d45',
+  },
+];

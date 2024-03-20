@@ -26,6 +26,7 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
 
   @Input() template: TopicTemplatesData;
   @Input() entityId: string;
+
   @Output() selectedTemplate = new EventEmitter();
   parentFG: FormGroup;
   loading: boolean;

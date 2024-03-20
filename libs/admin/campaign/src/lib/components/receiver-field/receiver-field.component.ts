@@ -1,10 +1,22 @@
 import { ENTER, COMMA, TAB } from '@angular/cdk/keycodes';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ReceiversSearchItem } from '../../data-model/email.model';
 import { EmailService } from '../../services/email.service';
-import { ControlContainer, FormGroup } from '@angular/forms';
-import { ListType, RecipientType } from '../../types/campaign.type';
+import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
+import {
+  CampaignForm,
+  ListType,
+  RecipientType,
+} from '../../types/campaign.type';
+import { Option } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-to-receiver-field',
@@ -15,10 +27,12 @@ export class ReceiverFieldComponent implements OnInit, OnDestroy {
   parentFG: FormGroup;
   @Input() controlName: string;
   chipList = [];
-  recipientValues: string[] = [];
+  recipients: Option[] = [];
   entityId: string;
   disableInput = false;
   disabled = false;
+
+  @Output() selectedRecipients = new EventEmitter();
 
   @Input() set recieverProps(value: RecieverProps) {
     Object.entries(value)?.forEach(([key, value]) => {
@@ -53,30 +67,6 @@ export class ReceiverFieldComponent implements OnInit, OnDestroy {
       )
     );
   }
-
-  /**
-   * @function searchKey function to search on the basis of key.
-   * @param event event object to stop propagation.
-   */
-  // searchKey(event) {
-  //   event.stopPropagation();
-  //   const key = trim(this.receiverField.nativeElement.value);
-  //   if (!this.separatorKeysCodes.includes(event.which) && key.length > 0) {
-  //     this.$subscription.add(
-  //       this._campaignService
-  //         .searchReceivers(this.entityId, key)
-  //         .subscribe((response) => {
-  //           this.search = true;
-  //           this.searchList = new ReceiversSearch().deserialize(
-  //             response
-  //           ).records;
-  //         })
-  //     );
-  //   } else {
-  //     this.search = false;
-  //     this.searchList = new ReceiversSearch().deserialize({}).records;
-  //   }
-  // }
 
   /**
    * @function enableReceiverField function to enable receiver field.
@@ -115,10 +105,19 @@ export class ReceiverFieldComponent implements OnInit, OnDestroy {
     type: TType;
     data: ListType<TType>;
   }) {
-    let recipientLabels = [...this.parentFG.get('to').value, event.data.name];
-    event.data.id && this.recipientValues.push(event.data.id);
-    this.recipientValues = [...new Set(this.recipientValues)];
-    this.parentFG.get('to').patchValue([...new Set(recipientLabels)]);
+    let recipientLabels = [...this.inputControls.to.value, event.data.name];
+    event.data.id &&
+      this.recipients.push({ label: event.data.name, value: event.data.id });
+    this.recipients = [...new Set(this.recipients)];
+    this.selectedRecipients.emit(this.recipients);
+    this.inputControls.to.patchValue([...new Set(recipientLabels)]);
+  }
+
+  get inputControls() {
+    return this.parentFG.controls as Record<
+      keyof CampaignForm,
+      AbstractControl
+    >;
   }
 
   /**

@@ -100,13 +100,13 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
       {
         label: 'Email',
         command: () => {
-          this.openCreateCampaign();
+          this.openCreateCampaign('EMAIL');
         },
       },
       {
         label: 'Whatsapp',
         command: () => {
-          this.openCreateCampaign('whatsapp');
+          this.openCreateCampaign('WHATSAPP');
         },
       },
     ];
@@ -260,10 +260,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   /**
    * @function openCreateCampaign to create campaign page.
    */
-  openCreateCampaign(campaignType: CampaignType = 'email'): void {
-    this.campaignService.campaignType = campaignType;
+  openCreateCampaign(campaignType: CampaignType): void {
     this.routesConfigService.navigate({
       additionalPath: 'create-campaign',
+      queryParams: {
+        campaignType: campaignType,
+      },
     });
   }
 

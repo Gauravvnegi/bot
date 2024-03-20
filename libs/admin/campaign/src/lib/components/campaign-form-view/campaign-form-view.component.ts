@@ -1,10 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  ModuleNames,
-  NavRouteOptions,
-  Option,
-  Regex,
-} from '@hospitality-bot/admin/shared';
+import { NavRouteOptions, Option, Regex } from '@hospitality-bot/admin/shared';
 import { CampaignForm, CampaignType } from '../../types/campaign.type';
 import { campaignRoutes } from '../../constant/route';
 import { Observable, Subscription } from 'rxjs';
@@ -25,6 +20,7 @@ import {
 import { triggerOptions, eventOptions } from '../../constant/campaign';
 import { CampaignService } from '../../services/campaign.service';
 import { ActivatedRoute } from '@angular/router';
+import { CampaignFormService } from '../../services/campaign-form.service';
 
 @Component({
   selector: 'hospitality-bot-campaign-form-view',
@@ -43,6 +39,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
   navRoutes: NavRouteOptions = [];
   triggerOptions: Option[] = [];
   eventOptions: Option[] = [];
+  recipients: Option[] = [];
   topicList: Observable<Option[]>;
 
   private $subscription = new Subscription();
@@ -52,12 +49,11 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
     private campaignService: CampaignService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private campaignFormService: CampaignFormService
   ) {}
 
   ngOnInit(): void {
-    this.campaignType = this.campaignService?.campaignType;
-    this.initDetails();
     this.initForm();
     this.listenRouteData();
   }
@@ -69,6 +65,10 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
           const formData = JSON.parse(atob(res.formData));
           this.useForm.patchValue(formData as CampaignForm);
         }
+        if (res.campaignType) {
+          this.campaignType = res.campaignType;
+          this.initDetails();
+        }
       })
     );
   }
@@ -76,12 +76,13 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
   initDetails() {
     this.triggerOptions = triggerOptions;
     this.eventOptions = eventOptions;
-    const { title } = campaignRoutes[
-      this.campaignType === 'email'
+    const { title, navRoutes } = campaignRoutes[
+      this.campaignType === 'EMAIL'
         ? 'createEmailCampaign'
         : 'createWhatsappCampaign'
     ];
     this.pageTitle = title;
+    this.navRoutes = navRoutes;
     this.entityId = this.globalFilterService.entityId;
     this.topicList = this.campaignService.mapTopicList(this.entityId);
     this.initNavRoutes();
@@ -110,8 +111,10 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
       startDate: [new Date()],
       endDate: [new Date()],
       campaignState: ['DOES_NOT_REPEAT'],
+      campaignTags: [[]],
       template: [''],
       message: [''],
+      templateId: [''],
     });
   }
 
@@ -122,15 +125,29 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
     );
   }
 
-  handleSend() {}
+  removeControl(controlName: string) {
+    this.useForm.removeControl(controlName);
+  }
+
+  selectedRecipients(recipients: Option[]) {
+    this.recipients = recipients;
+  }
+
+  handleSend() {
+    const formData = this.campaignFormService.posFormData(
+      this.useForm.getRawValue() as CampaignForm,
+      this.campaignType,
+      this.recipients
+    );
+  }
 
   handleSave() {}
 
-  ngOnDestroy() {
-    this.$subscription.unsubscribe();
-  }
-
   get inputControls() {
     return this.useForm.controls as Record<keyof CampaignForm, AbstractControl>;
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

@@ -28,6 +28,10 @@ export class CampaignService extends ApiService {
     );
   }
 
+  createCampaign(entityId: string, formData) {
+    return this.post(`/api/v1/cms/${entityId}/campaign`, formData);
+  }
+
   /**
    * @function getTopicList to get topic list.
    * @param id dynamically getting entityId into api.

@@ -187,3 +187,9 @@
   margin: 0 2rem;
   width: 94%;
 }
+
+.loader {
+  height: 65vh;
+  @include flex-justify-align-center;
+}
+

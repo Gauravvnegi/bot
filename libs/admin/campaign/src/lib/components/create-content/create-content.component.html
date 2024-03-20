@@ -1,37 +1,46 @@
 <div class="wrapper">
-  <div class="manually-add full-width">
-    <div
-      class="manually-add-templates"
-      (click)="openTemplateList('SAVEDTEMPLATE')"
-    >
-      <img
-        [src]="campaignConfig.images.saved.url"
-        [alt]="campaignConfig.images.saved.alt"
-      />
-      <div>
-        Saved Template
+  <ng-container *ngIf="campaignType === 'WHATSAPP'">
+    <hospitality-bot-button
+      label="Select Template"
+      variant="outlined"
+      (onClick)="openTemplateList()"
+    ></hospitality-bot-button>
+  </ng-container>
+  <ng-container *ngIf="campaignType === 'EMAIL'">
+    <div class="manually-add full-width">
+      <div
+        class="manually-add-templates"
+        (click)="openTemplateList('SAVEDTEMPLATE')"
+      >
+        <img
+          [src]="campaignConfig.images.saved.url"
+          [alt]="campaignConfig.images.saved.alt"
+        />
+        <div>
+          Saved Template
+        </div>
+      </div>
+      <div
+        class="manually-add-templates"
+        (click)="openTemplateList('PREDESIGNTEMPLATE')"
+      >
+        <img
+          [src]="campaignConfig.images.inbuilt.url"
+          [alt]="campaignConfig.images.inbuilt.alt"
+        />
+        <div>
+          In-Built Template
+        </div>
+      </div>
+      <div class="manually-add-templates" (click)="createTemplate()">
+        <img
+          [src]="campaignConfig.images.editTemplate.url"
+          [alt]="campaignConfig.images.editTemplate.alt"
+        />
+        <div>
+          Create New (HTML Editor)
+        </div>
       </div>
     </div>
-    <div
-      class="manually-add-templates"
-      (click)="openTemplateList('PREDESIGNTEMPLATE')"
-    >
-      <img
-        [src]="campaignConfig.images.inbuilt.url"
-        [alt]="campaignConfig.images.inbuilt.alt"
-      />
-      <div>
-        In-Built Template
-      </div>
-    </div>
-    <div class="manually-add-templates" (click)="createTemplate()">
-      <img
-        [src]="campaignConfig.images.editTemplate.url"
-        [alt]="campaignConfig.images.editTemplate.alt"
-      />
-      <div>
-        Create New (HTML Editor)
-      </div>
-    </div>
-  </div>
+  </ng-container>
 </div>

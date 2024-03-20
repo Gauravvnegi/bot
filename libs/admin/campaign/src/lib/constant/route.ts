@@ -32,25 +32,25 @@ export const campaignRoutes: Record<
 
   createEmailCampaign: {
     route: 'create-campaign',
-    navRoutes: [navRoute.campaignDataTable, navRoute.createCampaign],
+    navRoutes: [navRoute.createCampaign],
     title: 'Email Campaign',
   },
 
   editEmailCampaign: {
     route: 'edit-campaign',
-    navRoutes: [navRoute.campaignDataTable, navRoute.editCampaign],
+    navRoutes: [navRoute.editCampaign],
     title: 'Email Campaign',
   },
 
   createWhatsappCampaign: {
     route: 'create-campaign',
-    navRoutes: [navRoute.campaignDataTable, navRoute.createCampaign],
+    navRoutes: [navRoute.createCampaign],
     title: 'Whatsapp Campaign',
   },
 
   editWhatsappCampaign: {
     route: 'edit-campaign',
-    navRoutes: [navRoute.campaignDataTable, navRoute.editCampaign],
+    navRoutes: [navRoute.editCampaign],
     title: 'Whatsapp Campaign',
   },
 };

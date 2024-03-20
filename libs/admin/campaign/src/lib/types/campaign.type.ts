@@ -16,7 +16,7 @@ export type MessageObj = {
   message: string;
 };
 
-export type CampaignType = 'whatsapp' | 'email';
+export type CampaignType = 'WHATSAPP' | 'EMAIL';
 
 const CampaignState = {
   DOES_NOT_REPEAT: 'DOES_NOT_REPEAT',
@@ -47,9 +47,10 @@ export type CampaignForm = {
   campaignState: CampaignState;
   template: TemplateType;
   message: string;
-  templateTopic: string;
-  cc?: string;
-  bcc?: string;
+  cc?: string[];
+  bcc?: string[];
+  campaignTags: string[];
+  templateId: string;
 };
 
 export type RecipientType = 'LISTING' | 'SUBSCRIBER';
@@ -57,3 +58,24 @@ export type RecipientType = 'LISTING' | 'SUBSCRIBER';
 export type ListType<T extends RecipientType> = T extends 'LISTING'
   ? IList
   : { name: string; id: string };
+
+export class PostCampaignForm {
+  channel: CampaignType;
+  to: {
+    listing: string[];
+    individual: string[];
+  };
+  name: string;
+  topicId: string;
+  from: number;
+  subject?: {
+    text: string;
+  };
+  previewText?: string;
+  message: string;
+  templateId: string;
+  campaignType: string;
+  testEmails?: [];
+  tags: string[];
+  dateTime?: number;
+}

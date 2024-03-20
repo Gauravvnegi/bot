@@ -1,11 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { campaignConfig } from '../../constant/campaign';
 import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 import { ModuleNames } from '@hospitality-bot/admin/shared';
-import { CampaignForm, TemplateType } from '../../types/campaign.type';
+import {
+  CampaignForm,
+  CampaignType,
+  TemplateType,
+} from '../../types/campaign.type';
 import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CampaignService } from '../../services/campaign.service';
 @Component({
   selector: 'hospitality-bot-create-content',
   templateUrl: './create-content.component.html',
@@ -15,12 +18,13 @@ export class CreateContentComponent implements OnInit {
   parentFG: FormGroup;
   readonly campaignConfig = campaignConfig;
 
+  @Input() campaignType: CampaignType;
+
   constructor(
     private routesConfigService: RoutesConfigService,
     private controlContainer: ControlContainer,
     private router: Router,
-    private route: ActivatedRoute,
-    private campaignService: CampaignService
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -40,7 +44,7 @@ export class CreateContentComponent implements OnInit {
     };
     this.router.navigate(['template'], {
       relativeTo: this.route,
-      queryParams: queryParams,
+      queryParams: { campaignType: this.campaignType, ...queryParams },
     });
   }
 

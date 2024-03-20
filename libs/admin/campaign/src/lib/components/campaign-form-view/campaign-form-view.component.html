@@ -22,68 +22,101 @@
         placeholder: 'Select Topic'
       }"
     ></hospitality-bot-select>
-    <hospitality-bot-to-receiver-field
-      class="full-width"
-      controlName="to"
-      [recieverProps]="{
-        entityId: entityId,
-        chipList: inputControls?.to?.value,
-        disableInput: inputControls?.to?.value?.length
+    <hospitality-bot-chip-list
+      class="half-width"
+      controlName="campaignTags"
+      label="Campaign Tags"
+      [props]="{
+        placeholder: 'Enter Tags'
       }"
-    ></hospitality-bot-to-receiver-field>
-    <div
-      *ngIf="!inputControls?.bcc?.value || !inputControls?.cc?.value"
-      class="add-control-btn full-width"
     >
+    </hospitality-bot-chip-list>
+    <div class="reciever-wrapper full-width">
+      <hospitality-bot-to-receiver-field
+        controlName="to"
+        [recieverProps]="{
+          entityId: entityId,
+          chipList: inputControls?.to?.value,
+          disableInput: inputControls?.to?.value?.length
+        }"
+        (selectedRecipients)="selectedRecipients($event)"
+      ></hospitality-bot-to-receiver-field>
+      <div
+        *ngIf="!inputControls?.bcc?.value || !inputControls?.cc?.value"
+        class="control-btn"
+      >
+        <hospitality-bot-button
+          *ngIf="!inputControls?.cc?.value"
+          label="+ Cc"
+          (click)="addControl('cc')"
+          height="20px"
+          minWidth="20px"
+          variant="text"
+        ></hospitality-bot-button>
+        <hospitality-bot-button
+          *ngIf="!inputControls?.bcc?.value"
+          label="+ Bcc"
+          (click)="addControl('bcc')"
+          variant="text"
+          height="20px"
+          minWidth="20px"
+        ></hospitality-bot-button>
+      </div>
+    </div>
+    <div *ngIf="inputControls?.cc?.value" class="full-width reciever-wrapper">
+      <hospitality-bot-chip-list
+        controlName="cc"
+        [props]="{
+          placeholder: 'Enter Cc',
+          errorMessages: {
+            required: 'This is a required field.',
+            pattern: 'Please enter a valid email address.'
+          }
+        }"
+      ></hospitality-bot-chip-list>
       <hospitality-bot-button
-        *ngIf="!inputControls?.cc?.value"
-        label="+ Cc"
-        (click)="addControl('cc')"
+        class="control-btn"
+        severity="reset"
+        variant="text"
+        label="Remove"
         height="20px"
         minWidth="20px"
-        variant="text"
-      ></hospitality-bot-button>
-      <hospitality-bot-button
-        *ngIf="!inputControls?.bcc?.value"
-        label="+ Bcc"
-        (click)="addControl('bcc')"
-        variant="text"
-        height="20px"
-        minWidth="20px"
+        (onClick)="removeControl('cc')"
       ></hospitality-bot-button>
     </div>
-    <hospitality-bot-chip-list
-      *ngIf="inputControls?.cc?.value"
-      class="full-width"
-      label="Cc"
-      controlName="cc"
-      [props]="{
-        placeholder: 'Add Recipient',
-        errorMessages: {
-          required: 'This is a required field.',
-          pattern: 'Please enter a valid email address.'
-        }
-      }"
-    ></hospitality-bot-chip-list>
-    <hospitality-bot-chip-list
-      *ngIf="inputControls?.bcc?.value"
-      class="full-width"
-      label="Bcc"
-      controlName="bcc"
-      [props]="{
-        placeholder: 'Add Recipient',
-        errorMessages: {
-          required: 'This is a required field.',
-          pattern: 'Please enter a valid email address.'
-        }
-      }"
-    ></hospitality-bot-chip-list>
+    <div *ngIf="inputControls?.bcc?.value" class="full-width reciever-wrapper">
+      <hospitality-bot-chip-list
+        controlName="bcc"
+        [props]="{
+          placeholder: 'Enter Bcc',
+          errorMessages: {
+            required: 'This is a required field.',
+            pattern: 'Please enter a valid email address.'
+          }
+        }"
+      ></hospitality-bot-chip-list>
+      <hospitality-bot-button
+        class="control-btn"
+        severity="reset"
+        variant="text"
+        label="Remove"
+        height="20px"
+        minWidth="20px"
+        (onClick)="removeControl('bcc')"
+      ></hospitality-bot-button>
+    </div>
     <hr class="data-separator" />
-    <div class="group-header half-width">When</div>
+    <div class="group-header one-third-width">When</div>
+    <div class="one-third-width"></div>
     <hospitality-bot-select
-      class="half-width"
+      [ngClass]="
+        inputControls.campaignState.value !== 'DOES_NOT_REPEAT'
+          ? 'half-width'
+          : 'one-third-width'
+      "
       controlName="campaignState"
       [options]="triggerOptions"
+      [disabled]="true"
     ></hospitality-bot-select>
     <hospitality-bot-select
       *ngIf="inputControls.campaignState.value !== 'DOES_NOT_REPEAT'"
@@ -117,6 +150,7 @@
     <hospitality-bot-create-content
       *ngIf="!inputControls.message?.value?.length"
       class="full-width"
+      [campaignType]="campaignType"
     ></hospitality-bot-create-content>
     <hospitality-bot-template-editor
       *ngIf="inputControls.message?.value?.length"

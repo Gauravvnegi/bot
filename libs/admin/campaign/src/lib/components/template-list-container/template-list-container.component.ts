@@ -9,9 +9,12 @@ import { Observable, Subscription } from 'rxjs';
 import { campaignConfig } from '../../constant/campaign';
 import { CampaignService } from '../../services/campaign.service';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
-import { CampaignForm, TemplateType } from '../../types/campaign.type';
+import {
+  CampaignForm,
+  CampaignType,
+  TemplateType,
+} from '../../types/campaign.type';
 import { TopicTemplatesData } from '../../types/template.type';
-import { map } from 'rxjs/operators';
 import {
   GlobalFilterService,
   RoutesConfigService,
@@ -31,10 +34,14 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
   templateTypes = campaignConfig.datatable.templateTypes;
 
   topicList: Observable<Option[]>;
-  templateTopicList: Observable<TopicTemplatesData[]>;
+  templateTopicList: TopicTemplatesData[];
+
   selectedTopic: string;
   campaignForm: CampaignForm;
 
+  loading = false;
+
+  campaignType: CampaignType;
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -42,13 +49,12 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
     protected _translateService: TranslateService,
     private globalFilterService: GlobalFilterService,
     private activatedRoute: ActivatedRoute,
-    private routesConfigService: RoutesConfigService,
+    private routesConfigService: RoutesConfigService
   ) {}
 
   ngOnInit(): void {
     this.initForm();
     this.initDetails();
-    this.getTemplateForAllTopics();
     this.listenForRouteData();
   }
 
@@ -68,11 +74,22 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
   listenForRouteData() {
     this.$subscription.add(
       this.activatedRoute.queryParams.subscribe((res) => {
+        if (res.campaignType) {
+          this.campaignType = res.campaignType;
+        }
         if (res.formData) {
           const formData = JSON.parse(atob(res.formData));
           this.campaignForm = formData as CampaignForm;
-          this.inputControls.template.patchValue(this.campaignForm?.template);
+          if (this.campaignType === 'EMAIL')
+            this.inputControls?.template.patchValue(
+              this.campaignForm?.template
+            );
+          this.inputControls?.topic.patchValue(this.campaignForm.topic, {
+            emitEvent: false,
+          });
+          this.getTemplateByTopicId(this.campaignForm.topic);
         }
+        this.getTemplateForAllTopics();
       })
     );
   }
@@ -97,6 +114,7 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
   selectedTemplate(htmlTemplate: string) {
     this.campaignForm = { ...this.campaignForm, message: htmlTemplate };
     const queryParams = {
+      campaignType: this.campaignType,
       formData: btoa(JSON.stringify(this.campaignForm)),
     };
 
@@ -111,19 +129,20 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
    * @function getTemplateForAllTopics function to get template across respective topic.
    */
   getTemplateForAllTopics() {
-    const config = {
-      queryObj: this.adminUtilityService.makeQueryParams([
-        {
-          entityState: campaignConfig.topicConfig.active,
-          limit: campaignConfig.templateCard.limit,
-          templateType: this.inputControls.template.value,
-        },
-      ]),
-    };
-
-    this.templateTopicList = this.campaignService
-      .getTemplateByContentType(this.entityId, config)
-      .pipe(map((response) => response));
+    this.loading = true;
+    this.$subscription.add(
+      this.campaignService
+        .getTemplateByContentType(this.entityId, this.getConfig())
+        .subscribe(
+          (response) => {
+            if (response) {
+              this.templateTopicList = response;
+            }
+          },
+          (error) => (this.loading = false),
+          () => (this.loading = false)
+        )
+    );
   }
 
   /**
@@ -131,27 +150,44 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
    * @param topic topic data.
    */
   getTemplateByTopicId(topicId: string) {
+    if (topicId?.length) {
+      this.loading = true;
+      this.$subscription.add(
+        this.campaignService
+          .getTemplateListByTopicId(this.entityId, topicId, this.getConfig())
+          .subscribe(
+            (response) => {
+              this.templateTopicList = [
+                {
+                  templates: response.records,
+                  topicId: response.topicId,
+                  topicName: response.topicName,
+                  totalTemplate: response.total,
+                },
+              ];
+            },
+            (error) => (this.loading = false),
+            () => (this.loading = false)
+          )
+      );
+    }
+  }
+
+  getConfig() {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
           entityState: campaignConfig.topicConfig.active,
           limit: campaignConfig.templateCard.limit,
-          templateType: this.inputControls.template.value,
+          templateType:
+            this.campaignType === 'EMAIL'
+              ? this.inputControls.template.value
+              : undefined,
+          entityType: this.campaignType === 'WHATSAPP' ? 'WHATSAPP' : undefined,
         },
       ]),
     };
-    this.templateTopicList = this.campaignService
-      .getTemplateListByTopicId(this.entityId, topicId, config)
-      .pipe(
-        map((response) => [
-          {
-            templates: response.records,
-            topicId: response.topicId,
-            topicName: response.topicName,
-            totalTemplate: response.total,
-          },
-        ])
-      );
+    return config;
   }
 
   /**

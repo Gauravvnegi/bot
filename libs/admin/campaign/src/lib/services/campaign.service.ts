@@ -7,7 +7,8 @@ import {
 } from '../types/campaign.type';
 import { map } from 'rxjs/operators';
 import { Topics } from 'libs/admin/listing/src/lib/data-models/listing.model';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { CampaignResponse } from '../types/campaign.response';
 
 @Injectable()
 export class CampaignService extends ApiService {
@@ -127,7 +128,10 @@ export class CampaignService extends ApiService {
    * @param campaignId dynamically getting campaignId into api.
    * @returns get api for getting campaign by id.
    */
-  getCampaignById(entityId: string, campaignId: string) {
+  getCampaignById(
+    entityId: string,
+    campaignId: string
+  ): Observable<CampaignResponse> {
     return this.get(`/api/v1/cms/${entityId}/campaign/${campaignId}`);
   }
 

@@ -285,7 +285,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   openEditCampaign(campaign: Campaign, event: MouseEvent): void {
     event.stopPropagation();
     this.routesConfigService.navigate({
-      additionalPath: `create-campaign/${campaign.id}`,
+      additionalPath: `edit-campaign/${campaign.id}`,
       queryParams: {
         campaignType: campaign.channel,
       },

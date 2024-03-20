@@ -11,9 +11,10 @@ export const navRoute = {
   },
   editCampaign: {
     label: 'Edit Campaign',
-    link: './',
+    link: './:id',
   },
   addGuest: { label: 'Add Guest', link: './' },
+  template: { label: 'Template', link: './' },
 };
 
 export const campaignRoutes: Record<
@@ -21,7 +22,9 @@ export const campaignRoutes: Record<
   | 'createWhatsappCampaign'
   | 'editWhatsappCampaign'
   | 'createEmailCampaign'
-  | 'editEmailCampaign',
+  | 'editEmailCampaign'
+  | 'editTemplate'
+  | 'createTemplate',
   PageRoutes
 > = {
   campaign: {
@@ -52,5 +55,17 @@ export const campaignRoutes: Record<
     route: 'edit-campaign',
     navRoutes: [navRoute.editCampaign],
     title: 'Whatsapp Campaign',
+  },
+
+  createTemplate: {
+    route: 'template',
+    navRoutes: [navRoute.createCampaign, navRoute.template],
+    title: 'Template',
+  },
+
+  editTemplate: {
+    route: 'template',
+    navRoutes: [navRoute.editCampaign, navRoute.template],
+    title: 'Template',
   },
 };

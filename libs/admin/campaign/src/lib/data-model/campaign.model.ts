@@ -1,7 +1,15 @@
 import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set } from 'lodash';
-import { EntityState, IDeserializable } from '@hospitality-bot/admin/shared';
-import { CampaignType } from '../types/campaign.type';
+import {
+  EntityState,
+  IDeserializable,
+  Option,
+} from '@hospitality-bot/admin/shared';
+import {
+  CampaignType,
+  TemplateType,
+} from '../types/campaign.type';
+import { CampaignResponse } from '../types/campaign.response';
 
 export class Campaigns implements IDeserializable {
   records: Campaign[];
@@ -85,5 +93,38 @@ export class Campaign implements IDeserializable {
       return DateService.getDateFromTimeStamp(this.updatedAt, format, timezone);
     }
     return DateService.getDateFromTimeStamp(this.createdAt, format, timezone);
+  }
+}
+
+export class CampaignFormData {
+  campaignName: string;
+  topic: string;
+  to: string[];
+  event: string;
+  startDate: number;
+  endDate: number;
+  campaignState: string;
+  template: TemplateType;
+  message: string;
+  cc?: string[];
+  bcc?: string[];
+  campaignTags: string[];
+  templateId: string;
+  from: string;
+  recipients: Option[];
+  subject: string;
+
+  deserialize(input: CampaignResponse) {
+    this.campaignName = input.name;
+    this.topic = input.topicId;
+    this.startDate = input.dateTime;
+    this.campaignState = input.campaignType;
+    this.message = input.message;
+    this.templateId = input.templateId;
+    this.from = input.from;
+    this.subject = input.subject.text;
+    this.cc = input.cc;
+    this.bcc = input.bcc;
+    return this;
   }
 }

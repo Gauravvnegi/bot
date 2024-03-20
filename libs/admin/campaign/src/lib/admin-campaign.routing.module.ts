@@ -15,6 +15,7 @@ import { TemplateListContainerComponent } from './components/template-list-conta
 import { TopicTemplatesComponent } from './components/topic-templates/topic-templates.component';
 import { ScheduleCampaignComponent } from './components/schedule-campaign/schedule-campaign.component';
 import { CampaignFormViewComponent } from './components/campaign-form-view/campaign-form-view.component';
+import { campaignRoutes } from './constant/route';
 
 const appRoutes: Route[] = [
   {
@@ -26,7 +27,7 @@ const appRoutes: Route[] = [
         component: CampaignDatatableComponent,
       },
       {
-        path: 'create-campaign',
+        path: campaignRoutes.createEmailCampaign.route,
         component: CampaignComponent,
         children: [
           {
@@ -34,21 +35,24 @@ const appRoutes: Route[] = [
             component: CampaignFormViewComponent,
           },
           {
-            path: 'template',
+            path: campaignRoutes.createTemplate.route,
             component: TemplateListContainerComponent,
             pathMatch: 'full',
-            // component: CampaignComponent,
-            // children: [
-            //   {
-            //     path: '',
-            //     component: TemplateListContainerComponent,
-            //     pathMatch: 'full',
-            //   },
-            // ],
+          },
+        ],
+      },
+      {
+        path: `${campaignRoutes.editEmailCampaign.route}/:id`,
+        component: CampaignComponent,
+        children: [
+          {
+            path: '',
+            component: CampaignFormViewComponent,
           },
           {
-            path: ':campaignId',
-            component: CampaignFormViewComponent,
+            path: campaignRoutes.createTemplate.route,
+            component: TemplateListContainerComponent,
+            pathMatch: 'full',
           },
         ],
       },

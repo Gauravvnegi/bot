@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   AdminUtilityService,
   ModuleNames,
+  NavRouteOptions,
   Option,
 } from '@hospitality-bot/admin/shared';
 import { TranslateService } from '@ngx-translate/core';
@@ -20,6 +21,8 @@ import {
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
 import { ActivatedRoute } from '@angular/router';
+import { filter, take } from 'rxjs/operators';
+import { campaignRoutes } from '../../constant/route';
 
 @Component({
   selector: 'hospitality-bot-template-list-container',
@@ -31,7 +34,11 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
   templateForm: FormGroup;
 
   entityId: string;
+  campaignId: string;
   templateTypes = campaignConfig.datatable.templateTypes;
+
+  pageTitle: string;
+  navRoutes: NavRouteOptions = [];
 
   topicList: Observable<Option[]>;
   templateTopicList: TopicTemplatesData[];
@@ -53,9 +60,24 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.campaignId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initForm();
     this.initDetails();
     this.listenForRouteData();
+    this.initNavRoutes();
+  }
+
+  initNavRoutes() {
+    this.$subscription.add(
+      this.routesConfigService.navRoutesChanges
+        .pipe(
+          filter((navRoutesRes) => navRoutesRes.length > 0),
+          take(1)
+        )
+        .subscribe((navRoutesRes) => {
+          this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+        })
+    );
   }
 
   initForm() {
@@ -68,6 +90,11 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
   initDetails() {
     this.entityId = this.globalFilterService.entityId;
     this.topicList = this.campaignService.mapTopicList(this.entityId);
+    const { title, navRoutes } = campaignRoutes[
+      this.campaignId ? 'editTemplate' : 'createTemplate'
+    ];
+    this.pageTitle = title;
+    this.navRoutes = navRoutes;
     this.listenChanges();
   }
 

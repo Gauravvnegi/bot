@@ -24,6 +24,7 @@ import { CampaignFormService } from '../../services/campaign-form.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { EmailService } from '../../services/email.service';
 import { EmailList } from '../../data-model/email.model';
+import { CampaignFormData } from '../../data-model/campaign.model';
 
 @Component({
   selector: 'hospitality-bot-campaign-form-view',
@@ -36,11 +37,13 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
   useForm: FormGroup;
 
   entityId: string;
+  campaignId: string;
+
   pageTitle: string;
+  navRoutes: NavRouteOptions = [];
   campaignType: CampaignType;
 
   minDate = new Date();
-  navRoutes: NavRouteOptions = [];
   triggerOptions: Option[] = [];
   eventOptions: Option[] = [];
   fromEmailList: Option[] = [];
@@ -60,6 +63,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.campaignId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initForm();
     this.listenRouteData();
   }
@@ -86,9 +90,9 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
     this.triggerOptions = triggerOptions;
     this.eventOptions = eventOptions;
     const { title, navRoutes } = campaignRoutes[
-      this.campaignType === 'EMAIL'
-        ? 'createEmailCampaign'
-        : 'createWhatsappCampaign'
+      (this.campaignId ? 'edit' : 'create') +
+        (this.campaignType === 'EMAIL' ? 'Email' : 'Whatsapp') +
+        'Campaign'
     ];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
@@ -96,6 +100,9 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
     this.topicList = this.campaignService.mapTopicList(this.entityId);
     this.initNavRoutes();
     this.getFromEmails();
+    if (this.campaignId) {
+      this.initCampaignData();
+    }
   }
 
   initNavRoutes() {
@@ -116,7 +123,6 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
       campaignName: ['', [Validators.required]],
       topic: ['', [Validators.required]],
       to: [[]],
-      triggers: [''],
       from: ['', [Validators.required]],
       event: [''],
       startDate: [new Date()],
@@ -129,6 +135,21 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
       templateId: [''],
       recipients: [[]],
     });
+  }
+
+  initCampaignData() {
+    this.$subscription.add(
+      this.campaignService
+        .getCampaignById(this.entityId, this.campaignId)
+        .subscribe((res) => {
+          if (res) {
+            const campaignData = new CampaignFormData().deserialize(res);
+            this.useForm.patchValue(campaignData, { emitEvent: false });
+            // this.mapRecipientData()
+            this.useForm.disable();
+          }
+        })
+    );
   }
 
   addControl(controlName: string) {

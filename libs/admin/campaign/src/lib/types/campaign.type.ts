@@ -1,5 +1,5 @@
-import { Option } from '@hospitality-bot/admin/shared';
 import { IList } from 'libs/admin/listing/src/lib/data-models/listing.model';
+import { CampaignFormData } from '../data-model/campaign.model';
 
 export type QueryConfig = {
   queryObj: string;
@@ -37,25 +37,7 @@ export type TemplateType = typeof TemplateType[keyof typeof TemplateType];
 
 // export type ConstType<T extends Record<string, unknown>> = T[keyof T];
 
-export type CampaignForm = {
-  campaignName: string;
-  topic: string;
-  to: string[];
-  event: string;
-  startDate: number;
-  triggers: string;
-  endDate: number;
-  campaignState: CampaignState;
-  template: TemplateType;
-  message: string;
-  cc?: string[];
-  bcc?: string[];
-  campaignTags: string[];
-  templateId: string;
-  from: string;
-  recipients: Option[];
-  subject: string;
-};
+export type CampaignForm = Omit<CampaignFormData, 'deserialize'>;
 
 export type RecipientType = 'LISTING' | 'SUBSCRIBER';
 

@@ -151,6 +151,7 @@ import { DualPlotComponent } from './components/dual-plot/dual-plot.component';
 import { GaugeChartModule } from 'angular-gauge-chart';
 import { ChartsModule } from 'ng2-charts';
 import { ChipListComponent } from './components/form-component/chip-list/chip-list.component';
+import { DoughnutComponent } from './components/doughnut/doughnut.component';
 
 @NgModule({
   imports: [
@@ -304,6 +305,7 @@ import { ChipListComponent } from './components/form-component/chip-list/chip-li
     TableSwitchComponent,
     DualPlotComponent,
     ChipListComponent,
+    DoughnutComponent,
   ],
 
   exports: [
@@ -442,6 +444,7 @@ import { ChipListComponent } from './components/form-component/chip-list/chip-li
     TableSwitchComponent,
     DualPlotComponent,
     ChipListComponent,
+    DoughnutComponent,
   ],
 })
 export class AdminSharedModule {}

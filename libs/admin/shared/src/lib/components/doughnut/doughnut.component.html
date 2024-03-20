@@ -1,0 +1,45 @@
+<div class="doughnut__wrapper">
+  <div class="doughnut__title">
+    {{ label }}
+  </div>
+
+  <div class="wrapper">
+    <div class="doughnut__graph">
+      <div
+        class="outer"
+        *skeleton="loading; height: '25vw'; width: '25vw'; borderRadius: '50%'"
+      >
+        <canvas
+          baseChart
+          class="graph-base-chart"
+          [data]="doughnutTransparentGraphData.Data"
+          [labels]="doughnutTransparentGraphData.Labels"
+          [chartType]="doughnutTransparentGraphData.Type"
+          [legend]="doughnutTransparentGraphData.Legend"
+          [colors]="doughnutTransparentGraphData.Colors"
+          [options]="doughnutTransparentGraphData.Options"
+        >
+        </canvas>
+      </div>
+      <div class="inner" *ngIf="!loading">
+        <canvas
+          baseChart
+          class="graph-base-chart"
+          [data]="doughnutGraphData.Data"
+          [labels]="doughnutGraphData.Labels"
+          [chartType]="doughnutGraphData.Type"
+          [legend]="doughnutGraphData.Legend"
+          [colors]="doughnutGraphData.Colors"
+          [options]="doughnutGraphData.Options"
+          (chartHover)="handleCircularGraphClick($event)"
+        >
+        </canvas>
+      </div>
+      <div class="doughnut__graph__stat" *ngIf="!loading">
+        <div class="text">
+          {{ total }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

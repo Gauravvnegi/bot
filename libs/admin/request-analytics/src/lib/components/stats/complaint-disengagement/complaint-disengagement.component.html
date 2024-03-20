@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="left">
+    <hospitality-bot-doughnut
+      label="What drivers are leading to disengagement at the Property?"
+    >
+    </hospitality-bot-doughnut>
+  </div>
+
+  <div class="right">
+    <div class="right__top">
+      <div class="header">Complaint Break-down</div>
+      <div class="progress">
+        <div class="asap" [style.width]="getPercentage(30, 40, 50) + '%'"></div>
+        <div class="high" [style.width]="getPercentage(40, 30, 50) + '%'"></div>
+        <div
+          class="medium"
+          [style.width]="getPercentage(50, 40, 30) + '%'"
+        ></div>
+      </div>
+      <div class="right__top__stat-container">
+        <div>
+          <div>
+            ASAP
+            <span>{{ 0 }}</span>
+          </div>
+        </div>
+        <div>
+          <div>
+            High
+            <span>{{ 0 }}</span>
+          </div>
+        </div>
+        <div>
+          <div>
+            Medium
+            <span>{{ 0 }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="right__bottom">
+      <hospitality-bot-dual-plot
+        label="How is Complaint & Closure Rate varying over a period of time ?"
+      >
+      </hospitality-bot-dual-plot>
+    </div>
+  </div>
+</div>

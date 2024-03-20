@@ -1,0 +1,63 @@
+@import 'main';
+
+.doughnut__wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  height: 100%;
+  background: #ffffff;
+  border: solid 1px #e2e2e2;
+  box-shadow: 0px 3px 6px #0000000d;
+  border-radius: 5px;
+  min-height: 50vh;
+  position: relative;
+
+  .doughnut {
+    width: 50%;
+    border-right: solid 1px #e2e2e2;
+    padding-right: 20px;
+    &__title {
+      font-size: 16px;
+      font-weight: $bolder;
+      color: #002046;
+      margin-right: 30px;
+    }
+    &__graph {
+      margin: 30px 0;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: calc(100% - 100px);
+      width: 555px;
+
+      .outer {
+        position: absolute;
+        width: 125%;
+        z-index: 1;
+      }
+      .inner {
+        position: absolute;
+        width: 100%;
+        z-index: 10;
+      }
+      &__stat {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .text {
+          font-size: 35px;
+          font-weight: $bolder;
+          font-stretch: normal;
+          color: #002046;
+        }
+      }
+    }
+  }
+}
+.wrapper {
+  position: absolute;
+  top: 44%;
+  left: 0%;
+}

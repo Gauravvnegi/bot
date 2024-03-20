@@ -32,8 +32,6 @@ export class ReceiverFieldComponent implements OnInit, OnDestroy {
   disableInput = false;
   disabled = false;
 
-  @Output() selectedRecipients = new EventEmitter();
-
   @Input() set recieverProps(value: RecieverProps) {
     Object.entries(value)?.forEach(([key, value]) => {
       this[key] = value;
@@ -109,7 +107,7 @@ export class ReceiverFieldComponent implements OnInit, OnDestroy {
     event.data.id &&
       this.recipients.push({ label: event.data.name, value: event.data.id });
     this.recipients = [...new Set(this.recipients)];
-    this.selectedRecipients.emit(this.recipients);
+    this.inputControls.recipients.patchValue(this.recipients);
     this.inputControls.to.patchValue([...new Set(recipientLabels)]);
   }
 

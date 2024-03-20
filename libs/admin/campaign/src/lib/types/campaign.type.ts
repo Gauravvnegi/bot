@@ -1,3 +1,4 @@
+import { Option } from '@hospitality-bot/admin/shared';
 import { IList } from 'libs/admin/listing/src/lib/data-models/listing.model';
 
 export type QueryConfig = {
@@ -51,6 +52,8 @@ export type CampaignForm = {
   bcc?: string[];
   campaignTags: string[];
   templateId: string;
+  from: string;
+  recipients: Option[];
 };
 
 export type RecipientType = 'LISTING' | 'SUBSCRIBER';
@@ -67,15 +70,17 @@ export class PostCampaignForm {
   };
   name: string;
   topicId: string;
-  from: number;
+  from?: string;
   subject?: {
     text: string;
   };
   previewText?: string;
   message: string;
   templateId: string;
-  campaignType: string;
+  campaignType?: string;
   testEmails?: [];
   tags: string[];
   dateTime?: number;
+  cc?: string[];
+  bcc?: string[];
 }

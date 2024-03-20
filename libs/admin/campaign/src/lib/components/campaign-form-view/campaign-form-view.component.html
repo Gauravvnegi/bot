@@ -22,6 +22,15 @@
         placeholder: 'Select Topic'
       }"
     ></hospitality-bot-select>
+    <hospitality-bot-select
+      class="half-width"
+      label="From"
+      controlName="from"
+      [options]="fromEmailList"
+      [props]="{
+        placeholder: 'Select'
+      }"
+    ></hospitality-bot-select>
     <hospitality-bot-chip-list
       class="half-width"
       controlName="campaignTags"
@@ -39,7 +48,6 @@
           chipList: inputControls?.to?.value,
           disableInput: inputControls?.to?.value?.length
         }"
-        (selectedRecipients)="selectedRecipients($event)"
       ></hospitality-bot-to-receiver-field>
       <div
         *ngIf="!inputControls?.bcc?.value || !inputControls?.cc?.value"

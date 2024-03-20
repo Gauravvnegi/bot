@@ -111,8 +111,12 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
     );
   }
 
-  selectedTemplate(htmlTemplate: string) {
-    this.campaignForm = { ...this.campaignForm, message: htmlTemplate };
+  selectedTemplate(template: { templateId: string; htmlTemplate: string }) {
+    this.campaignForm = {
+      ...this.campaignForm,
+      message: template.htmlTemplate,
+      templateId: template.templateId,
+    };
     const queryParams = {
       campaignType: this.campaignType,
       formData: btoa(JSON.stringify(this.campaignForm)),

@@ -89,7 +89,10 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
    * @param template template data.
    */
   selectTemplate(template: TemplateData) {
-    this.selectedTemplate.emit(template.htmlTemplate);
+    this.selectedTemplate.emit({
+      templateId: template.id,
+      htmlTemplate: template.htmlTemplate,
+    });
   }
 
   get inputControls() {

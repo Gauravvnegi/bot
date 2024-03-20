@@ -21,6 +21,9 @@ import { triggerOptions, eventOptions } from '../../constant/campaign';
 import { CampaignService } from '../../services/campaign.service';
 import { ActivatedRoute } from '@angular/router';
 import { CampaignFormService } from '../../services/campaign-form.service';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { EmailService } from '../../services/email.service';
+import { EmailList } from '../../data-model/email.model';
 
 @Component({
   selector: 'hospitality-bot-campaign-form-view',
@@ -39,7 +42,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
   navRoutes: NavRouteOptions = [];
   triggerOptions: Option[] = [];
   eventOptions: Option[] = [];
-  recipients: Option[] = [];
+  fromEmailList: Option[] = [];
   topicList: Observable<Option[]>;
 
   private $subscription = new Subscription();
@@ -50,7 +53,9 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
     private globalFilterService: GlobalFilterService,
     private campaignService: CampaignService,
     private activatedRoute: ActivatedRoute,
-    private campaignFormService: CampaignFormService
+    private campaignFormService: CampaignFormService,
+    private snackbarService: SnackBarService,
+    private emailService: EmailService
   ) {}
 
   ngOnInit(): void {
@@ -62,7 +67,9 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.activatedRoute.queryParams.pipe(take(1)).subscribe((res) => {
         if (res.formData) {
-          const formData = JSON.parse(atob(res.formData));
+          const formData = JSON.parse(atob(res.formData)) as CampaignForm;
+          if (formData?.cc?.length) this.addControl('cc');
+          if (formData?.bcc?.length) this.addControl('bcc');
           this.useForm.patchValue(formData as CampaignForm);
         }
         if (res.campaignType) {
@@ -86,6 +93,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
     this.entityId = this.globalFilterService.entityId;
     this.topicList = this.campaignService.mapTopicList(this.entityId);
     this.initNavRoutes();
+    this.getFromEmails();
   }
 
   initNavRoutes() {
@@ -104,9 +112,10 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
   initForm() {
     this.useForm = this.fb.group({
       campaignName: ['', [Validators.required]],
-      topic: [''],
+      topic: ['', [Validators.required]],
       to: [[]],
       triggers: [''],
+      from: ['', [Validators.required]],
       event: [''],
       startDate: [new Date()],
       endDate: [new Date()],
@@ -115,6 +124,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
       template: [''],
       message: [''],
       templateId: [''],
+      recipients: [[]],
     });
   }
 
@@ -125,19 +135,48 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * @function getFromEmail function to get email across particular hotel id.
+   */
+  getFromEmails() {
+    this.$subscription.add(
+      this.emailService.getFromEmail(this.entityId).subscribe((response) => {
+        this.fromEmailList = new EmailList()
+          .deserialize(response)
+          .map((item) => ({ label: item.email, value: item.id }));
+      })
+    );
+  }
+
   removeControl(controlName: string) {
     this.useForm.removeControl(controlName);
   }
 
-  selectedRecipients(recipients: Option[]) {
-    this.recipients = recipients;
-  }
-
   handleSend() {
+    if (this.useForm.invalid) {
+      this.useForm.markAllAsTouched();
+      this.snackbarService.openSnackBarAsText(
+        'Invalid form: Please fix errors'
+      );
+      return;
+    }
+
     const formData = this.campaignFormService.posFormData(
       this.useForm.getRawValue() as CampaignForm,
-      this.campaignType,
-      this.recipients
+      this.campaignType
+    );
+    this.$subscription.add(
+      this.campaignService
+        .createCampaign(this.entityId, formData)
+        .subscribe((res) => {
+          if (res) {
+            this.snackbarService.openSnackBarAsText(
+              `Campaign created successfully`,
+              '',
+              { panelClass: 'success' }
+            );
+          }
+        })
     );
   }
 

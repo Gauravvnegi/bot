@@ -25,6 +25,7 @@
     <hospitality-bot-topic-templates
       [entityId]="entityId"
       [template]="template"
+      (selectedTemplate)="selectedTemplate($event)"
     ></hospitality-bot-topic-templates>
     <div *ngIf="!isLast" class="line"></div>
   </ng-container>

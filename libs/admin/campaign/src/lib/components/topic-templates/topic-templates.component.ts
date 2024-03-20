@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
@@ -19,6 +26,7 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
 
   @Input() template: TopicTemplatesData;
   @Input() entityId: string;
+  @Output() selectedTemplate = new EventEmitter();
   parentFG: FormGroup;
   loading: boolean;
   offset = 0;
@@ -80,7 +88,7 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
    * @param template template data.
    */
   selectTemplate(template: TemplateData) {
-    this.inputControls.message.patchValue(template.htmlTemplate);
+    this.selectedTemplate.emit(template.htmlTemplate);
   }
 
   get inputControls() {

@@ -31,11 +31,17 @@ export class CreateContentComponent implements OnInit {
    * @function openTemplateList function to open template list.
    */
   openTemplateList(type: TemplateType) {
-    this.campaignService.templateData.next(type);
-    this.routesConfigService.navigate({
-      additionalPath: 'template',
+    this.inputControls.template.patchValue(type, { emitEvent: false });
+
+    const queryParams = {
+      formData: btoa(
+        JSON.stringify(this.parentFG.getRawValue() as CampaignForm)
+      ),
+    };
+    this.router.navigate(['template'], {
+      relativeTo: this.route,
+      queryParams: queryParams,
     });
-    this.router.navigate(['template'], { relativeTo: this.route });
   }
 
   createTemplate() {

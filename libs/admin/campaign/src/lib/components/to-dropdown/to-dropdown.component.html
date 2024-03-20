@@ -20,7 +20,7 @@
       </div>
     </div>
     <ng-container
-      *ngIf="tabFilterIdx; then listing; else subscriberGroup"
+      *ngIf="tabFilterIdx; then subscriberGroup; else listing"
     ></ng-container>
     <ng-template #subscriberGroup>
       <div class="sub-title">
@@ -61,7 +61,7 @@
         <div
           class="item-container"
           *ngFor="let list of listings.data"
-          (click)="selectItem('listing', list)"
+          (click)="selectItem('LISTING', list)"
         >
           <div>{{ list.name }}</div>
           <div class="data">

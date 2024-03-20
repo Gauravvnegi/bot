@@ -166,11 +166,11 @@ export const campaignConfig = {
     shared: { url: 'assets/svg/shared_template.svg', alt: 'shared' },
   },
   dropDownTabFilter: [
-    {
-      label: 'Subscribers Groups',
-      value: 'SUBSCRIBERGROUP',
-      chips: [],
-    },
+    // {
+    //   label: 'Subscribers Groups',
+    //   value: 'SUBSCRIBERGROUP',
+    //   chips: [],
+    // },
     {
       label: 'Listing',
       value: 'LISTING',

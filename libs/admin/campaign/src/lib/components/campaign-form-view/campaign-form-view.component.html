@@ -22,14 +22,62 @@
         placeholder: 'Select Topic'
       }"
     ></hospitality-bot-select>
-    <hospitality-bot-input
-      class="half-width"
-      controlName="recipient"
-      label="Recipient"
-      [props]="{
-        placeholder: 'Enter'
+    <hospitality-bot-to-receiver-field
+      class="full-width"
+      controlName="to"
+      [recieverProps]="{
+        entityId: entityId,
+        chipList: inputControls?.to?.value,
+        disableInput: inputControls?.to?.value?.length
       }"
-    ></hospitality-bot-input>
+    ></hospitality-bot-to-receiver-field>
+    <div
+      *ngIf="!inputControls?.bcc?.value || !inputControls?.cc?.value"
+      class="add-control-btn full-width"
+    >
+      <hospitality-bot-button
+        *ngIf="!inputControls?.cc?.value"
+        label="+ Cc"
+        (click)="addControl('cc')"
+        height="20px"
+        minWidth="20px"
+        variant="text"
+      ></hospitality-bot-button>
+      <hospitality-bot-button
+        *ngIf="!inputControls?.bcc?.value"
+        label="+ Bcc"
+        (click)="addControl('bcc')"
+        variant="text"
+        height="20px"
+        minWidth="20px"
+      ></hospitality-bot-button>
+    </div>
+    <hospitality-bot-chip-list
+      *ngIf="inputControls?.cc?.value"
+      class="full-width"
+      label="Cc"
+      controlName="cc"
+      [props]="{
+        placeholder: 'Add Recipient',
+        errorMessages: {
+          required: 'This is a required field.',
+          pattern: 'Please enter a valid email address.'
+        }
+      }"
+    ></hospitality-bot-chip-list>
+    <hospitality-bot-chip-list
+      *ngIf="inputControls?.bcc?.value"
+      class="full-width"
+      label="Bcc"
+      controlName="bcc"
+      [props]="{
+        placeholder: 'Add Recipient',
+        errorMessages: {
+          required: 'This is a required field.',
+          pattern: 'Please enter a valid email address.'
+        }
+      }"
+    ></hospitality-bot-chip-list>
     <hr class="data-separator" />
     <div class="group-header half-width">When</div>
     <hospitality-bot-select

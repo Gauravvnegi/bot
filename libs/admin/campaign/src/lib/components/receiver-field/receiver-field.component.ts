@@ -1,22 +1,10 @@
 import { ENTER, COMMA, TAB } from '@angular/cdk/keycodes';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
-import { trim } from 'lodash';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { campaignConfig } from '../../constant/campaign';
-import {
-  ReceiversSearch,
-  ReceiversSearchItem,
-} from '../../data-model/email.model';
-import { CampaignService } from '../../services/campaign.service';
+import { ReceiversSearchItem } from '../../data-model/email.model';
 import { EmailService } from '../../services/email.service';
+import { ControlContainer, FormGroup } from '@angular/forms';
+import { ListType, RecipientType } from '../../types/campaign.type';
 
 @Component({
   selector: 'hospitality-bot-to-receiver-field',
@@ -24,13 +12,20 @@ import { EmailService } from '../../services/email.service';
   styleUrls: ['./receiver-field.component.scss'],
 })
 export class ReceiverFieldComponent implements OnInit, OnDestroy {
-  @ViewChild('receiverField') receiverField;
-  @Input() chipList = [];
-  @Input() name: string;
-  @Input() entityId: string;
-  @Input() disableInput = false;
-  @Input() disabled = false;
-  @Output() updateChipSet = new EventEmitter();
+  parentFG: FormGroup;
+  @Input() controlName: string;
+  chipList = [];
+  recipientValues: string[] = [];
+  entityId: string;
+  disableInput = false;
+  disabled = false;
+
+  @Input() set recieverProps(value: RecieverProps) {
+    Object.entries(value)?.forEach(([key, value]) => {
+      this[key] = value;
+    });
+  }
+
   searchList: ReceiversSearchItem[];
   enableDropdown = false;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, TAB];
@@ -38,18 +33,12 @@ export class ReceiverFieldComponent implements OnInit, OnDestroy {
   search = false;
   constructor(
     private _emailService: EmailService,
-    private _campaignService: CampaignService
+    private controlContainer: ControlContainer
   ) {}
 
   ngOnInit(): void {
+    this.parentFG = this.controlContainer.control as FormGroup;
     this.listenForEnableDropdown();
-  }
-
-  ngOnChanges() {
-    if (this.disableInput) {
-      this.removeField(null);
-      this.disableInput = false;
-    }
   }
 
   /**
@@ -57,88 +46,37 @@ export class ReceiverFieldComponent implements OnInit, OnDestroy {
    */
   listenForEnableDropdown() {
     this.$subscription.add(
-      this._emailService.$enableDropdown[this.name].subscribe((response) => {
-        this.enableDropdown = response;
-        if (!response) {
-          this.removeField(null);
+      this._emailService.$enableDropdown[this.controlName].subscribe(
+        (response) => {
+          this.enableDropdown = response;
         }
-      })
+      )
     );
-  }
-
-  /**
-   * @function removeChip function to remove chip.
-   * @param index particular chip index value.
-   * @param event event object to stop propagation.
-   */
-  removeChip(index, event) {
-    event.stopPropagation();
-    this.updateChipSet.emit({
-      action: 'remove',
-      value: index,
-    });
-    if (!this.chipList.length) this.enableTextField();
-  }
-
-  /**
-   * @function removeField function to remove the form field.
-   * @param event event for the same.
-   */
-  removeField(event) {
-    if (
-      !trim(this.receiverField?.nativeElement.value).length &&
-      this.chipList.length
-    ) {
-      this.receiverField?.nativeElement.setAttribute(
-        'style',
-        'display: none !important;'
-      );
-    }
-  }
-
-  /**
-   * @function addChip function to add chip set.
-   * @param event event to stop propagation.
-   */
-  addChip(event) {
-    event.stopPropagation();
-    if (this.separatorKeysCodes.includes(event.which)) {
-      this.updateChipSet.emit({
-        value: {
-          data: { name: this.receiverField.nativeElement.value },
-          type: 'email',
-        },
-        action: 'add',
-      });
-      this.receiverField.nativeElement.value = '';
-      this.search = false;
-      this.enableReceiverField();
-    }
   }
 
   /**
    * @function searchKey function to search on the basis of key.
    * @param event event object to stop propagation.
    */
-  searchKey(event) {
-    event.stopPropagation();
-    const key = trim(this.receiverField.nativeElement.value);
-    if (!this.separatorKeysCodes.includes(event.which) && key.length > 0) {
-      this.$subscription.add(
-        this._campaignService
-          .searchReceivers(this.entityId, key)
-          .subscribe((response) => {
-            this.search = true;
-            this.searchList = new ReceiversSearch().deserialize(
-              response
-            ).records;
-          })
-      );
-    } else {
-      this.search = false;
-      this.searchList = new ReceiversSearch().deserialize({}).records;
-    }
-  }
+  // searchKey(event) {
+  //   event.stopPropagation();
+  //   const key = trim(this.receiverField.nativeElement.value);
+  //   if (!this.separatorKeysCodes.includes(event.which) && key.length > 0) {
+  //     this.$subscription.add(
+  //       this._campaignService
+  //         .searchReceivers(this.entityId, key)
+  //         .subscribe((response) => {
+  //           this.search = true;
+  //           this.searchList = new ReceiversSearch().deserialize(
+  //             response
+  //           ).records;
+  //         })
+  //     );
+  //   } else {
+  //     this.search = false;
+  //     this.searchList = new ReceiversSearch().deserialize({}).records;
+  //   }
+  // }
 
   /**
    * @function enableReceiverField function to enable receiver field.
@@ -146,18 +84,16 @@ export class ReceiverFieldComponent implements OnInit, OnDestroy {
    */
   enableReceiverField(event?) {
     event?.stopPropagation();
-    this.enableTextField();
     this.enableDropdownItems();
-    this.receiverField.nativeElement.focus();
   }
 
   /**
    * @function enableDropdownItems function to enable dropdown items.
    */
   enableDropdownItems() {
-    this._emailService.$enableDropdown[this.name].next(true);
+    this._emailService.$enableDropdown[this.controlName].next(true);
     Object.keys(this._emailService.$enableDropdown).forEach((key) => {
-      if (key !== this.name)
+      if (key !== this.controlName)
         this._emailService.$enableDropdown[key].next(false);
     });
   }
@@ -168,31 +104,21 @@ export class ReceiverFieldComponent implements OnInit, OnDestroy {
    */
   disableDropdownItems(event) {
     event.stopPropagation();
-    this._emailService.$enableDropdown[this.name].next(false);
+    this._emailService.$enableDropdown[this.controlName].next(false);
   }
 
   /**
    * @function addItemFromDropdown function to add item from dropdown.
    * @param event event object to store value.
    */
-  addItemFromDropdown(event) {
-    this.updateChipSet.emit({
-      value: event,
-      action: campaignConfig.add,
-    });
-    this.receiverField.nativeElement.value = '';
-    this.search = false;
-    this.enableTextField();
-  }
-
-  /**
-   * @function enableTextField function to enable text field.
-   */
-  enableTextField() {
-    this.receiverField.nativeElement.setAttribute(
-      'style',
-      'display: block !important;'
-    );
+  addItemFromDropdown<TType extends RecipientType>(event: {
+    type: TType;
+    data: ListType<TType>;
+  }) {
+    let recipientLabels = [...this.parentFG.get('to').value, event.data.name];
+    event.data.id && this.recipientValues.push(event.data.id);
+    this.recipientValues = [...new Set(this.recipientValues)];
+    this.parentFG.get('to').patchValue([...new Set(recipientLabels)]);
   }
 
   /**
@@ -202,3 +128,10 @@ export class ReceiverFieldComponent implements OnInit, OnDestroy {
     this.$subscription.unsubscribe();
   }
 }
+
+type RecieverProps = {
+  entityId: string;
+  chipList: string[];
+  disableInput: boolean;
+  disabled: boolean;
+};

@@ -1,47 +1,25 @@
-<ng-container *ngIf="disabled; else normalField">
-  <div class="disabledBtn">
-    <div class="chips">
-      <div class="chip" *ngFor="let chip of chipList">
-        {{ chip.data?.name }}
-        <i class="pi pi-times"></i>
-      </div>
+<ng-container [formGroup]="parentFG">
+  <hospitality-bot-chip-list
+    label="Recipient"
+    [controlName]="controlName"
+    [props]="{
+      placeholder: 'Add Recipient',
+      errorMessages: {
+        required: 'This is a required field.',
+        pattern: 'Please enter a valid email address.'
+      }
+    }"
+    (onFocus)="enableReceiverField()"
+  >
+    <div class="dropdown" *ngIf="enableDropdown" click-stop-propagation>
+      <!-- [value]="receiverField?.nativeElement?.value" -->
+      <hospitality-bot-to-dropdown
+        [entityId]="entityId"
+        [search]="search"
+        [searchList]="searchList"
+        (selectedList)="addItemFromDropdown($event)"
+        (closeDropdown)="disableDropdownItems($event)"
+      ></hospitality-bot-to-dropdown>
     </div>
-  </div>
+  </hospitality-bot-chip-list>
 </ng-container>
-<ng-template #normalField>
-  <div (click)="enableReceiverField($event)">
-    <div
-      class="chips wrapper p-field"
-      [style.fontSize]="fontSize"
-      [ngClass]="wrapperNgClasses"
-    >
-      <label class="label label__static" [for]="'fieldId'">Add Recipient</label>
-      <input
-        #receiverField
-        pInputText
-        class="input"
-        [ngClass]="inputNgClasses"
-        (keydown)="addChip($event)"
-        (keyup)="searchKey($event)"
-        [id]="'fieldId'"
-      />
-      <div class="chips">
-        <span class="chip" *ngFor="let chip of chipList; let i = index"
-          >{{ chip.data?.name }}
-          <i class="pi pi-times" (click)="removeChip(i, $event)"></i
-        ></span>
-      </div>
-
-      <div class="dropdown" *ngIf="enableDropdown" click-stop-propagation>
-        <hospitality-bot-to-dropdown
-          [value]="receiverField?.nativeElement?.value"
-          [entityId]="entityId"
-          [search]="search"
-          [searchList]="searchList"
-          (selectedList)="addItemFromDropdown($event)"
-          (closeDropdown)="disableDropdownItems($event)"
-        ></hospitality-bot-to-dropdown>
-      </div>
-    </div>
-  </div>
-</ng-template>

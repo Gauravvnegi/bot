@@ -21,3 +21,8 @@
 .group-header {
   @include bold-sm-text;
 }
+
+.add-control-btn {
+  @include flex-row-justify-end;
+  margin-top: -50px;
+}

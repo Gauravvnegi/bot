@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ModuleNames,
+  NavRouteOptions,
+  Option,
+  Regex,
+} from '@hospitality-bot/admin/shared';
 import { CampaignForm, CampaignType } from '../../types/campaign.type';
 import { campaignRoutes } from '../../constant/route';
 import { Observable, Subscription } from 'rxjs';
@@ -8,50 +13,64 @@ import {
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
 import { filter, take } from 'rxjs/operators';
+import { campaignConfig } from '../../constant/campaign';
+
 import {
   AbstractControl,
   FormBuilder,
+  FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
 import { triggerOptions, eventOptions } from '../../constant/campaign';
 import { CampaignService } from '../../services/campaign.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-campaign-form-view',
   templateUrl: './campaign-form-view.component.html',
   styleUrls: ['./campaign-form-view.component.scss'],
 })
-export class CampaignFormViewComponent implements OnInit {
+export class CampaignFormViewComponent implements OnInit, OnDestroy {
+  readonly campaignConfig = campaignConfig;
+
   useForm: FormGroup;
 
   entityId: string;
-
   pageTitle: string;
-  navRoutes: NavRouteOptions = [];
   campaignType: CampaignType;
 
+  navRoutes: NavRouteOptions = [];
   triggerOptions: Option[] = [];
   eventOptions: Option[] = [];
-  private $subscription = new Subscription();
-
   topicList: Observable<Option[]>;
+
+  private $subscription = new Subscription();
 
   constructor(
     private routesConfigService: RoutesConfigService,
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.initParamData();
+    this.campaignType = this.campaignService?.campaignType;
     this.initDetails();
     this.initForm();
+    this.listenRouteData();
   }
 
-  initParamData() {
-    this.campaignType = this.campaignService?.campaignType;
+  listenRouteData() {
+    this.$subscription.add(
+      this.activatedRoute.queryParams.pipe(take(1)).subscribe((res) => {
+        if (res.formData) {
+          const formData = JSON.parse(atob(res.formData));
+          this.useForm.patchValue(formData as CampaignForm);
+        }
+      })
+    );
   }
 
   initDetails() {
@@ -85,7 +104,7 @@ export class CampaignFormViewComponent implements OnInit {
     this.useForm = this.fb.group({
       campaignName: ['', [Validators.required]],
       topic: [''],
-      recipient: [''],
+      to: [[]],
       triggers: [''],
       event: [''],
       startDate: [new Date()],
@@ -96,9 +115,20 @@ export class CampaignFormViewComponent implements OnInit {
     });
   }
 
+  addControl(controlName: string) {
+    this.useForm.addControl(
+      controlName,
+      new FormControl([], [Validators.pattern(Regex.EMAIL_REGEX)])
+    );
+  }
+
   handleSend() {}
 
   handleSave() {}
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 
   get inputControls() {
     return this.useForm.controls as Record<keyof CampaignForm, AbstractControl>;

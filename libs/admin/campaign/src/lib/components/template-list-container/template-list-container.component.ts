@@ -1,14 +1,22 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AdminUtilityService, Option } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  ModuleNames,
+  Option,
+} from '@hospitality-bot/admin/shared';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, Subscription } from 'rxjs';
 import { campaignConfig } from '../../constant/campaign';
 import { CampaignService } from '../../services/campaign.service';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
-import { TemplateType } from '../../types/campaign.type';
+import { CampaignForm, TemplateType } from '../../types/campaign.type';
 import { TopicTemplatesData } from '../../types/template.type';
 import { map } from 'rxjs/operators';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-template-list-container',
@@ -18,25 +26,30 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 export class TemplateListContainerComponent implements OnInit, OnDestroy {
   private $subscription = new Subscription();
   templateForm: FormGroup;
+
   entityId: string;
   templateTypes = campaignConfig.datatable.templateTypes;
 
   topicList: Observable<Option[]>;
   templateTopicList: Observable<TopicTemplatesData[]>;
   selectedTopic: string;
+  campaignForm: CampaignForm;
 
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
     private campaignService: CampaignService,
     protected _translateService: TranslateService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private activatedRoute: ActivatedRoute,
+    private routesConfigService: RoutesConfigService,
   ) {}
 
   ngOnInit(): void {
     this.initForm();
     this.initDetails();
     this.getTemplateForAllTopics();
+    this.listenForRouteData();
   }
 
   initForm() {
@@ -52,16 +65,21 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
     this.listenChanges();
   }
 
+  listenForRouteData() {
+    this.$subscription.add(
+      this.activatedRoute.queryParams.subscribe((res) => {
+        if (res.formData) {
+          const formData = JSON.parse(atob(res.formData));
+          this.campaignForm = formData as CampaignForm;
+          this.inputControls.template.patchValue(this.campaignForm?.template);
+        }
+      })
+    );
+  }
+
   listenChanges() {
     this.listenForTopicChanges();
     this.listenForTemplateChanges();
-    this.listenForTemplateType();
-  }
-
-  listenForTemplateType() {
-    this.campaignService.templateData.subscribe(
-      (res) => res && this.inputControls.template.patchValue(res)
-    );
   }
 
   listenForTopicChanges() {
@@ -74,6 +92,19 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
     this.inputControls.template.valueChanges.subscribe((res) =>
       this.templateTypeSelection(res)
     );
+  }
+
+  selectedTemplate(htmlTemplate: string) {
+    this.campaignForm = { ...this.campaignForm, message: htmlTemplate };
+    const queryParams = {
+      formData: btoa(JSON.stringify(this.campaignForm)),
+    };
+
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.CAMPAIGN,
+      additionalPath: 'create-campaign',
+      queryParams,
+    });
   }
 
   /**

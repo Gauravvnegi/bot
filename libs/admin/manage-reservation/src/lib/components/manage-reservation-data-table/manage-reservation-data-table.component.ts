@@ -287,7 +287,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
             ).reservationType = status;
             this.initTableValue();
             this.snackbarService.openSnackBarAsText(
-              'Reservation ' + status + ' changes successfully',
+              'Reservation ' + status + ' changed successfully',
               '',
               {
                 panelClass: 'success',

@@ -1,6 +1,15 @@
-import { Component, ComponentFactoryResolver, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { GlobalFilterService, RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -9,7 +18,7 @@ import {
   Option,
   QueryConfig,
   manageMaskZIndex,
-  openModal
+  openModal,
 } from '@hospitality-bot/admin/shared';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subject, Subscription } from 'rxjs';
@@ -26,7 +35,7 @@ import {
 import {
   OutletReservationList,
   OutletReservation,
-  OutletReservationTableList
+  OutletReservationTableList,
 } from '../../models/outlet-reservation.model';
 import { OrderReservationStatus } from '../../types/reservation-table';
 import { PosReservationComponent } from '../pos-reservation/pos-reservation.component';
@@ -42,10 +51,11 @@ import { defaultFilterChipValue } from 'libs/admin/shared/src/lib/constants/data
   templateUrl: './outlets-data-table.component.html',
   styleUrls: [
     './outlets-data-table.component.scss',
-    '../../../../../shared/src/lib/components/datatable/datatable.component.scss'
-  ]
+    '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
+  ],
 })
-export class OutletsDataTableComponent extends BaseDatatableComponent implements OnInit {
+export class OutletsDataTableComponent extends BaseDatatableComponent
+  implements OnInit {
   readonly tableReservationStatusDetails = TableReservationStatusDetails;
   entityId: string;
   globalQueries = [];
@@ -118,7 +128,10 @@ export class OutletsDataTableComponent extends BaseDatatableComponent implements
      * idx to prevent initial api call
      * Initial api called in @function setTableType
      */
-    if (this.tabFilterIdx !== -1 && this.tabFilterIdx !== previousTabFilterIdx) {
+    if (
+      this.tabFilterIdx !== -1 &&
+      this.tabFilterIdx !== previousTabFilterIdx
+    ) {
       this.loadData({});
     }
   }
@@ -174,9 +187,9 @@ export class OutletsDataTableComponent extends BaseDatatableComponent implements
           limit: '0',
           offset: '0',
           entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
-          liveBookings: true
-        }
-      ])
+          liveBookings: true,
+        },
+      ]),
     };
     return config;
   }
@@ -191,7 +204,12 @@ export class OutletsDataTableComponent extends BaseDatatableComponent implements
           const data = new OutletReservationTableList().deserialize(res);
           this.values = data.reservationData;
 
-          this.initFilters(data?.entityTypeCounts, data?.entityStateCounts, data.total, this.reservationStatusDetails);
+          this.initFilters(
+            data?.entityTypeCounts,
+            data?.entityStateCounts,
+            data.total,
+            this.reservationStatusDetails
+          );
           this.loading = false;
         })
     );
@@ -208,9 +226,9 @@ export class OutletsDataTableComponent extends BaseDatatableComponent implements
           includeKot: true,
           raw: true,
           offset: this.first,
-          limit: this.rowsPerPage
-        }
-      ])
+          limit: this.rowsPerPage,
+        },
+      ]),
     };
     return config;
   }
@@ -222,13 +240,16 @@ export class OutletsDataTableComponent extends BaseDatatableComponent implements
       params: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         { order: 'DESC' },
-        ...this.selectedRows.map((item) => ({ ids: item.id }))
-      ])
+        ...this.selectedRows.map((item) => ({ ids: item.id })),
+      ]),
     };
 
     this.$subscription.add(
       this.outletService.exportCSV(this.entityId, config).subscribe((res) => {
-        FileSaver.saveAs(res, `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`);
+        FileSaver.saveAs(
+          res,
+          `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+        );
       }, this.handleFinal)
     );
   }
@@ -236,17 +257,25 @@ export class OutletsDataTableComponent extends BaseDatatableComponent implements
   copyConfirmationNumber(number: string) {
     this._clipboard.copy(number);
     this.snackbarService.openSnackBarAsText('Booking number copied', '', {
-      panelClass: 'success'
+      panelClass: 'success',
     });
   }
 
-  handleStatus(status: OrderReservationStatus, reservationData: OutletReservation) {
+  handleStatus(
+    status: OrderReservationStatus,
+    reservationData: OutletReservation
+  ) {
     let modalRef: DynamicDialogRef;
 
     const data = {
       content: {
-        heading: `Mark Order As ${status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()}`,
-        descriptions: [`You are about to mark this order as ${status}`, `Are you Sure?`]
+        heading: `Mark Order As ${
+          status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
+        }`,
+        descriptions: [
+          `You are about to mark this order as ${status}`,
+          `Are you Sure?`,
+        ],
       },
       actions: [
         {
@@ -254,7 +283,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent implements
           onClick: () => {
             modalRef.close();
           },
-          variant: 'outlined'
+          variant: 'outlined',
         },
         {
           label: 'Yes',
@@ -263,36 +292,45 @@ export class OutletsDataTableComponent extends BaseDatatableComponent implements
             this.changeStatus(status, reservationData);
             modalRef.close();
           },
-          variant: 'contained'
-        }
-      ]
+          variant: 'contained',
+        },
+      ],
     };
 
     modalRef = openModal({
       config: {
         width: '35vw',
         styleClass: 'confirm-dialog',
-        data: data
+        data: data,
       },
       component: ModalComponent,
-      dialogService: this.dialogService
+      dialogService: this.dialogService,
     });
   }
 
-  changeStatus(status: OrderReservationStatus, reservationData: OutletReservation) {
+  changeStatus(
+    status: OrderReservationStatus,
+    reservationData: OutletReservation
+  ) {
     this.loading = true;
     this.$subscription.add(
       this.outletService
         .updateOrderStatus(this.entityId, reservationData.orderId, {
-          status: status
+          status: status,
         })
         .subscribe(
           (res) => {
-            this.values.find((item) => item.id === reservationData.id).tableType = status;
+            this.values.find(
+              (item) => item.id === reservationData.id
+            ).tableType = status;
             this.initTableReservations();
-            this.snackbarService.openSnackBarAsText('Order ' + status + ' changes successfully', '', {
-              panelClass: 'success'
-            });
+            this.snackbarService.openSnackBarAsText(
+              'Order ' + status + ' changed successfully',
+              '',
+              {
+                panelClass: 'success',
+              }
+            );
           },
           this.handleError,
           this.handleFinal
@@ -315,8 +353,8 @@ export class OutletsDataTableComponent extends BaseDatatableComponent implements
           additionalPath: rowData.orderId,
           queryParams: {
             entityId: this.entityId,
-            type: EntitySubType.RESTAURANT
-          }
+            type: EntitySubType.RESTAURANT,
+          },
         });
         break;
       case 'EDIT_ORDER':
@@ -325,18 +363,28 @@ export class OutletsDataTableComponent extends BaseDatatableComponent implements
     }
   }
 
-  onCardClick(data: { orderId?: string; reservationId?: string; selectedTable?: Option }) {
+  onCardClick(data: {
+    orderId?: string;
+    reservationId?: string;
+    selectedTable?: Option;
+  }) {
     this.addNewOrder(data.orderId, data.reservationId, data.selectedTable);
   }
 
-  addNewOrder(orderId?: string, reservationId?: string, selectedTable?: Option) {
+  addNewOrder(
+    orderId?: string,
+    reservationId?: string,
+    selectedTable?: Option
+  ) {
     this.sidebarVisible = true;
-    const factory = this.resolver.resolveComponentFactory(PosReservationComponent);
+    const factory = this.resolver.resolveComponentFactory(
+      PosReservationComponent
+    );
     const sidebarData = {
       isSidebar: true,
       orderId: orderId,
       reservationId: reservationId,
-      selectedTable: selectedTable
+      selectedTable: selectedTable,
     };
     this.sidebarSlide.clear();
     const componentRef = this.sidebarSlide.createComponent(factory);

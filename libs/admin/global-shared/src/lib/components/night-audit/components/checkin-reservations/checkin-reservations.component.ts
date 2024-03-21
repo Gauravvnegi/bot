@@ -171,7 +171,7 @@ export class CheckinReservationsComponent implements OnInit {
           (res) => {
             this.reload.emit({ status: event.value });
             this.snackbarService.openSnackBarAsText(
-              'Reservation ' + event.value + ' changes successfully',
+              'Reservation ' + event.value + ' changed successfully',
               '',
               { panelClass: 'success' }
             );

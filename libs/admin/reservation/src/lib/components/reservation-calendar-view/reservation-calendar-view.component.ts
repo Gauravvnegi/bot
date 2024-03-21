@@ -810,7 +810,7 @@ export class ReservationCalendarViewComponent implements OnInit {
               .subscribe(() => {
                 ref.close();
                 this.snackbarService.openSnackBarAsText(
-                  'Status changes successfully',
+                  'Status changed successfully',
                   '',
                   {
                     panelClass: 'success',
@@ -904,7 +904,7 @@ export class ReservationCalendarViewComponent implements OnInit {
           ).rooms = updatedValues;
 
           this.snackbarService.openSnackBarAsText(
-            'Status changes successfully',
+            'Status changed successfully',
             '',
             {
               panelClass: 'success',

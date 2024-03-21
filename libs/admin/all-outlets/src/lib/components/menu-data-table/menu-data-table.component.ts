@@ -118,7 +118,7 @@ export class MenuDataTableComponent extends BaseDatatableComponent
         .subscribe(() => {
           this.initTableValue();
           this.snackbarService.openSnackBarAsText(
-            'Status changes successfully',
+            'Status changed successfully',
             '',
             { panelClass: 'success' }
           );

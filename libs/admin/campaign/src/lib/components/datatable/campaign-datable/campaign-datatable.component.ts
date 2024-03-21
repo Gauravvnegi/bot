@@ -191,12 +191,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         .subscribe(
           (_response) => {
             this.loadData();
-            this.showMessage(
+            this.snackbarService.openSnackBarAsText(
+              'Status changed successfully',
+              '',
               {
-                key: 'messages.success.status_updated',
-                message: '',
-              },
-              'success'
+                panelClass: 'success',
+              }
             );
             this.changePage(this.currentPage);
           },

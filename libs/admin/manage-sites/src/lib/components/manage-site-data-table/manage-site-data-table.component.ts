@@ -204,7 +204,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
         () => {
           this.loading = false;
           this.snackbarService.openSnackBarAsText(
-            'Status changes successfully',
+            'Status changed successfully',
             '',
             { panelClass: 'success' }
           );

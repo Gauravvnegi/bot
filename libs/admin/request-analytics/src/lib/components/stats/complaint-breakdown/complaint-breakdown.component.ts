@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ComplaintBaseComponent } from '../complaint-analytics-base.component';
+import { AnalyticsService } from '../../../services/analytics.service';
+import { AdminUtilityService } from '@hospitality-bot/admin/shared';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { DateService } from '@hospitality-bot/shared/utils';
 type HotelService = {
   label: string;
   score: number;
@@ -14,76 +19,20 @@ type HotelService = {
   templateUrl: './complaint-breakdown.component.html',
   styleUrls: ['./complaint-breakdown.component.scss'],
 })
-export class ComplaintBreakdownComponent implements OnInit {
-  constructor() {}
-
+export class ComplaintBreakdownComponent extends ComplaintBaseComponent
+  implements OnInit {
+  constructor(
+    analyticsService: AnalyticsService,
+    adminUtilityService: AdminUtilityService,
+    globalFilterService: GlobalFilterService,
+    dateService: DateService
+  ) {
+    super(
+      analyticsService,
+      adminUtilityService,
+      globalFilterService,
+      dateService
+    );
+  }
   label: string = 'Complaint Breakdown';
-
-  performance = {
-    label: 'Top/Low NPS',
-    performances: [
-      {
-        label: 'Wifi Services',
-        score: 41.2,
-        positive: 381,
-        negative: 100,
-        neutral: 201,
-        minScore: -100,
-        maxScore: 100,
-        colorCode: '#4BC0C0',
-      },
-      {
-        label: 'Maintenance',
-        score: 40.83,
-        positive: 1102,
-        negative: 269,
-        neutral: 669,
-        minScore: -100,
-        maxScore: 100,
-        colorCode: '#FF6384',
-      },
-      {
-        label: 'Front Office',
-        score: 40.41,
-        positive: 1108,
-        negative: 282,
-        neutral: 654,
-        minScore: -100,
-        maxScore: 100,
-        colorCode: '#4BC0C0',
-      },
-      {
-        label: 'Food & Beverage',
-        score: 39.79,
-        positive: 371,
-        negative: 100,
-        neutral: 210,
-        minScore: -100,
-        maxScore: 100,
-        colorCode: '#FF6384',
-      },
-      {
-        label: 'House Keeping',
-        score: 35.36,
-        positive: 696,
-        negative: 214,
-        neutral: 453,
-        minScore: -100,
-        maxScore: 100,
-        colorCode: '#FF6384',
-      },
-      {
-        label: 'Reservations',
-        score: 7.95,
-        positive: 266,
-        negative: 213,
-        neutral: 188,
-        minScore: -100,
-        maxScore: 100,
-        colorCode: '#FF6384',
-      },
-    ],
-  };
-
-  ngOnInit(): void {}
 }

@@ -4,7 +4,7 @@
       <div class="icon" *ngIf="icon">
         <img [src]="icon" alt="icon" />
       </div>
-      <div class="stat-title">{{ label }}</div>
+      <div class="stat-title">{{ title }}</div>
     </div>
 
     <div class="menu-container">
@@ -26,15 +26,15 @@
   </div>
   <div class="line-chart">
     <canvas
-      *skeleton="DualPlotData == undefined; height: '65vh'; width: '100%'"
+      *skeleton="datasets == undefined; height: '65vh'; width: '100%'"
       baseChart
       class="line-chart__canvas"
-      [datasets]="DualPlotData.data"
-      [labels]="DualPlotData.labels"
-      [options]="DualPlotData.options"
-      [colors]="DualPlotData.colors"
-      [legend]="DualPlotData.legend"
-      [chartType]="DualPlotData.type"
+      [datasets]="datasets"
+      [labels]="labels"
+      [options]="options"
+      [colors]="colors"
+      [legend]="legend"
+      [chartType]="graphType"
     >
     </canvas>
   </div>
@@ -55,8 +55,11 @@
           margin: '0 0 10px 0'
         "
       />
-      <img [src]="filter.icon" alt="" />
-      <p class="stat-lable-title">
+      <div
+        class="legend-border"
+        [style.backgroundColor]="filter.colorCode"
+      ></div>
+      <p class="stat-filter-label-title">
         {{ filter.label }}
       </p>
     </div>

@@ -47,28 +47,21 @@ export class DualPlotComponent implements OnInit {
 
   @Input() graphType: GraphType = GraphType.LINE;
   @Input() isSwitchAble: boolean = false;
-  @Input() label: string;
+  @Input() title: string;
+  @Input() labels: string[] = [];
+
   @Input() icon: string;
   @Input() filterOptions: DualPlotFilterOptions;
 
   @Input() options: DualPlotOptions = defaultDualPlotOptions; //to customize graph design
   @Input() colors: DualPlotGraphColor[] = defaultDualPlotColors; //plotted graph colors
   @Input() datasets: DualPlotGraphDataset[] = []; //graph data
-
+  @Input() legend: boolean = false;
   @Input() set config(value: DualPlotChartConfig) {
     if (value) {
       Object.assign(this, value);
     }
   }
-
-  DualPlotData: DualPlotChartConfig = {
-    data: this.datasets,
-    labels: [],
-    options: this.options,
-    colors: this.colors,
-    legend: false,
-    type: 'line' as any,
-  };
 
   constructor(private fb: FormBuilder) {}
 
@@ -83,7 +76,7 @@ export class DualPlotComponent implements OnInit {
   }
 
   setChartType(config: ChartTypeConfig) {
-    this.DualPlotData.type = config.value;
+    this.graphType = config.value;
   }
 
   onFilterCLick(index: number) {

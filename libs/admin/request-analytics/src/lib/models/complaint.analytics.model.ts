@@ -2,6 +2,7 @@ import { labels } from 'libs/admin/shared/src/lib/constants/config';
 import {
   CategoryStatsResponse,
   ComplaintBreakDownResponse,
+  ComplaintsDataResponse,
   DistributionStatsResponse,
 } from '../types/response.types';
 
@@ -9,6 +10,8 @@ export class ComplaintBreakDown {
   total: number;
   complaintCategoryStats: ComplaintCategoryStats;
   distributionStats: DistributionStats;
+  complaintsData: ComplaintsData;
+  complaintCategoryBreakDownStats: ComplaintCategoryBreakDownStats;
 
   deserialize(input: ComplaintBreakDownResponse) {
     this.complaintCategoryStats = new ComplaintCategoryStats().deserialize(
@@ -19,6 +22,54 @@ export class ComplaintBreakDown {
     this.distributionStats = new DistributionStats().deserialize(
       input?.distributionStats
     );
+
+    this.complaintsData = new ComplaintsData().deserialize(
+      input?.complaintsData
+    );
+
+    this.complaintCategoryBreakDownStats = new ComplaintCategoryBreakDownStats().deserialize(
+      input.categoryStats
+    );
+    return this;
+  }
+}
+
+export class ComplaintsData {
+  data: { data: string[]; label: string; fill: boolean }[];
+
+  deserialize(input: ComplaintsDataResponse) {
+    this.data = [
+      {
+        label: 'Complaint',
+        data: Object.values(
+          input?.totalComplaintsGraph.totalComplaintGraphStats
+        ),
+        fill: false,
+      },
+      {
+        label: 'Closed',
+        data: Object.values(
+          input?.closedComplaintsGraph.closedComplaintGraphStats
+        ),
+        fill: false,
+      },
+    ];
+
+    return this;
+  }
+}
+
+export class ComplaintCategoryBreakDownStats {
+  data: { label: string; score: number; colorCode: string }[] = [];
+
+  deserialize(input: CategoryStatsResponse) {
+    Object.entries(input).forEach(([key, value]) => {
+      this.data.push({
+        label: key,
+        score: value,
+        colorCode: '#4BC0C0',
+      });
+    });
     return this;
   }
 }

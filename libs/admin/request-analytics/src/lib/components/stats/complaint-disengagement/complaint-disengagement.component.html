@@ -3,7 +3,7 @@
     <hospitality-bot-doughnut
       label="What drivers are leading to disengagement at the Property?"
       [config]="{
-        total: complaintBreakDownData.total,
+        total: complaintBreakDownData?.total,
         Labels: complaintBreakDownData?.complaintCategoryStats?.labels,
         Data: complaintBreakDownData?.complaintCategoryStats?.data,
         Colors: [
@@ -23,7 +23,7 @@
     <div class="right__top">
       <div class="header">Complaint Break-down</div>
       <div class="progress">
-        <ng-container *ngFor="let item of distributionStatsData.data">
+        <ng-container *ngFor="let item of distributionStatsData?.data">
           <div
             class="score"
             [style.width]="item?.score()"
@@ -32,10 +32,10 @@
         </ng-container>
       </div>
       <div class="right__top__stat-container">
-        <ng-container *ngFor="let item of distributionStatsData.data">
+        <ng-container *ngFor="let item of distributionStatsData?.data">
           <div>
             <div>
-              {{ item.label }}
+              {{ item?.label }}
               <span>{{ item?.count }}</span>
             </div>
           </div>
@@ -44,7 +44,12 @@
     </div>
     <div class="right__bottom">
       <hospitality-bot-dual-plot
-        label="How is Complaint & Closure Rate varying over a period of time ?"
+        title="How is Complaint & Closure Rate varying over a period of time ?"
+        [config]="{
+          datasets: complaintBreakDownData?.complaintsData?.data,
+          labels: labels
+        }"
+        [filterOptions]="[{ label: 'Complaint' }, { label: 'Closed' }]"
       >
       </hospitality-bot-dual-plot>
     </div>

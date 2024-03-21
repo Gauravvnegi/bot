@@ -115,6 +115,8 @@ export interface DualPlotGraphDataset {
   backgroundColor: string[];
   borderColor: string[];
   data: number[];
+  label: string;
+  fill: boolean;
 }
 
 export interface DualPlotChartConfig {

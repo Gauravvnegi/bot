@@ -81,6 +81,13 @@
     display: flex;
     justify-content: space-between;
     position: relative;
+    align-items: center;
+
+    .legend-border {
+      height: 2px;
+      width: 17px;
+      background: black;
+    }
 
     &-title {
       height: 16px;

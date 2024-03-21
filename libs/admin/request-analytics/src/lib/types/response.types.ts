@@ -64,7 +64,7 @@ interface TotalComplaintGraphStats {
   [hour: number]: number;
 }
 
-interface ComplaintsData {
+export type ComplaintsDataResponse = {
   comparisonPercent: number;
   score: number;
   totalComplaintsGraph: {
@@ -75,7 +75,7 @@ interface ComplaintsData {
     totalCount: number;
     closedComplaintGraphStats: TotalComplaintGraphStats;
   };
-}
+};
 
 export type CategoryStatsResponse = {
   [category: string]: number;
@@ -89,5 +89,5 @@ export type ComplaintBreakDownResponse = {
   totalCount: number;
   distributionStats: DistributionStatsResponse;
   categoryStats: CategoryStatsResponse;
-  complaintsData: ComplaintsData;
+  complaintsData: ComplaintsDataResponse;
 };

@@ -172,7 +172,19 @@
       [minDate]="minDate"
     ></hospitality-bot-date>
     <hr class="data-separator" />
-    <div class="group-header half-width">Add Content</div>
+    <div class="template-header full-width">
+      <div class="group-header">Add Content</div>
+      <hospitality-bot-button
+        *ngIf="isRemoveCta && inputControls.message?.value?.length"
+        class="remove-cta"
+        label="Delete"
+        variant="text"
+        severity="reset"
+        height="20px"
+        minWidth="0"
+        (onClick)="removeTemplate()"
+      ></hospitality-bot-button>
+    </div>
     <hospitality-bot-create-content
       *ngIf="!inputControls.message?.value?.length"
       class="full-width"
@@ -182,6 +194,7 @@
       *ngIf="inputControls.message?.value?.length"
       class="full-width"
       controlName="message"
+      (selectedMode)="selectedMode($event)"
     ></hospitality-bot-edit-content>
     <!-- <hospitality-bot-template-editor
       class="full-width"

@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ControlContainer, FormGroup } from '@angular/forms';
 import { campaignConfig } from '../../constant/campaign';
+import { TemplateMode } from '../../types/campaign.type';
 
 @Component({
   selector: 'hospitality-bot-edit-content',
@@ -12,8 +13,9 @@ export class EditContentComponent implements OnInit {
   @Input() controlName: string;
   @Input() viewMode = false;
   modes = campaignConfig.modes;
-  currentMode = campaignConfig.currentMode;
+  currentMode: TemplateMode = 'backdrop';
 
+  @Output() selectedMode = new EventEmitter();
   constructor(private controlContainer: ControlContainer) {}
 
   ngOnInit(): void {
@@ -24,8 +26,9 @@ export class EditContentComponent implements OnInit {
    * @function changeMode function to change mode.
    * @param mode param to store current mode.
    */
-  changeMode(mode: string) {
+  changeMode(mode: TemplateMode) {
     this.currentMode = mode;
+    this.selectedMode.emit(mode);
   }
 
   /**

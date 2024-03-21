@@ -28,6 +28,8 @@ const CampaignState = {
 
 export type CampaignState = typeof CampaignState[keyof typeof CampaignState];
 
+export type TemplateMode = 'backdrop' | 'edit' | 'view';
+
 const TemplateType = {
   SAVED: 'SAVEDTEMPLATE',
   PREDESIGNED: 'PREDESIGNTEMPLATE',

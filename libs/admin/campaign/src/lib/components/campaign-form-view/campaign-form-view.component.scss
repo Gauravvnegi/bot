@@ -18,8 +18,12 @@
   height: 1px;
 }
 
-.group-header {
-  @include bold-sm-text;
+.template-header {
+  .group-header {
+    @include bold-sm-text;
+  }
+  display: flex;
+  justify-content: space-between;
 }
 .reciever-wrapper {
   position: relative;
@@ -27,6 +31,6 @@
     @include flex-row-justify-end;
     position: absolute;
     right: 0;
-    bottom: 15px;
+    bottom: 12px;
   }
 }

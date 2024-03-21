@@ -5,7 +5,7 @@ import {
   Option,
   Regex,
 } from '@hospitality-bot/admin/shared';
-import { CampaignForm, CampaignType } from '../../types/campaign.type';
+import { CampaignForm, CampaignType, TemplateMode } from '../../types/campaign.type';
 import { campaignRoutes } from '../../constant/route';
 import { Observable, Subscription } from 'rxjs';
 import {
@@ -47,6 +47,8 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
   pageTitle: string;
   navRoutes: NavRouteOptions = [];
   campaignType: CampaignType;
+
+  isRemoveCta = false;
 
   minDate = new Date();
   triggerOptions: Option[] = [];
@@ -173,6 +175,14 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
           .map((item) => ({ label: item.email, value: item.id }));
       })
     );
+  }
+
+  selectedMode(mode: TemplateMode) {
+    this.isRemoveCta = mode !== 'backdrop';
+  }
+
+  removeTemplate() {
+    this.inputControls.message.reset();
   }
 
   removeControl(controlName: string) {

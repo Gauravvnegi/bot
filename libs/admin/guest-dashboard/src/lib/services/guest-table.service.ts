@@ -45,7 +45,8 @@ export class GuestTableService extends ApiService {
   }
 
   getAllGuestStats(config): Observable<any> {
-    return this.get(`/api/v1/members/stats/${config.queryObj}`);
+    // return this.get(`/api/v1/members/stats/${config.queryObj}`);
+    return this.get(`/api/v1/dashboard-stats/reservation/${config.queryObj}`);
   }
 
   getGuestDocsStats(config): Observable<any> {

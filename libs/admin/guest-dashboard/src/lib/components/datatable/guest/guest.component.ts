@@ -120,7 +120,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     const guestData = new GuestTable().deserialize(data);
     this.values = guestData.records;
     this.initFilters(
-      guestData.entityTypeCounts,
+      {},
       guestData.entityStateCounts,
       guestData.totalRecord,
       this.guestStatusDetails
@@ -244,6 +244,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         { type: 'GUEST', dashboard: true },
       ]),
     };
+
     this.$subscription.add(
       this._guestTableService.exportCSV(config).subscribe(
         (response) => {

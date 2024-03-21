@@ -156,3 +156,23 @@ export function getUniqueOptions<T extends Option>(data: T[]): T[] {
   }
   return Array.from(uniqueMap.values());
 }
+
+export function deepCopy<T>(obj: T): T {
+  if (obj === null || typeof obj !== 'object') {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(deepCopy) as any;
+  }
+
+  const copy: any = Array.isArray(obj) ? [] : {};
+
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      copy[key] = deepCopy(obj[key]);
+    }
+  }
+
+  return copy as T;
+}

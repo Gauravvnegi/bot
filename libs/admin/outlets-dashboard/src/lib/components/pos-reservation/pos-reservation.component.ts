@@ -221,6 +221,7 @@ export class PosReservationComponent implements OnInit {
 
             this.mapGuestAddress(res.deliveryAddress);
             this.mapDefaultReservationData(res.reservation);
+            this.formService.getOrderSummary.next(true);
           }
         })
     );
@@ -237,6 +238,7 @@ export class PosReservationComponent implements OnInit {
           if (res.order) {
             const formData = this.formService.mapReservationData(res);
             this.userForm.patchValue(formData, { emitEvent: false });
+            this.formService.getOrderSummary.next(true);
           } else {
             const reservationInformation = {
               tableNumber: res?.tableIdOrRoomId,
@@ -401,7 +403,7 @@ export class PosReservationComponent implements OnInit {
     this.$subscription.add(
       this.formService.getOrderSummary
         .pipe(
-          debounceTime(100),
+          debounceTime(200),
           switchMap((res) => {
             if (!res) {
               return EMPTY; // No need to proceed if res is falsy
@@ -411,6 +413,7 @@ export class PosReservationComponent implements OnInit {
               this.userForm.getRawValue() as MenuForm,
               this.orderId
             );
+            if (!data.outletOrder.items.length) return EMPTY;
             return this.outletTableService.getOrderSummary(data);
           })
         )
@@ -521,8 +524,10 @@ export class PosReservationComponent implements OnInit {
 
   mapGuestData(guest: GuestType) {
     this.selectedGuest = {
-      label: `${guest.firstName} ${guest.lastName}`,
-      value: guest.id,
+      label: guest?.label
+        ? guest.label
+        : `${guest?.firstName} ${guest?.lastName}`,
+      value: guest.value ? guest.value : guest.id,
       address: guest?.address,
     };
     this.mapGuestAddress();
@@ -548,12 +553,7 @@ export class PosReservationComponent implements OnInit {
       componentRef.instance.onCloseSidebar.subscribe(
         (res: GuestType | boolean) => {
           if (typeof res !== 'boolean') {
-            this.selectedGuest = {
-              label: `${res.firstName} ${res.lastName}`,
-              value: res.id,
-              address: res.address,
-            };
-            this.mapGuestAddress();
+            this.mapGuestData(res);
           }
           this.sidebarVisible = false;
         }

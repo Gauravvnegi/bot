@@ -1,0 +1,64 @@
+<div class="container">
+  <div class="header" [formGroup]="useForm">
+    <div class="title-container">
+      <div class="icon" *ngIf="icon">
+        <img [src]="icon" alt="icon" />
+      </div>
+      <div class="stat-title">{{ label }}</div>
+    </div>
+
+    <div class="menu-container">
+      <div class="pull-right" *ngIf="isSwitchAble">
+        <label class="labl" *ngFor="let option of chartTypeOption">
+          <input
+            placeholder="radio"
+            type="radio"
+            formControlName="graphType"
+            [value]="option.value"
+            (click)="setChartType(option)"
+          />
+          <div class="image">
+            <img [src]="option.url" alt="" />
+          </div>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="line-chart">
+    <canvas
+      *skeleton="chart == undefined; height: '65vh'; width: '100%'"
+      baseChart
+      class="line-chart__canvas"
+      [datasets]="chart.data"
+      [labels]="chart.labels"
+      [options]="chart.options"
+      [colors]="chart.colors"
+      [legend]="chart.legend"
+      [chartType]="chart.type"
+    >
+    </canvas>
+  </div>
+
+  <div class="stat-filter">
+    <div
+      class="stat-filter-label"
+      (click)="onFilterCLick(filterIndex)"
+      *ngFor="let filter of filterOptions; let filterIndex = index"
+    >
+      <input
+        class="filters"
+        type="checkbox"
+        *skeleton="
+          filterOptions == undefined;
+          height: '35px';
+          width: '90px';
+          margin: '0 0 10px 0'
+        "
+      />
+      <img [src]="filter.icon" alt="" />
+      <p class="stat-lable-title">
+        {{ filter.label }}
+      </p>
+    </div>
+  </div>
+</div>

@@ -125,6 +125,7 @@ import { CalendarViewComponent } from './components/calendar-view/calendar-view.
 import { PositionedMenuComponent } from './components/positioned-menu/positioned-menu.component';
 import { AngularDraggableModule } from 'angular2-draggable';
 import { TooltipModule } from 'primeng/tooltip';
+import { ChipsModule } from 'primeng/chips';
 
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiered-menu-button.component';
@@ -146,6 +147,11 @@ import { ChipsComponent } from './components/chips/chips.component';
 import { ItemViewComponent } from './view/item-view/item-view.component';
 import { DateGroupFilterComponent } from './components/date-group-filter/date-group-filter.component';
 import { TableSwitchComponent } from './components/table-switch/table-switch.component';
+import { DualPlotComponent } from './components/dual-plot/dual-plot.component';
+import { GaugeChartModule } from 'angular-gauge-chart';
+import { ChartsModule } from 'ng2-charts';
+import { ChipListComponent } from './components/form-component/chip-list/chip-list.component';
+import { DoughnutComponent } from './components/doughnut/doughnut.component';
 
 @NgModule({
   imports: [
@@ -183,6 +189,9 @@ import { TableSwitchComponent } from './components/table-switch/table-switch.com
     ConfirmDialogModule,
     ToastModule,
     TabViewModule,
+    GaugeChartModule,
+    ChartsModule,
+    ChipsModule,
   ],
   declarations: [
     DatatableComponent,
@@ -294,6 +303,9 @@ import { TableSwitchComponent } from './components/table-switch/table-switch.com
     ItemViewComponent,
     DateGroupFilterComponent,
     TableSwitchComponent,
+    DualPlotComponent,
+    ChipListComponent,
+    DoughnutComponent,
   ],
 
   exports: [
@@ -430,6 +442,9 @@ import { TableSwitchComponent } from './components/table-switch/table-switch.com
     ItemViewComponent,
     DateGroupFilterComponent,
     TableSwitchComponent,
+    DualPlotComponent,
+    ChipListComponent,
+    DoughnutComponent,
   ],
 })
 export class AdminSharedModule {}

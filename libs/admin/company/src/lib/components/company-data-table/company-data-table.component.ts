@@ -163,7 +163,7 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
           () => {
             this.initTable();
             this.snackbarService.openSnackBarAsText(
-              'Status changes successfully',
+              'Status changed successfully',
               '',
               { panelClass: 'success' }
             );

@@ -245,3 +245,23 @@
     }
   }
 }
+
+// Tiered menu btn styling
+:host ::ng-deep .tiered-menu-btn {
+  .tiered__wrapper {
+    .p-tieredmenu {
+      top: unset !important;
+    }
+    .split-button {
+      .label {
+        height: 46px;
+      }
+      .icon {
+        height: 46px;
+        i {
+          color: $white;
+        }
+      }
+    }
+  }
+}

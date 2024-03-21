@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { ControlContainer, FormGroup } from '@angular/forms';
 import { campaignConfig } from '../../constant/campaign';
-import { Campaign } from '../../data-model/campaign.model';
+import { TemplateMode } from '../../types/campaign.type';
 
 @Component({
   selector: 'hospitality-bot-edit-content',
@@ -9,29 +9,26 @@ import { Campaign } from '../../data-model/campaign.model';
   styleUrls: ['./edit-content.component.scss'],
 })
 export class EditContentComponent implements OnInit {
-  @Input() campaignFG: FormGroup;
-  @Input() campaignDetails: Campaign;
+  campaignFG: FormGroup;
+  @Input() controlName: string;
   @Input() viewMode = false;
-  @Output() addContent = new EventEmitter();
   modes = campaignConfig.modes;
-  currentMode = campaignConfig.currentMode;
-  constructor() {}
+  currentMode: TemplateMode = 'backdrop';
 
-  ngOnInit(): void {}
+  @Output() selectedMode = new EventEmitter();
+  constructor(private controlContainer: ControlContainer) {}
 
-  /**
-   * @function openAddContent function to add open-content.
-   */
-  openAddContent() {
-    this.addContent.emit();
+  ngOnInit(): void {
+    this.campaignFG = this.controlContainer.control as FormGroup;
   }
 
   /**
    * @function changeMode function to change mode.
    * @param mode param to store current mode.
    */
-  changeMode(mode: string) {
+  changeMode(mode: TemplateMode) {
     this.currentMode = mode;
+    this.selectedMode.emit(mode);
   }
 
   /**

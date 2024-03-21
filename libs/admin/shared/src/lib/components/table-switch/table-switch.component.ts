@@ -5,10 +5,10 @@ import { ControlContainer, FormControl, FormGroup } from '@angular/forms';
 @Component({
   selector: 'hospitality-bot-table-switch',
   templateUrl: './table-switch.component.html',
-  styleUrls: ['./table-switch.component.scss'],
+  styleUrls: ['./table-switch.component.scss']
 })
 export class TableSwitchComponent implements OnInit {
-  @Input() tableGroup: string;
+  @Input() tableGroup: 'campaign' | 'reservation' | 'outlet';
 
   selectedTableTypes: TableType[] = [];
   tableFG: FormGroup;
@@ -34,10 +34,18 @@ export class TableSwitchComponent implements OnInit {
   }
 }
 
+type TableTypeGroup = 'reservation' | 'campaign' | 'outlet';
+
+// Define type for the table type object
 type TableType = {
   name: string;
   value: string;
   url: string;
   whiteUrl: string;
-  backgrounColor: string;
+  backgroundColor: string;
+};
+
+// Define type for the defaultTableTypes constant
+export type DefaultTableTypes = {
+  [Key in TableTypeGroup]: TableType[];
 };

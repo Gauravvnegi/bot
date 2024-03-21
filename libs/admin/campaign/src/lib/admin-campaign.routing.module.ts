@@ -14,12 +14,50 @@ import { EditContentComponent } from './components/edit-content/edit-content.com
 import { TemplateListContainerComponent } from './components/template-list-container/template-list-container.component';
 import { TopicTemplatesComponent } from './components/topic-templates/topic-templates.component';
 import { ScheduleCampaignComponent } from './components/schedule-campaign/schedule-campaign.component';
+import { CampaignFormViewComponent } from './components/campaign-form-view/campaign-form-view.component';
+import { campaignRoutes } from './constant/route';
 
 const appRoutes: Route[] = [
-  { path: '', component: CampaignComponent },
-  { path: 'view/:id', component: ViewCampaignComponent },
-  { path: 'create', component: EditCampaignComponent },
-  { path: 'edit/:id', component: EditCampaignComponent },
+  {
+    path: '',
+    component: CampaignComponent,
+    children: [
+      {
+        path: '',
+        component: CampaignDatatableComponent,
+      },
+      {
+        path: campaignRoutes.createEmailCampaign.route,
+        component: CampaignComponent,
+        children: [
+          {
+            path: '',
+            component: CampaignFormViewComponent,
+          },
+          {
+            path: campaignRoutes.createTemplate.route,
+            component: TemplateListContainerComponent,
+            pathMatch: 'full',
+          },
+        ],
+      },
+      {
+        path: `${campaignRoutes.editEmailCampaign.route}/:id`,
+        component: CampaignComponent,
+        children: [
+          {
+            path: '',
+            component: CampaignFormViewComponent,
+          },
+          {
+            path: campaignRoutes.createTemplate.route,
+            component: TemplateListContainerComponent,
+            pathMatch: 'full',
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 @NgModule({
@@ -42,5 +80,6 @@ export class AdminCampaignRoutingModule {
     TemplateListContainerComponent,
     TopicTemplatesComponent,
     ScheduleCampaignComponent,
+    CampaignFormViewComponent,
   ];
 }

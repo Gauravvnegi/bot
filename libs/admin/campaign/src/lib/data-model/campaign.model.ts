@@ -1,11 +1,18 @@
 import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set } from 'lodash';
-import { EntityState, IDeserializable } from '@hospitality-bot/admin/shared';
+import {
+  EntityState,
+  IDeserializable,
+  Option,
+} from '@hospitality-bot/admin/shared';
+import { CampaignType, TemplateType } from '../types/campaign.type';
+import { CampaignResponse } from '../types/campaign.response';
 
 export class Campaigns implements IDeserializable {
   records: Campaign[];
   entityStateCounts: EntityState<string>;
   entityTypeCounts: EntityState<string>;
+  entityChannelCounts: EntityState<string>;
   totalRecord: number;
 
   deserialize(input: any) {
@@ -14,6 +21,7 @@ export class Campaigns implements IDeserializable {
     );
     this.entityStateCounts = input?.entityStateCounts;
     this.entityTypeCounts = input?.entityTypeCounts;
+    this.entityChannelCounts = input?.entityChannelCount;
     this.totalRecord = input?.total;
     return this;
   }
@@ -31,7 +39,7 @@ export class Campaign implements IDeserializable {
   archieved: true;
   campaignType: string;
   createdAt: number;
-
+  channel: CampaignType;
   from: string;
   message: string;
   previewText: string;
@@ -50,6 +58,7 @@ export class Campaign implements IDeserializable {
       this,
       set({}, 'id', get(input, ['id'])),
       set({}, 'name', get(input, ['name'])),
+      set({}, 'channel', get(input, ['channel'])),
       set({}, 'status', get(input, ['active'])),
       set({}, 'active', get(input, ['active'])),
       set({}, 'statsCampaign', get(input, ['statsCampaign'])),
@@ -81,5 +90,50 @@ export class Campaign implements IDeserializable {
       return DateService.getDateFromTimeStamp(this.updatedAt, format, timezone);
     }
     return DateService.getDateFromTimeStamp(this.createdAt, format, timezone);
+  }
+}
+
+export class CampaignFormData {
+  campaignName: string;
+  topic: string;
+  to: string[];
+  event: string;
+  startDate: number;
+  endDate: number;
+  campaignState: string;
+  template: TemplateType;
+  message: string;
+  cc?: string[];
+  bcc?: string[];
+  campaignTags: string[];
+  templateId: string;
+  from: string;
+  recipients: Option[];
+  subject: string;
+  id: string;
+
+  deserialize(input: CampaignResponse) {
+    this.campaignName = input.name;
+    this.topic = input.topicId;
+    this.startDate = input.dateTime;
+    // this.campaignState = input.campaignType;
+    this.message = input.message;
+    this.templateId = input.templateId;
+    this.from = input.from;
+    this.subject = input.subject.text;
+    this.cc = input.cc;
+    this.bcc = input.bcc;
+    this.campaignTags = input.tags;
+    this.id = input.id;
+
+    // Map individuals and listings in to array.
+    const individualLabels = input.to.individual.map((item) => item.name);
+    const listings = input.to.listing.map((item) => ({
+      label: item.name,
+      value: item.receiverId,
+    }));
+    this.to = [...individualLabels, ...listings.map((item) => item.label)];
+    this.recipients = listings;
+    return this;
   }
 }

@@ -39,13 +39,13 @@
 
   <div class="one-fourth">{{ 'formFieldLabels.to' | translate }}</div>
   <div class="email-style one-third-width">
-    <hospitality-bot-to-receiver-field
+    <!-- <hospitality-bot-to-receiver-field
       [name]="'to'"
       [entityId]="entityId"
       [chipList]="campaignFG.get('to')?.value || []"
       [disableInput]="(campaignFG.get('to')?.value || []).length"
       (updateChipSet)="updateFieldData($event, campaignFG.get('to'))"
-    ></hospitality-bot-to-receiver-field>
+    ></hospitality-bot-to-receiver-field> -->
     <div class="style-click">
       <span
         (click)="enableEmailControl($event, 'bcc')"
@@ -134,11 +134,4 @@
       {{ 'validationMessage.subjectLength' | translate }}
     </mat-error>
   </div>
-
-  <hospitality-bot-edit-content
-    class="full-width"
-    [campaignFG]="campaignFG"
-    [campaignDetails]="_campaign"
-    (addContent)="openAddContent()"
-  ></hospitality-bot-edit-content>
 </form>

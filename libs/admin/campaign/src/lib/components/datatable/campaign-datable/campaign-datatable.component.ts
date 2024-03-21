@@ -1,7 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -11,12 +14,12 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import * as FileSaver from 'file-saver';
-import { LazyLoadEvent, SortEvent } from 'primeng/api';
+import { LazyLoadEvent, MenuItem, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { campaignConfig } from '../../../constant/campaign';
 import { Campaigns, Campaign } from '../../../data-model/campaign.model';
 import { CampaignService } from '../../../services/campaign.service';
-import { MessageObj } from '../../../types/campaign.type';
+import { CampaignType, MessageObj } from '../../../types/campaign.type';
 import { campaignStatus } from '../../../constants/response';
 import { MenuOptions } from '../../../constants/camapign';
 
@@ -45,10 +48,15 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   menuOptions = MenuOptions;
   navRoutes: NavRouteOption[] = [
     {
-      label: 'Library',
+      label: 'Emark-it',
       link: './',
     },
   ];
+
+  tableType: 'campaignType' | 'campaignDetails' = 'campaignType';
+
+  campaignCta: MenuItem[] = [];
+
   constructor(
     public fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -57,13 +65,15 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     private router: Router,
     private route: ActivatedRoute,
     private campaignService: CampaignService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb);
   }
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
+    this.initDetails();
   }
 
   /**
@@ -85,6 +95,29 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         ...this.getSelectedQuickReplyFilters(),
       ]);
     });
+  }
+
+  initDetails() {
+    this.campaignCta = [
+      {
+        label: 'Email',
+        command: () => {
+          this.openCreateCampaign('EMAIL');
+        },
+      },
+      {
+        label: 'Whatsapp',
+        command: () => {
+          this.openCreateCampaign('WHATSAPP');
+        },
+      },
+    ];
+  }
+
+  setTableType(value: 'campaignType' | 'campaignDetails') {
+    this.tableType = value;
+    this.selectedTab = 'ALL';
+    this.loadData();
   }
 
   /**
@@ -112,8 +145,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   setRecords(data: Record<string, any>): void {
     const modData = new Campaigns().deserialize(data);
     this.values = modData.records;
+    let entityTypeCounts =
+      this.tableType === 'campaignDetails'
+        ? modData.entityTypeCounts
+        : modData.entityChannelCounts;
     this.initFilters(
-      modData.entityTypeCounts,
+      entityTypeCounts,
       modData.entityStateCounts,
       modData.totalRecord,
       this.campaignStatus
@@ -154,12 +191,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         .subscribe(
           (_response) => {
             this.loadData();
-            this.showMessage(
+            this.snackbarService.openSnackBarAsText(
+              'Status changed successfully',
+              '',
               {
-                key: 'messages.success.status_updated',
-                message: '',
-              },
-              'success'
+                panelClass: 'success',
+              }
             );
             this.changePage(this.currentPage);
           },
@@ -233,8 +270,13 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   /**
    * @function openCreateCampaign to create campaign page.
    */
-  openCreateCampaign(): void {
-    this.router.navigate(['create'], { relativeTo: this.route });
+  openCreateCampaign(campaignType: CampaignType): void {
+    this.routesConfigService.navigate({
+      additionalPath: 'create-campaign',
+      queryParams: {
+        campaignType: campaignType,
+      },
+    });
   }
 
   /**
@@ -242,12 +284,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    */
   openEditCampaign(campaign: Campaign, event: MouseEvent): void {
     event.stopPropagation();
-    this.router.navigate(
-      [`${campaign.isDraft ? 'edit' : 'view'}/${campaign.id}`],
-      {
-        relativeTo: this.route,
-      }
-    );
+    this.routesConfigService.navigate({
+      additionalPath: `edit-campaign/${campaign.id}`,
+      queryParams: {
+        campaignType: campaign.channel,
+      },
+    });
   }
 
   /**
@@ -265,21 +307,29 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   loadData(): void {
     this.loading = true;
     // this.updatePaginations(event);
-    this.$subscription.add(
-      this.fetchDataFrom(
-        [
-          ...this.globalQueries,
-          {
-            order: sharedConfig.defaultOrder,
-            entityType: this.selectedTab,
-          },
-          ...this.getSelectedQuickReplyFilters(),
-        ],
-        {
-          offset: this.first,
-          limit: this.rowsPerPage,
+
+    let queryParams = [
+      ...this.globalQueries,
+      {
+        order: sharedConfig.defaultOrder,
+        entityType: this.selectedTab,
+      },
+      ...this.getSelectedQuickReplyFilters(),
+    ];
+
+    if (this.tableType === 'campaignType') {
+      queryParams = queryParams.map((param) => {
+        if (param.entityType) {
+          return { ...param, channel: param.entityType, entityType: undefined };
         }
-      ).subscribe(
+        return param;
+      });
+    }
+    this.$subscription.add(
+      this.fetchDataFrom(queryParams, {
+        offset: this.first,
+        limit: this.rowsPerPage,
+      }).subscribe(
         (data) => this.setRecords(data),
         ({ error }) => {
           this.values = [];
@@ -367,7 +417,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @function showMessage To show the translated message.
    * @param messageObj The message object.
    */
-  showMessage(messageObj: MessageObj, panelClass = 'danger'): void {
+  showMessage(messageObj: MessageObj, panelClass = 'error'): void {
     this.snackbarService
       .openSnackBarWithTranslate(
         {

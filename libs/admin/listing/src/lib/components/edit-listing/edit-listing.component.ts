@@ -44,9 +44,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
     private _listingService: ListingService,
     private snackbarService: SnackBarService,
     private activatedRoute: ActivatedRoute,
-    private _location: Location,
     protected _translateService: TranslateService,
-    private _router: Router,
     private adminUtilityService: AdminUtilityService,
     private routesConfigService: RoutesConfigService
   ) {

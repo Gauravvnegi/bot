@@ -1,0 +1,91 @@
+@import '../form.component.scss';
+
+:host ::ng-deep .wrapper {
+  .input {
+    border-color: $border-color;
+    .p-chips {
+      @include input-default();
+      min-height: 45px;
+      height: auto;
+      max-width: 100%;
+      padding: 0;
+
+      .p-inputtext {
+        display: flex;
+        flex-wrap: wrap;
+        cursor: auto;
+        width: 100%;
+        border-color: $border-color;
+        padding: 0.7rem 0.6rem;
+        row-gap: 10px;
+        .p-chips-input-token {
+          padding: 0;
+          input {
+            font-size: 15px;
+            line-height: 1.4;
+            letter-spacing: 0.84px;
+            text-align: left;
+            color: rgba(0, 0, 0, 0.6);
+          }
+        }
+        &:hover {
+          border-color: $primary-form-color !important;
+        }
+        &.p-focus {
+          border-color: $primary-form-color;
+        }
+
+        .pi-times {
+          font-size: 1em;
+          margin-top: 0.3em;
+          cursor: pointer;
+        }
+
+        .p-chips-token {
+          display: flex;
+          gap: 1em;
+          background-color: #e8e2ff;
+          font-size: 0.7em;
+          padding: 0.4em 0.6em;
+          letter-spacing: 0.08em;
+          color: #5f38f9;
+          border-radius: 4px;
+          overflow: visible;
+          margin-top: -0.3em;
+          margin-bottom: -0.3em;
+        }
+      }
+    }
+
+    &__error {
+      .p-chips {
+        .p-inputtext {
+          border-color: $form-error-color;
+        }
+      }
+    }
+
+    &__static {
+      .p-chips {
+        .p-inputtext {
+          margin-top: $label-gap;
+        }
+      }
+    }
+
+    &__standard {
+      .p-chips {
+        .p-inputtext {
+          border-color: $primary-text-color;
+          border-width: 0 0 1px 0;
+        }
+        &:focus {
+          margin-bottom: -1px;
+          border-width: 0 0 2px 0;
+          border-color: $primary-form-color;
+          box-shadow: none;
+        }
+      }
+    }
+  }
+}

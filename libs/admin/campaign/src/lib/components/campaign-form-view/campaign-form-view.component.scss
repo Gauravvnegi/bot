@@ -1,0 +1,36 @@
+@import 'main';
+
+.form-block {
+  @include form-block;
+}
+
+.form-header {
+  @include bold-sm-text;
+  width: 100%;
+}
+
+.data-separator {
+  border: none;
+  margin: 10px 0px;
+  background: $dataSeparator;
+  opacity: 0.4;
+  width: 100%;
+  height: 1px;
+}
+
+.template-header {
+  .group-header {
+    @include bold-sm-text;
+  }
+  display: flex;
+  justify-content: space-between;
+}
+.reciever-wrapper {
+  position: relative;
+  .control-btn {
+    @include flex-row-justify-end;
+    position: absolute;
+    right: 0;
+    bottom: 12px;
+  }
+}

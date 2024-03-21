@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
-import { Option } from '../../../types/form.type';
 import { FormComponent } from '../form.components';
 
 @Component({

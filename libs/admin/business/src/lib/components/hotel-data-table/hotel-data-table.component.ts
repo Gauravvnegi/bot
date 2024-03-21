@@ -178,7 +178,7 @@ export class HotelDataTableComponent extends BaseDatatableComponent
           (res) => {
             this.initTableValue();
             this.snackbarService.openSnackBarAsText(
-              'Status changes successfully',
+              'Status changed successfully',
               '',
               { panelClass: 'success' }
             );

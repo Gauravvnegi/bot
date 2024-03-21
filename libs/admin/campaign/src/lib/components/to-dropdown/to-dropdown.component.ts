@@ -14,6 +14,11 @@ import { campaignConfig } from '../../constant/campaign';
 import { ReceiversSearchItem } from '../../data-model/email.model';
 import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
+import {
+  IList,
+  ListTable,
+} from 'libs/admin/listing/src/lib/data-models/listing.model';
+import { ListType, RecipientType } from '../../types/campaign.type';
 
 @Component({
   selector: 'hospitality-bot-to-dropdown',
@@ -25,14 +30,24 @@ export class ToDropdownComponent implements OnInit, OnDestroy {
   @Input() search = false;
   @Input() entityId: string;
   @Input() searchList: ReceiversSearchItem[];
+
   @Output() selectedList = new EventEmitter();
   @Output() closeDropdown = new EventEmitter();
-  $subscriptions = new Subscription();
+
   tabFilterIdx = 0;
-  tabFilterItems = campaignConfig.dropDownTabFilter;
-  listings = campaignConfig.listings;
-  subscribers = campaignConfig.subscribers;
   offset = 0;
+  limit = 5;
+
+  tabFilterItems = campaignConfig.dropDownTabFilter;
+  subscribers = campaignConfig.subscribers;
+
+  listings: { data: IList[]; totalRecords: number } = {
+    data: [],
+    totalRecords: 0,
+  };
+
+  $subscriptions = new Subscription();
+
   constructor(
     private _campaignService: CampaignService,
     private _adminUtilityService: AdminUtilityService,
@@ -42,7 +57,7 @@ export class ToDropdownComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.loadSubscribers();
+    this.loadListings();
   }
 
   /**
@@ -51,7 +66,7 @@ export class ToDropdownComponent implements OnInit, OnDestroy {
    */
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
-    if (this.listings.data.length === 0) this.loadListings();
+    if (this.listings?.data?.length === 0) this.loadSubscribers();
   }
 
   /**
@@ -74,7 +89,7 @@ export class ToDropdownComponent implements OnInit, OnDestroy {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         {
-          limit: campaignConfig.rowsPerPage.rows,
+          limit: this.limit,
           entityState: campaignConfig.topicConfig.active,
           offset: this.offset,
         },
@@ -84,9 +99,12 @@ export class ToDropdownComponent implements OnInit, OnDestroy {
       this._campaignService
         .getListings(this.entityId, config)
         .subscribe((response) => {
-          this.listings.data = [...this.listings.data, ...response.records];
-          this.offset = this.offset + campaignConfig.rowsPerPage.rows;
-          this.listings.totalRecords = response.total;
+          const listingData = new ListTable().deserialize(response);
+          this.listings = {
+            data: listingData.records,
+            totalRecords: listingData.total,
+          };
+          this.limit = this.limit + campaignConfig.rowsPerPage.rows;
         })
     );
   }
@@ -96,7 +114,7 @@ export class ToDropdownComponent implements OnInit, OnDestroy {
    * @param type type of item.
    * @param list list content.
    */
-  selectItem(type: string, list) {
+  selectItem<TType extends RecipientType>(type: TType, list: ListType<TType>) {
     this.selectedList.emit({ type, data: list });
   }
 

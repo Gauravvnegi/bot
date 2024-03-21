@@ -93,8 +93,18 @@ export const campaignConfig = {
       },
     ],
     templateTypes: [
-      { name: 'Saved Template', type: 'SAVEDTEMPLATE' },
-      { name: 'Pre-defined Template', type: 'PREDESIGNTEMPLATE' },
+      {
+        name: 'Saved Template',
+        type: 'SAVEDTEMPLATE',
+        label: 'Saved Template',
+        value: 'SAVEDTEMPLATE',
+      },
+      {
+        name: 'Pre-designed Template',
+        type: 'PREDESIGNTEMPLATE',
+        label: 'Pre-designed Template',
+        value: 'PREDESIGNTEMPLATE',
+      },
     ],
   },
   listings: {
@@ -156,11 +166,11 @@ export const campaignConfig = {
     shared: { url: 'assets/svg/shared_template.svg', alt: 'shared' },
   },
   dropDownTabFilter: [
-    {
-      label: 'Subscribers Groups',
-      value: 'SUBSCRIBERGROUP',
-      chips: [],
-    },
+    // {
+    //   label: 'Subscribers Groups',
+    //   value: 'SUBSCRIBERGROUP',
+    //   chips: [],
+    // },
     {
       label: 'Listing',
       value: 'LISTING',
@@ -168,3 +178,15 @@ export const campaignConfig = {
     },
   ],
 };
+
+export const triggerOptions = [
+  { label: 'Does not repeat', value: 'DOES_NOT_REPEAT' },
+  { label: 'Daily', value: 'DAILY' },
+  { label: 'Weekly', value: 'WEEKLY' },
+  { label: 'Triggered', value: 'TRIGGERED' },
+];
+
+export const eventOptions = [
+  { label: 'Checked-out', value: 'CHECKED_OUT' },
+  { label: 'Checked-in', value: 'CHECKED_IN' },
+];

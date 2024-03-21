@@ -9,9 +9,7 @@ import {
   BaseDatatableComponent,
   openModal,
 } from '@hospitality-bot/admin/shared';
-import {
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { LazyLoadEvent } from 'primeng/api';
@@ -233,7 +231,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
           () => {
             this.getDataTableValue();
             this.snackbarService.openSnackBarAsText(
-              'Status changes successfully',
+              'Status changed successfully',
               '',
               { panelClass: 'success' }
             );

@@ -5,7 +5,17 @@
     </div>
   </hospitality-bot-custom-tooltip>
   <div class="graph">
-    <hospitality-bot-tab-group> </hospitality-bot-tab-group>
-    <hospitality-bot-dual-plot></hospitality-bot-dual-plot>
+    <hospitality-bot-tab-group
+      [listItems]="tabFilterItems"
+      (selectedTabChange)="onSelectedTabFilterChange($event)"
+    >
+    </hospitality-bot-tab-group>
+
+    <hospitality-bot-dual-plot
+      [options]="options"
+      [datasets]="data"
+      [labels]="labels"
+      graphType="bar"
+    ></hospitality-bot-dual-plot>
   </div>
 </div>

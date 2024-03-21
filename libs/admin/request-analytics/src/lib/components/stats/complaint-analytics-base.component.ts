@@ -37,7 +37,6 @@ export class ComplaintBaseComponent {
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
-    this.initGraphStats();
   }
 
   initGraphStats(): void {

@@ -93,4 +93,12 @@ export class AnalyticsService extends ApiService {
       `/api/v1/request-analytics/breakdown${config.params ?? ''}`
     );
   }
+
+  getAvgResolveTimeStats(
+    config: QueryConfig
+  ): Observable<{ categoryStats: { [key: string]: number } }> {
+    return this.get(
+      `/api/v1/request-analytics/average-resolved-time${config?.params ?? ''}`
+    );
+  }
 }

@@ -5,7 +5,11 @@ import {
   Option,
   Regex,
 } from '@hospitality-bot/admin/shared';
-import { CampaignForm, CampaignType, TemplateMode } from '../../types/campaign.type';
+import {
+  CampaignForm,
+  CampaignType,
+  TemplateMode,
+} from '../../types/campaign.type';
 import { campaignRoutes } from '../../constant/route';
 import { Observable, Subscription } from 'rxjs';
 import {
@@ -49,6 +53,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
   campaignType: CampaignType;
 
   isRemoveCta = false;
+  isRouteData = false;
 
   minDate = new Date();
   triggerOptions: Option[] = [];
@@ -78,11 +83,12 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
   listenRouteData() {
     this.$subscription.add(
       this.activatedRoute.queryParams.pipe(take(1)).subscribe((res) => {
-        if (res.formData) {
-          const formData = JSON.parse(atob(res.formData)) as CampaignForm;
+        if (res.data) {
+          const formData = JSON.parse(atob(res.data)) as CampaignForm;
           if (formData?.cc?.length) this.addControl('cc');
           if (formData?.bcc?.length) this.addControl('bcc');
           this.useForm.patchValue(formData as CampaignForm);
+          this.isRouteData = true;
         }
         if (res.campaignType) {
           this.campaignType = res.campaignType;
@@ -107,7 +113,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
     this.topicList = this.campaignService.mapTopicList(this.entityId);
     this.initNavRoutes();
     this.getFromEmails();
-    if (this.campaignId) {
+    if (this.campaignId && !this.isRouteData) {
       this.initCampaignData();
     }
   }
@@ -141,6 +147,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
       message: [''],
       templateId: [''],
       recipients: [[]],
+      id: [''],
     });
   }
 

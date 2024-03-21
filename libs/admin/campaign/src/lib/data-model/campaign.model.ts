@@ -110,6 +110,7 @@ export class CampaignFormData {
   from: string;
   recipients: Option[];
   subject: string;
+  id: string;
 
   deserialize(input: CampaignResponse) {
     this.campaignName = input.name;
@@ -123,6 +124,7 @@ export class CampaignFormData {
     this.cc = input.cc;
     this.bcc = input.bcc;
     this.campaignTags = input.tags;
+    this.id = input.id;
 
     // Map individuals and listings in to array.
     const individualLabels = input.to.individual.map((item) => item.name);
@@ -132,7 +134,6 @@ export class CampaignFormData {
     }));
     this.to = [...individualLabels, ...listings.map((item) => item.label)];
     this.recipients = listings;
-
     return this;
   }
 }

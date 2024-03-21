@@ -60,7 +60,6 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.campaignId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initForm();
     this.initDetails();
     this.listenForRouteData();
@@ -104,8 +103,8 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
         if (res.campaignType) {
           this.campaignType = res.campaignType;
         }
-        if (res.formData) {
-          const formData = JSON.parse(atob(res.formData));
+        if (res.data) {
+          const formData = JSON.parse(atob(res.data));
           this.campaignForm = formData as CampaignForm;
           if (this.campaignType === 'EMAIL')
             this.inputControls?.template.patchValue(
@@ -149,14 +148,22 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
     };
     const queryParams = {
       campaignType: this.campaignType,
-      formData: btoa(JSON.stringify(this.campaignForm)),
+      data: btoa(JSON.stringify(this.campaignForm)),
     };
 
-    this.routesConfigService.navigate({
-      subModuleName: ModuleNames.CAMPAIGN,
-      additionalPath: 'create-campaign',
-      queryParams,
-    });
+    if (this.campaignForm?.id?.length) {
+      this.routesConfigService.navigate({
+        subModuleName: ModuleNames.CAMPAIGN,
+        additionalPath: `edit-campaign/${this.campaignForm?.id}`,
+        queryParams: queryParams,
+      });
+    } else {
+      this.routesConfigService.navigate({
+        subModuleName: ModuleNames.CAMPAIGN,
+        additionalPath: 'create-campaign',
+        queryParams,
+      });
+    }
   }
 
   /**
@@ -185,6 +192,10 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
    */
   getTemplateByTopicId(topicId: string) {
     if (topicId?.length) {
+      this.campaignForm = {
+        ...this.campaignForm,
+        topic: topicId,
+      };
       this.loading = true;
       this.$subscription.add(
         this.campaignService

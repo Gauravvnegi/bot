@@ -38,7 +38,7 @@ export class CreateContentComponent implements OnInit {
     this.inputControls.template.patchValue(type, { emitEvent: false });
 
     const queryParams = {
-      formData: btoa(
+      data: btoa(
         JSON.stringify(this.parentFG.getRawValue() as CampaignForm)
       ),
     };

@@ -11,7 +11,7 @@ export const navRoute = {
   },
   editCampaign: {
     label: 'Edit Campaign',
-    link: './:id',
+    link: './',
   },
   addGuest: { label: 'Add Guest', link: './' },
   template: { label: 'Template', link: './' },

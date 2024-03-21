@@ -87,7 +87,11 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
     }
 
     if (
-      ['getGuestDocsStats', 'getGuestPaymentStats'].includes(this.callingMethod)
+      [
+        'getGuestDocsStats',
+        'getGuestPaymentStats',
+        'getAllGuestStats',
+      ].includes(this.callingMethod)
     ) {
       this.isAllTabFilterRequired = false;
       this.isNpsColHidden = true;
@@ -136,36 +140,35 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
   }
 
   setRecords(data): void {
-    let guestRecord;
     switch (this.callingMethod) {
       case 'getGuestPaymentStats':
-        guestRecord = new GuestPaymentList().deserialize(data);
-        this.values = guestRecord.records;
+        const guestPayments = new GuestPaymentList().deserialize(data);
+        this.values = guestPayments.records;
         this.initFilters(
           {},
-          guestRecord.entityStateCounts,
-          guestRecord.totalRecord
+          guestPayments.entityStateCounts,
+          guestPayments.totalRecord
         );
         this.loading = false;
         return;
       case 'getGuestDocsStats':
-        guestRecord = new GuestDocumentList().deserialize(data);
-        this.values = guestRecord.records;
+        const guestDocs = new GuestDocumentList().deserialize(data);
+        this.values = guestDocs.records;
         this.initFilters(
           {},
-          guestRecord.entityStateCounts,
-          guestRecord.totalRecord
+          guestDocs.entityStateCounts,
+          guestDocs.totalRecord
         );
         this.loading = false;
         return;
 
       case 'getAllGuestStats':
-        guestRecord = new GuestTable().deserialize(data);
-        this.values = guestRecord.records;
+        const allGuest = new GuestTable().deserialize(data);
+        this.values = allGuest?.records;
         this.initFilters(
-          guestRecord.entityTypeCounts,
-          guestRecord.entityStateCounts,
-          guestRecord.totalRecord,
+          {},
+          allGuest?.entityStateCounts,
+          allGuest?.totalRecord,
           guestStatusDetails
         );
         this.loading = false;
@@ -247,7 +250,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
     };
 
     let responseObj;
-    if (this.exportURL === 'exportDocsCSV') {
+    if (this.exportURL === 'exportDocsCSV' || 'exportCSVStat') {
       const payload = this.selectedRows.map((item: GuestDocumentDetails) => {
         return {
           guestId: item?.id,
@@ -282,7 +285,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
     event.stopPropagation();
     if (rowData) {
       this.bookingDetailService.openBookingDetailSidebar({
-        bookingNumber: rowData.booking.bookingNumber,
+        bookingNumber: rowData.booking?.bookingNumber,
         guestId: rowData.id,
         tabKey: tabKey,
       });

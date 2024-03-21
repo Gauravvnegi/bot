@@ -44,7 +44,7 @@
     >
       <ng-template pTemplate="caption">
         <div class="caption__wrapper" [formGroup]="tableFG">
-          <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+          <!-- <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container> -->
 
           <hospitality-bot-filter-chips
             *ngIf="isQuickFilters"
@@ -94,26 +94,26 @@
           <td>
             <p class="arrival-date">
               {{
-                rowData.booking.getArrivalDate(globalFilterService.timezone)
+                rowData.booking?.getArrivalDate(globalFilterService.timezone)
               }}-{{
-                rowData.booking.getDepartureDate(globalFilterService.timezone)
+                rowData.booking?.getDepartureDate(globalFilterService.timezone)
               }}
             </p>
 
             <p class="arrival-time">
               {{
-                rowData.booking.getArrivalTime(globalFilterService.timezone)
+                rowData.booking?.getArrivalTime(globalFilterService.timezone)
               }}-{{
-                rowData.booking.getDepartureTime(globalFilterService.timezone)
+                rowData.booking?.getDepartureTime(globalFilterService.timezone)
               }}
             </p>
             <p class="arrival-time">
               {{
-                rowData.booking.getDaysAndNights(globalFilterService.timezone)
+                rowData.booking?.getDaysAndNights(globalFilterService.timezone)
                   .nights
               }}N |
               {{
-                rowData.booking.getDaysAndNights(globalFilterService.timezone)
+                rowData.booking?.getDaysAndNights(globalFilterService.timezone)
                   .days
               }}D
             </p>
@@ -139,10 +139,10 @@
               >
                 {{ rowData.feedback.rating }}
               </p>
-              <ng-container *ngIf="rowData.feedback.suggestions">
+              <ng-container *ngIf="rowData?.feedback?.suggestions">
                 <ng-container
                   *ngFor="
-                    let suggestion of rowData.feedback.suggestions.slice(0, 2)
+                    let suggestion of rowData?.feedback?.suggestions.slice(0, 2)
                   "
                 >
                   <img
@@ -157,12 +157,12 @@
                 </ng-container>
               </ng-container>
               <div
-                *ngIf="rowData.feedback.comments"
+                *ngIf="rowData?.feedback.comments"
                 [ngClass]="{
-                  'feedback-msg': rowData.feedback.comments.length > 0
+                  'feedback-msg': rowData?.feedback?.comments.length > 0
                 }"
               >
-                {{ rowData.feedback.comments }}
+                {{ rowData?.feedback?.comments }}
               </div>
             </div>
           </td>
@@ -175,10 +175,13 @@
               "
             >
               <ng-container
-                *ngIf="rowData.getPhoneNumber().includes(','); else singlePhone"
+                *ngIf="
+                  rowData?.getPhoneNumber().includes(',');
+                  else singlePhone
+                "
               >
                 <ng-container
-                  *ngFor="let link of rowData.getPhoneNumber().split(',\n')"
+                  *ngFor="let link of rowData?.getPhoneNumber().split(',\n')"
                 >
                   <a
                     href="tel:{{ link }}"
@@ -192,11 +195,11 @@
               </ng-container>
               <ng-template #singlePhone>
                 <a
-                  href="tel:{{ rowData.getPhoneNumber() }}"
+                  href="tel:{{ rowData?.getPhoneNumber() }}"
                   class="email"
                   (click)="openDetailPage($event)"
                 >
-                  <u> {{ rowData.getPhoneNumber() }}</u>
+                  <u> {{ rowData?.getPhoneNumber() }}</u>
                 </a>
               </ng-template>
             </span>
@@ -205,15 +208,15 @@
             <span
               [ngClass]="{
                 'status-text-reject':
-                  rowData.payment.dueAmount > 0 &&
-                  rowData.payment.dueAmount <= rowData.payment.totalAmount,
-                'status-text-success': rowData.payment.dueAmount === 0
+                  rowData?.payment?.dueAmount > 0 &&
+                  rowData?.payment?.dueAmount <= rowData?.payment?.totalAmount,
+                'status-text-success': rowData?.payment?.dueAmount === 0
               }"
-              >{{ rowData.payment.dueAmount | currency: 'INR' }}</span
-            >/ {{ rowData.payment.totalAmount | currency: 'INR' }}
+              >{{ rowData?.payment?.dueAmount | currency: 'INR' }}</span
+            >/ {{ rowData?.payment?.totalAmount | currency: 'INR' }}
           </td>
 
-          <td class="package" *ngIf="!isNpsColHidden">
+          <!-- <td class="package" *ngIf="!isNpsColHidden">
             <span
               [ngClass]="{
                 'status-text-initiated':
@@ -226,7 +229,7 @@
               }"
               >{{ rowData?.guestAttributes?.overAllNps }}
             </span>
-          </td>
+          </td> -->
 
           <!-- <td class="package">
               <span
@@ -253,7 +256,7 @@
                   src="assets/svg/Document.svg"
                   [ngClass]="
                     getStatusStyle(
-                      rowData.status.stepsStatus.documents,
+                      rowData?.status?.stepsStatus.documents,
                       'image'
                     )
                   "
@@ -261,7 +264,10 @@
                 <p
                   class="label"
                   [ngClass]="
-                    getStatusStyle(rowData.status.stepsStatus.documents, 'text')
+                    getStatusStyle(
+                      rowData?.status?.stepsStatus.documents,
+                      'text'
+                    )
                   "
                 >
                   Document
@@ -275,13 +281,16 @@
                   class="table-body-journey-icon"
                   src="assets/svg/Payment.svg"
                   [ngClass]="
-                    getStatusStyle(rowData.status.stepsStatus.payment, 'image')
+                    getStatusStyle(
+                      rowData?.status?.stepsStatus.payment,
+                      'image'
+                    )
                   "
                 />
                 <p
                   class="label"
                   [ngClass]="
-                    getStatusStyle(rowData.status.stepsStatus.payment, 'text')
+                    getStatusStyle(rowData?.status?.stepsStatus.payment, 'text')
                   "
                 >
                   Payment
@@ -337,19 +346,19 @@
                   src="assets/svg/precheckin.svg"
                   [ngClass]="
                     getStatusStyle(
-                      rowData.status.journeyStatus.preCheckin,
+                      rowData?.status?.journeyStatus.preCheckin,
                       'image'
                     )
                   "
                 />
                 <p
                   *ngIf="
-                    rowData.currentJourney.currentJourneyName === 'PRECHECKIN'
+                    rowData?.currentJourney?.currentJourneyName === 'PRECHECKIN'
                   "
                   class="label"
                   [ngClass]="
                     getStatusStyle(
-                      rowData.status.journeyStatus.preCheckin,
+                      rowData?.status?.journeyStatus.preCheckin,
                       'text'
                     )
                   "
@@ -366,18 +375,21 @@
                   src="assets/svg/checkin.svg"
                   [ngClass]="
                     getStatusStyle(
-                      rowData.status.journeyStatus.checkin,
+                      rowData?.status?.journeyStatus.checkin,
                       'image'
                     )
                   "
                 />
                 <p
                   *ngIf="
-                    rowData.currentJourney.currentJourneyName === 'CHECKIN'
+                    rowData?.currentJourney?.currentJourneyName === 'CHECKIN'
                   "
                   class="label"
                   [ngClass]="
-                    getStatusStyle(rowData.status.journeyStatus.checkin, 'text')
+                    getStatusStyle(
+                      rowData?.status?.journeyStatus.checkin,
+                      'text'
+                    )
                   "
                 >
                   Check-In
@@ -392,19 +404,19 @@
                   src="assets/svg/checkout.svg"
                   [ngClass]="
                     getStatusStyle(
-                      rowData.status.journeyStatus.checkout,
+                      rowData?.status?.journeyStatus.checkout,
                       'image'
                     )
                   "
                 />
                 <p
                   *ngIf="
-                    rowData.currentJourney.currentJourneyName === 'CHECKOUT'
+                    rowData?.currentJourney?.currentJourneyName === 'CHECKOUT'
                   "
                   class="label"
                   [ngClass]="
                     getStatusStyle(
-                      rowData.status.journeyStatus.checkout,
+                      rowData?.status?.journeyStatus.checkout,
                       'text'
                     )
                   "

@@ -16,12 +16,17 @@
         cursor: auto;
         width: 100%;
         border-color: $border-color;
-
-        &::placeholder {
-          font-size: 15px;
-          line-height: 1.07;
-          letter-spacing: 0.84px;
-          text-align: left;
+        padding: 0.7rem 0.6rem;
+        row-gap: 10px;
+        .p-chips-input-token {
+          padding: 0;
+          input {
+            font-size: 15px;
+            line-height: 1.4;
+            letter-spacing: 0.84px;
+            text-align: left;
+            color: rgba(0, 0, 0, 0.6);
+          }
         }
         &:hover {
           border-color: $primary-form-color !important;
@@ -45,6 +50,9 @@
           letter-spacing: 0.08em;
           color: #5f38f9;
           border-radius: 4px;
+          overflow: visible;
+          margin-top: -0.3em;
+          margin-bottom: -0.3em;
         }
       }
     }

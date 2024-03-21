@@ -37,9 +37,9 @@ export type CampaignResponse = {
   templateName: string;
   templateId: string;
   to: {
-    individual: string[];
-    subscribers: string[];
-    listing: string[];
+    individual: { name: string }[];
+    subscribers: { name: string; receiverId: string }[];
+    listing: { name: string; receiverId: string }[];
   };
   topicId: string;
   topicName: string;

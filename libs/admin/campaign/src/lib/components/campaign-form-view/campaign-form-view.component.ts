@@ -1,5 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NavRouteOptions, Option, Regex } from '@hospitality-bot/admin/shared';
+import {
+  ModuleNames,
+  NavRouteOptions,
+  Option,
+  Regex,
+} from '@hospitality-bot/admin/shared';
 import { CampaignForm, CampaignType } from '../../types/campaign.type';
 import { campaignRoutes } from '../../constant/route';
 import { Observable, Subscription } from 'rxjs';
@@ -145,8 +150,6 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
           if (res) {
             const campaignData = new CampaignFormData().deserialize(res);
             this.useForm.patchValue(campaignData, { emitEvent: false });
-            // this.mapRecipientData()
-            this.useForm.disable();
           }
         })
     );
@@ -214,6 +217,9 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
               '',
               { panelClass: 'success' }
             );
+            this.routesConfigService.navigate({
+              subModuleName: ModuleNames.CAMPAIGN,
+            });
           }
         })
     );

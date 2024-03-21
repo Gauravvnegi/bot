@@ -5,10 +5,7 @@ import {
   IDeserializable,
   Option,
 } from '@hospitality-bot/admin/shared';
-import {
-  CampaignType,
-  TemplateType,
-} from '../types/campaign.type';
+import { CampaignType, TemplateType } from '../types/campaign.type';
 import { CampaignResponse } from '../types/campaign.response';
 
 export class Campaigns implements IDeserializable {
@@ -118,13 +115,24 @@ export class CampaignFormData {
     this.campaignName = input.name;
     this.topic = input.topicId;
     this.startDate = input.dateTime;
-    this.campaignState = input.campaignType;
+    // this.campaignState = input.campaignType;
     this.message = input.message;
     this.templateId = input.templateId;
     this.from = input.from;
     this.subject = input.subject.text;
     this.cc = input.cc;
     this.bcc = input.bcc;
+    this.campaignTags = input.tags;
+
+    // Map individuals and listings in to array.
+    const individualLabels = input.to.individual.map((item) => item.name);
+    const listings = input.to.listing.map((item) => ({
+      label: item.name,
+      value: item.receiverId,
+    }));
+    this.to = [...individualLabels, ...listings.map((item) => item.label)];
+    this.recipients = listings;
+
     return this;
   }
 }

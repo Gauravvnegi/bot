@@ -56,21 +56,17 @@
         border-radius: 5px;
         @include flex-item-center;
         background-color: rgb(20, 149, 164, 0.1);
-        .asap {
-          background-color: #ff6384;
-          height: 100%;
-          border-radius: 5px 0 0 5px;
-        }
-        .high {
-          background-color: #63ff78;
-          height: 100%;
-        }
 
-        .medium {
-          background-color: #1495a4;
+        .score {
           height: 100%;
-          border-radius: 0 5px 5px 0;
         }
+      }
+      .score:first-child {
+        border-radius: 5px 0 0 5px;
+      }
+
+      .score:last-child {
+        border-radius: 0 5px 5px 0;
       }
     }
 

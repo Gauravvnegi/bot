@@ -2,6 +2,19 @@
   <div class="left">
     <hospitality-bot-doughnut
       label="What drivers are leading to disengagement at the Property?"
+      [config]="{
+        total: complaintBreakDownData.total,
+        Labels: complaintBreakDownData?.complaintCategoryStats?.labels,
+        Data: complaintBreakDownData?.complaintCategoryStats?.data,
+        Colors: [
+          {
+            backgroundColor:
+              complaintBreakDownData?.complaintCategoryStats?.backgroundColor,
+            borderColor:
+              complaintBreakDownData?.complaintCategoryStats?.borderColor
+          }
+        ]
+      }"
     >
     </hospitality-bot-doughnut>
   </div>
@@ -10,32 +23,23 @@
     <div class="right__top">
       <div class="header">Complaint Break-down</div>
       <div class="progress">
-        <div class="asap" [style.width]="getPercentage(30, 40, 50) + '%'"></div>
-        <div class="high" [style.width]="getPercentage(40, 30, 50) + '%'"></div>
-        <div
-          class="medium"
-          [style.width]="getPercentage(50, 40, 30) + '%'"
-        ></div>
+        <ng-container *ngFor="let item of distributionStatsData.data">
+          <div
+            class="score"
+            [style.width]="item?.score()"
+            [style.backgroundColor]="item.color"
+          ></div>
+        </ng-container>
       </div>
       <div class="right__top__stat-container">
-        <div>
+        <ng-container *ngFor="let item of distributionStatsData.data">
           <div>
-            ASAP
-            <span>{{ 0 }}</span>
+            <div>
+              {{ item.label }}
+              <span>{{ item?.count }}</span>
+            </div>
           </div>
-        </div>
-        <div>
-          <div>
-            High
-            <span>{{ 0 }}</span>
-          </div>
-        </div>
-        <div>
-          <div>
-            Medium
-            <span>{{ 0 }}</span>
-          </div>
-        </div>
+        </ng-container>
       </div>
     </div>
     <div class="right__bottom">

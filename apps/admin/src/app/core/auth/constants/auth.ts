@@ -72,7 +72,7 @@ export const authConstants = {
     search: 'search',
     botshotLogo: 'botshotlogo',
   },
-  passwordMinLength: 8,
+  passwordMinLength: 1,
   passwordMaxLength: 20,
 
   //product certification

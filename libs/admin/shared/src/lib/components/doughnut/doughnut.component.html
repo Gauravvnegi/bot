@@ -37,7 +37,7 @@
       </div>
       <div class="doughnut__graph__stat" *ngIf="!loading">
         <div class="text">
-          {{ total }}
+          {{ doughnutGraphData?.total || 0 }}
         </div>
       </div>
     </div>

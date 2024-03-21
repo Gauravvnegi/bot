@@ -3,8 +3,9 @@ import { BaseChartDirective } from 'ng2-charts';
 import { deepCopy } from '../../utils/shared';
 
 interface DoughnutChartData {
+  total?: number;
   Labels: string[];
-  Data: number[][];
+  Data: number[];
   Type: string;
   Legend: boolean;
   Colors: {
@@ -46,7 +47,7 @@ const DefaultDoughnutConfig = {
 
 const doughnutTransparentGraphDefaultConfig = {
   Labels: ['No Data'],
-  Data: [[100]],
+  Data: [100],
   Type: 'doughnut',
   Legend: false,
   Colors: [
@@ -60,7 +61,7 @@ const doughnutTransparentGraphDefaultConfig = {
 
 const doughnutGraphDefaultConfig = {
   Labels: ['No Data'],
-  Data: [[100]],
+  Data: [100],
   Type: 'doughnut',
   Legend: false,
   Colors: [
@@ -90,13 +91,15 @@ export class DoughnutComponent implements OnInit {
   backUpData: DoughnutChartData;
 
   @Input() set config(data: DoughnutChartData) {
-    if (data) {
+    if (data?.total) {
       this.backUpData = data;
       this.initGraphData(data);
-      this.initTransparentGraph(0);
+      this.initTransparentGraph(
+        this.doughnutGraphData.Data.findIndex((item) => item !== 0)
+      );
     }
   }
-  total: number = 0;
+  @Input() total: number = 0;
 
   initGraphData(data: DoughnutChartData) {
     Object.assign(this.doughnutGraphData, deepCopy(data));
@@ -107,11 +110,11 @@ export class DoughnutComponent implements OnInit {
     const transparentColor = 'transparent';
     const colors = this.doughnutTransparentGraphData.Colors[0];
 
-    colors.backgroundColor = colors.backgroundColor.map((item, idx) =>
+    colors.backgroundColor = colors?.backgroundColor?.map((item, idx) =>
       idx === index ? this.selectedColor : transparentColor
     );
 
-    colors.borderColor = colors.borderColor.map((item, idx) =>
+    colors.borderColor = colors?.borderColor?.map((item, idx) =>
       idx === index ? this.selectedColor : transparentColor
     );
 

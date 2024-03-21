@@ -325,9 +325,11 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
             ).tableType = status;
             this.initTableReservations();
             this.snackbarService.openSnackBarAsText(
-              'Order ' + status + ' changes successfully',
+              'Order ' + status + ' changed successfully',
               '',
-              { panelClass: 'success' }
+              {
+                panelClass: 'success',
+              }
             );
           },
           this.handleError,

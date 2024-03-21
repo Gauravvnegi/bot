@@ -125,6 +125,7 @@ import { CalendarViewComponent } from './components/calendar-view/calendar-view.
 import { PositionedMenuComponent } from './components/positioned-menu/positioned-menu.component';
 import { AngularDraggableModule } from 'angular2-draggable';
 import { TooltipModule } from 'primeng/tooltip';
+import { ChipsModule } from 'primeng/chips';
 
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiered-menu-button.component';
@@ -149,6 +150,7 @@ import { TableSwitchComponent } from './components/table-switch/table-switch.com
 import { DualPlotComponent } from './components/dual-plot/dual-plot.component';
 import { GaugeChartModule } from 'angular-gauge-chart';
 import { ChartsModule } from 'ng2-charts';
+import { ChipListComponent } from './components/form-component/chip-list/chip-list.component';
 import { DoughnutComponent } from './components/doughnut/doughnut.component';
 
 @NgModule({
@@ -189,6 +191,7 @@ import { DoughnutComponent } from './components/doughnut/doughnut.component';
     TabViewModule,
     GaugeChartModule,
     ChartsModule,
+    ChipsModule,
   ],
   declarations: [
     DatatableComponent,
@@ -301,6 +304,7 @@ import { DoughnutComponent } from './components/doughnut/doughnut.component';
     DateGroupFilterComponent,
     TableSwitchComponent,
     DualPlotComponent,
+    ChipListComponent,
     DoughnutComponent,
   ],
 
@@ -439,6 +443,7 @@ import { DoughnutComponent } from './components/doughnut/doughnut.component';
     DateGroupFilterComponent,
     TableSwitchComponent,
     DualPlotComponent,
+    ChipListComponent,
     DoughnutComponent,
   ],
 })

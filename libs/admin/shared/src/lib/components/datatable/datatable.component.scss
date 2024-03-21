@@ -223,10 +223,6 @@
   box-shadow: unset !important;
 }
 
-:host ::ng-deep .pi-chevron-down:before {
-  color: $grayMedium;
-}
-
 :host ::ng-deep .table--checkbox {
   text-align: center !important;
 }

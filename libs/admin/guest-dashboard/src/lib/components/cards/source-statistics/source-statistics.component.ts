@@ -49,34 +49,34 @@ export class SourceStatisticsComponent implements OnInit, OnDestroy {
     },
   ];
 
-  tabFilterItems = [
-    {
-      label: 'All',
-      content: '',
-      value: 'ALL',
-      disabled: false,
-      chips: this.chips,
-      lastPage: 0,
-    },
-    {
-      label: 'VIP',
-      content: '',
-      value: 'VIP',
-      disabled: false,
-      total: 0,
-      chips: this.chips,
-      lastPage: 0,
-    },
-    {
-      label: 'General',
-      content: '',
-      value: 'GENERAL',
-      disabled: false,
-      total: 0,
-      chips: this.chips,
-      lastPage: 0,
-    },
-  ];
+  // tabFilterItems = [
+  //   {
+  //     label: 'All',
+  //     content: '',
+  //     value: 'ALL',
+  //     disabled: false,
+  //     chips: this.chips,
+  //     lastPage: 0,
+  //   },
+  //   {
+  //     label: 'VIP',
+  //     content: '',
+  //     value: 'VIP',
+  //     disabled: false,
+  //     total: 0,
+  //     chips: this.chips,
+  //     lastPage: 0,
+  //   },
+  //   {
+  //     label: 'General',
+  //     content: '',
+  //     value: 'GENERAL',
+  //     disabled: false,
+  //     total: 0,
+  //     chips: this.chips,
+  //     lastPage: 0,
+  //   },
+  // ];
 
   constructor(
     private _adminUtilityService: AdminUtilityService,
@@ -198,7 +198,7 @@ export class SourceStatisticsComponent implements OnInit, OnDestroy {
    * @function updateTabChips To update the chips to the tab filters.
    */
   updateTabChips() {
-    this.tabFilterItems.forEach((item) => (item.chips = this.chips));
+    this.chips.forEach((item) => (item.chips = this.chips));
   }
 
   /**
@@ -230,9 +230,10 @@ export class SourceStatisticsComponent implements OnInit, OnDestroy {
     // });
 
     const data: GuestDialogData = {
-      tabFilterItems: this.tabFilterItems as any[],
+      tabFilterItems: this.chips as any[],
       callingMethod: 'getAllGuestStats',
-      guestFilter: 'GUESTSOURCES',
+      // guestFilter: 'GUESTSOURCES',
+      entityType: 'GUESTSOURCES',
       exportURL: 'exportCSVStat',
       tableName: 'Booking Source',
     };

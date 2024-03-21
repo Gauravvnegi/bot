@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { ControlContainer, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'hospitality-bot-template-editor',
@@ -7,8 +7,8 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./template-editor.component.scss'],
 })
 export class TemplateEditorComponent implements OnInit {
-  @Input() parentFG: FormGroup;
-  @Input() name: string;
+  parentFG: FormGroup;
+  @Input() controlName: string;
   @Input() template = '';
   @Input() disabled = false;
   @Input() hybrid = true;
@@ -24,9 +24,10 @@ export class TemplateEditorComponent implements OnInit {
     disallowedContent: 'img[src]',
   };
 
-  constructor() {}
+  constructor(private controlContainer: ControlContainer) {}
 
   ngOnInit(): void {
+    this.parentFG = this.controlContainer.control as FormGroup;
     if (this.isSimpleEditor) {
       this.ckeConfig['toolbar'] = [
         ['Bold', 'Italic', 'Strike', 'RemoveFormat'],
@@ -46,10 +47,10 @@ export class TemplateEditorComponent implements OnInit {
 
   changeField(value: boolean) {
     this.richText = value;
-    if (!value) this.template = this.parentFG.get(this.name).value + '\n';
+    if (!value) this.template = this.parentFG.get(this.controlName).value + '\n';
   }
 
   onTemplateChange(value) {
-    this.parentFG.get(this.name).setValue(value);
+    this.parentFG.get(this.controlName).setValue(value);
   }
 }

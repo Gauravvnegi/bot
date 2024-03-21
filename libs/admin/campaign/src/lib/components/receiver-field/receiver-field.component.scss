@@ -1,5 +1,4 @@
 @import 'main';
-@import '../../../../../shared/src/lib/components/form-component/input/input.component.scss';
 
 .dropdown {
   width: 100%;
@@ -8,38 +7,15 @@
   left: 0px;
   z-index: 112;
   border-radius: 10px;
-  // box-shadow: 3px 9px 20px 0 $hoverBGlight;
   box-shadow: 1px 4px 6px #a8a8a8;
   background-color: $white;
   padding: 15px;
 }
 
-.disabledBtn {
-  opacity: 0.8;
-}
-
-.chips {
-  flex-basis: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 0.5em;
-  row-gap: 1em;
-  cursor: auto;
-
-  .pi-times {
-    font-size: 1em;
-    margin-top: 0.3em;
-    cursor: pointer;
+:host ::ng-deep .chip-list {
+  .p-chips {
+    .p-inputtext {
+      padding-right: 8rem;
+    }
   }
-}
-
-.chip {
-  display: flex;
-  gap: 1em;
-  background-color: #e8e2ff;
-  font-size: 0.7em;
-  padding: 0.4em 0.6em;
-  letter-spacing: 0.08em;
-  color: #5f38f9;
-  border-radius: 4px;
 }

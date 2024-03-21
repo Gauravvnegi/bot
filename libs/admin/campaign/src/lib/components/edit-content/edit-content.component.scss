@@ -40,24 +40,7 @@
   .one-fourth {
     flex-basis: 9%;
   }
-  .one-third-width {
-    flex-basis: 85%;
-  }
-}
-
-.add-content {
-  flex-basis: 85%;
-  opacity: 0.4;
-  border-radius: 4px;
-  border: solid 1px $grayMedium;
-  @include flex-col-all-Center;
-  padding: 30px;
-  &__btn {
-    height: 53px;
-    border: solid 1px $grayMedium;
-    border-radius: 3px;
-    padding: 14px 30px;
-    margin-top: 20px;
-    cursor: pointer;
+  .full-width {
+    flex-basis: 100%;
   }
 }

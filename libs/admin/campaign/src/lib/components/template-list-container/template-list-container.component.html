@@ -1,50 +1,46 @@
-<div class="container">
-  <header class="header">
-    <div class="header__back">
-      <mat-icon class="material-icons" matSuffix (click)="goBack()"
-        >keyboard_backspace</mat-icon
-      >
-      <div class="template-name">
-        <mat-select
-          [value]="templateType"
-          (selectionChange)="templateTypeSelection($event.value)"
-        >
-          <mat-option
-            *ngFor="let template of templateTypes"
-            [value]="template.type"
-            >{{ template.name }}</mat-option
-          >
-        </mat-select>
-      </div>
-    </div>
-    <div class="header__preDesigned">
-      <div class="topic">Topic</div>
-      <div class="mt-20">
-        <mat-form-field>
-          <mat-select [value]="selectedTopic">
-            <mat-option [value]="'ALL'" (click)="getTemplateForAllTopics()"
-              >All</mat-option
-            >
-            <mat-option
-              *ngFor="let topic of topicList"
-              [value]="topic.name"
-              (click)="getTemplateByTopicId(topic)"
-            >
-              {{ topic.name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-  </header>
+<hospitality-bot-navigation-header
+  [heading]="pageTitle"
+  [routes]="navRoutes"
+></hospitality-bot-navigation-header>
 
-  <ng-container *ngFor="let template of templateTopicList; last as isLast">
-    <hospitality-bot-topic-templates
-      [entityId]="entityId"
-      [templateType]="templateType"
-      [template]="template"
-      (selectedTemplate)="setTemplate($event)"
-    ></hospitality-bot-topic-templates>
-    <div *ngIf="!isLast" class="line"></div>
+<div class="container" [formGroup]="templateForm">
+  <div class="form-block">
+    <ng-container *ngIf="campaignType === 'EMAIL'">
+      <hospitality-bot-select
+        class="half-width"
+        label="Template"
+        [options]="templateTypes"
+        controlName="template"
+      ></hospitality-bot-select>
+      <hospitality-bot-select
+        class="half-width"
+        controlName="topic"
+        label="Topic"
+        [options]="topicList | async"
+      ></hospitality-bot-select>
+    </ng-container>
+    <ng-container *ngIf="campaignType === 'WHATSAPP'">
+      <hospitality-bot-select
+        class="half-width"
+        controlName="topic"
+        label="Topic"
+        [options]="topicList | async"
+      ></hospitality-bot-select>
+    </ng-container>
+  </div>
+
+  <ng-container *ngIf="!loading; else loader">
+    <ng-container *ngFor="let template of templateTopicList; last as isLast">
+      <hospitality-bot-topic-templates
+        [entityId]="entityId"
+        [template]="template"
+        (selectedTemplate)="selectedTemplate($event)"
+      ></hospitality-bot-topic-templates>
+      <div *ngIf="!isLast" class="line"></div>
+    </ng-container>
   </ng-container>
 </div>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
+</ng-template>

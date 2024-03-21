@@ -1,0 +1,220 @@
+<div>
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+    <!-- [dateTime]="draftDate | date" -->
+  </hospitality-bot-navigation-header>
+
+  <div class="form-block" [formGroup]="useForm" [id]="fa.referenceId">
+    <div class="form-header">Campaign Details</div>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="campaignName"
+      label="Campaign Name"
+      [props]="{
+        placeholder: 'Enter Campaign Name'
+      }"
+    ></hospitality-bot-input>
+    <hospitality-bot-select
+      class="half-width"
+      controlName="topic"
+      label="Topic"
+      [options]="topicList | async"
+      [props]="{
+        placeholder: 'Select Topic'
+      }"
+    ></hospitality-bot-select>
+    <hospitality-bot-select
+      class="half-width"
+      label="From"
+      controlName="from"
+      [options]="fromEmailList"
+      [props]="{
+        placeholder: 'Select'
+      }"
+    ></hospitality-bot-select>
+    <hospitality-bot-chip-list
+      class="half-width"
+      controlName="campaignTags"
+      label="Campaign Tags"
+      [props]="{
+        placeholder: 'Enter Tags'
+      }"
+    >
+    </hospitality-bot-chip-list>
+    <div class="reciever-wrapper full-width">
+      <hospitality-bot-to-receiver-field
+        controlName="to"
+        [recieverProps]="{
+          entityId: entityId,
+          chipList: inputControls?.to?.value,
+          disableInput: inputControls?.to?.value?.length
+        }"
+      ></hospitality-bot-to-receiver-field>
+      <ng-container *ngIf="campaignType === 'EMAIL'">
+        <div
+          *ngIf="!inputControls?.bcc?.value || !inputControls?.cc?.value"
+          class="control-btn"
+        >
+          <hospitality-bot-button
+            *ngIf="!inputControls?.cc?.value"
+            label="+ Cc"
+            (click)="addControl('cc')"
+            height="20px"
+            minWidth="20px"
+            variant="text"
+          ></hospitality-bot-button>
+          <hospitality-bot-button
+            *ngIf="!inputControls?.bcc?.value"
+            label="+ Bcc"
+            (click)="addControl('bcc')"
+            variant="text"
+            height="20px"
+            minWidth="20px"
+          ></hospitality-bot-button>
+        </div>
+      </ng-container>
+    </div>
+    <div *ngIf="inputControls?.cc?.value" class="full-width reciever-wrapper">
+      <hospitality-bot-chip-list
+        controlName="cc"
+        label="Cc"
+        [props]="{
+          placeholder: 'Enter Cc',
+          errorMessages: {
+            required: 'This is a required field.',
+            pattern: 'Please enter a valid email address.'
+          }
+        }"
+      ></hospitality-bot-chip-list>
+      <hospitality-bot-button
+        class="control-btn"
+        severity="reset"
+        variant="text"
+        label="Remove"
+        height="20px"
+        minWidth="20px"
+        (onClick)="removeControl('cc')"
+      ></hospitality-bot-button>
+    </div>
+    <div *ngIf="inputControls?.bcc?.value" class="full-width reciever-wrapper">
+      <hospitality-bot-chip-list
+        controlName="bcc"
+        label="Bcc"
+        [props]="{
+          placeholder: 'Enter Bcc',
+          errorMessages: {
+            required: 'This is a required field.',
+            pattern: 'Please enter a valid email address.'
+          }
+        }"
+      ></hospitality-bot-chip-list>
+      <hospitality-bot-button
+        class="control-btn"
+        severity="reset"
+        variant="text"
+        label="Remove"
+        height="20px"
+        minWidth="20px"
+        (onClick)="removeControl('bcc')"
+      ></hospitality-bot-button>
+    </div>
+    <hospitality-bot-input
+      *ngIf="campaignType === 'EMAIL'"
+      class="full-width"
+      controlName="subject"
+      label="Subject"
+      [props]="{
+        placeholder: 'Enter Subject',
+        errorMessages: {
+          required: 'This is a required field.'
+        }
+      }"
+    ></hospitality-bot-input>
+    <hr class="data-separator" />
+    <div class="group-header one-third-width">When</div>
+    <div class="one-third-width"></div>
+    <hospitality-bot-select
+      [ngClass]="
+        inputControls.campaignState.value !== 'DOES_NOT_REPEAT'
+          ? 'half-width'
+          : 'one-third-width'
+      "
+      controlName="campaignState"
+      [options]="triggerOptions"
+      [disabled]="true"
+    ></hospitality-bot-select>
+    <hospitality-bot-select
+      *ngIf="inputControls.campaignState.value !== 'DOES_NOT_REPEAT'"
+      class="half-width"
+      controlName="event"
+      label="Event"
+      [options]="eventOptions"
+      [props]="{
+        placeholder: 'Select Event'
+      }"
+    ></hospitality-bot-select>
+    <div
+      *ngIf="inputControls.campaignState.value !== 'DOES_NOT_REPEAT'"
+      class="half-width"
+    ></div>
+    <hospitality-bot-date
+      class="half-width"
+      controlName="startDate"
+      label="Start Date"
+      [settings]="{ enableTime: true }"
+      [minDate]="minDate"
+    ></hospitality-bot-date>
+    <hospitality-bot-date
+      *ngIf="inputControls.campaignState.value !== 'DOES_NOT_REPEAT'"
+      class="half-width"
+      controlName="endDate"
+      label="End Date"
+      [settings]="{ enableTime: true }"
+      [minDate]="minDate"
+    ></hospitality-bot-date>
+    <hr class="data-separator" />
+    <div class="template-header full-width">
+      <div class="group-header">Add Content</div>
+      <hospitality-bot-button
+        *ngIf="isRemoveCta && inputControls.message?.value?.length"
+        class="remove-cta"
+        label="Delete"
+        variant="text"
+        severity="reset"
+        height="20px"
+        minWidth="0"
+        (onClick)="removeTemplate()"
+      ></hospitality-bot-button>
+    </div>
+    <hospitality-bot-create-content
+      *ngIf="!inputControls.message?.value?.length"
+      class="full-width"
+      [campaignType]="campaignType"
+    ></hospitality-bot-create-content>
+    <hospitality-bot-edit-content
+      *ngIf="inputControls.message?.value?.length"
+      class="full-width"
+      controlName="message"
+      (selectedMode)="selectedMode($event)"
+    ></hospitality-bot-edit-content>
+    <!-- <hospitality-bot-template-editor
+      class="full-width"
+      controlName="message"
+      [hybrid]="false"
+    ></hospitality-bot-template-editor> -->
+    <hospitality-bot-form-action
+      class="full-width"
+      (onPostAction)="handleSubmit('save')"
+      (onPreAction)="handleSubmit('send')"
+      [isSticky]="true"
+      [isFixed]="true"
+      [config]="{
+        postLabel: 'Save',
+        preLabel: 'Send',
+        preVariant: 'outlined',
+        preSeverity: 'primary'
+      }"
+      #fa
+    >
+    </hospitality-bot-form-action>
+  </div>
+</div>

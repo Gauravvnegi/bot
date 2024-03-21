@@ -160,6 +160,7 @@
 .sent-on {
   margin-bottom: 10px;
   display: flex;
+  gap: 10px;
 }
 .draft-on {
   margin-bottom: 10px;
@@ -199,5 +200,12 @@
 :host ::ng-deep .status-toggle {
   .wrapper {
     display: flex;
+  }
+}
+
+.template_image_wrapper {
+  .text {
+    display: flex;
+    gap: 10px;
   }
 }

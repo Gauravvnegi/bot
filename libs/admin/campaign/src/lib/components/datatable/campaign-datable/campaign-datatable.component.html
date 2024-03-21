@@ -1,11 +1,21 @@
-<div
-  [formGroup]="tableFG"
->
-  <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes" [isBack]="false">
-      <hospitality-bot-button
-      (click)="openCreateCampaign()"
-      label=" {{ 'campaign.create' | translate }}"
-    ></hospitality-bot-button>
+<div [formGroup]="tableFG">
+  <hospitality-bot-navigation-header
+    [heading]="tableName"
+    [routes]="navRoutes"
+    [isBack]="false"
+  >
+    <hospitality-bot-table-switch
+      tableGroup="campaign"
+      (onChange)="setTableType($event)"
+    ></hospitality-bot-table-switch>
+    <hospitality-bot-tiered-menu-button
+      class="tiered-menu-btn"
+      label="+ Create Campaign"
+      [splitButton]="true"
+      (clicked)="openCreateCampaign('EMAIL')"
+      [openNewWindow]="true"
+      [items]="campaignCta"
+    ></hospitality-bot-tiered-menu-button>
     <hospitality-bot-export-list
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
@@ -85,6 +95,16 @@
             class="text"
             *ngIf="rowData.name || rowData.topicName; else emptyCell"
           >
+            <img
+              *ngIf="rowData.channel === 'WHATSAPP'"
+              src="assets/svg/whatsapp-campaign.svg"
+              alt="Whatsapp"
+            />
+            <img
+              *ngIf="rowData.channel === 'EMAIL'"
+              src="assets/svg/email-campaign.svg"
+              alt="Email"
+            />
             <div class="template-name">{{ rowData.name }}</div>
           </div>
         </div>

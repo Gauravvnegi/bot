@@ -56,7 +56,7 @@ export class RoomCardComponent implements OnInit {
         () => {
           this.housekeepingService.refreshData.next(true);
           this.snackbarService.openSnackBarAsText(
-            'Status changes successfully',
+            'Status changed successfully',
             '',
             { panelClass: 'success' }
           );

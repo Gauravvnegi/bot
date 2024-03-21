@@ -156,7 +156,7 @@ export class AllOutletsDataTableComponent extends BaseDatatableComponent
         () => {
           this.loadInitialData();
           this.snackbarService.openSnackBarAsText(
-            'Status changes successfully',
+            'Status changed successfully',
             '',
             { panelClass: 'success' }
           );

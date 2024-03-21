@@ -1,18 +1,28 @@
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { AdminUtilityService } from '@hospitality-bot/admin/shared';
-import { SnackBarService } from '@hospitality-bot/shared/material';
+  AdminUtilityService,
+  ModuleNames,
+  NavRouteOptions,
+  Option,
+} from '@hospitality-bot/admin/shared';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { campaignConfig } from '../../constant/campaign';
-import { Topics } from '../../data-model/email.model';
 import { CampaignService } from '../../services/campaign.service';
+import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
+import {
+  CampaignForm,
+  CampaignType,
+  TemplateType,
+} from '../../types/campaign.type';
+import { TopicTemplatesData } from '../../types/template.type';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
+import { ActivatedRoute } from '@angular/router';
+import { filter, take } from 'rxjs/operators';
+import { campaignRoutes } from '../../constant/route';
 
 @Component({
   selector: 'hospitality-bot-template-list-container',
@@ -21,65 +31,158 @@ import { CampaignService } from '../../services/campaign.service';
 })
 export class TemplateListContainerComponent implements OnInit, OnDestroy {
   private $subscription = new Subscription();
-  @Input() entityId: string;
-  @Input() templateType: string;
-  @Output() change = new EventEmitter();
+  templateForm: FormGroup;
+
+  entityId: string;
+  campaignId: string;
   templateTypes = campaignConfig.datatable.templateTypes;
-  topicList = [];
-  templateTopicList = [];
+
+  pageTitle: string;
+  navRoutes: NavRouteOptions = [];
+
+  topicList: Observable<Option[]>;
+  templateTopicList: TopicTemplatesData[];
+
   selectedTopic: string;
+  campaignForm: CampaignForm;
+
+  loading = false;
+
+  campaignType: CampaignType;
   constructor(
+    private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
     private campaignService: CampaignService,
-    private snackbarService: SnackBarService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    private globalFilterService: GlobalFilterService,
+    private activatedRoute: ActivatedRoute,
+    private routesConfigService: RoutesConfigService
   ) {}
 
   ngOnInit(): void {
-    this.getTopicList();
-    this.getTemplateForAllTopics();
+    this.initForm();
+    this.initDetails();
+    this.listenForRouteData();
+    this.initNavRoutes();
   }
 
-  /**
-   * @function getTopicList function to get topic list.
-   */
-  getTopicList() {
-    const config = {
-      queryObj: this.adminUtilityService.makeQueryParams([
-        {
-          limit: campaignConfig.topicConfig.limit,
-          entityState: campaignConfig.topicConfig.active,
-        },
-      ]),
-    };
+  initNavRoutes() {
     this.$subscription.add(
-      this.campaignService.getTopicList(this.entityId, config).subscribe(
-        (response) => {
-          this.topicList = new Topics().deserialize(response).records;
-        } 
-      )
+      this.routesConfigService.navRoutesChanges
+        .pipe(
+          filter((navRoutesRes) => navRoutesRes.length > 0),
+          take(1)
+        )
+        .subscribe((navRoutesRes) => {
+          this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+        })
     );
+  }
+
+  initForm() {
+    this.templateForm = this.fb.group({
+      template: [''],
+      topic: [''],
+    });
+  }
+
+  initDetails() {
+    this.entityId = this.globalFilterService.entityId;
+    this.topicList = this.campaignService.mapTopicList(this.entityId);
+    const { title, navRoutes } = campaignRoutes[
+      this.campaignId ? 'editTemplate' : 'createTemplate'
+    ];
+    this.pageTitle = title;
+    this.navRoutes = navRoutes;
+    this.listenChanges();
+  }
+
+  listenForRouteData() {
+    this.$subscription.add(
+      this.activatedRoute.queryParams.subscribe((res) => {
+        if (res.campaignType) {
+          this.campaignType = res.campaignType;
+        }
+        if (res.data) {
+          const formData = JSON.parse(atob(res.data));
+          this.campaignForm = formData as CampaignForm;
+          if (this.campaignType === 'EMAIL')
+            this.inputControls?.template.patchValue(
+              this.campaignForm?.template,
+              {
+                emitEvent: false,
+              }
+            );
+          this.inputControls?.topic.patchValue(this.campaignForm.topic, {
+            emitEvent: false,
+          });
+          this.getTemplateByTopicId(this.campaignForm.topic);
+        }
+        this.getTemplateForAllTopics();
+      })
+    );
+  }
+
+  listenChanges() {
+    this.listenForTopicChanges();
+    if (this.campaignType === 'EMAIL') this.listenForTemplateChanges();
+  }
+
+  listenForTopicChanges() {
+    this.inputControls.topic.valueChanges.subscribe((res) =>
+      this.getTemplateByTopicId(res)
+    );
+  }
+
+  listenForTemplateChanges() {
+    this.inputControls.template.valueChanges.subscribe((res) =>
+      this.templateTypeSelection(res)
+    );
+  }
+
+  selectedTemplate(template: { templateId: string; htmlTemplate: string }) {
+    this.campaignForm = {
+      ...this.campaignForm,
+      message: template.htmlTemplate,
+      templateId: template.templateId,
+    };
+    const queryParams = {
+      campaignType: this.campaignType,
+      data: btoa(JSON.stringify(this.campaignForm)),
+    };
+
+    if (this.campaignForm?.id?.length) {
+      this.routesConfigService.navigate({
+        subModuleName: ModuleNames.CAMPAIGN,
+        additionalPath: `edit-campaign/${this.campaignForm?.id}`,
+        queryParams: queryParams,
+      });
+    } else {
+      this.routesConfigService.navigate({
+        subModuleName: ModuleNames.CAMPAIGN,
+        additionalPath: 'create-campaign',
+        queryParams,
+      });
+    }
   }
 
   /**
    * @function getTemplateForAllTopics function to get template across respective topic.
    */
   getTemplateForAllTopics() {
-    const config = {
-      queryObj: this.adminUtilityService.makeQueryParams([
-        {
-          entityState: campaignConfig.topicConfig.active,
-          limit: campaignConfig.templateCard.limit,
-          templateType: this.templateType,
-        },
-      ]),
-    };
+    this.loading = true;
     this.$subscription.add(
       this.campaignService
-        .getTemplateByContentType(this.entityId, config)
-        .subscribe((response) => {
-          this.templateTopicList = response;
-        })
+        .getTemplateByContentType(this.entityId, this.getConfig())
+        .subscribe(
+          (response) => {
+            if (response) {
+              this.templateTopicList = response;
+            }
+          },
+          (error) => (this.loading = false),
+          () => (this.loading = false)
+        )
     );
   }
 
@@ -87,55 +190,58 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
    * @function getTemplateByTopicId function to get template across a particular topic id.
    * @param topic topic data.
    */
-  getTemplateByTopicId(topic) {
+  getTemplateByTopicId(topicId: string) {
+    if (topicId?.length) {
+      this.campaignForm = {
+        ...this.campaignForm,
+        topic: topicId,
+      };
+      this.loading = true;
+      this.$subscription.add(
+        this.campaignService
+          .getTemplateListByTopicId(this.entityId, topicId, this.getConfig())
+          .subscribe(
+            (response) => {
+              this.templateTopicList = [
+                {
+                  templates: response.records,
+                  topicId: response.topicId,
+                  topicName: response.topicName,
+                  totalTemplate: response.total,
+                },
+              ];
+            },
+            (error) => (this.loading = false),
+            () => (this.loading = false)
+          )
+      );
+    }
+  }
+
+  getConfig() {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
           entityState: campaignConfig.topicConfig.active,
           limit: campaignConfig.templateCard.limit,
-          templateType: this.templateType,
+          templateType:
+            this.campaignType === 'EMAIL'
+              ? this.inputControls.template.value
+              : undefined,
+          entityType: this.campaignType === 'WHATSAPP' ? 'WHATSAPP' : undefined,
         },
       ]),
     };
-    this.$subscription.add(
-      this.campaignService
-        .getTemplateListByTopicId(this.entityId, topic.id, config)
-        .subscribe((response) => {
-          this.templateTopicList = [
-            {
-              templates: response.records,
-              topicId: topic.id,
-              topicName: topic.name,
-              totalTemplate: response.total,
-            },
-          ];
-        })
-    );
+    return config;
   }
 
   /**
    * @function templateTypeSelection function to select template type.
    * @param value template type value.
    */
-  templateTypeSelection(value) {
-    this.templateType = value;
+  templateTypeSelection(value: TemplateType) {
     this.selectedTopic = campaignConfig.chipValue.all;
     this.getTemplateForAllTopics();
-  }
-
-  /**
-   * @function setTemplate function to set template.
-   * @param event event object of set template.
-   */
-  setTemplate(event) {
-    this.change.emit(event);
-  }
-
-  /**
-   * @function goBack function to go back to previous page.
-   */
-  goBack() {
-    this.change.emit({ status: false });
   }
 
   /**
@@ -143,5 +249,12 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy() {
     this.$subscription.unsubscribe();
+  }
+
+  get inputControls() {
+    return this.templateForm.controls as Record<
+      keyof { topic: string; template: string },
+      AbstractControl
+    >;
   }
 }

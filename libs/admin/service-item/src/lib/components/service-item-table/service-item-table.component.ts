@@ -175,7 +175,7 @@ export class ServiceItemTableComponent extends BaseDatatableComponent
           () => {
             this.initTableValue();
             this.snackbarService.openSnackBarAsText(
-              'Status changes successfully',
+              'Status changed successfully',
               '',
               { panelClass: 'success' }
             );

@@ -12,6 +12,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { campaignConfig } from '../../constant/campaign';
 import { CampaignService } from '../../services/campaign.service';
+import { TemplateData, TopicTemplatesData } from '../../types/template.type';
+import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
+import { CampaignForm } from '../../types/campaign.type';
 
 @Component({
   selector: 'hospitality-bot-topic-templates',
@@ -19,10 +22,13 @@ import { CampaignService } from '../../services/campaign.service';
   styleUrls: ['./topic-templates.component.scss'],
 })
 export class TopicTemplatesComponent implements OnInit, OnDestroy {
-  @Input() template;
+  readonly campaignConfiguration = campaignConfig;
+
+  @Input() template: TopicTemplatesData;
   @Input() entityId: string;
-  @Input() templateType: string;
+
   @Output() selectedTemplate = new EventEmitter();
+  parentFG: FormGroup;
   loading: boolean;
   offset = 0;
   private $subscription = new Subscription();
@@ -31,10 +37,13 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
     private adminUtilityService: AdminUtilityService,
     private templateService: CampaignService,
     private snackbarService: SnackBarService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    private controlContainer: ControlContainer
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.parentFG = this.controlContainer.control as FormGroup;
+  }
 
   /**
    * @function loadData To load data for the table after any event.
@@ -47,7 +56,7 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
           offset: this.offset,
           limit: campaignConfig.templateCard.limit,
           entityState: campaignConfig.topicConfig.active,
-          templateType: this.templateType,
+          templateType: this.inputControls.template.value,
         },
       ]),
     };
@@ -76,19 +85,21 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @function campaignConfiguration returns campaignConfig object.
-   * @returns campaignConfig object.
-   */
-  get campaignConfiguration() {
-    return campaignConfig;
-  }
-
-  /**
    * @function selectTemplate function to select template.
    * @param template template data.
    */
-  selectTemplate(template) {
-    this.selectedTemplate.emit({ status: true, data: template });
+  selectTemplate(template: TemplateData) {
+    this.selectedTemplate.emit({
+      templateId: template.id,
+      htmlTemplate: template.htmlTemplate,
+    });
+  }
+
+  get inputControls() {
+    return this.parentFG.controls as Record<
+      keyof CampaignForm,
+      AbstractControl
+    >;
   }
 
   /**

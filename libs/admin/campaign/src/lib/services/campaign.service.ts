@@ -1,10 +1,38 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { Campaign } from '../data-model/campaign.model';
-import { QueryConfig } from '../types/campaign.type';
+import {
+  CampaignType,
+  QueryConfig,
+  TemplateType,
+} from '../types/campaign.type';
+import { map } from 'rxjs/operators';
+import { Topics } from 'libs/admin/listing/src/lib/data-models/listing.model';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { CampaignResponse } from '../types/campaign.response';
 
 @Injectable()
 export class CampaignService extends ApiService {
+  campaignType: CampaignType;
+
+  templateData = new BehaviorSubject<TemplateType>(null);
+
+  mapTopicList(entityId: string) {
+    return this.getTopicList(entityId, {
+      queryObj: '?entityState=ACTIVE',
+    }).pipe(
+      map((response) => {
+        const data = new Topics()
+          .deserialize(response)
+          .records.map((item) => ({ label: item.name, value: item.id }));
+        return data;
+      })
+    );
+  }
+
+  createCampaign(entityId: string, formData) {
+    return this.post(`/api/v1/cms/${entityId}/campaign`, formData);
+  }
+
   /**
    * @function getTopicList to get topic list.
    * @param id dynamically getting entityId into api.
@@ -100,7 +128,10 @@ export class CampaignService extends ApiService {
    * @param campaignId dynamically getting campaignId into api.
    * @returns get api for getting campaign by id.
    */
-  getCampaignById(entityId: string, campaignId: string) {
+  getCampaignById(
+    entityId: string,
+    campaignId: string
+  ): Observable<CampaignResponse> {
     return this.get(`/api/v1/cms/${entityId}/campaign/${campaignId}`);
   }
 

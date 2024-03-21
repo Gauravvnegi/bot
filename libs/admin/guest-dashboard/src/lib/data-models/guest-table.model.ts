@@ -8,10 +8,12 @@ import {
   Status,
 } from '../../../../reservation/src/lib/models/reservation-table.model';
 import { EntityState } from '@hospitality-bot/admin/shared';
+
 import {
   convertToNormalCase,
   getFullName,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { GuestListResponse, GuestReservationType } from '../types/guest.type';
 
 export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
@@ -19,18 +21,89 @@ export interface IDeserializable {
 
 export class GuestTable implements IDeserializable {
   totalRecord: number;
-  entityTypeCounts: EntityState<string>;
   entityStateCounts: EntityState<string>;
-  records: Guest[];
+  entityStateLabels: EntityState<string>;
+  records: GuestData[];
 
-  deserialize(input: any) {
-    this.records = input.records.map((record) =>
-      new Guest().deserialize(record)
-    );
-    this.entityTypeCounts = input?.entityTypeCounts;
-    this.entityStateCounts = input?.entityStateCounts;
-    this.totalRecord = input?.total;
+  deserialize(input: GuestListResponse) {
+    this.records =
+      input.records?.map((item) => new GuestData().deserialize(item)) ?? [];
+    this.entityStateCounts = input.entityStateCounts;
+    this.entityStateLabels = input?.entityStateLabels;
+
+    this.totalRecord = input.total;
     return this;
+  }
+}
+
+export class GuestData {
+  dateOfBirth: string;
+  contactDetails;
+  firstName: string;
+  lastName: string;
+  salutation: string;
+  nationality: string;
+  countryCode: string;
+  phoneNumber: string;
+  email: string;
+  guestAttributes: GuestAttributes;
+  booking: Booking;
+  feedback: Feedback;
+  payment: Payment;
+  status: Status;
+  currentJourney: CurrentJourney;
+  rooms: Room;
+  documents: any[];
+  vip: boolean;
+  fullName: string;
+  reservationId: string;
+  id: string;
+  deserialize(input: GuestReservationType) {
+    const guest = input.guestDetails.primaryGuest;
+    this.firstName = guest?.firstName;
+    this.lastName = guest?.lastName;
+    this.id = guest?.id;
+    // this.dateOfBirth= input?.guestDetails?.primaryGuest?.
+
+    // this.salutation =guest?.
+    this.nationality = guest?.nationality;
+    this.countryCode = guest?.contactDetails?.cc;
+    this.phoneNumber = guest?.contactDetails?.contactNumber;
+    this.email = guest?.contactDetails?.emailId;
+    this.documents = this.documents = guest.documents;
+    this.booking = new Booking().deserialize(input);
+    // this.feedback = new Feedback().deserialize(input.feedback);
+    this.payment = new Payment().deserialize(input.paymentSummary);
+    this.status = new Status().deserialize(input);
+    this.currentJourney = new CurrentJourney().deserialize(input);
+    this.rooms = new Room().deserialize(input.stayDetails);
+    this.vip = input.vip;
+    this.reservationId = input?.id;
+    set(
+      {},
+      'fullName',
+      `${trim(get(guest, ['firstName'], 'No'))} ${trim(
+        get(guest, ['lastName'], 'Name')
+      )}`
+    );
+
+    return this;
+  }
+  getFullName() {
+    return getFullName(this.firstName, this.lastName);
+  }
+
+  getPhoneNumber() {
+    return `${this.countryCode ? this.countryCode : ''} ${
+      this.phoneNumber ? this.phoneNumber : ''
+    }`;
+  }
+
+  getNationality(cc) {
+    if (cc && cc.length) {
+      return cc.includes('+') ? cc : `+${cc}`;
+    }
+    return cc;
   }
 }
 
@@ -117,7 +190,6 @@ export class Guest implements IDeserializable {
       set({}, 'phoneNumber', get(input, ['contactDetails', 'contactNumber'])),
       set({}, 'email', get(input, ['contactDetails', 'emailId']))
     );
-    this.guestAttributes = new GuestAttributes().deserialize(input.attributes);
     if (input.reservation[0]) {
       const reservation = input.reservation[0];
       this.booking = new Booking().deserialize(reservation);
@@ -161,7 +233,7 @@ export class Guest implements IDeserializable {
 
 export class GuestAttributes {
   id: string;
-  overAllNps: number;
+  // overAllNps: number;
   transactionUsage: string;
   totalSpend: number;
   potential: string;
@@ -172,7 +244,7 @@ export class GuestAttributes {
     Object.assign(
       this,
       set({}, 'id', get(data, ['id'])),
-      set({}, 'overAllNps', get(data, ['overAllNps'])),
+      // set({}, 'overAllNps', get(data, ['overAllNps'])),
       set({}, 'transactionUsage', get(data, ['transactionUsage'])),
       set({}, 'totalSpend', get(data, ['totalSpend'])),
       set({}, 'potential', get(data, ['potential'])),

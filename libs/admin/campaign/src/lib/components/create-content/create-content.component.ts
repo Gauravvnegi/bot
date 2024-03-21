@@ -1,56 +1,64 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { campaignConfig } from '../../constant/campaign';
-import { NavRouteOptions } from '@hospitality-bot/admin/shared';
-import { Campaign } from '../../data-model/campaign.model';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import { ModuleNames } from '@hospitality-bot/admin/shared';
+import {
+  CampaignForm,
+  CampaignType,
+  TemplateType,
+} from '../../types/campaign.type';
+import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'hospitality-bot-create-content',
   templateUrl: './create-content.component.html',
   styleUrls: ['./create-content.component.scss'],
 })
 export class CreateContentComponent implements OnInit {
-  @Input() campaignId: string;
-  @Input() campaign: Campaign;
+  parentFG: FormGroup;
+  readonly campaignConfig = campaignConfig;
 
-  draftDate: number | string = Date.now();
-  pageTitle = 'Create Content';
-  navRoutes: NavRouteOptions = [
-    { label: 'Marketing', link: './' },
-    { label: 'Campaign', link: '/pages/marketing/campaign' },
-    { label: 'Create Campaign', link: './' },
-    { label: 'Create Content', link: './' },
-  ];
+  @Input() campaignType: CampaignType;
 
-  @Output() changeStep = new EventEmitter();
-
-  constructor() {}
+  constructor(
+    private routesConfigService: RoutesConfigService,
+    private controlContainer: ControlContainer,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    if (this.campaignId) {
-      this.pageTitle = 'Edit Content';
-      this.navRoutes[2].label = 'Edit Campaign';
-      this.navRoutes[3].label = 'Edit Content';
-    }
-    this.draftDate = this.campaign?.updatedAt ?? this.campaign?.createdAt;
-  }
-
-  /**
-   * @function goBack function to go back on previous page.
-   */
-  goBack() {
-    this.changeStep.emit({ step: 'previous' });
-  }
-
-  /**
-   * @function campaignConfiguration campaign config.
-   */
-  get campaignConfiguration() {
-    return campaignConfig;
+    this.parentFG = this.controlContainer.control as FormGroup;
   }
 
   /**
    * @function openTemplateList function to open template list.
    */
-  openTemplateList(type: string) {
-    this.changeStep.emit({ step: 'next', templateType: type });
+  openTemplateList(type: TemplateType) {
+    this.inputControls.template.patchValue(type, { emitEvent: false });
+
+    const queryParams = {
+      data: btoa(
+        JSON.stringify(this.parentFG.getRawValue() as CampaignForm)
+      ),
+    };
+    this.router.navigate(['template'], {
+      relativeTo: this.route,
+      queryParams: { campaignType: this.campaignType, ...queryParams },
+    });
+  }
+
+  createTemplate() {
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.TEMPLATE,
+      additionalPath: 'create-template',
+    });
+  }
+
+  get inputControls() {
+    return this.parentFG.controls as Record<
+      keyof CampaignForm,
+      AbstractControl
+    >;
   }
 }

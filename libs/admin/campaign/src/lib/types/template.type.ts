@@ -19,7 +19,7 @@ export type TemplateData = {
 
 export type TopicTemplatesData = {
   templates: TemplateData[];
-  topicId: string;
-  topicName: string;
+  topicId?: string;
+  topicName?: string;
   totalTemplate: number;
 };

@@ -113,26 +113,26 @@ export class CampaignFormData {
   id: string;
 
   deserialize(input: CampaignResponse) {
-    this.campaignName = input.name;
-    this.topic = input.topicId;
-    this.startDate = input.dateTime;
+    this.campaignName = input?.name;
+    this.topic = input?.topicId;
+    this.startDate = input?.dateTime;
     // this.campaignState = input.campaignType;
-    this.message = input.message;
-    this.templateId = input.templateId;
-    this.from = input.from;
-    this.subject = input.subject.text;
-    this.cc = input.cc;
-    this.bcc = input.bcc;
-    this.campaignTags = input.tags;
-    this.id = input.id;
+    this.message = input?.message;
+    this.templateId = input?.templateId;
+    this.from = input?.from;
+    this.subject = input?.subject?.text;
+    this.cc = input?.cc;
+    this.bcc = input?.bcc;
+    this.campaignTags = input?.tags;
+    this.id = input?.id;
 
     // Map individuals and listings in to array.
-    const individualLabels = input.to.individual.map((item) => item.name);
-    const listings = input.to.listing.map((item) => ({
-      label: item.name,
-      value: item.receiverId,
+    const individualLabels = input?.to?.individual?.map((item) => item?.name);
+    const listings = input?.to?.listing?.map((item) => ({
+      label: item?.name,
+      value: item?.receiverId,
     }));
-    this.to = [...individualLabels, ...listings.map((item) => item.label)];
+    this.to = [...individualLabels, ...listings?.map((item) => item?.label)];
     this.recipients = listings;
     return this;
   }

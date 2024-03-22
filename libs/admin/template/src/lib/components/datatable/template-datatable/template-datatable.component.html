@@ -1,8 +1,10 @@
-<div
-  [formGroup]="tableFG"
->
-  <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes" [isBack]="false">
-     <hospitality-bot-button
+<div [formGroup]="tableFG">
+  <hospitality-bot-navigation-header
+    [heading]="tableName"
+    [routes]="navRoutes"
+    [isBack]="false"
+  >
+    <hospitality-bot-button
       (click)="openCreateTemplate()"
       label=" {{ 'createTemplate' | translate }}"
     ></hospitality-bot-button>
@@ -81,9 +83,21 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <div>
-          <div class="primary-text">{{ rowData.name }}</div>
-          <div class="secondary-text">{{ rowData.topicName }}</div>
+        <div class="template-name-wrapper">
+          <img
+            *ngIf="rowData.channel === 'WHATSAPP'"
+            src="assets/svg/whatsapp-campaign.svg"
+            alt="Whatsapp"
+          />
+          <img
+            *ngIf="rowData.channel === 'EMAIL'"
+            src="assets/svg/email-campaign.svg"
+            alt="Email"
+          />
+          <div>
+            <div class="primary-text">{{ rowData.name }}</div>
+            <div class="secondary-text">{{ rowData.topicName }}</div>
+          </div>
         </div>
       </td>
       <td>

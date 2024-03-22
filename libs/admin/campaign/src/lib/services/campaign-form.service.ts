@@ -11,7 +11,7 @@ import {
 export class CampaignFormService {
   constructor() {}
 
-  posFormData(
+  postFormData(
     formData: CampaignForm,
     campaignType: CampaignType,
     action: 'send' | 'save'
@@ -29,13 +29,13 @@ export class CampaignFormService {
         individual: individualRecipients,
         listing: formData.recipients.map((item) => item.value),
       },
-      name: formData.campaignName,
-      topicId: formData.topic,
-      from: formData.from,
+      name: formData?.campaignName,
+      topicId: formData?.topic.length ? formData.topic : undefined,
+      from: formData?.from?.length ? formData.from : undefined,
       dateTime: new Date(formData.startDate).getTime(),
-      message: formData.message,
-      templateId: formData.templateId,
-      tags: formData.campaignTags,
+      message: formData?.message,
+      templateId: formData?.templateId,
+      tags: formData?.campaignTags,
       cc: formData?.cc?.length ? formData?.cc : undefined,
       bcc: formData?.bcc?.length ? formData?.bcc : undefined,
       isDraft: action === 'save',

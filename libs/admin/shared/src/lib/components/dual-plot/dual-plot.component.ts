@@ -4,7 +4,7 @@ import {
   DualPlotChartConfig,
   DualPlotFilterOptions,
   DualPlotGraphColor,
-  DualPlotGraphDataset,
+  DualPlotDataset,
   DualPlotOptions,
 } from '../../types/chart.type';
 import { BaseChartDirective } from 'ng2-charts';
@@ -51,15 +51,16 @@ export class DualPlotComponent implements OnInit {
   @Input() labels: string[] = [];
 
   @Input() icon: string;
-  @Input() filterOptions: DualPlotFilterOptions;
+  @Input() isFilter: boolean = false;
 
   @Input() options: DualPlotOptions = defaultDualPlotOptions; //to customize graph design
   @Input() colors: DualPlotGraphColor[] = defaultDualPlotColors; //plotted graph colors
-  @Input() datasets: DualPlotGraphDataset[] = []; //graph data
+  @Input() datasets: DualPlotDataset[] = []; //graph data
   @Input() legend: boolean = false;
   @Input() set config(value: DualPlotChartConfig) {
     if (value) {
       Object.assign(this, value);
+      this.initDualPlotColors();
     }
   }
 
@@ -100,6 +101,32 @@ export class DualPlotComponent implements OnInit {
     });
 
     chart.update();
+  }
+
+  initDualPlotColors() {
+    this.colors = this.datasets.map((item, index) => {
+      const defaultColors = defaultDualPlotColors[index];
+      return {
+        backgroundColor: item?.backgroundColor || defaultColors.backgroundColor,
+        borderColor: item?.borderColor || defaultColors.borderColor,
+
+        pointBackgroundColor:
+          item?.pointBackgroundColor || defaultColors.pointBackgroundColor,
+
+        pointBorderColor:
+          item?.pointBorderColor ||
+          item?.borderColor ||
+          defaultColors.pointBorderColor,
+        pointHoverBackgroundColor:
+          item?.pointHoverBackgroundColor ||
+          item?.pointBackgroundColor ||
+          defaultColors.pointHoverBackgroundColor,
+        pointHoverBorderColor:
+          item?.pointHoverBorderColor ||
+          item?.borderColor ||
+          defaultColors.pointHoverBorderColor,
+      };
+    });
   }
 }
 

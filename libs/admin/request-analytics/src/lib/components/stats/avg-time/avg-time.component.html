@@ -1,21 +1,13 @@
 <div class="container">
-  <hospitality-bot-custom-tooltip [text]="'art.tooltip_text'">
-    <div class="stat-title">
-      {{ 'Avg time to resolve task' }}
-    </div>
-  </hospitality-bot-custom-tooltip>
   <div class="graph">
-    <hospitality-bot-tab-group
-      [listItems]="tabFilterItems"
-      (selectedTabChange)="onSelectedTabFilterChange($event)"
-    >
-    </hospitality-bot-tab-group>
-
     <hospitality-bot-dual-plot
       [options]="options"
       [datasets]="data"
       [labels]="labels"
       graphType="bar"
+      [tabFilterOptions]="tabFilterItems"
+      [title]="'Avg time to resolve task'"
+      (onSelectedTabFilterChange)="onSelectedTabFilterChange($event)"
     ></hospitality-bot-dual-plot>
   </div>
 </div>

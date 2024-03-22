@@ -111,16 +111,16 @@ export interface DualPlotGraphColor {
   pointHoverBorderColor: string;
 }
 
-export interface DualPlotGraphDataset {
-  backgroundColor: string[];
-  borderColor: string[];
+export type DualPlotDataset = {
+  backgroundColor?: string;
+  borderColor?: string;
   data: number[];
   label: string;
   fill: boolean;
-}
+} & Partial<DualPlotGraphColor>;
 
 export interface DualPlotChartConfig {
-  data: DualPlotGraphDataset[];
+  data: DualPlotDataset[];
   labels: string[];
   options: DualPlotOptions;
   colors: DualPlotGraphColor[];

@@ -39,17 +39,17 @@
     </canvas>
   </div>
 
-  <div class="stat-filter">
+  <div class="stat-filter" *ngIf="isFilter">
     <div
       class="stat-filter-label"
       (click)="onFilterCLick(filterIndex)"
-      *ngFor="let filter of filterOptions; let filterIndex = index"
+      *ngFor="let filter of datasets; let filterIndex = index"
     >
       <input
         class="filters"
         type="checkbox"
         *skeleton="
-          filterOptions == undefined;
+          datasets == undefined;
           height: '35px';
           width: '90px';
           margin: '0 0 10px 0'
@@ -57,7 +57,7 @@
       />
       <div
         class="legend-border"
-        [style.backgroundColor]="filter.colorCode"
+        [style.backgroundColor]="filter?.backgroundColor"
       ></div>
       <p class="stat-filter-label-title">
         {{ filter.label }}

@@ -100,4 +100,8 @@ export class ComplaintBaseComponent {
       );
     });
   }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }

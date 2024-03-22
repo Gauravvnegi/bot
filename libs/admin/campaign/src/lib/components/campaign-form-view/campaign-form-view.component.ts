@@ -135,7 +135,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
     this.useForm = this.fb.group({
       campaignName: ['', [Validators.required]],
       topic: [''],
-      to: [[]],
+      to: [[], [Validators.required]],
       from: ['', [Validators.required]],
       event: [''],
       startDate: [new Date()],
@@ -211,7 +211,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
   }
 
   handleSubmit(action: 'send' | 'save') {
-    if (this.useForm.invalid) {
+    if (this.useForm.invalid && action === 'send') {
       this.useForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
         'Invalid form: Please fix errors'

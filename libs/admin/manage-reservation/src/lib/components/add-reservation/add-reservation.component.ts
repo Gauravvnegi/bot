@@ -98,15 +98,17 @@ export class AddReservationComponent extends BaseReservationComponent
   }
 
   listenRouteData() {
-    this.activatedRoute.queryParams
-      .pipe(debounceTime(100))
-      .subscribe((queryParams) => {
-        if (queryParams.data) {
-          const data = queryParams.data;
-          const paramsData = JSON.parse(atob(data));
-          this.initParamsData(paramsData);
-        }
-      });
+    this.$subscription.add(
+      this.activatedRoute.queryParams
+        .pipe(debounceTime(100))
+        .subscribe((queryParams) => {
+          if (queryParams.data) {
+            const data = queryParams.data;
+            const paramsData = JSON.parse(atob(data));
+            this.initParamsData(paramsData);
+          }
+        })
+    );
   }
 
   initParamsData(
@@ -161,13 +163,15 @@ export class AddReservationComponent extends BaseReservationComponent
     if (this.expandAccordion) {
       this.formService.enableAccordion = false;
     }
-    this.formService.getSummary.subscribe((res) => {
-      if (res) {
-        if (this.roomInfoControls.valid && this.isDataInitialized) {
-          this.getSummaryData();
+    this.$subscription.add(
+      this.formService.getSummary.subscribe((res) => {
+        if (res) {
+          if (this.roomInfoControls.valid && this.isDataInitialized) {
+            this.getSummaryData();
+          }
         }
-      }
-    });
+      })
+    );
   }
 
   /**
@@ -507,13 +511,19 @@ export class AddReservationComponent extends BaseReservationComponent
   }
 
   handleEmailInvoice() {
-    this.manageReservationService
-      .emailInvoice(this.reservationId, {})
-      .subscribe((_) => {
-        this.snackbarService.openSnackBarAsText('Email Sent Successfully', '', {
-          panelClass: 'success',
-        });
-      });
+    this.$subscription.add(
+      this.manageReservationService
+        .emailInvoice(this.reservationId, {})
+        .subscribe((_) => {
+          this.snackbarService.openSnackBarAsText(
+            'Email Sent Successfully',
+            '',
+            {
+              panelClass: 'success',
+            }
+          );
+        })
+    );
   }
 
   /**

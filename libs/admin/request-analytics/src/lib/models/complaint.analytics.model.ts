@@ -5,6 +5,7 @@ import {
   ComplaintsDataResponse,
   DistributionStatsResponse,
 } from '../types/response.types';
+import { DualPlotDataset } from '@hospitality-bot/admin/shared';
 
 export class ComplaintBreakDown {
   total: number;
@@ -35,7 +36,7 @@ export class ComplaintBreakDown {
 }
 
 export class ComplaintsData {
-  data: { data: string[]; label: string; fill: boolean }[];
+  data: DualPlotDataset[];
 
   deserialize(input: ComplaintsDataResponse) {
     this.data = [
@@ -45,12 +46,22 @@ export class ComplaintsData {
           input?.totalComplaintsGraph.totalComplaintGraphStats
         ),
         fill: false,
+        borderColor: '#FF6384',
+        backgroundColor: '#FF6384',
+        pointBorderColor: '#FF6384',
+        pointHoverBackgroundColor: '#FF6384',
+        pointHoverBorderColor: '#FF6384',
       },
       {
         label: 'Closed',
         data: Object.values(
           input?.closedComplaintsGraph.closedComplaintGraphStats
         ),
+        borderColor: '#C5C5C5',
+        backgroundColor: '#C5C5C5',
+        pointBorderColor: '#C5C5C5',
+        pointHoverBackgroundColor: '#C5C5C5',
+        pointHoverBorderColor: '#C5C5C5',
         fill: false,
       },
     ];
@@ -60,14 +71,19 @@ export class ComplaintsData {
 }
 
 export class ComplaintCategoryBreakDownStats {
-  data: { label: string; score: number; colorCode: string }[] = [];
+  data: { label: string; score: number; colorCode: string; percentage }[] = [];
+  total: number = 0;
 
   deserialize(input: CategoryStatsResponse) {
     Object.entries(input).forEach(([key, value]) => {
+      this.total += value;
       this.data.push({
         label: key,
         score: value,
         colorCode: '#4BC0C0',
+        percentage: () => {
+          return `${(value * 100) / this.total}`;
+        },
       });
     });
     return this;

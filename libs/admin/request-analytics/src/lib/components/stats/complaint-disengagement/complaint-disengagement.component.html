@@ -34,9 +34,9 @@
       <div class="right__top__stat-container">
         <ng-container *ngFor="let item of distributionStatsData?.data">
           <div>
-            <div>
+            <div class="label">
               {{ item?.label }}
-              <span>{{ item?.count }}</span>
+              <span class="label__count">{{ item?.count }}</span>
             </div>
           </div>
         </ng-container>
@@ -49,7 +49,7 @@
           datasets: complaintBreakDownData?.complaintsData?.data,
           labels: labels
         }"
-        [filterOptions]="[{ label: 'Complaint' }, { label: 'Closed' }]"
+        [isFilter]="true"
       >
       </hospitality-bot-dual-plot>
     </div>

@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { AnalyticsService } from '../../../services/analytics.service';
 import {
   AdminUtilityService,
+  DualPlotDataset,
   QueryConfig,
   getCalendarType,
 } from '@hospitality-bot/admin/shared';
@@ -57,6 +58,7 @@ export class AvgTimeComponent implements OnInit {
               data: [],
               label: 'Line',
               fill: false,
+              backgroundColor: '#4BC0C0',
             },
           ];
 
@@ -135,7 +137,7 @@ const options = {
     callbacks: {
       label: function (context) {
         if (context.value !== null) {
-          return ' ART: ' + context.value + ' hrs';
+          return context.value + ' hrs';
         }
       },
     },

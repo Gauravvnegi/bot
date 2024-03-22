@@ -1,10 +1,18 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {
   DualPlotChartConfig,
   DualPlotFilterOptions,
   DualPlotGraphColor,
-  DualPlotGraphDataset,
+  DualPlotDataset,
   DualPlotOptions,
 } from '../../types/chart.type';
 import { BaseChartDirective } from 'ng2-charts';
@@ -45,17 +53,20 @@ export class DualPlotComponent implements OnInit {
   useForm: FormGroup;
   chartTypeOption = chartTypeConfig;
 
+  @Output() onSelectedTabFilterChange = new EventEmitter(null);
+
   @Input() graphType: GraphType = GraphType.LINE;
   @Input() isSwitchAble: boolean = false;
   @Input() title: string;
   @Input() labels: string[] = [];
 
   @Input() icon: string;
-  @Input() filterOptions: DualPlotFilterOptions;
+  @Input() isFilter: boolean = false;
 
+  @Input() tabFilterOptions: any[];
   @Input() options: DualPlotOptions = defaultDualPlotOptions; //to customize graph design
   @Input() colors: DualPlotGraphColor[] = defaultDualPlotColors; //plotted graph colors
-  @Input() datasets: DualPlotGraphDataset[] = []; //graph data
+  @Input() datasets: DualPlotDataset[] = []; //graph data
   @Input() legend: boolean = false;
   @Input() set config(value: DualPlotChartConfig) {
     if (value) {
@@ -100,6 +111,38 @@ export class DualPlotComponent implements OnInit {
     });
 
     chart.update();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.datasets || changes.config) {
+      this.initDualPlotColors();
+    }
+  }
+
+  initDualPlotColors() {
+    this.colors = this.datasets.map((item, index) => {
+      const defaultColors = defaultDualPlotColors[index];
+      return {
+        backgroundColor: item?.backgroundColor || defaultColors.backgroundColor,
+        borderColor: item?.borderColor || defaultColors.borderColor,
+
+        pointBackgroundColor:
+          item?.pointBackgroundColor || defaultColors.pointBackgroundColor,
+
+        pointBorderColor:
+          item?.pointBorderColor ||
+          item?.borderColor ||
+          defaultColors.pointBorderColor,
+        pointHoverBackgroundColor:
+          item?.pointHoverBackgroundColor ||
+          item?.pointBackgroundColor ||
+          defaultColors.pointHoverBackgroundColor,
+        pointHoverBorderColor:
+          item?.pointHoverBorderColor ||
+          item?.borderColor ||
+          defaultColors.pointHoverBorderColor,
+      };
+    });
   }
 }
 

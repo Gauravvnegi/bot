@@ -35,8 +35,4 @@ export class ComplaintBreakdownComponent extends ComplaintBaseComponent
     );
   }
   label: string = 'Complaint Breakdown';
-
-  getTransparentWidth(data) {
-    return isNaN(data) ? 100 : Math.max(0, Math.min(100, 100 - (data ?? 0)));
-  }
 }

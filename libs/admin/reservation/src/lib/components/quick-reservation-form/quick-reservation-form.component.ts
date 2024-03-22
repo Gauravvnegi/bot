@@ -158,11 +158,13 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   listenForDateChanges() {
-    this.formService.reinitializeRooms.subscribe((res) => {
-      if (res) {
-        this.reinitializeRooms = !this.reinitializeRooms;
-      }
-    });
+    this.$subscription.add(
+      this.formService.reinitializeRooms.subscribe((res) => {
+        if (res) {
+          this.reinitializeRooms = !this.reinitializeRooms;
+        }
+      })
+    );
   }
 
   /**

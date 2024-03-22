@@ -68,9 +68,11 @@ export class PaymentMethodComponent implements OnInit {
       },
       { emitEvent: false }
     );
-    this.formService.currentJourneyStatus.subscribe((res) => {
-      this.isCheckedout = res && res === ReservationCurrentStatus.CHECKEDOUT;
-    });
+    this.$subscription.add(
+      this.formService.currentJourneyStatus.subscribe((res) => {
+        this.isCheckedout = res && res === ReservationCurrentStatus.CHECKEDOUT;
+      })
+    );
   }
 
   addFormGroup() {
@@ -96,18 +98,20 @@ export class PaymentMethodComponent implements OnInit {
   }
 
   initConfig() {
-    this.configService.$config.subscribe((value) => {
-      if (value) {
-        const { currencyConfiguration } = value;
-        this.currencies = currencyConfiguration.map(({ key, value }) => ({
-          label: key,
-          value,
-        }));
-        this.controlContainer.control.get('paymentMethod').patchValue({
-          currency: this.currencies[0].value,
-        });
-      }
-    });
+    this.$subscription.add(
+      this.configService.$config.subscribe((value) => {
+        if (value) {
+          const { currencyConfiguration } = value;
+          this.currencies = currencyConfiguration.map(({ key, value }) => ({
+            label: key,
+            value,
+          }));
+          this.controlContainer.control.get('paymentMethod').patchValue({
+            currency: this.currencies[0].value,
+          });
+        }
+      })
+    );
   }
 
   getPaymentMethod(): void {

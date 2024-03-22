@@ -484,25 +484,6 @@ export class ReservationCalendarViewComponent implements OnInit {
     return config;
   }
 
-  // getAvailability(
-  //   nextDate: number,
-  //   type: 'quantity' | 'occupancy',
-  //   roomTypeId: string
-  // ) {
-  //   if (
-  //     Object.keys(this.occupancyData).length === 0 ||
-  //     !this.occupancyData[nextDate]?.availability
-  //   )
-  //     return 0;
-  //   const date = new Date(this.useForm.controls['date'].value);
-  //   date.setDate(date.getDate() + nextDate);
-  //   let room = this.occupancyData[roomTypeId]['availability'][
-  //     date.getTime()
-  //   ];
-  //   if (room) return room[type] === 'NaN' || !room[type] ? 0 : room[type];
-  //   return 0;
-  // }
-
   getAvailability(
     nextDate: { currentDate: Date },
     index: number,
@@ -794,29 +775,31 @@ export class ReservationCalendarViewComponent implements OnInit {
           label: 'Release',
           type: 'SUCCESS',
           onClick: () => {
-            this.roomService
-              .updateRoomStatus(this.entityId, {
-                room: {
-                  id: selectedData.id,
-                  ...(statusId
-                    ? { removeStatusIds: [statusId] }
-                    : {
-                        statusDetailsList: [
-                          { isCurrentStatus: true, status: 'DIRTY' },
-                        ],
-                      }),
-                },
-              })
-              .subscribe(() => {
-                ref.close();
-                this.snackbarService.openSnackBarAsText(
-                  'Status changed successfully',
-                  '',
-                  {
-                    panelClass: 'success',
-                  }
-                );
-              });
+            this.$subscription.add(
+              this.roomService
+                .updateRoomStatus(this.entityId, {
+                  room: {
+                    id: selectedData.id,
+                    ...(statusId
+                      ? { removeStatusIds: [statusId] }
+                      : {
+                          statusDetailsList: [
+                            { isCurrentStatus: true, status: 'DIRTY' },
+                          ],
+                        }),
+                  },
+                })
+                .subscribe(() => {
+                  ref.close();
+                  this.snackbarService.openSnackBarAsText(
+                    'Status changed successfully',
+                    '',
+                    {
+                      panelClass: 'success',
+                    }
+                  );
+                })
+            );
           },
           variant: 'contained',
         },
@@ -875,44 +858,46 @@ export class ReservationCalendarViewComponent implements OnInit {
       });
       return;
     }
-    this.roomService
-      .updateRoomStatus(this.entityId, {
-        room: {
-          id: id,
-          statusDetailsList: [{ isCurrentStatus: true, status: status }],
-        },
-      })
-      .subscribe(
-        (res) => {
-          // this.initRoomTypes();
-          let currentStatus = res.rooms[0]?.statusDetailsList.filter(
-            (item) => item.isCurrentStatus
-          )[0]?.status;
-          const updatedValues = roomType.rooms.map((item) => {
-            if (item.id === id) {
-              return {
-                ...item,
-                currentStatus: currentStatus,
-                nextStates: [currentStatus, ...res.rooms[0].nextStates],
-                statusDetails: res.rooms[0].statusDetailsList,
-              };
-            }
-            return item; // Keep other items unchanged
-          });
-          this.roomTypes.find(
-            (item) => item.value === roomType.value
-          ).rooms = updatedValues;
+    this.$subscription.add(
+      this.roomService
+        .updateRoomStatus(this.entityId, {
+          room: {
+            id: id,
+            statusDetailsList: [{ isCurrentStatus: true, status: status }],
+          },
+        })
+        .subscribe(
+          (res) => {
+            // this.initRoomTypes();
+            let currentStatus = res.rooms[0]?.statusDetailsList.filter(
+              (item) => item.isCurrentStatus
+            )[0]?.status;
+            const updatedValues = roomType.rooms.map((item) => {
+              if (item.id === id) {
+                return {
+                  ...item,
+                  currentStatus: currentStatus,
+                  nextStates: [currentStatus, ...res.rooms[0].nextStates],
+                  statusDetails: res.rooms[0].statusDetailsList,
+                };
+              }
+              return item; // Keep other items unchanged
+            });
+            this.roomTypes.find(
+              (item) => item.value === roomType.value
+            ).rooms = updatedValues;
 
-          this.snackbarService.openSnackBarAsText(
-            'Status changed successfully',
-            '',
-            {
-              panelClass: 'success',
-            }
-          );
-        },
-        () => {}
-      );
+            this.snackbarService.openSnackBarAsText(
+              'Status changed successfully',
+              '',
+              {
+                panelClass: 'success',
+              }
+            );
+          },
+          () => {}
+        )
+    );
   }
 
   handleCloseSidebar(resetData: boolean) {

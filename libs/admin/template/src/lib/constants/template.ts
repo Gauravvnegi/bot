@@ -45,17 +45,20 @@ export const templateConfig = {
         field: 'name',
         header: 'Name',
         sortType: 'string',
+        width: '35%',
       },
       {
         field: 'description',
         header: 'Description',
         sortType: 'string',
+        width: '35%',
       },
       {
         field: 'active',
         header: 'Active',
         sortType: 'number',
         isSearchDisabled: true,
+        width: '30%',
       },
     ],
     chips: [

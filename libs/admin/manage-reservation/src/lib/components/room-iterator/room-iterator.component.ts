@@ -122,6 +122,7 @@ export class RoomIteratorComponent extends IteratorComponent
     this.fields[3].type = 'multi-select';
     this.initDetails();
     this.listenForGlobalFilters();
+    this.mapJourney();
     this.createNewFields(true);
     this.listenForFormChanges();
     if (!this.reservationId) this.initItems = true;
@@ -130,11 +131,13 @@ export class RoomIteratorComponent extends IteratorComponent
   initDetails() {
     this.parentFormGroup = this.controlContainer.control as FormGroup;
     this.roomTypeArray = this.fb.array([]);
-    this.formService.isDataInitialized.subscribe((res) => {
-      if (res) {
-        this.isDataInitialized = res;
-      }
-    });
+    this.$subscription.add(
+      this.formService.isDataInitialized.subscribe((res) => {
+        if (res) {
+          this.isDataInitialized = res;
+        }
+      })
+    );
     this.listenForDateChanges();
   }
 
@@ -143,14 +146,19 @@ export class RoomIteratorComponent extends IteratorComponent
       // set-global query everytime global filter changes
       this.globalQueries = [...data['dateRange'].queryValue];
     });
-    this.formService.currentJourneyStatus.subscribe((res) => {
-      if (res) {
-        this.isCheckedIn =
-          res === ReservationCurrentStatus.INHOUSE ||
-          res === ReservationCurrentStatus.DUEOUT;
-        this.isCheckedout = res === ReservationCurrentStatus.CHECKEDOUT;
-      }
-    });
+  }
+
+  mapJourney() {
+    this.$subscription.add(
+      this.formService.currentJourneyStatus.subscribe((res) => {
+        if (res) {
+          this.isCheckedIn =
+            res === ReservationCurrentStatus.INHOUSE ||
+            res === ReservationCurrentStatus.DUEOUT;
+          this.isCheckedout = res === ReservationCurrentStatus.CHECKEDOUT;
+        }
+      })
+    );
   }
 
   /**
@@ -190,12 +198,14 @@ export class RoomIteratorComponent extends IteratorComponent
   }
 
   listenForDateChanges() {
-    this.formService.reinitializeRooms.subscribe((res) => {
-      if (res) {
-        this.reinitializeRooms = !this.reinitializeRooms;
-        this.updatedRoomsLoaded = true;
-      }
-    });
+    this.$subscription.add(
+      this.formService.reinitializeRooms.subscribe((res) => {
+        if (res) {
+          this.reinitializeRooms = !this.reinitializeRooms;
+          this.updatedRoomsLoaded = true;
+        }
+      })
+    );
   }
 
   listenForRoomChanges(index: number) {
@@ -416,11 +426,13 @@ export class RoomIteratorComponent extends IteratorComponent
   }
 
   loadMoreRoomTypes(id: string, index: number) {
-    this.roomService.getRoomTypeById(this.entityId, id).subscribe((res) => {
-      if (res) {
-        this.roomTypeChange(res, index, false);
-      }
-    });
+    this.$subscription.add(
+      this.roomService.getRoomTypeById(this.entityId, id).subscribe((res) => {
+        if (res) {
+          this.roomTypeChange(res, index, false);
+        }
+      })
+    );
   }
 
   /**

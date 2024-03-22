@@ -44,6 +44,16 @@ export class CampaignService extends ApiService {
   }
 
   /**
+   * @function getHotelTemplate get template list from api.
+   * @param config dynamically getting global query filter into api.
+   * @param entityId dynamically getting entityId into api.
+   * @returns get api of template lists.
+   */
+  getHotelTemplate(config: QueryConfig, entityId: string) {
+    return this.get(`/api/v1/entity/${entityId}/templates${config.queryObj}`);
+  }
+
+  /**
    * @function getListings to get listing data.
    * @param entityId dynamically getting entityId into api.
    * @param config dynamically getting global query filter into api.

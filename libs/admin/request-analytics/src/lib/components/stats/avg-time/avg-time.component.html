@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="graph">
+    <hospitality-bot-dual-plot
+      [options]="options"
+      [datasets]="data"
+      [labels]="labels"
+      graphType="bar"
+      [tabFilterOptions]="tabFilterItems"
+      [title]="'Avg time to resolve task'"
+      (onSelectedTabFilterChange)="onSelectedTabFilterChange($event)"
+    ></hospitality-bot-dual-plot>
+  </div>
+</div>

@@ -59,3 +59,35 @@ export type DistributionStats = {
     occupiedUsers: number;
   };
 };
+
+interface TotalComplaintGraphStats {
+  [hour: number]: number;
+}
+
+export type ComplaintsDataResponse = {
+  comparisonPercent: number;
+  score: number;
+  totalComplaintsGraph: {
+    totalCount: number;
+    totalComplaintGraphStats: TotalComplaintGraphStats;
+  };
+  closedComplaintsGraph: {
+    totalCount: number;
+    closedComplaintGraphStats: TotalComplaintGraphStats;
+  };
+};
+
+export type CategoryStatsResponse = {
+  [category: string]: number;
+};
+
+export type DistributionStatsResponse = {
+  [key: string]: number;
+};
+
+export type ComplaintBreakDownResponse = {
+  totalCount: number;
+  distributionStats: DistributionStatsResponse;
+  categoryStats: CategoryStatsResponse;
+  complaintsData: ComplaintsDataResponse;
+};

@@ -14,6 +14,7 @@
       }"
     ></hospitality-bot-input>
     <hospitality-bot-select
+      *ngIf="campaignType === 'EMAIL'"
       class="half-width"
       controlName="topic"
       label="Topic"
@@ -23,6 +24,7 @@
       }"
     ></hospitality-bot-select>
     <hospitality-bot-select
+      *ngIf="campaignType === 'EMAIL'"
       class="half-width"
       label="From"
       controlName="from"

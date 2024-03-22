@@ -1,7 +1,9 @@
-<div
-  [formGroup]="tableFG"
->
-  <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes" [isBack]="false">
+<div [formGroup]="tableFG">
+  <hospitality-bot-navigation-header
+    [heading]="tableName"
+    [routes]="navRoutes"
+    [isBack]="false"
+  >
     <hospitality-bot-button
       label="+ Create Category"
       variant="text"
@@ -165,7 +167,7 @@
   <hospitality-bot-tab-group
     [selectedIndex]="tabFilterIdx"
     *ngIf="isTabFilters"
-    [listItems]="tabFilterItems"
+    [listItems]="[{ label: 'sam', value: 0 }]"
     (selectedTabChange)="onSelectedTabFilterChange($event)"
   ></hospitality-bot-tab-group>
 </ng-template>

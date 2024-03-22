@@ -1,1 +1,6 @@
 @import 'main';
+
+.template-name-wrapper {
+  @include flex-item-center;
+  gap: 10px;
+}

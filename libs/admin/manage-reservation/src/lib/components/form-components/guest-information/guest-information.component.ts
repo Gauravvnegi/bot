@@ -66,13 +66,15 @@ export class GuestInformationComponent implements OnInit {
       guestDetails: ['', [Validators.required]],
     };
     this.parentFormGroup.addControl('guestInformation', this.fb.group(data));
-    this.formService.currentJourneyStatus.subscribe((res) => {
-      if (res)
-        this.isCheckinOrCheckout =
-          res === ReservationCurrentStatus.INHOUSE ||
-          res === ReservationCurrentStatus.DUEOUT ||
-          res === ReservationCurrentStatus.CHECKEDOUT;
-    });
+    this.$subscription.add(
+      this.formService.currentJourneyStatus.subscribe((res) => {
+        if (res)
+          this.isCheckinOrCheckout =
+            res === ReservationCurrentStatus.INHOUSE ||
+            res === ReservationCurrentStatus.DUEOUT ||
+            res === ReservationCurrentStatus.CHECKEDOUT;
+      })
+    );
   }
 
   /**
@@ -128,10 +130,12 @@ export class GuestInformationComponent implements OnInit {
         label: `${event.firstName} ${event.lastName}`,
         value: event.id,
       };
-      this.formService.offerType.subscribe((res) => {
-        if (res && res === 'COMPANY' && this.reservationId)
-          this.inputControls.offerId.reset();
-      });
+      this.$subscription.add(
+        this.formService.offerType.subscribe((res) => {
+          if (res && res === 'COMPANY' && this.reservationId)
+            this.inputControls.offerId.reset();
+        })
+      );
     }
   }
 

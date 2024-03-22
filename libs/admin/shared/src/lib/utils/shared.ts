@@ -1,3 +1,4 @@
+import { DateService } from '@hospitality-bot/shared/utils';
 import { DiscountType } from '../constants';
 import { Option } from '@hospitality-bot/admin/shared';
 
@@ -175,4 +176,22 @@ export function deepCopy<T>(obj: T): T {
   }
 
   return copy as T;
+}
+
+export function getCalendarType(startDate, endDate, timezone) {
+  const dateDiff = DateService.getDateDifference(startDate, endDate, timezone);
+  const monthDiff = DateService.getMonthDifference(
+    startDate,
+    endDate,
+    timezone
+  );
+  if (dateDiff >= 0 && dateDiff < 30) {
+    return 'date';
+  } else if (dateDiff >= 30 && dateDiff <= 98) {
+    return 'week';
+  } else if (dateDiff > 98 && monthDiff <= 14) {
+    return 'month';
+  } else {
+    return 'year';
+  }
 }

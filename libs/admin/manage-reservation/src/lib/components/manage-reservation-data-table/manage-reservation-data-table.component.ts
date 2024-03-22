@@ -147,10 +147,12 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    */
   listenForGlobalFilters(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.globalFilterService.globalFilter$.subscribe((data) => {
-      this.globalQueries = [...data['dateRange'].queryValue];
-      this.initTableValue();
-    });
+    this.$subscription.add(
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.globalQueries = [...data['dateRange'].queryValue];
+        this.initTableValue();
+      })
+    );
   }
 
   loadData(event: LazyLoadEvent): void {
@@ -163,33 +165,35 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    */
   initTableValue() {
     this.loading = true;
-    this.manageReservationService
-      .getReservationItems<ReservationListResponse>(
-        this.getQueryConfig(),
-        this.entityId
-      )
-      .subscribe(
-        (res) => {
-          // Process the response and update the data
-          this.reservationLists = new ReservationList().deserialize(res);
-          this.roomReservationList = res?.records;
-          this.values = this.reservationLists.reservationData;
-          this.initFilters(
-            this.reservationLists.entityTypeCounts,
-            this.reservationLists.entityStateCounts,
-            this.reservationLists.total,
-            reservationStatusDetails
-          );
-        },
-        (error) => {
-          // Handle error if needed
-          this.values = [];
-          this.loading = false;
-        },
-        () => {
-          this.loading = false;
-        }
-      );
+    this.$subscription.add(
+      this.manageReservationService
+        .getReservationItems<ReservationListResponse>(
+          this.getQueryConfig(),
+          this.entityId
+        )
+        .subscribe(
+          (res) => {
+            // Process the response and update the data
+            this.reservationLists = new ReservationList().deserialize(res);
+            this.roomReservationList = res?.records;
+            this.values = this.reservationLists.reservationData;
+            this.initFilters(
+              this.reservationLists.entityTypeCounts,
+              this.reservationLists.entityStateCounts,
+              this.reservationLists.total,
+              reservationStatusDetails
+            );
+          },
+          (error) => {
+            // Handle error if needed
+            this.values = [];
+            this.loading = false;
+          },
+          () => {
+            this.loading = false;
+          }
+        )
+    );
   }
 
   initDetails() {

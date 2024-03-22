@@ -1,0 +1,57 @@
+<div class="container">
+  <div class="left">
+    <hospitality-bot-doughnut
+      label="What drivers are leading to disengagement at the Property?"
+      [config]="{
+        total: complaintBreakDownData?.total,
+        Labels: complaintBreakDownData?.complaintCategoryStats?.labels,
+        Data: complaintBreakDownData?.complaintCategoryStats?.data,
+        Colors: [
+          {
+            backgroundColor:
+              complaintBreakDownData?.complaintCategoryStats?.backgroundColor,
+            borderColor:
+              complaintBreakDownData?.complaintCategoryStats?.borderColor
+          }
+        ]
+      }"
+    >
+    </hospitality-bot-doughnut>
+  </div>
+
+  <div class="right">
+    <div class="right__top">
+      <div class="header">Complaint Break-down</div>
+      <div class="progress">
+        <ng-container *ngFor="let item of distributionStatsData?.data">
+          <div
+            class="score"
+            [style.width]="item?.score()"
+            [style.backgroundColor]="item.color"
+          ></div>
+        </ng-container>
+      </div>
+      <div class="right__top__stat-container">
+        <ng-container *ngFor="let item of distributionStatsData?.data">
+          <div>
+            <div class="label">
+              {{ item?.label }}
+              <span class="label__count">{{ item?.count }}</span>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="right__bottom">
+      <hospitality-bot-dual-plot
+        title="How is Complaint & Closure Rate varying over a period of time ?"
+        [config]="{
+          datasets: complaintBreakDownData?.complaintsData?.data,
+          labels: labels
+        }"
+        [isFilter]="true"
+      >
+      </hospitality-bot-dual-plot>
+    </div>
+  </div>
+</div>

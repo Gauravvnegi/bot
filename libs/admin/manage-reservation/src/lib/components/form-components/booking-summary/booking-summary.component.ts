@@ -154,47 +154,49 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   rateImprovement(data: RoomReservationFormData) {
-    this.manageReservationService
-      .rateImprovement(this.entityId, this.reservationId, data)
-      .subscribe((res) => {
-        if (res?.chargedAmount > 0) {
-          let modalRef: DynamicDialogRef;
-          const modalData: Partial<AddRefundComponent> = {
-            heading: 'Update Reservation',
-            isReservationPopup: true,
-            chargedAmount: res.chargedAmount,
-          };
-          modalRef = openModal({
-            config: {
-              width: '40%',
-              styleClass: 'confirm-dialog',
-              data: modalData,
-            },
-            component: AddRefundComponent,
-            dialogService: this.dialogService,
-          });
+    this.$subscription.add(
+      this.manageReservationService
+        .rateImprovement(this.entityId, this.reservationId, data)
+        .subscribe((res) => {
+          if (res?.chargedAmount > 0) {
+            let modalRef: DynamicDialogRef;
+            const modalData: Partial<AddRefundComponent> = {
+              heading: 'Update Reservation',
+              isReservationPopup: true,
+              chargedAmount: res.chargedAmount,
+            };
+            modalRef = openModal({
+              config: {
+                width: '40%',
+                styleClass: 'confirm-dialog',
+                data: modalData,
+              },
+              component: AddRefundComponent,
+              dialogService: this.dialogService,
+            });
 
-          modalRef.onClose.subscribe(
-            (res: { chargedAmount: number; remarks: string }) => {
-              if (res) {
-                this.updateReservation(
-                  {
-                    chargedAmount: res?.chargedAmount,
-                    remarks: res?.remarks,
-                    ...data,
-                  },
-                  'ROOM_TYPE'
-                );
+            modalRef.onClose.subscribe(
+              (res: { chargedAmount: number; remarks: string }) => {
+                if (res) {
+                  this.updateReservation(
+                    {
+                      chargedAmount: res?.chargedAmount,
+                      remarks: res?.remarks,
+                      ...data,
+                    },
+                    'ROOM_TYPE'
+                  );
+                }
               }
-            }
-          );
-        } else {
-          this.updateReservation(
-            { chargedAmount: res?.chargedAmount, ...data },
-            'ROOM_TYPE'
-          );
-        }
-      });
+            );
+          } else {
+            this.updateReservation(
+              { chargedAmount: res?.chargedAmount, ...data },
+              'ROOM_TYPE'
+            );
+          }
+        })
+    );
   }
 
   createReservation(

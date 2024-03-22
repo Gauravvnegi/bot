@@ -52,15 +52,17 @@ export class PaymentRuleComponent implements OnInit {
       })
     );
     this.addFormGroup();
-    this.formService.currentJourneyStatus.subscribe((res) => {
-      if (res) {
-        this.isCheckedout = res === ReservationCurrentStatus.CHECKEDOUT;
-        this.isCheckedIn =
-          res &&
-          (res === ReservationCurrentStatus.INHOUSE ||
-            res === ReservationCurrentStatus.DUEOUT);
-      }
-    });
+    this.$subscription.add(
+      this.formService.currentJourneyStatus.subscribe((res) => {
+        if (res) {
+          this.isCheckedout = res === ReservationCurrentStatus.CHECKEDOUT;
+          this.isCheckedIn =
+            res &&
+            (res === ReservationCurrentStatus.INHOUSE ||
+              res === ReservationCurrentStatus.DUEOUT);
+        }
+      })
+    );
     this.registerPaymentRuleChange();
   }
 
@@ -87,13 +89,15 @@ export class PaymentRuleComponent implements OnInit {
   }
 
   registerPaymentRuleChange() {
-    this.inputControl.amountToPay.valueChanges.subscribe((res) => {
-      if (!res) this.inputControl.deductedAmount.setValue(this.totalAmount);
-      if (res && this.inputControl.amountToPay.valid) {
-        const newDeductedAmount = this.totalAmount - +res;
-        this.inputControl.deductedAmount.setValue(newDeductedAmount);
-      }
-    });
+    this.$subscription.add(
+      this.inputControl.amountToPay.valueChanges.subscribe((res) => {
+        if (!res) this.inputControl.deductedAmount.setValue(this.totalAmount);
+        if (res && this.inputControl.amountToPay.valid) {
+          const newDeductedAmount = this.totalAmount - +res;
+          this.inputControl.deductedAmount.setValue(newDeductedAmount);
+        }
+      })
+    );
   }
 
   /**

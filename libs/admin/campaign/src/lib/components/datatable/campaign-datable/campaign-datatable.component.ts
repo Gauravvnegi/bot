@@ -314,7 +314,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         order: sharedConfig.defaultOrder,
         entityType: this.selectedTab,
       },
-      ...this.getSelectedQuickReplyFilters(),
+      ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
     ];
 
     if (this.tableType === 'campaignType') {

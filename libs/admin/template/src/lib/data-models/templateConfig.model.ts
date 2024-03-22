@@ -59,6 +59,7 @@ export class Template implements IDeserializable {
   topicName: string;
   updatedAt: number;
   createdAt: number;
+  channel: string;
 
   deserialize(input: any) {
     Object.assign(
@@ -76,7 +77,8 @@ export class Template implements IDeserializable {
       set({}, 'isShared', get(input, ['isShared'])),
       set({}, 'template', new Templates().deserialize(input.template).records),
       set({}, 'updatedAt', get(input, ['updatedAt'])),
-      set({}, 'createdAt', get(input, ['createdAt']))
+      set({}, 'createdAt', get(input, ['createdAt'])),
+      set({}, 'channel', get(input, ['channel']))
     );
     return this;
   }

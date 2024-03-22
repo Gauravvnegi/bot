@@ -48,6 +48,8 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
 
   loading = false;
 
+  limit = 10;
+
   campaignType: CampaignType;
   constructor(
     private fb: FormBuilder,
@@ -116,11 +118,20 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
           this.inputControls?.topic.patchValue(this.campaignForm.topic, {
             emitEvent: false,
           });
-          this.getTemplateByTopicId(this.campaignForm.topic);
         }
-        this.getTemplateForAllTopics();
+        this.getData();
       })
     );
+  }
+
+  getData() {
+    if (this.campaignType === 'EMAIL') {
+      this.campaignForm?.topic &&
+        this.getTemplateByTopicId(this.campaignForm.topic);
+      this.getTemplateForAllTopics();
+    } else {
+      this.getWhatsappTemplates();
+    }
   }
 
   listenChanges() {
@@ -137,6 +148,30 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
   listenForTemplateChanges() {
     this.inputControls.template.valueChanges.subscribe((res) =>
       this.templateTypeSelection(res)
+    );
+  }
+
+  getWhatsappTemplates() {
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams([
+        {
+          entityState: 'ACTIVE',
+          limit: this.limit,
+          entityType: 'WHATSAPP',
+        },
+      ]),
+    };
+    this.$subscription.add(
+      this.campaignService
+        .getHotelTemplate(config, this.entityId)
+        .subscribe((res) => {
+          this.templateTopicList = [
+            {
+              templates: res.records,
+              totalTemplate: res.entityTypeCounts.WHATSAPP,
+            },
+          ];
+        })
     );
   }
 

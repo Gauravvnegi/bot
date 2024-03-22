@@ -55,7 +55,13 @@ type ChartData = {
   data: number[];
 };
 
-export type ChartOptions = {
+export type DualPlotFilterOptions = {
+  label: string;
+  color: string;
+  icon: string;
+};
+
+export interface DualPlotOptions {
   responsive: boolean;
   elements: {
     line: {
@@ -70,8 +76,19 @@ export type ChartOptions = {
     };
   };
   scales: {
-    xAxes: Array<{ gridLines: { display: boolean } }>;
-    yAxes: Array<{ gridLines: { display: boolean }; ticks: { min: number } }>;
+    xAxes: {
+      gridLines: {
+        display: boolean;
+      };
+    }[];
+    yAxes: {
+      gridLines: {
+        display: boolean;
+      };
+      ticks: {
+        min: number;
+      };
+    }[];
   };
   tooltips: {
     backgroundColor: string;
@@ -83,39 +100,30 @@ export type ChartOptions = {
     xPadding: number;
     yPadding: number;
   };
-};
+}
 
-type ChartColors = {
+export interface DualPlotGraphColor {
   borderColor: string;
   backgroundColor: string;
   pointBackgroundColor: string;
   pointBorderColor: string;
   pointHoverBackgroundColor: string;
   pointHoverBorderColor: string;
-};
+}
 
-type ChartConfigOptions = {
-  nps: ChartOptions;
-};
+export type DualPlotDataset = {
+  backgroundColor?: string;
+  borderColor?: string;
+  data: number[];
+  label: string;
+  fill: boolean;
+} & Partial<DualPlotGraphColor>;
 
-type ChartConfigColors = {
-  nps: ChartColors[];
-};
-
-export type ChartConfigType = {
-  options: ChartConfigOptions;
-  colors: ChartConfigColors;
-  type: {
-    line: 'line';
-    bar: 'bar';
-  };
-};
-
-export type DualPlotChartConfig = {
-  data: ChartData[];
+export interface DualPlotChartConfig {
+  data: DualPlotDataset[];
   labels: string[];
-  options: ChartOptions;
-  colors: ChartColors[];
+  options: DualPlotOptions;
+  colors: DualPlotGraphColor[];
   legend: boolean;
   type: 'line' | 'bar';
-};
+}

@@ -9,7 +9,9 @@ import { PreArrivalDatatableComponent } from './components/pre-arrival-datatable
 import { PreArrivalPackagesComponent } from './components/pre-arrival-packages/pre-arrival-packages.component';
 import { ComplaintAnalyticsComponent } from './components/complaint-analytics/complaint-analytics.component';
 import { ComplaintBifurcationComponent } from './components/stats/complaint-bifurcation/complaint-bifurcation.component';
-
+import { ComplaintDisengagementComponent } from './components/stats/complaint-disengagement/complaint-disengagement.component';
+import { ComplaintBreakdownComponent } from './components/stats/complaint-breakdown/complaint-breakdown.component';
+import { AvgTimeComponent } from './components/stats/avg-time/avg-time.component';
 const appRoutes: Route[] = [
   {
     path: '',
@@ -32,5 +34,8 @@ export class AdminRequestAnalyticsRoutingModule {
     PreArrivalDatatableComponent,
     ComplaintAnalyticsComponent,
     ComplaintBifurcationComponent,
+    ComplaintDisengagementComponent,
+    ComplaintBreakdownComponent,
+    AvgTimeComponent,
   ];
 }

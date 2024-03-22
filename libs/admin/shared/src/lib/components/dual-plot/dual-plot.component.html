@@ -4,7 +4,7 @@
       <div class="icon" *ngIf="icon">
         <img [src]="icon" alt="icon" />
       </div>
-      <div class="stat-title">{{ label }}</div>
+      <div class="stat-title">{{ title }}</div>
     </div>
 
     <div class="menu-container">
@@ -24,39 +24,50 @@
       </div>
     </div>
   </div>
+
+  <hospitality-bot-tab-group
+    *ngIf="tabFilterOptions?.length"
+    [listItems]="tabFilterOptions"
+    (selectedTabChange)="onSelectedTabFilterChange.emit($event)"
+  >
+  </hospitality-bot-tab-group>
+
   <div class="line-chart">
     <canvas
-      *skeleton="chart == undefined; height: '65vh'; width: '100%'"
+      *skeleton="datasets == undefined; height: '65vh'; width: '100%'"
       baseChart
       class="line-chart__canvas"
-      [datasets]="chart.data"
-      [labels]="chart.labels"
-      [options]="chart.options"
-      [colors]="chart.colors"
-      [legend]="chart.legend"
-      [chartType]="chart.type"
+      [datasets]="datasets"
+      [labels]="labels"
+      [options]="options"
+      [colors]="colors"
+      [legend]="legend"
+      [chartType]="graphType"
     >
     </canvas>
   </div>
 
-  <div class="stat-filter">
+  <div class="stat-filter" *ngIf="isFilter">
     <div
       class="stat-filter-label"
       (click)="onFilterCLick(filterIndex)"
-      *ngFor="let filter of filterOptions; let filterIndex = index"
+      *ngFor="let filter of datasets; let filterIndex = index"
     >
       <input
         class="filters"
         type="checkbox"
         *skeleton="
-          filterOptions == undefined;
+          datasets == undefined;
           height: '35px';
           width: '90px';
           margin: '0 0 10px 0'
         "
       />
-      <img [src]="filter.icon" alt="" />
-      <p class="stat-lable-title">
+      <div
+        class="legend-border"
+        [style.backgroundColor]="filter?.backgroundColor"
+      ></div>
+      <p class="stat-filter-label-title">
         {{ filter.label }}
       </p>
     </div>

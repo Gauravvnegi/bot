@@ -7,7 +7,7 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 1em;
+  gap: 0.5em;
 
   .header {
     display: flex;
@@ -65,9 +65,7 @@
 .line-chart__canvas {
   max-width: calc(100% - 30px);
   max-height: 65vh;
-  margin: 0 15px;
   margin-bottom: 10px;
-  // max-height: 350px;
 }
 
 .stat-filter {

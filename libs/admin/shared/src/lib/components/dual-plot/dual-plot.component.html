@@ -24,6 +24,14 @@
       </div>
     </div>
   </div>
+
+  <hospitality-bot-tab-group
+    *ngIf="tabFilterOptions?.length"
+    [listItems]="tabFilterOptions"
+    (selectedTabChange)="onSelectedTabFilterChange.emit($event)"
+  >
+  </hospitality-bot-tab-group>
+
   <div class="line-chart">
     <canvas
       *skeleton="datasets == undefined; height: '65vh'; width: '100%'"

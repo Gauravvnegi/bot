@@ -1,4 +1,12 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {
   DualPlotChartConfig,
@@ -45,6 +53,8 @@ export class DualPlotComponent implements OnInit {
   useForm: FormGroup;
   chartTypeOption = chartTypeConfig;
 
+  @Output() onSelectedTabFilterChange = new EventEmitter(null);
+
   @Input() graphType: GraphType = GraphType.LINE;
   @Input() isSwitchAble: boolean = false;
   @Input() title: string;
@@ -53,6 +63,7 @@ export class DualPlotComponent implements OnInit {
   @Input() icon: string;
   @Input() isFilter: boolean = false;
 
+  @Input() tabFilterOptions: any[];
   @Input() options: DualPlotOptions = defaultDualPlotOptions; //to customize graph design
   @Input() colors: DualPlotGraphColor[] = defaultDualPlotColors; //plotted graph colors
   @Input() datasets: DualPlotDataset[] = []; //graph data
@@ -60,7 +71,6 @@ export class DualPlotComponent implements OnInit {
   @Input() set config(value: DualPlotChartConfig) {
     if (value) {
       Object.assign(this, value);
-      this.initDualPlotColors();
     }
   }
 
@@ -101,6 +111,12 @@ export class DualPlotComponent implements OnInit {
     });
 
     chart.update();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.datasets || changes.config) {
+      this.initDualPlotColors();
+    }
   }
 
   initDualPlotColors() {

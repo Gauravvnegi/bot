@@ -71,14 +71,19 @@ export class ComplaintsData {
 }
 
 export class ComplaintCategoryBreakDownStats {
-  data: { label: string; score: number; colorCode: string }[] = [];
+  data: { label: string; score: number; colorCode: string; percentage }[] = [];
+  total: number = 0;
 
   deserialize(input: CategoryStatsResponse) {
     Object.entries(input).forEach(([key, value]) => {
+      this.total += value;
       this.data.push({
         label: key,
         score: value,
         colorCode: '#4BC0C0',
+        percentage: () => {
+          return `${(value * 100) / this.total}`;
+        },
       });
     });
     return this;

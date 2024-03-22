@@ -13,6 +13,7 @@ import { ListingService } from '../../services/listing.service';
 import { TranslateService } from '@ngx-translate/core';
 import {
   AdminUtilityService,
+  ModuleNames,
   NavRouteOptions,
   Option,
 } from 'libs/admin/shared/src';
@@ -132,6 +133,16 @@ export class EditListingComponent implements OnInit, OnDestroy {
         this.initNavRoutes();
       })
     );
+  }
+
+  createTopic() {
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.TOPIC,
+      additionalPath: 'create-topic',
+      queryParams: {
+        entityId: this.entityId,
+      },
+    });
   }
 
   /**

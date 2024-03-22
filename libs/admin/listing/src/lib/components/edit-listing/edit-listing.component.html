@@ -42,22 +42,42 @@
       label="Name"
       maxLength="60"
     ></hospitality-bot-input>
-    <hospitality-bot-select
+    <!-- <hospitality-bot-select
       class="half-width"
       label="Topic"
       controlName="topicName"
       [options]="topicList"
-    ></hospitality-bot-select>
+    ></hospitality-bot-select> -->
+    <hospitality-bot-multi-select
+      class="one-third-width"
+      controlName="topicName"
+      [options]="topicList"
+      label="Topic"
+      [props]="{
+        isAsync: true,
+        createPrompt: '+ Create New Topic',
+        placeholder: 'Select Topic'
+      }"
+      (onCreate)="createTopic()"
+    >
+    </hospitality-bot-multi-select>
 
-    <div class="des-template">
-      <div class="des-template__label">Description</div>
+    <!-- <div class="des-template">
+      <div class="des-template__label">Description*</div>
       <div class="des-template__input">
         <hospitality-bot-template-editor
           controlName="description"
           [isSimpleEditor]="true"
         ></hospitality-bot-template-editor>
       </div>
-    </div>
+    </div> -->
+
+    <hospitality-bot-input
+      class="full-width"
+      controlName="description"
+      label="Description"
+      maxLength="200"
+    ></hospitality-bot-input>
   </form>
 
   <div class="table-block" *ngIf="!loading">

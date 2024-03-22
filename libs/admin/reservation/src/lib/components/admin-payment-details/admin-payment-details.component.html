@@ -1,4 +1,4 @@
-<div class="material-body">
+<div class="material-body" id="payment-wrapper">
   <div class="payment-header">
     <label class="heading">Payment Summary</label>
     <ng-container [ngSwitch]="getPaymentStatus()">
@@ -319,7 +319,9 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-element>
                   <tr>
-                    <td class="transaction-id">{{ element?.transactionId || '--' }}</td>
+                    <td class="transaction-id">
+                      {{ element?.transactionId || '--' }}
+                    </td>
                     <td>
                       {{ element?.created | date: 'MMM d, h:mm a, z' || '--' }}
                     </td>

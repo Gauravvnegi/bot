@@ -82,7 +82,15 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        {{ rowData.email }}
+        <div class="primary-text">
+          <a
+            (click)="$event.stopPropagation()"
+            class="link"
+            href="mailto:{{ rowData.email }}"
+          >
+            <u> {{ rowData.email }}</u>
+          </a>
+        </div>
       </td>
       <td>
         {{ rowData.salutation }}
@@ -97,7 +105,15 @@
         {{ rowData.companyName }}
       </td>
       <td>
-        {{ rowData.mobile }}
+        <div class="primary-text">
+          <a
+            (click)="$event.stopPropagation()"
+            class="link"
+            href="tel:{{ rowData.mobile }}"
+          >
+            <u> {{ rowData.mobile }}</u>
+          </a>
+        </div>
       </td>
     </tr>
   </ng-template>

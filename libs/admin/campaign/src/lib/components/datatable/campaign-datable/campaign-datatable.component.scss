@@ -148,6 +148,24 @@
   }
 }
 
+.read {
+  background-color: rgba(82, 179, 63, 0.1);
+  color: $posCompare;
+  &__value {
+    color: $white;
+    background-color: $posCompare;
+  }
+}
+
+.sent {
+  background-color: rgba(37, 162, 226, 0.1);
+  color: $load-more;
+  &__value {
+    color: $white;
+    background-color: $load-more;
+  }
+}
+
 .failed {
   background-color: rgba(240, 13, 42, 0.1);
   color: $mediumRed;

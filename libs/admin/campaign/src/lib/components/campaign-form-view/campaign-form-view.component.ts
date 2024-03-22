@@ -134,7 +134,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
   initForm() {
     this.useForm = this.fb.group({
       campaignName: ['', [Validators.required]],
-      topic: ['', [Validators.required]],
+      topic: [''],
       to: [[]],
       from: ['', [Validators.required]],
       event: [''],
@@ -219,7 +219,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const formData = this.campaignFormService.posFormData(
+    const formData = this.campaignFormService.postFormData(
       this.useForm.getRawValue() as CampaignForm,
       this.campaignType,
       action

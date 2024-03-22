@@ -17,14 +17,9 @@
         controlName="topic"
         label="Topic"
         [options]="topicList | async"
-      ></hospitality-bot-select>
-    </ng-container>
-    <ng-container *ngIf="campaignType === 'WHATSAPP'">
-      <hospitality-bot-select
-        class="half-width"
-        controlName="topic"
-        label="Topic"
-        [options]="topicList | async"
+        [props]="{
+          placeholder: 'Select Topic'
+        }"
       ></hospitality-bot-select>
     </ng-container>
   </div>
@@ -35,6 +30,7 @@
         [entityId]="entityId"
         [template]="template"
         (selectedTemplate)="selectedTemplate($event)"
+        [campaignType]="campaignType"
       ></hospitality-bot-topic-templates>
       <div *ngIf="!isLast" class="line"></div>
     </ng-container>

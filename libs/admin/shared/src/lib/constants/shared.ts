@@ -38,6 +38,7 @@ export enum StatCardImageUrls {
   AverageTicket = 'assets/svg/tickets.svg',
   AverageTime = 'assets/svg/time-taken.svg',
   Agent = 'assets/svg/agent.svg',
+  Group = 'assets/images/group-icon.png',
 }
 
 export enum DiscountType {

@@ -23,7 +23,12 @@
     <div class="right__top">
       <div class="header">Complaint Break-down</div>
       <div class="progress">
-        <ng-container *ngFor="let item of distributionStatsData?.data">
+        <ng-container
+          *ngFor="
+            let item of complaintBreakDownData?.distributionStats?.data;
+            let i = index
+          "
+        >
           <div
             class="score"
             [style.width]="item?.score()"
@@ -32,7 +37,9 @@
         </ng-container>
       </div>
       <div class="right__top__stat-container">
-        <ng-container *ngFor="let item of distributionStatsData?.data">
+        <ng-container
+          *ngFor="let item of complaintBreakDownData?.distributionStats?.data"
+        >
           <div>
             <div class="label">
               {{ item?.label }}

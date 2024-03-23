@@ -12,7 +12,7 @@ import {
   StatCard,
   manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { AnalyticsService } from '../../services/analytics.service';
 import { AverageStats, DistributionStats } from '../../types/response.types';
@@ -66,11 +66,11 @@ export class ComplaintAnalyticsComponent implements OnInit {
 
   statCard: StatCard[] = [];
   agentStats: StatCard;
+  ticketsStats: any[];
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.listenForGlobalFilters();
-    this.getAgentStats();
   }
 
   listenForGlobalFilters(): void {
@@ -98,35 +98,35 @@ export class ComplaintAnalyticsComponent implements OnInit {
           calenderType,
         ];
         this.statCard = [];
-        this.getPerDayStats();
         this.getAgentStats();
+        this.initTicketsCreatedStats();
       })
     );
   }
 
-  getConfig() {
-    const config = {
-      params: this.adminUtilityService.makeQueryParams([...this.globalQueries]),
-    };
-    return config;
+  //resolved
+  initTicketsCreatedStats() {
+    forkJoin([
+      this.getPerDayStats('ALL'),
+      this.getPerDayStats('FOCUSED'),
+    ]).subscribe(([teamResponse, individualResponse]) => {
+      this.ticketsStats = new AverageRequestStats().deserialize(
+        teamResponse,
+        individualResponse
+      ).data;
+    });
   }
 
-  getPerDayStats() {
-    this.analyticsService
-      .getPerDayRequestStats(this.getConfig())
-      .subscribe((res: AverageStats) => {
-        const statsData = new AverageRequestStats().deserialize(res);
-        this.createdTicketCount = statsData.createdTickets;
-        this.closedTicketCount = statsData.resolvedTickets;
-        statsData.averageStats.forEach((stat) => {
-          this.statCard.push({
-            key: stat.key,
-            label: stat.label,
-            score: stat.value,
-            additionalData: stat.value,
-          });
-        });
-      });
+  getPerDayStats(statsType: 'ALL' | 'FOCUSED') {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          statsType: statsType,
+        },
+      ]),
+    };
+    return this.analyticsService.getPerDayRequestStats(config);
   }
 
   getAgentStats() {
@@ -150,8 +150,8 @@ export class ComplaintAnalyticsComponent implements OnInit {
   refreshStats() {
     this.analyticsService.refreshStats.emit(true);
     this.statCard = [];
-    this.getPerDayStats();
     this.getAgentStats();
+    this.initTicketsCreatedStats();
   }
 
   createServiceItem() {

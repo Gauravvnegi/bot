@@ -1,38 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { ComplaintBaseComponent } from '../complaint-analytics-base.component';
+import { Subscription } from 'rxjs';
+import { ComplaintCategoryBreakDownStats } from '../../../models/complaint.analytics.model';
 import { AnalyticsService } from '../../../services/analytics.service';
-import { AdminUtilityService } from '@hospitality-bot/admin/shared';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { DateService } from '@hospitality-bot/shared/utils';
-type HotelService = {
-  label: string;
-  score: number;
-  positive: number;
-  negative: number;
-  neutral: number;
-  minScore: number;
-  maxScore: number;
-  colorCode: string;
-};
+
 @Component({
   selector: 'complaint-breakdown',
   templateUrl: './complaint-breakdown.component.html',
   styleUrls: ['./complaint-breakdown.component.scss'],
 })
-export class ComplaintBreakdownComponent extends ComplaintBaseComponent
-  implements OnInit {
-  constructor(
-    analyticsService: AnalyticsService,
-    adminUtilityService: AdminUtilityService,
-    globalFilterService: GlobalFilterService,
-    dateService: DateService
-  ) {
-    super(
-      analyticsService,
-      adminUtilityService,
-      globalFilterService,
-      dateService
+export class ComplaintBreakdownComponent implements OnInit {
+  label: string = 'Complaint Breakdown';
+  complaintCategoryBreakDownStats: ComplaintCategoryBreakDownStats;
+  $subscription = new Subscription();
+
+  constructor(private AnalyticsService: AnalyticsService) {}
+
+  ngOnInit(): void {
+    this.$subscription.add(
+      this.AnalyticsService.$complaintBreakDownStatsData.subscribe((res) => {
+        if (res)
+          this.complaintCategoryBreakDownStats =
+            res.complaintCategoryBreakDownStats;
+      })
     );
   }
-  label: string = 'Complaint Breakdown';
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }

@@ -88,6 +88,11 @@
         postControlName="containerCharge"
         [options]="currencies"
         label="Container Charge"
+        [defaultProps]="{
+          post: {
+            type: 'number'
+          }
+        }"
         [props]="{
           placeholder: 'Enter Container Charge'
         }"

@@ -57,13 +57,27 @@ export class AvgTimeComponent implements OnInit {
             {
               data: [],
               label: 'Line',
+              type: 'line',
+              fill: false,
+              borderColor: ['#000000'],
+              backgroundColor: ['#000000'],
+              tooltipHidden: false,
+            },
+            {
+              data: [],
+              label: 'Line',
+              type: 'bar',
               fill: false,
               backgroundColor: '#4BC0C0',
             },
           ];
 
           this.labels = Object.keys(res.categoryStats);
-          datasets[0].data = Object.values(res.categoryStats) as any;
+          const data = Object.values(res.categoryStats) as any;
+          datasets[1].data = data;
+          const sum = data.reduce((acc, val) => acc + val);
+          datasets[0].data = new Array(data.length).fill(sum / data.length);
+
           this.data = datasets;
         })
     );
@@ -156,8 +170,7 @@ const options = {
     xAxes: [
       {
         ticks: {
-          min: 'Monday',
-          max: 'Sunday',
+          beginAtZero: true,
         },
         gridLines: {
           display: false,

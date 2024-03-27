@@ -47,7 +47,7 @@ export type RequestStat = {
 export type AverageStats = {
   averageStats: {
     averageCreatedJobs: number;
-    averagetTimePerJob: number;
+    averageTimePerJob: number;
     averageResolvedJobs: number;
     timeoutJobs: number;
   };

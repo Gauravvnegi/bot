@@ -120,7 +120,7 @@ export class DualPlotComponent implements OnInit {
   }
 
   initDualPlotColors() {
-    this.colors = this.datasets.map((item, index) => {
+    this.colors = this.datasets?.map((item, index) => {
       const defaultColors = defaultDualPlotColors[index];
       return {
         backgroundColor: item?.backgroundColor || defaultColors.backgroundColor,

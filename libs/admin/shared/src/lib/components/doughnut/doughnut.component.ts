@@ -72,6 +72,7 @@ const doughnutGraphDefaultConfig = {
   ],
   Options: DefaultDoughnutConfig,
 };
+
 @Component({
   selector: 'hospitality-bot-doughnut',
   templateUrl: './doughnut.component.html',
@@ -97,6 +98,52 @@ export class DoughnutComponent implements OnInit {
       this.initTransparentGraph(
         this.doughnutGraphData.Data.findIndex((item) => item !== 0)
       );
+    } else {
+      /**
+       * need to refactor just random code
+       */
+      this.total = 0;
+
+      this.backUpData = this.doughnutTransparentGraphData = {
+        Labels: ['No Data'],
+        Data: [100],
+        Type: 'doughnut',
+        Legend: false,
+        Colors: [
+          {
+            backgroundColor: ['#D5D1D1'],
+            borderColor: ['#D5D1D1'],
+          },
+        ],
+        Options: DefaultDoughnutConfig,
+      };
+
+      this.doughnutTransparentGraphData = {
+        Labels: ['No Data'],
+        Data: [100],
+        Type: 'doughnut',
+        Legend: false,
+        Colors: [
+          {
+            backgroundColor: ['#D5D1D1'],
+            borderColor: ['#D5D1D1'],
+          },
+        ],
+        Options: DefaultDoughnutConfig,
+      };
+      this.doughnutGraphData = {
+        Labels: ['No Data'],
+        Data: [100],
+        Type: 'doughnut',
+        Legend: false,
+        Colors: [
+          {
+            backgroundColor: ['#D5D1D1'],
+            borderColor: ['#D5D1D1'],
+          },
+        ],
+        Options: DefaultDoughnutConfig,
+      };
     }
   }
   @Input() total: number = 0;
@@ -128,15 +175,9 @@ export class DoughnutComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  resetData() {
-    this.doughnutGraphData = doughnutGraphDefaultConfig;
-    this.doughnutTransparentGraphData = doughnutTransparentGraphDefaultConfig;
-  }
-
   handleCircularGraphClick(data: any) {
-    if (data.event.type === 'click') {
+    if (data.event.type === 'click' && this.doughnutGraphData.total) {
       const clickedIndex = data.active[0]?._index;
-      this.resetData();
       this.initGraphData(this.backUpData);
       this.initTransparentGraph(clickedIndex);
     }

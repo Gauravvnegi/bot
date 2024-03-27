@@ -59,7 +59,10 @@
                 class="half-width"
                 controlName="email"
                 [props]="{
-                  placeholder: 'Email'
+                  placeholder: 'Email',
+                  errorMessages: {
+                    pattern: 'Please enter a valid email address.'
+                  }
                 }"
               ></hospitality-bot-input>
             </div>
@@ -110,14 +113,14 @@
           </td>
           <td>
             <div class="cell-content" *ngIf="rowData; else emptyCell">
-              <hospitality-bot-input
-                class="half-width"
-                controlName="mobile"
+              <hospitality-bot-phone-number
+                preControlName="cc"
+                postControlName="mobile"
+                [label]="undefined"
                 [props]="{
-                  placeholder: 'Mobile No.',
-                  type: 'number'
+                  placeholder: 'Enter'
                 }"
-              ></hospitality-bot-input>
+              ></hospitality-bot-phone-number>
             </div>
           </td>
           <td (click)="removeContactField(rowData)">

@@ -1,0 +1,112 @@
+@import 'main';
+
+.wrapper {
+  display: flex;
+  gap: 1%;
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border: solid 1px #e2e2e2;
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+
+      &__title {
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      &__dropdown {
+      }
+    }
+    .graph {
+      display: flex;
+
+      &__left {
+        width: 50%;
+      }
+
+      &__right {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 20px;
+        gap: 1em;
+        .total {
+          display: flex;
+          flex-direction: column;
+          &__count {
+            font-size: 38px;
+            font-weight: 700;
+            line-height: 57px;
+            text-align: left;
+          }
+          &__label {
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 18px;
+            text-align: left;
+            color: #6d7580;
+          }
+        }
+
+        .labels {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1em;
+
+          .label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5em;
+
+            &__circle {
+              height: 1em;
+              width: 1em;
+              border-radius: 50%;
+              overflow: hidden;
+              color: black;
+            }
+
+            &__name {
+              font-size: 12px;
+              font-weight: 400;
+              line-height: 18px;
+              text-align: left;
+              color: ' #405060';
+            }
+
+            &__count {
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .stat-card-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    box-shadow: none;
+    column-gap: 1%;
+    row-gap: 4%;
+
+    .stat-card {
+      width: 49%;
+      background: $white;
+      border: solid 1px $borderCol;
+      box-shadow: 0px 3px 6px $boxShadow;
+      border-radius: 5px;
+    }
+  }
+}
+
+:host ::ng-deep {
+  hospitality-bot-stats-card .wrapper {
+    box-shadow: none !important;
+  }
+}

@@ -15,8 +15,9 @@ import { GraphData } from '../types/stats';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class MarketingDashboardComponent implements OnInit, OnDestroy {
-  welcomeMessage = 'Welcome To eMark-IT';
-  navRoutes = [{ label: 'eMark-IT Stats', link: './' }];
+  welcomeMessage = 'Welcome To your dashboard';
+  navRoutes = [{ label: 'eMark-IT Dashboard', link: './' }];
+
   $subscription = new Subscription();
   entityId: string;
   config: any;
@@ -127,7 +128,7 @@ export class MarketingDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  handleError = ({ error }) => { 
+  handleError = ({ error }) => {
     this.loading = false;
   };
 

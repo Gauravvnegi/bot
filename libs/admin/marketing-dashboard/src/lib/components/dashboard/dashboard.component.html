@@ -4,8 +4,25 @@
   [isBack]="false"
 >
 </hospitality-bot-navigation-header>
-<hospitality-bot-stats-view></hospitality-bot-stats-view>
+
 <div class="container">
+  <hospitality-bot-recent-campaign></hospitality-bot-recent-campaign>
+
+  <hospitality-bot-total-vs-new-contacts
+    class="half-width"
+  ></hospitality-bot-total-vs-new-contacts>
+
+  <hospitality-bot-contacts class="half-width"></hospitality-bot-contacts>
+  <hospitality-bot-sent-delivered-read
+    class="half-width"
+  ></hospitality-bot-sent-delivered-read>
+
+  <hospitality-bot-subscribe-vs-unsubscribe
+    class="half-width"
+  ></hospitality-bot-subscribe-vs-unsubscribe>
+</div>
+
+<!-- <div class="container">
   <div class="rate-contact-stat">
     <div class="rateGraph">
       <hospitality-bot-comparison-graph
@@ -27,4 +44,4 @@
       [loading]="loading"
     ></hospitality-bot-comparison-graph>
   </div>
-</div>
+</div> -->

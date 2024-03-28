@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormComponent } from '../form.components';
 import { ControlContainer } from '@angular/forms';
 
@@ -8,9 +8,16 @@ import { ControlContainer } from '@angular/forms';
   styleUrls: ['./chip-list.component.scss'],
 })
 export class ChipListComponent extends FormComponent implements OnInit {
+  @Output() onRemove = new EventEmitter();
+
   constructor(public controlContainer: ControlContainer) {
     super(controlContainer);
   }
 
   ngOnInit(): void {}
+
+  handleRemove(event: { originalEvent: PointerEvent; value: string }) {
+    event.originalEvent.stopPropagation();
+    this.onRemove.emit(event.value);
+  }
 }

@@ -8,6 +8,7 @@ import {
 import {
   CampaignForm,
   CampaignType,
+  PostCampaignForm,
   TemplateMode,
 } from '../../types/campaign.type';
 import { campaignRoutes } from '../../constant/route';
@@ -201,6 +202,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
       this.inputControls.subject.setValidators([Validators.required]);
     } else {
       this.resetValidators(this.inputControls.subject);
+      this.resetValidators(this.inputControls.from);
     }
   }
 
@@ -211,7 +213,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
   }
 
   handleSubmit(action: 'send' | 'save') {
-    if (this.useForm.invalid && action === 'send') {
+    if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
         'Invalid form: Please fix errors'
@@ -224,6 +226,34 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
       this.campaignType,
       action
     );
+
+    if (this.campaignId) {
+      this.updateCampaign(formData);
+    } else {
+      this.createCampaign(formData);
+    }
+  }
+
+  updateCampaign(formData: PostCampaignForm) {
+    this.$subscription.add(
+      this.campaignService
+        .updateCampaign(this.entityId, formData, this.campaignId)
+        .subscribe((res) => {
+          if (res) {
+            this.snackbarService.openSnackBarAsText(
+              `Campaign updated successfully`,
+              '',
+              { panelClass: 'success' }
+            );
+            this.routesConfigService.navigate({
+              subModuleName: ModuleNames.CAMPAIGN,
+            });
+          }
+        })
+    );
+  }
+
+  createCampaign(formData: PostCampaignForm) {
     this.$subscription.add(
       this.campaignService
         .createCampaign(this.entityId, formData)

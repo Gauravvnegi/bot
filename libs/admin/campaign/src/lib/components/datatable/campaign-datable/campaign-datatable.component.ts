@@ -39,7 +39,6 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   isResizableColumns = true;
   isAutoLayout = false;
   isCustomSort = true;
-  isAllTabFilterRequired = true;
   triggerInitialData = false;
   cols = campaignConfig.datatable.cols;
   globalQueries = [];
@@ -116,7 +115,6 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
 
   setTableType(value: 'campaignType' | 'campaignDetails') {
     this.tableType = value;
-    this.selectedTab = 'ALL';
     this.loadData();
   }
 
@@ -379,6 +377,8 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         {
           order: sharedConfig.defaultOrder,
           entityType: this.selectedTab,
+          exportType: 'CSV',
+          channel: this.selectedTab,
         },
         ...this.getSelectedQuickReplyFilters(),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
@@ -391,7 +391,8 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
             response,
             `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           ),
-        ({ error }) => (this.loading = false)
+        ({ error }) => (this.loading = false),
+        () => (this.loading = false)
       )
     );
   }

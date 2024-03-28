@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import {
   CampaignType,
+  PostCampaignForm,
   QueryConfig,
   TemplateType,
 } from '../types/campaign.type';
@@ -29,8 +30,19 @@ export class CampaignService extends ApiService {
     );
   }
 
-  createCampaign(entityId: string, formData) {
+  createCampaign(entityId: string, formData: PostCampaignForm) {
     return this.post(`/api/v1/cms/${entityId}/campaign`, formData);
+  }
+
+  updateCampaign(
+    entityId: string,
+    formData: PostCampaignForm,
+    campaignId: string
+  ) {
+    return this.patch(
+      `/api/v1/cms/${entityId}/campaign/${campaignId}`,
+      formData
+    );
   }
 
   /**
@@ -123,13 +135,9 @@ export class CampaignService extends ApiService {
    * @returns get api of export csv report of table.
    */
   exportCSV(entityId: string, config: QueryConfig) {
-    console.log('config', config);
-    return this.get(
-      `/api/v1/cms/${entityId}/campaign/export${config.queryObj}`,
-      {
-        responseType: 'blob',
-      }
-    );
+    return this.get(`/api/v1/cms/${entityId}/campaign${config.queryObj}`, {
+      responseType: 'blob',
+    });
   }
 
   /**

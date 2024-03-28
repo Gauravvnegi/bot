@@ -135,16 +135,6 @@ export class EditListingComponent implements OnInit, OnDestroy {
     );
   }
 
-  createTopic() {
-    this.routesConfigService.navigate({
-      subModuleName: ModuleNames.TOPIC,
-      additionalPath: 'create-topic',
-      queryParams: {
-        entityId: this.entityId,
-      },
-    });
-  }
-
   /**
    * @function getListDetails To get the listing details.
    * @param id The id for which edit action will be done.

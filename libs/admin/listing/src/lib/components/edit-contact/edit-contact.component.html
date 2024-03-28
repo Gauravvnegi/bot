@@ -113,14 +113,14 @@
           </td>
           <td>
             <div class="cell-content" *ngIf="rowData; else emptyCell">
-              <hospitality-bot-phone-number
-                preControlName="cc"
-                postControlName="mobile"
-                [label]="undefined"
+              <hospitality-bot-input
+                class="half-width"
+                controlName="mobile"
                 [props]="{
-                  placeholder: 'Enter'
+                  placeholder: 'Mobile No.',
+                  type: 'number'
                 }"
-              ></hospitality-bot-phone-number>
+              ></hospitality-bot-input>
             </div>
           </td>
           <td (click)="removeContactField(rowData)">

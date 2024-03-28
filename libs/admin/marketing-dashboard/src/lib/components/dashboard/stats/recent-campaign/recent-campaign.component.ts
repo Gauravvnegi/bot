@@ -15,7 +15,10 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
-import { eMarketStatCard } from '../../../../constants/emarket-stats.constants';
+import {
+  eMarketEmailStatCard,
+  eMarketWhatsappStatCard,
+} from '../../../../constants/emarket-stats.constants';
 import { MarketingService } from '../../../../services/stats.service';
 import { EMarketStatsResponse } from '../../../types/campaign.response.type';
 
@@ -27,11 +30,17 @@ import { EMarketStatsResponse } from '../../../types/campaign.response.type';
 export class RecentCampaignComponent implements OnInit {
   $subscription = new Subscription();
   campaignForm: FormGroup;
-  campaignList: Option[];
+  campaignList: Option[] = [];
   entityId: string;
-  statCard: StatCard[] = eMarketStatCard;
+  statCard: StatCard[] = eMarketEmailStatCard;
+
   @Input() selectedTab: 'EMAIL' | 'WHATSAPP' = 'EMAIL';
   statsScore: number = 0;
+
+  noMoreCampaign: boolean = true;
+
+  limit: number = 10;
+  offset: number = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -66,18 +75,19 @@ export class RecentCampaignComponent implements OnInit {
       this.statCard = this.statCard.map((item) => {
         return {
           ...item,
-          comparisonPercent:
-            item.id === 'deliveryRate'
-              ? value.campaignStats['deliveryRate'] -
-                value.previousCampaignStats['deliveryRate']
-              : this.getScoreInPercentage(
-                  value.campaignStats[item.id],
-                  value.previousCampaignStats[item.id]
-                ),
-          additionalData:
-            item.id === 'deliveryRate'
-              ? `${value.campaignStats[item.id]}%`
-              : `${value.campaignStats[item.id]}`,
+          comparisonPercent: ['deliveryRate', 'conversionRate'].includes(
+            item.id
+          )
+            ? value.campaignStats[item.id] -
+              value.previousCampaignStats[item.id]
+            : this.getScoreInPercentage(
+                value.campaignStats[item.id],
+                value.previousCampaignStats[item.id]
+              ),
+
+          additionalData: ['deliveryRate', 'conversionRate'].includes(item.id)
+            ? `${value.campaignStats[item.id]}%`
+            : `${value.campaignStats[item.id]}`,
         };
       });
     }
@@ -99,6 +109,13 @@ export class RecentCampaignComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (!changes.config.firstChange) {
       this.getAllCampaignList();
+    }
+
+    if (changes.selectedTab) {
+      this.statCard =
+        this.selectedTab === 'EMAIL'
+          ? eMarketEmailStatCard
+          : eMarketWhatsappStatCard;
     }
   }
 
@@ -141,62 +158,69 @@ export class RecentCampaignComponent implements OnInit {
   }
 
   getAllCampaignList() {
+    const params = `${this.config.params}&limit=${this.limit}&offset=${this.offset}&active=true`;
+
     this.$subscription.add(
       this.statsService
-        .getCampaignList(this.entityId, this.config)
+        .getCampaignList(this.entityId, { params: params })
         .subscribe((res) => {
-          this.campaignList = res.records.map((data) => {
-            return {
-              label: data.name,
-              value: data.id,
-              score:
-                this.selectedTab !== 'EMAIL'
-                  ? data?.statsCampaign['sent']
-                  : data?.statsCampaign['delivered'],
+          this.noMoreCampaign = this.limit > res.total;
 
-              data:
-                this.selectedTab !== 'EMAIL'
-                  ? [
-                      {
-                        label: 'Delivered',
-                        count: data?.statsCampaign['delivered'],
-                        colorCode: '#FF9F40',
-                      },
-                      {
-                        label: 'Read',
-                        count: data?.statsCampaign['read'],
-                        colorCode: '#4BC0C0',
-                      },
-                      {
-                        label: 'Failed',
-                        count: data?.statsCampaign['failed'],
-                        colorCode: '#FF6384',
-                      },
-                    ]
-                  : [
-                      {
-                        label: 'Open',
-                        count: data?.statsCampaign['opened'],
-                        colorCode: '#FF9F40',
-                      },
-                      {
-                        label: 'Failed',
-                        count: data?.statsCampaign['failed'],
-                        colorCode: '#4BC0C0',
-                      },
-                      {
-                        label: 'Clicks',
-                        count: data?.statsCampaign['clicked'],
-                        colorCode: '#FF6384',
-                      },
-                      {
-                        label: 'Unopened',
-                        count: data?.statsCampaign['unopened'],
-                        colorCode: '#36A2EB',
-                      },
-                    ],
-            };
-          });
+          this.campaignList = [
+            ...this.campaignList,
+            ...res.records.map((data) => {
+              return {
+                label: data.name,
+                value: data.id,
+                score:
+                  this.selectedTab !== 'EMAIL'
+                    ? data?.statsCampaign['sent']
+                    : data?.statsCampaign['delivered'],
+
+                data:
+                  this.selectedTab !== 'EMAIL'
+                    ? [
+                        {
+                          label: 'Delivered',
+                          count: data?.statsCampaign['delivered'],
+                          colorCode: '#FF9F40',
+                        },
+                        {
+                          label: 'Read',
+                          count: data?.statsCampaign['read'],
+                          colorCode: '#4BC0C0',
+                        },
+                        {
+                          label: 'Failed',
+                          count: data?.statsCampaign['failed'],
+                          colorCode: '#FF6384',
+                        },
+                      ]
+                    : [
+                        {
+                          label: 'Open',
+                          count: data?.statsCampaign['opened'],
+                          colorCode: '#FF9F40',
+                        },
+                        {
+                          label: 'Failed',
+                          count: data?.statsCampaign['failed'],
+                          colorCode: '#4BC0C0',
+                        },
+                        {
+                          label: 'Clicks',
+                          count: data?.statsCampaign['clicked'],
+                          colorCode: '#FF6384',
+                        },
+                        {
+                          label: 'Unopened',
+                          count: data?.statsCampaign['unopened'],
+                          colorCode: '#36A2EB',
+                        },
+                      ],
+              };
+            }),
+          ];
 
           this.campaignForm.patchValue({
             campaign: this.campaignList[0].value,
@@ -204,6 +228,15 @@ export class RecentCampaignComponent implements OnInit {
         })
     );
   }
+
+  loadMoreData() {
+    if (!this.noMoreCampaign) {
+      this.limit += 10;
+      this.getAllCampaignList();
+    }
+  }
+
+  onSearchCampaign(text: string) {}
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();

@@ -22,6 +22,7 @@
     [inputId]="controlName"
     [addOnBlur]="true"
     (onFocus)="handleFocus()"
+    (onRemove)="handleRemove($event)"
   >
     <ng-template let-item pTemplate="item">
       <div>

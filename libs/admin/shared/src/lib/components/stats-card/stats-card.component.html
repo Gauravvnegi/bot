@@ -33,14 +33,20 @@
       margin: '30px 0 0 0'
     "
   >
-    <div class="amount">{{ additionalData }}</div>
-    <div>
+    <div *ngIf="additionalData?.length" class="amount">
+      {{ additionalData || 0 }}
+    </div>
+    <div *ngIf="isComparisonPercent">
       <div class="percent">
-        <div class="comparison-percent" *ngIf="comparisonPercent">
+        <div
+          class="comparison-percent"
+          [style.color]="comparisonPercent < 0 ? 'red' : 'green'"
+          *ngIf="comparisonPercent !== undefined"
+        >
           ({{ comparisonPercent }}%)
         </div>
         <img
-          *ngIf="comparisonPercent"
+          *ngIf="comparisonPercent !== undefined"
           [src]="
             comparisonPercent < 0
               ? adminSharedConfig.img.downArrow.url
@@ -53,9 +59,9 @@
           "
         />
       </div>
-      <div *ngIf="comparisonPercent" class="compared-dates">
+      <!-- <div *ngIf="comparisonPercent" class="compared-dates">
         In 30 Days
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="graph">

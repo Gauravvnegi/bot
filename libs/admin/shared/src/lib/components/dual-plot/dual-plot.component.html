@@ -64,10 +64,21 @@
           margin: '0 0 10px 0'
         "
       />
-      <div
-        class="legend-border"
-        [style.backgroundColor]="filter?.backgroundColor"
-      ></div>
+
+      <ng-container>
+        <div
+          class="legend-border"
+          *ngIf="!filter.fill"
+          [style.backgroundColor]="filter?.backgroundColor"
+        ></div>
+
+        <div
+          *ngIf="filter.fill"
+          class="hexagon"
+          [style.backgroundColor]="filter?.borderColor"
+        ></div>
+      </ng-container>
+
       <p class="stat-filter-label-title">
         {{ filter.label }}
       </p>

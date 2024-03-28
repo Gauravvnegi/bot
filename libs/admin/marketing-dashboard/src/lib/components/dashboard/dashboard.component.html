@@ -5,43 +5,32 @@
 >
 </hospitality-bot-navigation-header>
 
+<hospitality-bot-tab-group
+  [listItems]="tabOptions"
+  (selectedTabChange)="onTabFilterChange($event)"
+>
+</hospitality-bot-tab-group>
+
 <div class="container">
-  <hospitality-bot-recent-campaign></hospitality-bot-recent-campaign>
+  <hospitality-bot-recent-campaign
+    [data]="eMarketStatsData"
+    [config]="globalQueryConfig"
+    [selectedTab]="tabOptions[selectedTabIndex]?.value"
+    class="full-width"
+  ></hospitality-bot-recent-campaign>
 
-  <hospitality-bot-total-vs-new-contacts
+  <!-- <hospitality-bot-total-vs-new-contacts
     class="half-width"
-  ></hospitality-bot-total-vs-new-contacts>
+  ></hospitality-bot-total-vs-new-contacts> -->
 
-  <hospitality-bot-contacts class="half-width"></hospitality-bot-contacts>
+  <!-- <hospitality-bot-contacts class="half-width"></hospitality-bot-contacts> -->
   <hospitality-bot-sent-delivered-read
-    class="half-width"
+    [data]="eMarketStatsData"
+    [labels]="labels"
+    class="full-width"
   ></hospitality-bot-sent-delivered-read>
 
-  <hospitality-bot-subscribe-vs-unsubscribe
+  <!-- <hospitality-bot-subscribe-vs-unsubscribe
     class="half-width"
-  ></hospitality-bot-subscribe-vs-unsubscribe>
+  ></hospitality-bot-subscribe-vs-unsubscribe> -->
 </div>
-
-<!-- <div class="container">
-  <div class="rate-contact-stat">
-    <div class="rateGraph">
-      <hospitality-bot-comparison-graph
-        [charts]="rateGraph.chart"
-        [legendData]="rateGraph.legendData"
-        [title]="rateGraph.title"
-        [loading]="loading"
-      ></hospitality-bot-comparison-graph>
-    </div>
-    <div>
-      <hospitality-bot-contact-stats></hospitality-bot-contact-stats>
-    </div>
-  </div>
-  <div class="subscriberGraph">
-    <hospitality-bot-comparison-graph
-      [charts]="subscriberGraph.chart"
-      [legendData]="subscriberGraph.legendData"
-      [title]="subscriberGraph.title"
-      [loading]="loading"
-    ></hospitality-bot-comparison-graph>
-  </div>
-</div> -->

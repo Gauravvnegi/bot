@@ -20,7 +20,7 @@
       <div class="graph__left">
         <p-chart
           type="doughnut"
-          [data]="data"
+          [data]="statsDataSets"
           [options]="{
             legend: false
           }"
@@ -29,10 +29,14 @@
       <div class="graph__right">
         <div class="total">
           <div class="total__count">
-            100
+            {{ statsScore || 0 }}
           </div>
           <div class="total__label">
-            Total Sent Messages
+            {{
+              selectedTab === 'EMAIL'
+                ? 'Total Delivered Emails'
+                : 'Total Sent Messages'
+            }}
           </div>
         </div>
         <div class="labels">
@@ -52,18 +56,22 @@
   <div class="stat-card-wrapper">
     <hospitality-bot-stats-card
       [stats]="statCard[0]"
+      [isComparisonPercent]="true"
       class="stat-card"
     ></hospitality-bot-stats-card>
     <hospitality-bot-stats-card
       [stats]="statCard[1]"
+      [isComparisonPercent]="true"
       class="stat-card"
     ></hospitality-bot-stats-card>
     <hospitality-bot-stats-card
       [stats]="statCard[2]"
+      [isComparisonPercent]="true"
       class="stat-card"
     ></hospitality-bot-stats-card>
     <hospitality-bot-stats-card
       [stats]="statCard[3]"
+      [isComparisonPercent]="true"
       class="stat-card"
     ></hospitality-bot-stats-card>
   </div>

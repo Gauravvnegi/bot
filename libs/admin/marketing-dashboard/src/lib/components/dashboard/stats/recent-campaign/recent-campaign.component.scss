@@ -5,6 +5,7 @@
   gap: 1%;
 
   .container {
+    width: 49%;
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -20,6 +21,7 @@
       }
 
       &__dropdown {
+        width: 10em;
       }
     }
     .graph {
@@ -89,14 +91,14 @@
   }
 
   .stat-card-wrapper {
+    width: 49%;
     display: flex;
     flex-wrap: wrap;
     box-shadow: none;
-    column-gap: 1%;
-    row-gap: 4%;
+    gap: 1em;
 
     .stat-card {
-      width: 49%;
+      width: 48%;
       background: $white;
       border: solid 1px $borderCol;
       box-shadow: 0px 3px 6px $boxShadow;

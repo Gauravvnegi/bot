@@ -64,7 +64,7 @@
 
 .line-chart__canvas {
   max-width: calc(100% - 30px);
-  // max-height: 65vh;
+  max-height: 60vh;
   margin-bottom: 10px;
 }
 
@@ -113,4 +113,32 @@
   &:hover {
     cursor: pointer;
   }
+}
+
+.hexagon {
+  width: 20px;
+  height: 11.55px; /* Equals 20px * tan(30deg) */
+  background-color: #00bcd4;
+  position: relative;
+  margin: 50px auto;
+}
+
+.hexagon:before,
+.hexagon:after {
+  content: '';
+  position: absolute;
+  width: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+
+.hexagon:before {
+  bottom: 100%;
+  border-bottom: 5.775px solid var(--before-bg-color); /* Equals height / 2 */
+}
+
+.hexagon:after {
+  top: 100%;
+  width: 0;
+  border-top: 5.775px solid var(--after-bg-color); /* Equals height / 2 */
 }

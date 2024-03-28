@@ -86,20 +86,24 @@ export class DualPlotComponent implements OnInit {
 
   ngAfterViewInit() {
     if (this.isGradient) {
-      this.datasets.forEach((item) => {
-        const gradient = this.canvas.nativeElement
-          .getContext('2d')
-          .createLinearGradient(0, 0, 0, 500);
-
-        // Add color stops to transition from item.borderColor to white
-        gradient.addColorStop(0, item.borderColor); // Start color
-        gradient.addColorStop(0.7, 'white'); // Transition to white
-        gradient.addColorStop(1, 'white'); // End color (white)
-
-        item.backgroundColor = gradient;
-      });
-      this.baseChart.update();
+      this.initGradient();
     }
+  }
+
+  initGradient() {
+    this.datasets.forEach((item) => {
+      const gradient = this.canvas.nativeElement
+        .getContext('2d')
+        .createLinearGradient(0, 0, 0, 500);
+
+      // Add color stops to transition from item.borderColor to white
+      gradient.addColorStop(0, item.borderColor); // Start color
+      gradient.addColorStop(0.7, 'white'); // Transition to white
+      gradient.addColorStop(1, 'white'); // End color (white)
+
+      item.backgroundColor = gradient;
+    });
+    this.baseChart.update();
   }
 
   initForm(): void {
@@ -110,6 +114,9 @@ export class DualPlotComponent implements OnInit {
 
   setChartType(config: ChartTypeConfig) {
     this.graphType = config.value;
+    if (this.graphType === 'line' && this.isGradient) {
+      this.initGradient();
+    }
   }
 
   onFilterCLick(index: number) {

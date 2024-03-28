@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { DualPlotDataset } from '@hospitality-bot/admin/shared';
+import { EMarketStatsResponse } from '../../../types/campaign.response.type';
 
 @Component({
   selector: 'hospitality-bot-sent-delivered-read',
@@ -7,35 +8,48 @@ import { DualPlotDataset } from '@hospitality-bot/admin/shared';
   styleUrls: ['./sent-delivered-read.component.scss'],
 })
 export class SentDeliveredReadComponent implements OnInit {
-  constructor() {}
-  labels: string[] = ['aa', 'bb', 'cc'];
+  @Input() set data(value: EMarketStatsResponse) {
+    if (value) {
+      this.sentDeliveredReadStatsData[0].data = Object.values(
+        value.sentEventStats
+      );
+      this.sentDeliveredReadStatsData[1].data = Object.values(
+        value.deliveredEventStats
+      );
 
-  dataSets: DualPlotDataset[] = [
+      this.sentDeliveredReadStatsData[2].data = Object.values(
+        value.readEventStats
+      );
+    }
+  }
+
+  @Input() labels: string[] = [];
+
+  ngOnInit(): void {}
+  sentDeliveredReadStatsData: DualPlotDataset[] = [
     {
-      data: [5, 0, 0],
+      data: [0],
       fill: true,
       label: 'sent',
-      backgroundColor: '#c9e6f9',
+      backgroundColor: '#4BA0F5',
       borderColor: '#4BA0F5',
       pointBackgroundColor: '#4BA0F5',
     },
     {
-      data: [10, 20, 15],
+      data: [0],
       fill: true,
       label: 'Delivered',
-      backgroundColor: '#e0dfd9',
+      backgroundColor: '#FF9F40',
       borderColor: '#FF9F40',
       pointBackgroundColor: '#FF9F40',
     },
     {
-      data: [20, 0, 45],
+      data: [0],
       fill: true,
       label: 'Read',
-      backgroundColor: '#dceae2',
+      backgroundColor: '#4BC0C0',
       borderColor: '#4BC0C0',
       pointBackgroundColor: '#4BC0C0',
     },
   ];
-
-  ngOnInit(): void {}
 }

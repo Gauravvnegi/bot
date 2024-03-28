@@ -85,6 +85,9 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
     }
 
     const values = this.chatFG.getRawValue();
+    if (values.message.trim().length === 0) {
+      return;
+    }
     values.receiverId = this.selectedChat.phone;
     const mentions = this.mentions
       .map((mention) => {
@@ -140,6 +143,7 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
             update: true,
           });
           this.mentions = [];
+          debugger;
         })
     );
   }

@@ -11,3 +11,9 @@
 :host ::ng-deep .p-datatable {
   @include tableCellPadding(0.8em);
 }
+
+:host ::ng-deep {
+  .p-datatable .p-datatable-tbody .table-row .primary-text {
+    color: black;
+  }
+}

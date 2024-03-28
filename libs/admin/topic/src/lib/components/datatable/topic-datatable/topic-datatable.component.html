@@ -1,8 +1,10 @@
-<div
-  [formGroup]="tableFG"
->
-  <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes" [isBack]="false">
-   <hospitality-bot-button
+<div [formGroup]="tableFG">
+  <hospitality-bot-navigation-header
+    [heading]="tableName"
+    [routes]="navRoutes"
+    [isBack]="false"
+  >
+    <hospitality-bot-button
       (click)="openCreateTopic()"
       label=" {{ 'createTopic' | translate }}"
     ></hospitality-bot-button>
@@ -72,7 +74,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="table-row" (click)="openTopic($event, rowData)">
+    <tr class="table-row" (click)="openTopic($event, rowData.id)">
       <td class="table-row__checkbox">
         <p-tableCheckbox
           [value]="rowData"
@@ -86,7 +88,7 @@
       <td>
         <div class="primary-text" [innerHTML]="rowData.description"></div>
       </td>
-      <td class="center-align">
+      <!-- <td class="center-align">
         <label (click)="onCheckboxClicked($event)" class="switch">
           <mat-slide-toggle
             class="active"
@@ -94,6 +96,16 @@
             (change)="updateTopicStatus($event, rowData.id)"
           ></mat-slide-toggle>
         </label>
+      </td> -->
+      <td>
+        <div class="cell-content" (click)="onCheckboxClicked($event)">
+          <hospitality-bot-status-dropdown-toggle
+            class="toggle-btn"
+            (onClick)="updateDropDownStatus($event, rowData)"
+            [state]="rowData.active"
+          >
+          </hospitality-bot-status-dropdown-toggle>
+        </div>
       </td>
     </tr>
   </ng-template>

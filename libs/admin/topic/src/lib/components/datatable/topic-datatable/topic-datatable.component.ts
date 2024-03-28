@@ -203,7 +203,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
           {
             order: sharedConfig.defaultOrder,
           },
-          ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
+          ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         ],
         {
           offset: this.first,

@@ -47,6 +47,13 @@
       label="Topic"
       controlName="topicName"
       [options]="topicList"
+      [props]="{
+        isAsync: true,
+        stopEmission: true,
+        createPrompt: '+ Create New Topic',
+        placeholder: 'Select Topic'
+      }"
+      (onCreate)="createTopic()"
     ></hospitality-bot-select>
     <!-- <hospitality-bot-multi-select
       class="one-third-width"

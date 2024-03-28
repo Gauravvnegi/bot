@@ -291,6 +291,15 @@ export class EditListingComponent implements OnInit, OnDestroy {
       this.listFG.patchValue({ marketingContacts: event.data });
     else this.getListDetails(this.listId);
   }
+  createTopic() {
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.TOPIC,
+      additionalPath: 'create-topic',
+      queryParams: {
+        entityId: this.entityId,
+      },
+    });
+  }
 
   /**
    * @function ngOnDestroy to unsubscribe subscription

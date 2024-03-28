@@ -3,7 +3,7 @@ import { PageRoutes } from '@hospitality-bot/admin/shared';
 export const navRoute = {
   library: { label: 'Library', link: './' },
   listing: { label: 'Listing', link: '/pages/library/listing' },
-  createListing: { label: 'Create List', link: './' },
+  createListing: { label: 'Create Listing', link: './' },
   editListing: { label: 'Edit List', link: './' },
 };
 

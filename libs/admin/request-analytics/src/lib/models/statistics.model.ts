@@ -111,22 +111,27 @@ export class RequestStats {
 }
 
 export class AverageRequestStats {
-  averageStats: { label: string; value: number | string; key: string }[];
-  createdTickets: number;
-  resolvedTickets: number;
-  deserialize(input: AverageStats) {
-    const statsData = Object.keys(input.averageStats);
-    this.averageStats = statsData
-      .filter((requestKey) => requestKey === 'averageTimePerJob')
-      .map((requestKey) => {
-        return {
-          label: 'Average Time Taken/Tickets',
-          value: `${input.averageStats[requestKey]} Mins`,
-          key: 'AverageTime',
-        };
-      });
-    this.createdTickets = input.averageStats.averageCreatedJobs;
-    this.resolvedTickets = input.averageStats.averageResolvedJobs;
+  data: {
+    label: string;
+    key: string;
+    averageResolvedJobs: number;
+    averageTimePerJob: number;
+  }[] = [];
+
+  deserialize(team: AverageStats, individualData: AverageStats) {
+    this.data.push({
+      label: 'Avg Tickets & Time',
+      key: 'Agent',
+      averageResolvedJobs: individualData?.averageStats?.averageResolvedJobs,
+      averageTimePerJob: individualData?.averageStats?.averageTimePerJob,
+    });
+    this.data.push({
+      label: 'Team’s Avg Tickets & Time',
+      key: 'Group',
+      averageResolvedJobs: team?.averageStats?.averageResolvedJobs,
+      averageTimePerJob: team?.averageStats?.averageTimePerJob,
+    });
+
     return this;
   }
 }

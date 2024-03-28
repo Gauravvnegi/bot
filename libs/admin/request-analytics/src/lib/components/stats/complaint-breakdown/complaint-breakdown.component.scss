@@ -19,9 +19,12 @@
   &-container {
     display: flex;
     flex-direction: column;
-    padding: 5px;
+    padding: 15px;
     overflow-y: auto;
-    max-height: 48vh;
+    max-height: 49vh;
+    @media screen and (max-width: 1024px) {
+      max-height: 32vh;
+    }
 
     .progress-container {
       display: flex;
@@ -83,9 +86,9 @@
 
 .progress-value {
   min-height: 20px;
-}
+  display: flex;
+  justify-content: center;
 
-.progress {
   .value {
     font-size: 13px;
   }

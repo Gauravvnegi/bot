@@ -81,7 +81,11 @@ export class Contact {
   deserialize(input, index) {
     Object.assign(
       this,
-      set({}, 'companyName', get(input, ['companyName'])),
+      set(
+        {},
+        'companyName' ? 'companyName' : null,
+        get(input, ['companyName'])
+      ),
       set({}, 'email', get(input, ['email'])),
       set({}, 'firstName', get(input, ['firstName'])),
       set({}, 'lastName', get(input, ['lastName'])),

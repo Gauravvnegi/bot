@@ -3,7 +3,7 @@
 .form-block {
   @include form-block;
   margin-bottom: 10px;
-  padding-bottom: 50px;
+  padding-bottom: 70px;
 }
 
 .table-block {
@@ -12,6 +12,20 @@
   gap: 20px;
   align-items: center;
 }
+:host ::ng-deep {
+  .table-block {
+    .p-datatable .p-datatable-header .caption__wrapper {
+      display: none;
+    }
+  }
+}
+// :host ::ng-deep {
+//   .form-block{
+//     .half-width{
+//       margin-bottom: 70px;
+//     }
+//   }
+// }
 
 .stats-container {
   display: flex;

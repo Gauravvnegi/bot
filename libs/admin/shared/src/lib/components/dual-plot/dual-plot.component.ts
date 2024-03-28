@@ -1,5 +1,6 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnInit,
@@ -53,6 +54,8 @@ export class DualPlotComponent implements OnInit {
   useForm: FormGroup;
   chartTypeOption = chartTypeConfig;
 
+  @ViewChild('myCanvas') canvas: ElementRef;
+
   @Output() onSelectedTabFilterChange = new EventEmitter(null);
 
   @Input() graphType: GraphType = GraphType.LINE;
@@ -73,11 +76,34 @@ export class DualPlotComponent implements OnInit {
       Object.assign(this, value);
     }
   }
+  @Input() isGradient: boolean = false;
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.initForm();
+  }
+
+  ngAfterViewInit() {
+    if (this.isGradient) {
+      this.initGradient();
+    }
+  }
+
+  initGradient() {
+    this.datasets.forEach((item) => {
+      const gradient = this.canvas.nativeElement
+        .getContext('2d')
+        .createLinearGradient(0, 0, 0, 500);
+
+      // Add color stops to transition from item.borderColor to white
+      gradient.addColorStop(0, item.borderColor); // Start color
+      gradient.addColorStop(0.7, 'white'); // Transition to white
+      gradient.addColorStop(1, 'white'); // End color (white)
+
+      item.backgroundColor = gradient;
+    });
+    this.baseChart.update();
   }
 
   initForm(): void {
@@ -88,6 +114,9 @@ export class DualPlotComponent implements OnInit {
 
   setChartType(config: ChartTypeConfig) {
     this.graphType = config.value;
+    if (this.graphType === 'line' && this.isGradient) {
+      this.initGradient();
+    }
   }
 
   onFilterCLick(index: number) {

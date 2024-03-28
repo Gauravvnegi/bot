@@ -94,7 +94,10 @@ export class AddMenuItemComponent extends OutletBaseComponent
       //   label: item,
       //   value: item,
       // }));
-      this.unitOptions = config[0].menu.units;
+      this.unitOptions = config[0].menu.units.map((unit) => ({
+        label: unit.label.toUpperCase(),
+        value: unit.value,
+      }));
     });
     this.getTax();
   }

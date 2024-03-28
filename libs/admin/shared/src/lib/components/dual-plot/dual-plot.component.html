@@ -34,6 +34,7 @@
 
   <div class="line-chart">
     <canvas
+      #myCanvas
       *skeleton="datasets == undefined; height: '65vh'; width: '100%'"
       baseChart
       class="line-chart__canvas"
@@ -63,10 +64,21 @@
           margin: '0 0 10px 0'
         "
       />
-      <div
-        class="legend-border"
-        [style.backgroundColor]="filter?.backgroundColor"
-      ></div>
+
+      <ng-container>
+        <div
+          class="legend-border"
+          *ngIf="!filter.fill"
+          [style.backgroundColor]="filter?.backgroundColor"
+        ></div>
+
+        <div
+          *ngIf="filter.fill"
+          class="hexagon"
+          [style.backgroundColor]="filter?.borderColor"
+        ></div>
+      </ng-container>
+
       <p class="stat-filter-label-title">
         {{ filter.label }}
       </p>

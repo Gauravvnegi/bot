@@ -80,9 +80,17 @@
           [index]="rowIndex"
           (click)="onCheckboxClicked($event)"
         ></p-tableCheckbox>
-      </td>
+      </td> 
       <td>
-        {{ rowData.email }}
+        <div class="primary-text">
+          <a
+            (click)="$event.stopPropagation()"
+            class="link"
+            href="mailto:{{ rowData.email }}"
+          >
+            <u> {{ rowData.email }}</u>
+          </a>
+        </div>
       </td>
       <td>
         {{ rowData.salutation }}
@@ -94,10 +102,26 @@
         {{ rowData.lastName }}
       </td>
       <td>
-        {{ rowData.companyName }}
+        <div
+          class="cell-content"
+          *ngIf="
+            rowData[columns.field] != undefined || null || '';
+            else emptyCell
+          "
+        >
+          {{ rowData.companyName }}
+        </div>
       </td>
       <td>
-        {{ rowData.mobile }}
+        <div class="primary-text">
+          <a
+            (click)="$event.stopPropagation()"
+            class="link"
+            href="tel:{{ rowData.mobile }}"
+          >
+            <u> {{ rowData.mobile }}</u>
+          </a>
+        </div>
       </td>
     </tr>
   </ng-template>

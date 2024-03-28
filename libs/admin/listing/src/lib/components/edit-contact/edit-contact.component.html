@@ -59,7 +59,10 @@
                 class="half-width"
                 controlName="email"
                 [props]="{
-                  placeholder: 'Email'
+                  placeholder: 'Email',
+                  errorMessages: {
+                    pattern: 'Please enter a valid email address.'
+                  }
                 }"
               ></hospitality-bot-input>
             </div>

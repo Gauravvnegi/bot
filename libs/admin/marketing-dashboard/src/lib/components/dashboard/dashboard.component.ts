@@ -1,13 +1,20 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { AdminUtilityService } from '@hospitality-bot/admin/shared';
-import { SnackBarService } from '@hospitality-bot/shared/material';
+import {
+  AdminUtilityService,
+  QueryConfig,
+  StatCard,
+} from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
-import { ComparisonGraphStats } from '../../data-models/graph.model';
+import {
+  eMarketStatCard,
+  eMarketTabFilterOptions,
+} from '../../constants/emarket-stats.constants';
 import { MarketingService } from '../../services/stats.service';
 import { dashboardConfig } from '../constants/dashboard';
 import { GraphData } from '../types/stats';
+import { EMarketStatsResponse } from '../types/campaign.response.type';
 
 @Component({
   selector: 'hospitality-bot-marketing-dashboard',
@@ -15,34 +22,36 @@ import { GraphData } from '../types/stats';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class MarketingDashboardComponent implements OnInit, OnDestroy {
-  welcomeMessage = 'Welcome To eMark-IT';
-  navRoutes = [{ label: 'eMark-IT Stats', link: './' }];
+  welcomeMessage = 'Welcome To your dashboard';
+  navRoutes = [{ label: 'eMark-IT Dashboard', link: './' }];
+  eMarketStatsData: EMarketStatsResponse;
   $subscription = new Subscription();
   entityId: string;
+  labels: string[] = [];
+  selectedTabIndex: number = 0;
+  tabOptions = eMarketTabFilterOptions;
+
   config: any;
   loading = false;
-  rateGraph: GraphData = {
-    title: 'rateGraph.title',
-    chart: {},
-    legendData: dashboardConfig.rateGraph.legendData,
-  };
+  globalQueries;
+  globalQueryConfig: QueryConfig;
 
-  subscriberGraph: GraphData = {
-    title: 'subscriber.title',
-    chart: {},
-    legendData: dashboardConfig.subscriber.legendData,
-  };
+  selectedInterval: string;
 
   constructor(
     private _adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private dateService: DateService,
-    private statsService: MarketingService,
-    private snackbarService: SnackBarService
+    public statsService: MarketingService
   ) {}
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
+  }
+
+  onTabFilterChange(event) {
+    this.selectedTabIndex = event.index;
+    this.getComplaintStats();
   }
 
   /**
@@ -59,75 +68,64 @@ export class MarketingDashboardComponent implements OnInit, OnDestroy {
           ),
         };
 
-        const globalQueries = [
+        this.selectedInterval = calenderType.calenderType;
+
+        this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
           calenderType,
         ];
 
-        this.config = {
-          queryObj: this._adminUtilityService.makeQueryParams(globalQueries),
-        };
-
         this.entityId = this.globalFilterService.entityId;
-        this.loading = true;
-        this.rateGraphStats();
-        this.subscriberGraphStats();
+        this.getComplaintStats();
       })
     );
   }
 
-  /**
-   * @function rateGraphStats To get rate graph data.
-   */
-  rateGraphStats(): void {
+  getQueryConfig(): QueryConfig {
+    return {
+      params: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          channel: this.tabOptions[this.selectedTabIndex].value,
+        },
+      ]),
+    };
+  }
+
+  getComplaintStats() {
+    this.globalQueryConfig = this.getQueryConfig();
     this.$subscription.add(
       this.statsService
-        .rateGraphStats(this.entityId, this.config)
-        .subscribe((response) => {
-          this.loading = false;
-          const graph = new ComparisonGraphStats().deserialize(response);
-          this.rateGraph.chart = {
-            chartLabels: graph.labels,
-            chartData: [
-              { data: graph.primaryData, label: 'Click Rate', fill: false },
-              { data: graph.secondaryData, label: 'Open Rate', fill: false },
-            ],
-          };
-        }, this.handleError)
+        .getEMarketStats(this.entityId, this.globalQueryConfig)
+        .subscribe((res) => {
+          this.eMarketStatsData = res;
+          this.initLabels(res.deliveredEventStats);
+        })
     );
   }
 
-  /**
-   * @function subscriberGraphStats To get subscriber graph data.
-   */
-  subscriberGraphStats(): void {
-    this.$subscription.add(
-      this.statsService
-        .subscriberGraphStats(this.entityId, this.config)
-        .subscribe((response) => {
-          this.loading = false;
-          const graph = new ComparisonGraphStats().deserialize(response);
-          this.subscriberGraph.chart = {
-            chartLabels: graph.labels,
-            chartData: [
-              {
-                data: graph.primaryData,
-                label: 'Unsubscribers',
-                fill: false,
-              },
-              {
-                data: graph.secondaryData,
-                label: 'Subscribers',
-                fill: false,
-              },
-            ],
-          };
-        }, this.handleError)
-    );
+  initLabels(data: { [key: string]: number }) {
+    this.labels = [];
+
+    Object.keys(data).forEach((key) => {
+      this.labels.push(
+        this.dateService.convertTimestampToLabels(
+          this.selectedInterval,
+          key,
+          this.globalFilterService.timezone,
+          this._adminUtilityService.getDateFormatFromInterval(
+            this.selectedInterval
+          ),
+          this.selectedInterval === 'week'
+            ? this._adminUtilityService.getToDate(this.globalQueries)
+            : null
+        )
+      );
+    });
   }
 
-  handleError = ({ error }) => { 
+  handleError = ({ error }) => {
     this.loading = false;
   };
 

@@ -1,9 +1,16 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  EventEmitter,
+  Output,
+  
+} from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { UserService } from '@hospitality-bot/admin/shared';
 import { PaymentStatus } from 'libs/admin/finance/src/lib/components/transaction-history-data-table/transaction-history-data-table.component';
 import { PaymentType } from 'libs/admin/finance/src/lib/types/history';
-import { of } from 'rxjs';
+import { Subscription, interval, of } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-admin-payment-details',
@@ -63,6 +70,22 @@ export class AdminPaymentDetailsComponent implements OnInit {
   constructor(private _fb: FormBuilder, private userService: UserService) {}
 
   ngOnInit(): void {}
+
+  $subscription = new Subscription();
+  ngAfterViewInit(): void {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom() {
+    this.$subscription = interval(100).subscribe((res) => {
+      const materialBody = document.getElementById('payment-wrapper');
+      materialBody.scrollTo(0, materialBody.scrollHeight);
+
+      if (materialBody) {
+        this.$subscription.unsubscribe();
+      }
+    });
+  }
 
   ngOnChanges() {
     this.paymentDetailForm = this._fb.group({});

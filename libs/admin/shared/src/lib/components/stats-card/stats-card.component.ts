@@ -18,6 +18,8 @@ export class StatsCardComponent {
   imageUrls = StatCardImageUrls;
   tooltip: string;
 
+  @Input() isComparisonPercent: boolean = false;
+
   @Input() set stats(value: StatCard) {
     this.key = value?.key ? value?.key : value?.label?.replace(/\s+|-/g, '');
     this.label = value?.label;

@@ -41,7 +41,7 @@ export class TopicService extends ApiService {
    * @param topicId dynamically getting topicId into api.
    * @returns patch api of update status.
    */
-  updateTopicStatus(entityId, data, topicId) {
+  updateTopicStatus(entityId: string, topicId: string, data) {
     return this.patch(
       `/api/v1/entity/${entityId}/topics/${topicId}/status`,
       data

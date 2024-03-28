@@ -1,33 +1,41 @@
 <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
 </hospitality-bot-navigation-header>
-<div class="form-block" [formGroup]="topicForm" *ngIf="topicForm">
-  <div class="half-width"></div>
-  <hospitality-bot-toggle-switch
-    class="status"
-    controlName="status"
-    label="Status:"
-  ></hospitality-bot-toggle-switch>
-  <hospitality-bot-input
-    label="Name"
-    controlName="name"
-    class="half-width"
-    maxLength="60"
-  ></hospitality-bot-input>
-  <div class="des-template">
-    <div class="des-template__label">Description</div>
-    <div class="des-template__input">
-      <hospitality-bot-template-editor
-        controlName="description"
-        [isSimpleEditor]="true"
-      ></hospitality-bot-template-editor>
-    </div>
+<div class="wrapper">
+  <div class="form-block" [formGroup]="topicForm" *ngIf="topicForm">
+    <hospitality-bot-input
+      label="Name"
+      controlName="name"
+      class="half-width"
+      maxLength="60"
+    ></hospitality-bot-input>
+    <hospitality-bot-toggle-switch
+      class="status"
+      controlName="status"
+      label="Status:"
+    ></hospitality-bot-toggle-switch>
+    <hospitality-bot-input
+      class="full-width"
+      controlName="description"
+      label="Description"
+      maxLength="200"
+    ></hospitality-bot-input>
+    <!-- <div class="des-template">
+      <div class="des-template__label">Description</div>
+      <div class="des-template__input">
+        <hospitality-bot-template-editor
+          [parentFG]="topicForm"
+          [name]="'description'"
+          [isSimpleEditor]="true"
+        ></hospitality-bot-template-editor>
+      </div>
+    </div> -->
+    <hospitality-bot-form-action
+      class="full-width"
+      [loading]="loading || isSavingTopic"
+      [isId]="topicId"
+      (onPreAction)="resetForm()"
+      (onPostAction)="handleSubmit()"
+    >
+    </hospitality-bot-form-action>
   </div>
-  <hospitality-bot-form-action
-    class="full-width"
-    [loading]="loading || isSavingTopic"
-    [isId]="topicId"
-    (onPreAction)="resetForm()"
-    (onPostAction)="handleSubmit()"
-  >
-  </hospitality-bot-form-action>
 </div>

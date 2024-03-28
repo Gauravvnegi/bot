@@ -8,6 +8,10 @@
   border-radius: 5px;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.05);
   background-color: $white;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+
   .rate-contact-stat {
     display: flex;
     width: 100%;
@@ -19,4 +23,12 @@
   .subscriberGraph {
     padding-top: 20px;
   }
+}
+
+.half-width {
+  width: 49%;
+}
+
+.full-width {
+  width: 100%;
 }

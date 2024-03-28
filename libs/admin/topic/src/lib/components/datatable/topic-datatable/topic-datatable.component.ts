@@ -13,7 +13,7 @@ import { SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { TopicRoutes } from '../../../constants/routes';
 import { topicConfig } from '../../../constants/topic';
-import { Topics } from '../../../data-models/topicConfig.model';
+import { Topic, Topics } from '../../../data-models/topicConfig.model';
 import { TopicService } from '../../../services/topic.service';
 import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
@@ -139,33 +139,33 @@ export class TopicDatatableComponent extends BaseDatatableComponent
    * @param event active & inactive event check.
    * @param topicId The topic id for which status update action will be done.
    */
-  updateTopicStatus(event, topicId): void {
-    this.loading = true;
-    const data = {
-      active: event.checked,
-    };
-    this.topicService.updateTopicStatus(this.entityId, data, topicId).subscribe(
-      (response) => {
-        this.loadData();
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'message.success.topic_status_updated',
-              priorityMessage: 'Status Updated Successfully..',
-            },
-            '',
-            {
-              panelClass: 'success',
-            }
-          )
-          .subscribe();
-        this.loading = false;
-      },
-      ({ error }) => {
-        this.values = [];
-        this.loading = false;
-      },
-      this.handleFinal
+  updateDropDownStatus(status: boolean, rowData: Topic) {
+    this.$subscription.add(
+      this.topicService
+        .updateTopicStatus(this.entityId, rowData.id, { active: status })
+        .subscribe(
+          (_) => {
+            this.loadData();
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'message.success.topic_status_updated',
+                  priorityMessage: 'Status Updated Successfully..',
+                },
+                '',
+                {
+                  panelClass: 'success',
+                }
+              )
+              .subscribe();
+            this.loading = false;
+          },
+          ({ error }) => {
+            this.values = [];
+            this.loading = false;
+          },
+          this.handleFinal
+        )
     );
   }
 
@@ -186,7 +186,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   openTopic(event, topic): void {
     event.stopPropagation();
     this.routesConfigService.navigate({
-      additionalPath: `${TopicRoutes.createTopic.route}/${topic.id}`,
+      additionalPath: `${TopicRoutes.createTopic.route}/${topic}`,
     });
   }
 
@@ -203,7 +203,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
           {
             order: sharedConfig.defaultOrder,
           },
-          ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
+          ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         ],
         {
           offset: this.first,

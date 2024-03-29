@@ -3,11 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ValidatorService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import {
-  authConstants,
-  confirmPasswordValidator,
-  passwordValidator,
-} from '../../constants/auth';
+import { passwordValidator } from '../../constants/auth';
 import { AuthService } from '../../services/auth.service';
 
 /**

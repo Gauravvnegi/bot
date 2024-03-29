@@ -96,7 +96,7 @@ export class MenuItem {
     this.description = input?.description;
     // this.type = input?.type;
     this.hsnCode = input?.hsnCode;
-    this.category = input?.category;
+    this.category = input?.categoryName;
     this.dineInPrice = input?.dineInPrice;
     this.deliveryPrice = input?.deliveryPrice;
     this.preparationTime = input?.preparationTime;

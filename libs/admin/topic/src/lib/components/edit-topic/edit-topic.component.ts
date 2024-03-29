@@ -95,6 +95,8 @@ export class EditTopicComponent implements OnInit, OnDestroy {
    */
   handleSubmit() {
     if (this.topicForm.invalid) {
+      this.topicForm.markAllAsTouched();
+
       this.snackbarService
         .openSnackBarWithTranslate(
           {

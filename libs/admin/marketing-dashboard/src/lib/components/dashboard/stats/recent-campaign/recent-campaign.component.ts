@@ -1,10 +1,4 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  SimpleChange,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -15,6 +9,7 @@ import {
   getUniqueOptions,
 } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { convertToNormalCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { Subscription } from 'rxjs';
 import {
   eMarketEmailStatCard,
@@ -58,7 +53,8 @@ export class RecentCampaignComponent implements OnInit {
     this.listenFormCampaignValueChanges();
   }
 
-  title: string = 'Recent WhatsApp Campaign';
+  title: string = `Recent ${convertToNormalCase(this.selectedTab)} Campaign`;
+
   labelList: { label: string; count: number; colorCode }[];
   statsDataSets: StatData = {
     labels: ['NO DATA'],
@@ -120,6 +116,8 @@ export class RecentCampaignComponent implements OnInit {
           ? eMarketEmailStatCard
           : eMarketWhatsappStatCard;
       this.campaignList = [];
+
+      this.title = `Recent ${convertToNormalCase(this.selectedTab)} Campaign`;
     }
   }
 

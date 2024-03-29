@@ -13,6 +13,11 @@
     display: flex;
     justify-content: space-between;
   }
+  .stat-title {
+    font: normal normal 600 16px / 21px Poppins;
+    letter-spacing: 0.96px;
+    color: #002046;
+  }
 }
 .menu-container {
   display: flex;

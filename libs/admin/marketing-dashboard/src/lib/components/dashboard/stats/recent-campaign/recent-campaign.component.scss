@@ -16,8 +16,9 @@
       justify-content: space-between;
 
       &__title {
-        font-weight: 600;
-        font-size: 14px;
+        font: normal normal 600 16px / 21px Poppins;
+        letter-spacing: 0.96px;
+        color: #002046;
       }
 
       &__dropdown {

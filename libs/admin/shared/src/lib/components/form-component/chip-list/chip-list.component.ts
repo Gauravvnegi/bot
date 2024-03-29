@@ -14,7 +14,9 @@ export class ChipListComponent extends FormComponent implements OnInit {
     super(controlContainer);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.initInputControl();
+  }
 
   handleRemove(event: { originalEvent: PointerEvent; value: string }) {
     event.originalEvent.stopPropagation();

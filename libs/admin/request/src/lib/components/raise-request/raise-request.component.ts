@@ -122,7 +122,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
           limit: '0',
           offset: '0',
           categoryStatus: true,
-          includeActiveUsers: true,
         },
       ]),
     };

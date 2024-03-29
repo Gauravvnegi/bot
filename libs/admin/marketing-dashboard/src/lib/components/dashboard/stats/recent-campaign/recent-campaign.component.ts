@@ -12,6 +12,7 @@ import {
   Option,
   QueryConfig,
   StatCard,
+  getUniqueOptions,
 } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
@@ -30,9 +31,11 @@ import { EMarketStatsResponse } from '../../../types/campaign.response.type';
 export class RecentCampaignComponent implements OnInit {
   $subscription = new Subscription();
   campaignForm: FormGroup;
-  campaignList: Option[] = [];
+  campaignList: any[] = [];
   entityId: string;
   statCard: StatCard[] = eMarketEmailStatCard;
+  loading: boolean = false;
+  selectedOption: Option;
 
   @Input() selectedTab: 'EMAIL' | 'WHATSAPP' = 'EMAIL';
   statsScore: number = 0;
@@ -103,12 +106,12 @@ export class RecentCampaignComponent implements OnInit {
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.getAllCampaignList();
+    this.getAllCampaignList(true);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.config.firstChange) {
-      this.getAllCampaignList();
+    if (!changes?.config?.firstChange) {
+      this.getAllCampaignList(true);
     }
 
     if (changes.selectedTab) {
@@ -116,12 +119,15 @@ export class RecentCampaignComponent implements OnInit {
         this.selectedTab === 'EMAIL'
           ? eMarketEmailStatCard
           : eMarketWhatsappStatCard;
+      this.campaignList = [];
     }
   }
 
   listenFormCampaignValueChanges() {
     this.campaignForm.get('campaign').valueChanges.subscribe((res) => {
       const campaignData = this.campaignList.find((item) => item.value === res);
+      this.selectedOption = campaignData;
+
       this.labelList = campaignData?.data;
       this.statsScore = campaignData?.score;
       this.initStatsData();
@@ -154,78 +160,48 @@ export class RecentCampaignComponent implements OnInit {
 
     if (data.total) {
       this.statsDataSets = data;
+    } else {
+      this.statsDataSets = {
+        labels: ['NO DATA'],
+        datasets: [
+          {
+            data: [100],
+            backgroundColor: ['#d5d1d1'],
+            hoverBackgroundColor: ['#d5d1d1'],
+          },
+        ],
+        total: 0,
+      };
     }
   }
 
-  getAllCampaignList() {
-    const params = `${this.config.params}&limit=${this.limit}&offset=${this.offset}&active=true`;
+  getAllCampaignList(patch: boolean = false) {
+    this.loading = true;
+    const params = `${this.config.params}&limit=${this.limit}&offset=${this.offset}&entityState=ACTIVE`;
 
     this.$subscription.add(
       this.statsService
         .getCampaignList(this.entityId, { params: params })
-        .subscribe((res) => {
-          this.noMoreCampaign = this.limit > res.total;
+        .subscribe(
+          (res) => {
+            this.noMoreCampaign = this.limit > res.total;
 
-          this.campaignList = [
-            ...this.campaignList,
-            ...res.records.map((data) => {
-              return {
-                label: data.name,
-                value: data.id,
-                score:
-                  this.selectedTab !== 'EMAIL'
-                    ? data?.statsCampaign['sent']
-                    : data?.statsCampaign['delivered'],
+            const data = this.initCampaignOption(res.records);
 
-                data:
-                  this.selectedTab !== 'EMAIL'
-                    ? [
-                        {
-                          label: 'Delivered',
-                          count: data?.statsCampaign['delivered'],
-                          colorCode: '#FF9F40',
-                        },
-                        {
-                          label: 'Read',
-                          count: data?.statsCampaign['read'],
-                          colorCode: '#4BC0C0',
-                        },
-                        {
-                          label: 'Failed',
-                          count: data?.statsCampaign['failed'],
-                          colorCode: '#FF6384',
-                        },
-                      ]
-                    : [
-                        {
-                          label: 'Open',
-                          count: data?.statsCampaign['opened'],
-                          colorCode: '#FF9F40',
-                        },
-                        {
-                          label: 'Failed',
-                          count: data?.statsCampaign['failed'],
-                          colorCode: '#4BC0C0',
-                        },
-                        {
-                          label: 'Clicks',
-                          count: data?.statsCampaign['clicked'],
-                          colorCode: '#FF6384',
-                        },
-                        {
-                          label: 'Unopened',
-                          count: data?.statsCampaign['unopened'],
-                          colorCode: '#36A2EB',
-                        },
-                      ],
-              };
-            }),
-          ];
+            this.campaignList = getUniqueOptions([
+              ...this.campaignList,
+              ...data,
+              this.selectedOption ? this.selectedOption : {},
+            ]);
 
-          this.campaignForm.patchValue({
-            campaign: this.campaignList[0].value,
-          });
-        })
+            if (patch) {
+              const id = this.campaignList[0].value;
+              this.campaignForm.get('campaign').patchValue(id);
+            }
+          },
+          this.handleError,
+          this.handleFinal
+        )
     );
   }
 
@@ -236,11 +212,93 @@ export class RecentCampaignComponent implements OnInit {
     }
   }
 
-  onSearchCampaign(text: string) {}
+  initCampaignOption(record: any[]) {
+    return record.map((data) => {
+      return {
+        label: data.name,
+        value: data.id,
+        score:
+          this.selectedTab !== 'EMAIL'
+            ? data?.statsCampaign['sent']
+            : data?.statsCampaign['delivered'],
+
+        data:
+          this.selectedTab !== 'EMAIL'
+            ? [
+                {
+                  label: 'Delivered',
+                  count: data?.statsCampaign['delivered'],
+                  colorCode: '#FF9F40',
+                },
+                {
+                  label: 'Read',
+                  count: data?.statsCampaign['read'],
+                  colorCode: '#4BC0C0',
+                },
+                {
+                  label: 'Failed',
+                  count: data?.statsCampaign['failed'],
+                  colorCode: '#FF6384',
+                },
+              ]
+            : [
+                {
+                  label: 'Open',
+                  count: data?.statsCampaign['opened'],
+                  colorCode: '#FF9F40',
+                },
+                {
+                  label: 'Failed',
+                  count: data?.statsCampaign['failed'],
+                  colorCode: '#4BC0C0',
+                },
+                {
+                  label: 'Clicks',
+                  count: data?.statsCampaign['clicked'],
+                  colorCode: '#FF6384',
+                },
+                {
+                  label: 'Unopened',
+                  count: data?.statsCampaign['unopened'],
+                  colorCode: '#36A2EB',
+                },
+              ],
+      };
+    });
+  }
+
+  onSearchCampaign(text: string) {
+    if (text) {
+      const params = `${this.config.params}&key=${text}&entityState=ACTIVE`;
+
+      this.$subscription.add(
+        this.statsService
+          .getCampaignList(this.entityId, { params: params })
+          .subscribe((res) => {
+            this.campaignList = this.initCampaignOption(res.records);
+          })
+      );
+    } else {
+      this.campaignList = [];
+      this.getAllCampaignList();
+    }
+  }
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
+
+  /**
+   * @function handleError to show the error
+   * @param param0 network error
+   */
+  handleError = ({ error }): void => {
+    this.loading = false;
+  };
+
+  handleFinal = () => {
+    this.loading = false;
+  };
 }
 
 type StatData = { labels: string[]; datasets: any[]; total: number };

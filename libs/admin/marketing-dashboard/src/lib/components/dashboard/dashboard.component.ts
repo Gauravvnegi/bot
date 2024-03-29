@@ -7,10 +7,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
-import {
-  eMarketStatCard,
-  eMarketTabFilterOptions,
-} from '../../constants/emarket-stats.constants';
+import { eMarketTabFilterOptions } from '../../constants/emarket-stats.constants';
 import { MarketingService } from '../../services/stats.service';
 import { dashboardConfig } from '../constants/dashboard';
 import { GraphData } from '../types/stats';

@@ -99,3 +99,64 @@ export const authConstants = {
     },
   ],
 };
+
+import { AbstractControl, ValidatorFn } from '@angular/forms';
+
+export function passwordValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    const password = control.value;
+    const uppercaseRegex = /[A-Z]/;
+    const numericRegex = /[0-9]/;
+    const alphanumericRegex = /^[A-Za-z0-9]+$/;
+
+    if (!password || password.length < 1) {
+      return { required: true };
+    }
+
+    if (!uppercaseRegex.test(password.charAt(0))) {
+      return { uppercaseStart: true };
+    }
+
+    if (
+      password.length < 8 ||
+      password.length > authConstants.passwordMaxLength
+    ) {
+      return { invalidLength: true };
+    }
+
+    if (!uppercaseRegex.test(password)) {
+      return { noUppercase: true };
+    }
+
+    if (!numericRegex.test(password)) {
+      return { noNumeric: true };
+    }
+
+    if (!alphanumericRegex.test(password)) {
+      return { nonAlphanumeric: true };
+    }
+
+    return null; // Password meets all criteria
+  };
+}
+
+export function confirmPasswordValidator(controlName: string): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    const password = control.root.get('password');
+    const confirmPassword = control.root.get(controlName);
+
+    if (!password || !confirmPassword) {
+      return null;
+    }
+
+    if (confirmPassword.value === '') {
+      return null; // Don't show error if confirm password field is empty
+    }
+
+    if (password.value !== confirmPassword.value) {
+      return { passwordMismatch: true };
+    }
+
+    return null; // Passwords match
+  };
+}

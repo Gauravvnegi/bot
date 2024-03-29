@@ -125,7 +125,10 @@
           </td>
           <td (click)="removeContactField(rowData)">
             <div class="remove-table">
-              <i class="fa fa-times" aria-hidden="true"></i>
+              <i
+                *ngIf="contactFA?.controls.length === 1; else del"
+                class="fas fa-undo"
+              ></i>
             </div>
           </td>
         </tr>
@@ -147,3 +150,7 @@
     (onClick)="submitContact()"
   ></hospitality-bot-button>
 </div>
+
+<ng-template #del>
+  <i class="fa fa-trash" aria-hidden="true" style="color: red;"></i>
+</ng-template>

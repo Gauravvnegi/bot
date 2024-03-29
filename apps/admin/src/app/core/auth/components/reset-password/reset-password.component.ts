@@ -3,7 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ValidatorService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { authConstants } from '../../constants/auth';
+import {
+  authConstants,
+  confirmPasswordValidator,
+  passwordValidator,
+} from '../../constants/auth';
 import { AuthService } from '../../services/auth.service';
 
 /**
@@ -41,14 +45,7 @@ export class ResetPasswordComponent implements OnInit {
   initResetForm(): void {
     this.resetPasswordForm = this._fb.group(
       {
-        password: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(authConstants.passwordMinLength),
-            Validators.maxLength(authConstants.passwordMaxLength),
-          ],
-        ],
+        password: ['', [Validators.required, passwordValidator()]],
         resetPassword: ['', [Validators.required]],
       },
       {
@@ -97,7 +94,7 @@ export class ResetPasswordComponent implements OnInit {
             { panelClass: 'success' }
           )
           .subscribe();
-        
+
         this.isResetingIn = false;
 
         this.navigateToLogin();

@@ -10,8 +10,13 @@
           controlName="campaign"
           [options]="campaignList"
           [props]="{
+            isAsync: true,
             placeholder: 'Select Type'
           }"
+          (onSearch)="onSearchCampaign($event)"
+          [stopEmission]="noMoreCampaign"
+          (paginate)="loadMoreData()"
+          [loading]="loading"
         ></hospitality-bot-select>
       </div>
     </div>

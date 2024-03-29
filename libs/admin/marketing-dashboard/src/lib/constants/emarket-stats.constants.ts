@@ -1,6 +1,6 @@
 import { StatCard } from '@hospitality-bot/admin/shared';
 
-export const eMarketStatCard: StatCard[] = [
+export const eMarketWhatsappStatCard: StatCard[] = [
   {
     label: 'Total Sent',
     key: 'Resolved',
@@ -28,6 +28,36 @@ export const eMarketStatCard: StatCard[] = [
     score: 0,
     additionalData: '0',
     id: 'deliveryRate',
+  },
+];
+export const eMarketEmailStatCard: StatCard[] = [
+  {
+    label: 'Total Delivered',
+    key: 'Resolved',
+    score: 0,
+    additionalData: '0',
+    id: 'delivered',
+  },
+  {
+    label: 'Total Open',
+    key: 'Timedout',
+    score: 0,
+    additionalData: '0',
+    id: 'opened',
+  },
+  {
+    label: 'Total Clicks',
+    key: 'InProgress',
+    score: 0,
+    additionalData: '0',
+    id: 'clicked',
+  },
+  {
+    label: 'Conversion Rate',
+    key: 'ToDo',
+    score: 0,
+    additionalData: '0',
+    id: 'conversionRate',
   },
 ];
 

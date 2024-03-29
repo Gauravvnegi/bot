@@ -82,7 +82,10 @@ export class EditContactComponent extends BaseDatatableComponent
    * @returns Return true if there is only one contact field.
    */
   removeContactField(formGroup: FormGroup) {
-    if (this.contactFA.controls.length === 1) return;
+    if (this.contactFA.controls.length === 1) {
+      formGroup.reset();
+      return;
+    }
     this.contactFA.controls = this.contactFA.controls.filter(
       (data) => data !== formGroup
     );

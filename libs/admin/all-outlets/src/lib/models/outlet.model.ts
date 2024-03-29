@@ -79,7 +79,7 @@ export class MenuItem {
   deliveryPrice: number;
   kitchenDept: string;
   dineInPrice: number;
-  preparationTime: number;
+  preparationTime: string;
   unit: string;
   status: boolean;
   quantity: number;
@@ -99,7 +99,7 @@ export class MenuItem {
     this.category = input?.category;
     this.dineInPrice = input?.dineInPrice;
     this.deliveryPrice = input?.deliveryPrice;
-    this.preparationTime = input?.preparationTime;
+    this.preparationTime = this.formatDuration(input?.preparationTime);
     this.unit = input?.unit;
     this.status = input?.status;
     this.quantity = input?.quantity;
@@ -109,6 +109,23 @@ export class MenuItem {
     this.offers = input?.offers;
     this.itemId = input?.id;
     return this;
+  }
+  formatDuration(milliseconds) {
+    if (!milliseconds) return undefined;
+
+    const seconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    const remainingSeconds = seconds % 60;
+
+    const formattedHours = hours > 0 ? `${hours}h` : '';
+    const formattedMinutes =
+      remainingMinutes > 0 ? `${remainingMinutes}min` : '';
+    const formattedSeconds = remainingSeconds > 0 ? `${remainingSeconds}s` : '';
+
+    const formattedTime = `${formattedHours} ${formattedMinutes} ${formattedSeconds}`.trim();
+    return formattedTime;
   }
 }
 

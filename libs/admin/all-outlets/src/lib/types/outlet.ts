@@ -100,6 +100,7 @@ export type MenuItemForm = {
   description: string;
   mealPreference: MealPreferences;
   category: string;
+  categoryName: string;
   // type: string;
   preparationTime: number;
   quantity: number;

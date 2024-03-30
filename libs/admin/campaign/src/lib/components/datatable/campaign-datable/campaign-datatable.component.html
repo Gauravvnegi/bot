@@ -179,7 +179,7 @@
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
-    link="create"
+    (action)="openCreateCampaign('EMAIL')"
     [content]="{
       description:
         'No Campaign found. Tap the +Create campaign to create campaign',

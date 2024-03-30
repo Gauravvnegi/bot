@@ -410,8 +410,23 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @param data campaign stats data.
    * @returns statsCampaign key object.
    */
+
   getStatsCampaignChips(data: Campaign): string[] {
-    return Object.keys(data.statsCampaign);
+    let allowedKeys = [];
+
+    switch (data.channel) {
+      case 'EMAIL':
+        allowedKeys = ['delivered', 'unopened', 'opened', 'failed', 'clicked'];
+        break;
+      case 'WHATSAPP':
+        allowedKeys = ['failed', 'delivered', 'read', 'sent'];
+        break;
+      default:
+        break;
+    }
+    return Object.keys(data.statsCampaign).filter((key) =>
+      allowedKeys.includes(key)
+    );
   }
 
   /**

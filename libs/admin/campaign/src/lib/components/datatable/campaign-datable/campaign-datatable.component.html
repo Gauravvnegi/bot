@@ -125,7 +125,10 @@
           </div>
         </ng-container>
         <ng-template #chipStats>
-          <div class="stats-container">
+          <div
+            class="stats-container"
+            *ngIf="['EMAIL', 'WHATSAPP'].includes(rowData.channel)"
+          >
             <div
               class="stat-chip {{ key }}"
               *ngFor="let key of getStatsCampaignChips(rowData)"

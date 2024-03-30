@@ -8,6 +8,7 @@ import {
 import {
   CampaignForm,
   CampaignType,
+  PostCampaignForm,
   TemplateMode,
 } from '../../types/campaign.type';
 import { campaignRoutes } from '../../constant/route';
@@ -34,6 +35,9 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { EmailService } from '../../services/email.service';
 import { EmailList } from '../../data-model/email.model';
 import { CampaignFormData } from '../../data-model/campaign.model';
+import {
+  TemplateDataType,
+} from 'libs/admin/template/src/lib/data-models/templateConfig.model';
 
 @Component({
   selector: 'hospitality-bot-campaign-form-view',
@@ -61,6 +65,10 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
   fromEmailList: Option[] = [];
   topicList: Observable<Option[]>;
 
+  campaignData = new CampaignFormData();
+
+  selectedTemplate: Option;
+
   private $subscription = new Subscription();
 
   constructor(
@@ -75,6 +83,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId;
     this.campaignId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initForm();
     this.listenRouteData();
@@ -109,7 +118,6 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
     ];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
-    this.entityId = this.globalFilterService.entityId;
     this.topicList = this.campaignService.mapTopicList(this.entityId);
     this.initNavRoutes();
     this.getFromEmails();
@@ -157,8 +165,12 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
         .getCampaignById(this.entityId, this.campaignId)
         .subscribe((res) => {
           if (res) {
-            const campaignData = new CampaignFormData().deserialize(res);
-            this.useForm.patchValue(campaignData, { emitEvent: false });
+            this.campaignData = new CampaignFormData().deserialize(res);
+            this.selectedTemplate = {
+              label: this.campaignData.templateName,
+              value: this.campaignData.templateId,
+            };
+            this.useForm.patchValue(this.campaignData, { emitEvent: false });
           }
         })
     );
@@ -201,6 +213,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
       this.inputControls.subject.setValidators([Validators.required]);
     } else {
       this.resetValidators(this.inputControls.subject);
+      this.resetValidators(this.inputControls.from);
     }
   }
 
@@ -210,8 +223,16 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
     control.markAsUntouched();
   }
 
+  templateChange(event: TemplateDataType) {
+    if (event.id)
+      this.selectedTemplate = {
+        label: event?.name,
+        value: event?.id,
+      };
+  }
+
   handleSubmit(action: 'send' | 'save') {
-    if (this.useForm.invalid && action === 'send') {
+    if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
         'Invalid form: Please fix errors'
@@ -224,6 +245,34 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
       this.campaignType,
       action
     );
+
+    if (this.campaignId) {
+      this.updateCampaign(formData);
+    } else {
+      this.createCampaign(formData);
+    }
+  }
+
+  updateCampaign(formData: PostCampaignForm) {
+    this.$subscription.add(
+      this.campaignService
+        .updateCampaign(this.entityId, formData, this.campaignId)
+        .subscribe((res) => {
+          if (res) {
+            this.snackbarService.openSnackBarAsText(
+              `Campaign updated successfully`,
+              '',
+              { panelClass: 'success' }
+            );
+            this.routesConfigService.navigate({
+              subModuleName: ModuleNames.CAMPAIGN,
+            });
+          }
+        })
+    );
+  }
+
+  createCampaign(formData: PostCampaignForm) {
     this.$subscription.add(
       this.campaignService
         .createCampaign(this.entityId, formData)

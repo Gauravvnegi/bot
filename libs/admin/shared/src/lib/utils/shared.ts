@@ -151,9 +151,12 @@ export function generateUniqueId() {
  * @returns uninque option
  */
 export function getUniqueOptions<T extends Option>(data: T[]): T[] {
+  if (!data) {
+    return [];
+  }
   const uniqueMap = new Map();
   for (const item of data) {
-    uniqueMap.set(item.value, item);
+    uniqueMap.set(item?.value, item);
   }
   return Array.from(uniqueMap.values());
 }

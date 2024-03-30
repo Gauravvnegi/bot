@@ -44,6 +44,8 @@ class EntityTypeCounts {
   }
 }
 
+export type TemplateDataType = Omit<Template, 'deserialize, getDraftDate'>;
+
 export class Template implements IDeserializable {
   id: string;
   status: boolean;

@@ -3,7 +3,7 @@ import { ApiService } from '@hospitality-bot/shared/utils';
 import { Observable } from 'rxjs';
 import { TableValue } from '../constants/listing';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ListingService extends ApiService {
   selectedTab = TableValue.all;
   /**

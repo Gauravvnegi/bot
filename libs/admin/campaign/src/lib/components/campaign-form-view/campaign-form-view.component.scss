@@ -19,9 +19,6 @@
 }
 
 .template-header {
-  .group-header {
-    @include bold-sm-text;
-  }
   display: flex;
   justify-content: space-between;
 }

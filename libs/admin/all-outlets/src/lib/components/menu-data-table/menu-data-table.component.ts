@@ -111,10 +111,9 @@ export class MenuDataTableComponent extends BaseDatatableComponent
    */
   handleStatus(status: boolean, rowData: MenuItemResponse): void {
     this.loading = true;
-    rowData.status = status;
     this.$subscription.add(
       this.outletService
-        .updateMenuItems(rowData, rowData.id, this.menuId)
+        .updateMenuItems({ status: status }, rowData.id, this.menuId)
         .subscribe(() => {
           this.initTableValue();
           this.snackbarService.openSnackBarAsText(

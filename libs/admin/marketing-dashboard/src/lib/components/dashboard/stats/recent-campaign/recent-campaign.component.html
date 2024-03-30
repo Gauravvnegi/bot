@@ -1,0 +1,83 @@
+<div class="wrapper">
+  <div class="container">
+    <div class="header">
+      <div class="header__title">
+        {{ title }}
+      </div>
+      <div class="header__dropdown" [formGroup]="campaignForm">
+        <hospitality-bot-select
+          class="half-width"
+          controlName="campaign"
+          [options]="campaignList"
+          [props]="{
+            isAsync: true,
+            placeholder: 'Select Type'
+          }"
+          (onSearch)="onSearchCampaign($event)"
+          [stopEmission]="noMoreCampaign"
+          (paginate)="loadMoreData()"
+          [loading]="loading"
+        ></hospitality-bot-select>
+      </div>
+    </div>
+
+    <div class="graph">
+      <div class="graph__left">
+        <p-chart
+          type="doughnut"
+          [data]="statsDataSets"
+          [options]="{
+            legend: false
+          }"
+        ></p-chart>
+      </div>
+      <div class="graph__right">
+        <div class="total">
+          <div class="total__count">
+            {{ statsScore || 0 }}
+          </div>
+          <div class="total__label">
+            {{
+              selectedTab === 'EMAIL'
+                ? 'Total Delivered Emails'
+                : 'Total Sent Messages'
+            }}
+          </div>
+        </div>
+        <div class="labels">
+          <div class="label" *ngFor="let item of labelList">
+            <div
+              class="label__circle"
+              [style.backgroundColor]="item?.colorCode"
+            ></div>
+            <div class="label__name">{{ item?.label }}</div>
+            <div class="label__count">{{ item?.count }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-card-wrapper">
+    <hospitality-bot-stats-card
+      [stats]="statCard[0]"
+      [isComparisonPercent]="true"
+      class="stat-card"
+    ></hospitality-bot-stats-card>
+    <hospitality-bot-stats-card
+      [stats]="statCard[1]"
+      [isComparisonPercent]="true"
+      class="stat-card"
+    ></hospitality-bot-stats-card>
+    <hospitality-bot-stats-card
+      [stats]="statCard[2]"
+      [isComparisonPercent]="true"
+      class="stat-card"
+    ></hospitality-bot-stats-card>
+    <hospitality-bot-stats-card
+      [stats]="statCard[3]"
+      [isComparisonPercent]="true"
+      class="stat-card"
+    ></hospitality-bot-stats-card>
+  </div>
+</div>

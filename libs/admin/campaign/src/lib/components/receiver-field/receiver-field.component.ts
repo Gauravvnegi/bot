@@ -1,12 +1,5 @@
 import { ENTER, COMMA, TAB } from '@angular/cdk/keycodes';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ReceiversSearchItem } from '../../data-model/email.model';
 import { EmailService } from '../../services/email.service';
@@ -109,6 +102,13 @@ export class ReceiverFieldComponent implements OnInit, OnDestroy {
     this.recipients = [...new Set(this.recipients)];
     this.inputControls.recipients.patchValue(this.recipients);
     this.inputControls.to.patchValue([...new Set(recipientLabels)]);
+  }
+
+  onRemoveChip(value: string) {
+    this.recipients = this.recipients.filter(
+      (recipient) => recipient.label !== value
+    );
+    this.inputControls.recipients.patchValue(this.recipients);
   }
 
   get inputControls() {

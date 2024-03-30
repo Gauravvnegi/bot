@@ -47,6 +47,7 @@ export type StatCard = {
   comparisonPercent?: number;
   color?: string;
   tooltip?: string;
+  id?: string;
 };
 
 type ChartData = {

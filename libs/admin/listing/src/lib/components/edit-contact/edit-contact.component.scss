@@ -80,6 +80,8 @@ td {
 
   .add-more {
     margin-left: auto;
+    margin-top: -42px;
+    padding-right: 25px;
   }
 
   .submit {
@@ -118,5 +120,8 @@ td {
 
   .p-datatable-thead > tr > th:last-child {
     background-color: #ffff !important;
+  }
+  .p-datatable .p-datatable-tbody .table-row:hover {
+    background: unset !important;
   }
 }

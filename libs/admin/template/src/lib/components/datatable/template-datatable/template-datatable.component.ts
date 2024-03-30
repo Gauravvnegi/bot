@@ -107,7 +107,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
               order: sharedConfig.defaultOrder,
               entityType: this.selectedTab,
             },
-            ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
+            ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
           ]);
         })
     );
@@ -173,14 +173,11 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
    */
   updateTemplateStatus(status, userData): void {
     this.loading = true;
-    const data = {
-      active: status,
-    };
     this.templateService
-      .updateTemplateStatus(this.entityId, data, userData.id)
+      .updateTemplateStatus(this.entityId, { active: status }, userData.id)
       .subscribe(
         (_) => {
-          this.loadInitialData();
+          this.loadData();
           this.snackbarService.openSnackBarWithTranslate(
             {
               translateKey: `messages.SUCCESS.STATUS_UPDATED`,
@@ -228,11 +225,12 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(
         [
+          ...this.globalQueries,
           {
             order: sharedConfig.defaultOrder,
             entityType: this.selectedTab,
           },
-          ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
+          ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         ],
         {
           offset: this.first,

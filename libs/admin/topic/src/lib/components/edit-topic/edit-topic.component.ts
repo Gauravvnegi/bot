@@ -212,7 +212,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
                 }
               )
               .subscribe();
-            this._router.navigate(['/pages/library/topic']);
+            this.routesConfigService.goBack();
             this.isSavingTopic = false;
           },
           ({ error }) => {

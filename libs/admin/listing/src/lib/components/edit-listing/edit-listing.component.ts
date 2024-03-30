@@ -160,6 +160,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
   }
 
   handleSubmit() {
+    this.listFG.markAllAsTouched();
     if (this.listId) this.updateList();
     else this.createList();
   }
@@ -287,6 +288,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
    * @param event The event for which updation will be done.
    */
   updateContactList(event) {
+    this.listFG.markAllAsTouched();
     if (event.add && !this.listId)
       this.listFG.patchValue({ marketingContacts: event.data });
     else this.getListDetails(this.listId);

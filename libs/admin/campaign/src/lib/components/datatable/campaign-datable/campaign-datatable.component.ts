@@ -40,6 +40,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   isAutoLayout = false;
   isCustomSort = true;
   triggerInitialData = false;
+
   cols = campaignConfig.datatable.cols;
   globalQueries = [];
   $subscription = new Subscription();
@@ -52,6 +53,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     },
   ];
 
+  selectedTab = 'EMAIL';
   tableType: 'campaignType' | 'campaignDetails' = 'campaignType';
 
   campaignCta: MenuItem[] = [];
@@ -61,8 +63,6 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    private router: Router,
-    private route: ActivatedRoute,
     private campaignService: CampaignService,
     protected _translateService: TranslateService,
     private routesConfigService: RoutesConfigService
@@ -79,21 +79,24 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
   listenForGlobalFilters(): void {
-    this.globalFilterService.globalFilter$.subscribe((data) => {
-      this.globalQueries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-      ];
-      this.entityId = this.globalFilterService.entityId;
-      this.loadInitialData([
-        ...this.globalQueries,
-        {
-          order: sharedConfig.defaultOrder,
-          entityType: this.selectedTab,
-        },
-        ...this.getSelectedQuickReplyFilters(),
-      ]);
-    });
+    this.$subscription.add(
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ];
+        this.entityId = this.globalFilterService.entityId;
+
+        this.loadInitialData([
+          ...this.globalQueries,
+          {
+            order: sharedConfig.defaultOrder,
+            channel: this.selectedTab,
+          },
+          ...this.getSelectedQuickReplyFilters(),
+        ]);
+      })
+    );
   }
 
   initDetails() {
@@ -147,6 +150,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
       this.tableType === 'campaignDetails'
         ? modData.entityTypeCounts
         : modData.entityChannelCounts;
+
     this.initFilters(
       entityTypeCounts,
       modData.entityStateCounts,
@@ -376,7 +380,6 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
-          entityType: this.selectedTab,
           exportType: 'CSV',
           channel: this.selectedTab,
         },
@@ -410,8 +413,23 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @param data campaign stats data.
    * @returns statsCampaign key object.
    */
+
   getStatsCampaignChips(data: Campaign): string[] {
-    return Object.keys(data.statsCampaign);
+    let allowedKeys = [];
+
+    switch (data.channel) {
+      case 'EMAIL':
+        allowedKeys = ['delivered', 'unopened', 'opened', 'failed', 'clicked'];
+        break;
+      case 'WHATSAPP':
+        allowedKeys = ['failed', 'delivered', 'read', 'sent'];
+        break;
+      default:
+        break;
+    }
+    return Object.keys(data.statsCampaign).filter((key) =>
+      allowedKeys.includes(key)
+    );
   }
 
   /**

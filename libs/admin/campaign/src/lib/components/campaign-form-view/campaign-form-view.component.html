@@ -8,6 +8,7 @@
     <hospitality-bot-input
       class="half-width"
       controlName="campaignName"
+      maxLength="60"
       label="Campaign Name"
       [props]="{
         placeholder: 'Enter Campaign Name'
@@ -132,7 +133,7 @@
       }"
     ></hospitality-bot-input>
     <hr class="data-separator" />
-    <div class="group-header one-third-width">When</div>
+    <div class="form-header one-third-width">When</div>
     <div class="one-third-width"></div>
     <hospitality-bot-select
       [ngClass]="
@@ -175,7 +176,7 @@
     ></hospitality-bot-date>
     <hr class="data-separator" />
     <div class="template-header full-width">
-      <div class="group-header">Add Content</div>
+      <div class="form-header">Add Content</div>
       <hospitality-bot-button
         *ngIf="isRemoveCta && inputControls.message?.value?.length"
         class="remove-cta"
@@ -187,17 +188,54 @@
         (onClick)="removeTemplate()"
       ></hospitality-bot-button>
     </div>
-    <hospitality-bot-create-content
-      *ngIf="!inputControls.message?.value?.length"
-      class="full-width"
-      [campaignType]="campaignType"
-    ></hospitality-bot-create-content>
-    <hospitality-bot-edit-content
-      *ngIf="inputControls.message?.value?.length"
-      class="full-width"
-      controlName="message"
-      (selectedMode)="selectedMode($event)"
-    ></hospitality-bot-edit-content>
+    <ng-container *ngIf="campaignType === 'WHATSAPP' && campaignId">
+      <hospitality-bot-quick-select
+        class="half-width select"
+        controlName="templateId"
+        label="Template"
+        [inputType]="'select'"
+        [props]="{
+          showChips: false,
+          placeholder: 'Select',
+          selectedOption: selectedTemplate
+        }"
+        [apiConfig]="{
+          entityId: entityId,
+          apiEndPoint: 'templates',
+          dataModel: {
+            key: 'records',
+            values: {
+              label: 'name',
+              value: 'id'
+            }
+          },
+          queryParams: {
+            entityState: 'ACTIVE',
+            entityType: 'WHATSAPP'
+          }
+        }"
+        [paginationConfig]="{
+          isPagination: true
+        }"
+        (clickedOption)="templateChange($event)"
+        [initItems]="true"
+      ></hospitality-bot-quick-select>
+    </ng-container>
+    <ng-container
+      *ngIf="!campaignId || (campaignType !== 'WHATSAPP' && campaignId)"
+    >
+      <hospitality-bot-create-content
+        *ngIf="!inputControls.message?.value?.length"
+        class="full-width"
+        [campaignType]="campaignType"
+      ></hospitality-bot-create-content>
+      <hospitality-bot-edit-content
+        *ngIf="inputControls.message?.value?.length"
+        class="full-width"
+        controlName="message"
+        (selectedMode)="selectedMode($event)"
+      ></hospitality-bot-edit-content>
+    </ng-container>
     <!-- <hospitality-bot-template-editor
       class="full-width"
       controlName="message"

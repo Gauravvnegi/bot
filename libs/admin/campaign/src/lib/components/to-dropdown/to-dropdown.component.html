@@ -47,13 +47,12 @@
       <div class="division"></div>
       <div class="info-message">
         {{ 'toDrop.infoMessage' | translate }}
-        <span class="color">{{ 'toDrop.learn' | translate }}</span>
       </div>
     </ng-template>
     <ng-template #listing>
       <div class="sub-title">
         {{ 'toDrop.viewlist' | translate }}
-        <span class="color" (click)="redirect('/pages/library/listing')">{{
+        <span class="color" (click)="createListing()">{{
           'toDrop.toDrop' | translate
         }}</span>
       </div>
@@ -80,7 +79,6 @@
       <div class="division"></div>
       <div class="info-message">
         {{ 'toDrop.infoMessage' | translate }}
-        <span class="color">{{ 'toDrop.learn' | translate }}</span>
       </div>
     </ng-template>
   </ng-template>

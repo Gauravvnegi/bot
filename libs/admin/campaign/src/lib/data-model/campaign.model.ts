@@ -111,6 +111,7 @@ export class CampaignFormData {
   recipients: Option[];
   subject: string;
   id: string;
+  templateName: string;
 
   deserialize(input: CampaignResponse) {
     this.campaignName = input?.name;
@@ -119,6 +120,7 @@ export class CampaignFormData {
     // this.campaignState = input.campaignType;
     this.message = input?.message;
     this.templateId = input?.templateId;
+    this.templateName = input?.templateName;
     this.from = input?.from;
     this.subject = input?.subject?.text;
     this.cc = input?.cc;

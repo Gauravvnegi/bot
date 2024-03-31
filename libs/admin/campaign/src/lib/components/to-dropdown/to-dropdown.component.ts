@@ -7,7 +7,10 @@ import {
   Output,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { AdminUtilityService } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  ModuleNames,
+} from '@hospitality-bot/admin/shared';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { campaignConfig } from '../../constant/campaign';
@@ -19,6 +22,7 @@ import {
   ListTable,
 } from 'libs/admin/listing/src/lib/data-models/listing.model';
 import { ListType, RecipientType } from '../../types/campaign.type';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-to-dropdown',
@@ -53,7 +57,8 @@ export class ToDropdownComponent implements OnInit, OnDestroy {
     private _adminUtilityService: AdminUtilityService,
     private _router: Router,
     private _emailService: EmailService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    private routesConfigService: RoutesConfigService
   ) {}
 
   ngOnInit(): void {
@@ -124,6 +129,13 @@ export class ToDropdownComponent implements OnInit, OnDestroy {
    */
   redirect(url: string) {
     this._router.navigate([url]);
+  }
+
+  createListing() {
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.LISTING,
+      additionalPath: 'create-listing',
+    });
   }
 
   /**

@@ -104,10 +104,7 @@
       <td>
         <div
           class="cell-content"
-          *ngIf="
-            rowData[columns.field] != undefined || null || '';
-            else emptyCell
-          "
+          *ngIf="rowData[columns.field]; else emptyCell"
         >
           {{ rowData.companyName }}
         </div>

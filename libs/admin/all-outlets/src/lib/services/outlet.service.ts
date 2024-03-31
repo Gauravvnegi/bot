@@ -81,7 +81,7 @@ export class OutletService extends ApiService {
   }
 
   updateMenuItems(
-    data: MenuItemForm,
+    data: Partial<MenuItemForm>,
     menuItemId: string,
     menuId: string
   ): Observable<any> {

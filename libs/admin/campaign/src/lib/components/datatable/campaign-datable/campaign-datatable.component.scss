@@ -43,6 +43,11 @@
     }
   }
 }
+:host ::ng-deep {
+  .p-datatable .p-datatable-tbody .table-row .primary-text {
+    color: black;
+  }
+}
 
 :host ::ng-deep .name {
   font-size: 12px !important;

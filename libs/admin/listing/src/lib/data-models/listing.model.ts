@@ -62,9 +62,11 @@ export class ContactList {
 
   deserialize(input) {
     this.records = new Array<IContact>();
-    input?.forEach((contact, i) =>
-      this.records.push(new Contact().deserialize(contact, i))
-    );
+    input?.forEach((contact, i) => {
+      if (Object.keys(contact).length) {
+        this.records.push(new Contact().deserialize(contact, i));
+      }
+    });
     return this;
   }
 }

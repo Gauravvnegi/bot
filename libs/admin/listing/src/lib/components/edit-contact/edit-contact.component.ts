@@ -3,6 +3,10 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseDatatableComponent, Regex } from '@hospitality-bot/admin/shared';
 import { contactConfig } from '../../constants/contact';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { Subscription } from 'rxjs';
+import { ListingService } from '../../services/listing.service';
+import { Contact, ContactList } from '../../data-models/listing.model';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-edit-contact',
@@ -23,6 +27,9 @@ export class EditContactComponent extends BaseDatatableComponent
   isSelectable: boolean = false;
   isSearchable: boolean = false;
   tableName: string = 'Add Contact';
+  fileName: string = '';
+
+  $subscription = new Subscription();
 
   readonly salutationList = contactConfig.datatable.salutationList;
   readonly cols = contactConfig.datatable.cols;
@@ -30,7 +37,9 @@ export class EditContactComponent extends BaseDatatableComponent
   constructor(
     public fb: FormBuilder,
     private dialogConfig: DynamicDialogConfig,
-    private dialogRef: DynamicDialogRef
+    private dialogRef: DynamicDialogRef,
+    private listingService: ListingService,
+    private globalFilterService: GlobalFilterService
   ) {
     super(fb);
 
@@ -46,6 +55,7 @@ export class EditContactComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId;
     this.generateContactField();
     this.generateContactField();
     this.generateContactField();
@@ -55,18 +65,46 @@ export class EditContactComponent extends BaseDatatableComponent
     this.contactFA = this.fb.array([]);
   }
 
-  createContactFG(): FormGroup {
+  createContactFG(data?: Contact): FormGroup {
+    const emailPattern = Validators.pattern(Regex.EMAIL_REGEX);
+    const namePattern = Validators.pattern(Regex.NAME);
+    const numberPattern = Validators.pattern(Regex.NUMBER_REGEX);
+
     return this.fb.group({
-      email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
-      salutation: ['Mr.', [Validators.required]],
-      firstName: ['', [Validators.required, Validators.pattern(Regex.NAME)]],
-      lastName: ['', [Validators.required, Validators.pattern(Regex.NAME)]],
-      companyName: [''],
-      mobile: [
-        '',
-        [Validators.required, , Validators.pattern(Regex.NUMBER_REGEX)],
-      ],
+      email: [data?.email || '', [Validators.required, emailPattern]],
+      salutation: [data?.salutation || 'Mr', [Validators.required]],
+      firstName: [data?.firstName || '', [Validators.required, namePattern]],
+      lastName: [data?.lastName || '', [Validators.required, namePattern]],
+      companyName: [data?.companyName || ''],
+      mobile: [data?.mobile || '', [Validators.required, numberPattern]],
     });
+  }
+
+  importContact(event) {
+    const formData = new FormData();
+    formData.append('file', event.file);
+    this.$subscription.add(
+      this.listingService.importContact(this.entityId, formData).subscribe(
+        (response) => {
+          this.fileName = event.file.name;
+          this.contacts = new ContactList().deserialize(response).records;
+          this.createFA();
+
+          // this.contacts.forEach((contact, index) => {
+          //   this.contactFA.controls[index].patchValue(contact);
+          //   if (index < this.contacts.length - 1)
+          //     this.contactFA.push(this.createContactFG());
+          // });
+
+          this.contactFA.controls = this.contacts.map((item) => {
+            return this.createContactFG(item);
+          });
+
+          // this.contactFA.controls.forEach((control) => control.disable());
+        },
+        ({ error }) => {}
+      )
+    );
   }
 
   /**

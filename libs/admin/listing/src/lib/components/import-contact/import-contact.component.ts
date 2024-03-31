@@ -14,6 +14,7 @@ import { ListingService } from '../../services/listing.service';
 import { TranslateService } from '@ngx-translate/core';
 import { contactConfig } from '../../constants/contact';
 import { Regex } from '@hospitality-bot/admin/shared';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-import-contact',
@@ -22,7 +23,7 @@ import { Regex } from '@hospitality-bot/admin/shared';
 })
 export class ImportContactComponent implements OnInit, OnDestroy {
   @Output() onImportClosed = new EventEmitter();
-  @Input() entityId: string;
+  entityId: string;
   fileUploadData = contactConfig.datatable.fileUploadData;
   contacts: IContact[];
   fileName = '';
@@ -31,7 +32,8 @@ export class ImportContactComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder,
     private _listingService: ListingService,
     protected _translateService: TranslateService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private globalFilterService: GlobalFilterService
   ) {
     this.createFA();
   }
@@ -40,6 +42,7 @@ export class ImportContactComponent implements OnInit, OnDestroy {
   salutationList = contactConfig.datatable.salutationList;
 
   ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId;
     this.generateContactField();
     this.contactFA.controls.forEach((control) => control.disable());
   }
@@ -105,8 +108,7 @@ export class ImportContactComponent implements OnInit, OnDestroy {
           });
           this.contactFA.controls.forEach((control) => control.disable());
         },
-        ({ error }) => { 
-        }
+        ({ error }) => {}
       )
     );
   }

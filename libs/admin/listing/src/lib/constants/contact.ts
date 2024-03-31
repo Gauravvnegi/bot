@@ -60,8 +60,8 @@ export const contactConfig = {
     ],
     dialogWidth: '550',
     salutationList: [
-      { label: 'Mr.', value: 'Mr.' },
-      { label: 'Mrs.', value: 'Mrs.' },
+      { label: 'Mr.', value: 'Mr' },
+      { label: 'Mrs.', value: 'Mrs' },
       { label: 'Miss', value: 'Miss' },
     ],
     fileUploadData: {

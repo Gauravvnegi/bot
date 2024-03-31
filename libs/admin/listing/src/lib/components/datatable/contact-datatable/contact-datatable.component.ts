@@ -25,6 +25,7 @@ import { EditContactComponent } from '../../edit-contact/edit-contact.component'
 import { ImportContactComponent } from '../../import-contact/import-contact.component';
 import { TranslateService } from '@ngx-translate/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-contact-datatable',
@@ -54,13 +55,15 @@ export class ContactDatatableComponent extends BaseDatatableComponent
     private _listingService: ListingService,
     private snackbarService: SnackBarService,
     protected _translateService: TranslateService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private globalFilterService: GlobalFilterService
   ) {
     super(fb);
   }
 
   ngOnInit(): void {
     this.loadInitialData();
+    this.entityId = this.globalFilterService.entityId;
   }
 
   /**

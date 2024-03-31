@@ -13,10 +13,10 @@
       *ngIf="selectedRows.length"
     />
 
-    <div class="import" (click)="openImportContact($event)">
+    <!-- <div class="import" (click)="openImportContact($event)">
       <img src="assets/svg/import.svg" alt="import" />
       {{ 'contact.import' | translate }}
-    </div>
+    </div> -->
 
     <hospitality-bot-button
       label="{{ 'contact.add' | translate }}"
@@ -80,7 +80,7 @@
           [index]="rowIndex"
           (click)="onCheckboxClicked($event)"
         ></p-tableCheckbox>
-      </td> 
+      </td>
       <td>
         <div class="primary-text">
           <a

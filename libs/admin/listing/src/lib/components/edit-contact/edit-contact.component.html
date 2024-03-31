@@ -136,13 +136,22 @@
     </p-table>
   </div>
 
-  <hospitality-bot-button
-    class="add-more"
-    label="+ Add More"
-    variant="text"
-    severity="primary"
-    (onClick)="generateContactField()"
-  ></hospitality-bot-button>
+  <div class="cta-wrapper">
+    <hospitality-bot-upload-csv
+      class="upload-csv"
+      [isDisable]="false"
+      (fileData)="importContact($event)"
+      label="import"
+    >
+    </hospitality-bot-upload-csv>
+
+    <hospitality-bot-button
+      label="+ Add More"
+      variant="text"
+      severity="primary"
+      (onClick)="generateContactField()"
+    ></hospitality-bot-button>
+  </div>
 
   <hospitality-bot-button
     class="submit"

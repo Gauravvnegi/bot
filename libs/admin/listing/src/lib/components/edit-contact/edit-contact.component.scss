@@ -84,6 +84,13 @@ td {
     padding-right: 25px;
   }
 
+  .cta-wrapper {
+    display: inline-flex;
+    margin-left: auto;
+    margin-top: -12px;
+    padding-right: 25px;
+  }
+
   .submit {
     margin-inline: auto;
   }
@@ -95,7 +102,7 @@ td {
 
   .contact-table {
     display: block;
-    padding: 25px;
+    padding: 25px 25px 0 25px;
   }
 }
 
@@ -124,4 +131,9 @@ td {
   .p-datatable .p-datatable-tbody .table-row:hover {
     background: unset !important;
   }
+}
+
+.upload-csv {
+  display: block;
+  width: 79px;
 }

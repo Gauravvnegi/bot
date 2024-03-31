@@ -152,6 +152,7 @@ import { GaugeChartModule } from 'angular-gauge-chart';
 import { ChartsModule } from 'ng2-charts';
 import { ChipListComponent } from './components/form-component/chip-list/chip-list.component';
 import { DoughnutComponent } from './components/doughnut/doughnut.component';
+import { FileUploadModule } from 'primeng/fileupload';
 
 @NgModule({
   imports: [
@@ -192,6 +193,7 @@ import { DoughnutComponent } from './components/doughnut/doughnut.component';
     GaugeChartModule,
     ChartsModule,
     ChipsModule,
+    FileUploadModule,
   ],
   declarations: [
     DatatableComponent,

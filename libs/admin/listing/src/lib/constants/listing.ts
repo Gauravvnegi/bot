@@ -28,9 +28,9 @@ export const listingConfig = {
     cols: [
       {
         field: 'name',
-        header: 'Name/Topic',
+        header: 'Name',
         sortType: 'string',
-        searchField: ['name', 'topicName'],
+        searchField: ['name'],
       },
       {
         field: 'description',

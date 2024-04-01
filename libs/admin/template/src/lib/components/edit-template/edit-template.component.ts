@@ -72,7 +72,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
   initFG(): void {
     this.templateForm = this._fb.group({
       name: ['', [Validators.required]],
-      topicId: ['', [Validators.required]],
+      topicId: [''],
       description: ['', [Validators.required]],
       status: [true],
       templateType: [''],
@@ -119,6 +119,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
             .deserialize(response)
             .records.map((item) => ({ label: item.name, value: item.id }));
           this.topicList = [...this.topicList, ...data];
+          this.templateForm.get('topicId').patchValue(this.topicList[0].value);
         })
     );
   }

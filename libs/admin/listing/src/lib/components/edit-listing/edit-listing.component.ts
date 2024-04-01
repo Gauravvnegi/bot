@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Route, Router } from '@angular/router';
@@ -111,6 +110,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
             .deserialize(response)
             .records.map((item) => ({ label: item.name, value: item.id }));
           this.topicList = [...this.topicList, ...data];
+          this.listFG.get('topicName').patchValue(this.topicList[0].value);
         })
     );
   }

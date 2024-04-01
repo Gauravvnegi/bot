@@ -17,7 +17,6 @@ import { ControlContainer } from '@angular/forms';
 export class ChipListComponent extends FormComponent
   implements OnInit, AfterViewInit {
   @Output() onRemove = new EventEmitter();
-  // @Input() max: number;
   @Input() id: string;
   @Input() maxLength: number;
 
@@ -35,6 +34,7 @@ export class ChipListComponent extends FormComponent
   }
   ngAfterViewInit(): void {
     const inputElement = document.getElementById(this.id);
-    inputElement.setAttribute('maxlength', this.maxLength.toString());
+    inputElement &&
+      inputElement?.setAttribute('maxlength', this.maxLength?.toString());
   }
 }

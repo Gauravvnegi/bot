@@ -30,19 +30,18 @@
   </ng-container>
 
   <form class="form-block" [formGroup]="listFG">
-    <div class="half-width"></div>
-    <hospitality-bot-toggle-switch
-      class="status"
-      controlName="active"
-      label="Status:"
-    ></hospitality-bot-toggle-switch>
     <hospitality-bot-input
       class="half-width"
       controlName="name"
       label="Name"
       maxLength="60"
     ></hospitality-bot-input>
-    <hospitality-bot-select
+    <hospitality-bot-toggle-switch
+      class="status"
+      controlName="active"
+      label="Status:"
+    ></hospitality-bot-toggle-switch>
+    <!-- <hospitality-bot-select
       class="half-width"
       label="Topic"
       controlName="topicName"
@@ -54,7 +53,7 @@
         placeholder: 'Select Topic'
       }"
       (onCreate)="createTopic()"
-    ></hospitality-bot-select>
+    ></hospitality-bot-select> -->
     <!-- <hospitality-bot-multi-select
       class="one-third-width"
       controlName="topicName"

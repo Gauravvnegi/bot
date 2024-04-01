@@ -23,6 +23,7 @@
     [addOnBlur]="true"
     (onFocus)="handleFocus()"
     (onRemove)="handleRemove($event)"
+    [maxlength]="maxLength"
   >
     <ng-template let-item pTemplate="item">
       <div>

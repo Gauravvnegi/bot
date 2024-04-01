@@ -31,7 +31,10 @@
       [maxLength]="30"
       [id]="'campaignTags'"
       [props]="{
-        placeholder: 'Enter Tags'
+        placeholder: 'Enter Tags',
+        errorMessages: {
+          maxTags: 'You can not add more than 5 tags'
+        }
       }"
     >
     </hospitality-bot-chip-list>
@@ -226,6 +229,7 @@
         *ngIf="inputControls.message?.value?.length"
         class="full-width"
         controlName="message"
+        [campaignType]="campaignType"
         (selectedMode)="selectedMode($event)"
       ></hospitality-bot-edit-content>
     </ng-container>
@@ -236,15 +240,17 @@
     ></hospitality-bot-template-editor> -->
     <hospitality-bot-form-action
       class="full-width"
-      (onPostAction)="handleSubmit('save')"
-      (onPreAction)="handleSubmit('send')"
+      (onPreAction)="handleSubmit('save')"
+      (onPostAction)="handleSubmit('schedule')"
       [isSticky]="true"
       [isFixed]="true"
       [config]="{
-        postLabel: 'Save',
-        preLabel: 'Send',
+        postLabel: 'Schedule',
+        preLabel: 'Save',
         preVariant: 'outlined',
-        preSeverity: 'primary'
+        preSeverity: 'primary',
+        postVariant: 'contained',
+        postSeverity: 'primary'
       }"
       #fa
     >

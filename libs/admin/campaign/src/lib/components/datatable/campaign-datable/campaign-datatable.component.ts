@@ -420,7 +420,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
           exportType: 'CSV',
           channel: this.selectedTab,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
@@ -474,6 +474,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @param messageObj The message object.
    */
   showMessage(messageObj: MessageObj, panelClass = 'error'): void {
+    this.loading = false;
     this.snackbarService
       .openSnackBarWithTranslate(
         {
@@ -484,7 +485,6 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         { panelClass }
       )
       .subscribe();
-    this.loading = false;
   }
 
   /**

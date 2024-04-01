@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ControlContainer, FormGroup } from '@angular/forms';
 import { campaignConfig } from '../../constant/campaign';
-import { TemplateMode } from '../../types/campaign.type';
+import { CampaignType, TemplateMode } from '../../types/campaign.type';
 
 @Component({
   selector: 'hospitality-bot-edit-content',
@@ -12,6 +12,7 @@ export class EditContentComponent implements OnInit {
   campaignFG: FormGroup;
   @Input() controlName: string;
   @Input() viewMode = false;
+  @Input() campaignType: CampaignType;
   modes = campaignConfig.modes;
   currentMode: TemplateMode = 'backdrop';
 

@@ -47,7 +47,6 @@ export class Campaign implements IDeserializable {
   subject: string;
   templateId: string;
   testEmails: string[];
-  toReceivers;
   topicId: string;
   updatedAt: number;
   to;
@@ -76,7 +75,7 @@ export class Campaign implements IDeserializable {
       set({}, 'subject', get(input, ['subject', 'text'])),
       set({}, 'templateId', get(input, ['templateId'])),
       set({}, 'testEmails', get(input, ['testEmails'], [])),
-      set({}, 'toReceivers', get(input, ['to'])),
+      set({}, 'to', get(input, ['to'])),
       set({}, 'cc', get(input, ['cc'])),
       set({}, 'bcc', get(input, ['bcc'])),
       set({}, 'topicId', get(input, ['topicId'])),

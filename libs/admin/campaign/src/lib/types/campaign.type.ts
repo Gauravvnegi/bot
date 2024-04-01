@@ -55,7 +55,7 @@ export class PostCampaignForm {
   };
   name: string;
   isSchedule: boolean;
-  topicId: string;
+  // topicId: string
   from?: string;
   subject?: {
     text: string;

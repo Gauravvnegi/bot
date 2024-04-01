@@ -234,8 +234,10 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
               }
             );
             this.changePage(this.currentPage);
+            this.loading = false;
           },
-          ({ error }) => () => (this.loading = false)
+          ({ error }) => () => (this.loading = false),
+          () => (this.loading = false)
         )
     );
   }
@@ -482,6 +484,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         { panelClass }
       )
       .subscribe();
+    this.loading = false;
   }
 
   /**

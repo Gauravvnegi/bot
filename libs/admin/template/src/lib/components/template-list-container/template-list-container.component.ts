@@ -29,6 +29,7 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
   templateLabel: string;
   topicFG: FormGroup;
   templateTopicList = [];
+  topicList = [];
   isSavedTemplateType: boolean = false;
   isEditTemplate: boolean = false;
 

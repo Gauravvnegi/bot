@@ -26,6 +26,7 @@ export class NavigationHeaderComponent implements OnInit, OnDestroy {
 
   @Input() heading: string;
   @Input() onlyNavRoutes: boolean = false;
+  @Input() isCustomRouteBack: boolean = false;
   @Input() routes: NavRouteOptions = [];
   @Input() isBack: boolean = true;
   @Input() dateTitle: string;
@@ -45,6 +46,7 @@ export class NavigationHeaderComponent implements OnInit, OnDestroy {
 
   @ViewChild('header') header: ElementRef;
   @Output() routeNumber = new EventEmitter<number>();
+  @Output() routeBack = new EventEmitter();
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -78,7 +80,9 @@ export class NavigationHeaderComponent implements OnInit, OnDestroy {
   }
 
   back() {
-    this.location.back();
+    if (this.isCustomRouteBack) {
+      this.routeBack.emit();
+    } else this.location.back();
   }
 
   ngOnDestroy(): void {

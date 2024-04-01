@@ -1,6 +1,8 @@
 <hospitality-bot-navigation-header
   [heading]="pageTitle"
   [routes]="navRoutes"
+  [isCustomRouteBack]="true"
+  (routeBack)="selectedTemplate()"
 ></hospitality-bot-navigation-header>
 
 <div class="container" [formGroup]="templateForm">
@@ -11,15 +13,6 @@
         label="Template"
         [options]="templateTypes"
         controlName="template"
-      ></hospitality-bot-select>
-      <hospitality-bot-select
-        class="half-width"
-        controlName="topic"
-        label="Topic"
-        [options]="topicList | async"
-        [props]="{
-          placeholder: 'Select Topic'
-        }"
       ></hospitality-bot-select>
     </ng-container>
   </div>

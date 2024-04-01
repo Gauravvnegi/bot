@@ -1,4 +1,11 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  Input,
+  AfterViewInit,
+} from '@angular/core';
 import { FormComponent } from '../form.components';
 import { ControlContainer } from '@angular/forms';
 
@@ -7,8 +14,12 @@ import { ControlContainer } from '@angular/forms';
   templateUrl: './chip-list.component.html',
   styleUrls: ['./chip-list.component.scss'],
 })
-export class ChipListComponent extends FormComponent implements OnInit {
+export class ChipListComponent extends FormComponent
+  implements OnInit, AfterViewInit {
   @Output() onRemove = new EventEmitter();
+  // @Input() max: number;
+  @Input() id: string;
+  @Input() maxLength: number;
 
   constructor(public controlContainer: ControlContainer) {
     super(controlContainer);
@@ -21,5 +32,9 @@ export class ChipListComponent extends FormComponent implements OnInit {
   handleRemove(event: { originalEvent: PointerEvent; value: string }) {
     event.originalEvent.stopPropagation();
     this.onRemove.emit(event.value);
+  }
+  ngAfterViewInit(): void {
+    const inputElement = document.getElementById(this.id);
+    inputElement.setAttribute('maxlength', this.maxLength.toString());
   }
 }

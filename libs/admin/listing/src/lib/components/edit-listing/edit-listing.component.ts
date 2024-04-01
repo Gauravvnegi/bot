@@ -289,7 +289,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
    */
   updateContactList(event) {
     this.listFG.markAllAsTouched();
-    if (event.add && !this.listId)
+    if (event?.add && !this.listId)
       this.listFG.patchValue({ marketingContacts: event.data });
     else this.getListDetails(this.listId);
   }

@@ -88,12 +88,16 @@ export class Contact {
         'companyName' ? 'companyName' : null,
         get(input, ['companyName'])
       ),
-      set({}, 'email', get(input, ['email'])),
-      set({}, 'firstName', get(input, ['firstName'])),
-      set({}, 'lastName', get(input, ['lastName'])),
-      set({}, 'mobile', get(input, ['mobile'])),
-      set({}, 'id', get(input, ['id'], index)),
-      set({}, 'salutation', get(input, ['salutation'], ''))
+      set({}, 'email' ? 'email' : null, get(input, ['email'])),
+      set({}, 'firstName' ? 'firstName' : null, get(input, ['firstName'])),
+      set({}, 'lastName' ? 'lastName' : null, get(input, ['lastName'])),
+      set({}, 'mobile' ? 'mobile' : null, get(input, ['mobile'])),
+      set({}, 'id' ? 'id' : null, get(input, ['id'], index)),
+      set(
+        {},
+        'salutation' ? 'salutation' : null,
+        get(input, ['salutation'], '')
+      )
     );
     return this;
   }

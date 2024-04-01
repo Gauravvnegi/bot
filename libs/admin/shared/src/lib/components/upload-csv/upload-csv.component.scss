@@ -10,14 +10,27 @@
   .p-button {
     font-weight: 400;
     font-size: 14px;
-    color: #4b56c0 !important;
+    border-color: #4b56c0 !important;
+    color: #4b56c0;
+    // border: 1px solid;
     background-color: unset;
   }
   .p-fileupload-choose:hover {
     background: unset !important;
+    color: #4b56c0;
   }
   p-fileUpload .p-button .p-button-icon-left {
     font-size: 12px;
     margin-right: 0.3rem;
+  }
+  .file-upload {
+    cursor: pointer;
+  }
+
+  .p-fileupload {
+    cursor: pointer;
+    border: 1px solid #4b56c0;
+    display: flex;
+    justify-content: center;
   }
 }

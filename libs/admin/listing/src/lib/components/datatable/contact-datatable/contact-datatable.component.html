@@ -12,6 +12,13 @@
       (click)="deleteContact()"
       *ngIf="selectedRows.length"
     />
+    <img
+      class="edit-icon"
+      src="assets/images/edit-icon.png"
+      alt="Edit"
+      (click)="openAddContact(true)"
+      *ngIf="selectedRows.length"
+    />
 
     <!-- <div class="import" (click)="openImportContact($event)">
       <img src="assets/svg/import.svg" alt="import" />
@@ -20,7 +27,7 @@
 
     <hospitality-bot-button
       label="{{ 'contact.add' | translate }}"
-      (onClick)="openAddContact($event)"
+      (onClick)="openAddContact()"
     >
     </hospitality-bot-button>
   </div>
@@ -82,7 +89,7 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <div class="primary-text">
+        <div class="primary-text" *ngIf="rowData.email; else emptyCell">
           <a
             (click)="$event.stopPropagation()"
             class="link"
@@ -93,24 +100,27 @@
         </div>
       </td>
       <td>
-        {{ rowData.salutation }}
+        <div class="cell-content" *ngIf="rowData.salutation; else emptyCell">
+          {{ rowData.salutation }}
+        </div>
       </td>
       <td>
-        {{ rowData.firstName }}
+        <div class="cell-content" *ngIf="rowData.firstName; else emptyCell">
+          {{ rowData.firstName }}
+        </div>
       </td>
       <td>
-        {{ rowData.lastName }}
+        <div class="cell-content" *ngIf="rowData.lastName; else emptyCell">
+          {{ rowData.lastName }}
+        </div>
       </td>
       <td>
-        <div
-          class="cell-content"
-          *ngIf="rowData[columns.field]; else emptyCell"
-        >
+        <div class="cell-content" *ngIf="rowData.companyName; else emptyCell">
           {{ rowData.companyName }}
         </div>
       </td>
       <td>
-        <div class="primary-text">
+        <div class="primary-text" *ngIf="rowData.mobile; else emptyCell">
           <a
             (click)="$event.stopPropagation()"
             class="link"

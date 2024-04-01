@@ -196,8 +196,8 @@
 <ng-template #tabFilter>
   <hospitality-bot-tab-group
     [selectedIndex]="tabFilterIdx"
-    *ngIf="isTabFilterOption"
-    [listItems]="tabFilterOptions"
+    *ngIf="isTabFilters"
+    [listItems]="tabFilterItems"
     (selectedTabChange)="onSelectedTabFilterChange($event)"
   ></hospitality-bot-tab-group>
 </ng-template>

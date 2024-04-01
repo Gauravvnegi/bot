@@ -37,10 +37,13 @@ export class CampaignService extends ApiService {
   updateCampaign(
     entityId: string,
     formData: PostCampaignForm,
-    campaignId: string
+    campaignId: string,
+    queryConfig?: QueryConfig
   ) {
     return this.patch(
-      `/api/v1/cms/${entityId}/campaign/${campaignId}`,
+      `/api/v1/cms/${entityId}/campaign/${campaignId}${
+        queryConfig.queryObj ?? ''
+      }`,
       formData
     );
   }

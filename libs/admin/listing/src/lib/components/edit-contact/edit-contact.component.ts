@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { ListingService } from '../../services/listing.service';
 import { Contact, ContactList } from '../../data-models/listing.model';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 
 @Component({
   selector: 'hospitality-bot-edit-contact',
@@ -28,6 +29,8 @@ export class EditContactComponent extends BaseDatatableComponent
   isSearchable: boolean = false;
   tableName: string = 'Add Contact';
   fileName: string = '';
+  contactList: Contact[];
+  isContactImported: boolean = false;
 
   $subscription = new Subscription();
 
@@ -39,7 +42,8 @@ export class EditContactComponent extends BaseDatatableComponent
     private dialogConfig: DynamicDialogConfig,
     private dialogRef: DynamicDialogRef,
     private listingService: ListingService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService
   ) {
     super(fb);
 
@@ -56,9 +60,15 @@ export class EditContactComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.generateContactField();
-    this.generateContactField();
-    this.generateContactField();
+    if (this.contactList?.length) {
+      this.contactFA.controls = this.contactList.map((item) => {
+        return this.createContactFG(item);
+      });
+    } else {
+      this.generateContactField();
+      this.generateContactField();
+      this.generateContactField();
+    }
   }
 
   createFA(): void {
@@ -71,6 +81,7 @@ export class EditContactComponent extends BaseDatatableComponent
     const numberPattern = Validators.pattern(Regex.NUMBER_REGEX);
 
     return this.fb.group({
+      id: [data?.id || null],
       email: [data?.email || '', [Validators.required, emailPattern]],
       salutation: [data?.salutation || 'Mr', [Validators.required]],
       firstName: [data?.firstName || '', [Validators.required, namePattern]],
@@ -86,21 +97,20 @@ export class EditContactComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.listingService.importContact(this.entityId, formData).subscribe(
         (response) => {
+          this.snackbarService.openSnackBarAsText(
+            'Contact Imported successfully',
+            '',
+            { panelClass: 'success' }
+          );
+
           this.fileName = event.file.name;
           this.contacts = new ContactList().deserialize(response).records;
           this.createFA();
-
-          // this.contacts.forEach((contact, index) => {
-          //   this.contactFA.controls[index].patchValue(contact);
-          //   if (index < this.contacts.length - 1)
-          //     this.contactFA.push(this.createContactFG());
-          // });
-
           this.contactFA.controls = this.contacts.map((item) => {
             return this.createContactFG(item);
           });
 
-          // this.contactFA.controls.forEach((control) => control.disable());
+          this.isContactImported = true;
         },
         ({ error }) => {}
       )
@@ -155,5 +165,9 @@ export class EditContactComponent extends BaseDatatableComponent
       status: true,
       data: this.contactFA.getRawValue(),
     });
+  }
+
+  get isEditContact() {
+    return this.contactList?.length;
   }
 }

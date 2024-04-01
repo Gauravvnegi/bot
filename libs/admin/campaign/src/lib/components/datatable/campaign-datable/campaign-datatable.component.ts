@@ -61,8 +61,6 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   tableType: 'campaignType' | 'campaignDetails' = 'campaignType';
 
   campaignCta: MenuItem[] = [];
-  tabFilterOptions: any = eMarketTabFilterOptions;
-  isTabFilterOption: boolean = true;
 
   constructor(
     public fb: FormBuilder,
@@ -78,17 +76,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.tabFilterOptions.forEach((option) => {
-      if (
-        !this.subscriptionPlanService.checkViewPermission(option.moduleName)
-      ) {
-        this.tabFilterOptions = this.tabFilterOptions.filter(
-          (item) => item.value !== option.value
-        );
-      }
-    });
-    this.selectedTab = this.tabFilterOptions[this.tabFilterIdx]?.value;
-
+    this.selectedTab = !this.isPermissionTo.viewEmail ? 'WHATSAPP' : 'EMAIL';
     this.listenForGlobalFilters();
     this.initDetails();
   }
@@ -115,12 +103,6 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         ]);
       })
     );
-  }
-
-  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-    this.tabFilterIdx = event.index;
-    this.selectedTab = this.tabFilterOptions[this.tabFilterIdx].value;
-    this.loadData();
   }
 
   initDetails() {
@@ -177,10 +159,17 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     const modData = new Campaigns().deserialize(data);
     this.values = modData.records;
 
+    if (!this.isPermissionTo.viewEmail) {
+      delete modData.entityChannelCounts['EMAIL'];
+    }
+    if (!this.isPermissionTo.viewWhatsapp) {
+      delete modData.entityChannelCounts['WHATSAPP'];
+    }
+
     let entityTypeCounts =
       this.tableType === 'campaignDetails'
         ? modData.entityTypeCounts
-        : undefined;
+        : modData.entityChannelCounts;
 
     this.initFilters(
       entityTypeCounts,
@@ -236,7 +225,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
             this.changePage(this.currentPage);
             this.loading = false;
           },
-          ({ error }) => () => (this.loading = false),
+          ({ error }) => (this.loading = false),
           () => (this.loading = false)
         )
     );
@@ -500,5 +489,16 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         ? PermissionModuleNames.EMAIL_CAMPAIGN
         : PermissionModuleNames.WHATSAPP_CAMPAIGN
     );
+  }
+
+  get isPermissionTo() {
+    return {
+      viewEmail: this.subscriptionPlanService.checkViewPermission(
+        PermissionModuleNames.EMAIL_CAMPAIGN
+      ),
+      viewWhatsapp: this.subscriptionPlanService.checkViewPermission(
+        PermissionModuleNames.WHATSAPP_CAMPAIGN
+      ),
+    };
   }
 }

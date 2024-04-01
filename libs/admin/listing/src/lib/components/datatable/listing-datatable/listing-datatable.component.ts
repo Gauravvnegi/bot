@@ -82,6 +82,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
           {
             order: sharedConfig.defaultOrder,
             entityType: this.selectedTab,
+            sort: 'updated',
           },
           ...this.getSelectedQuickReplyFilters(),
         ]);
@@ -143,6 +144,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
           {
             order: sharedConfig.defaultOrder,
             entityType: this.selectedTab,
+            sort: 'updated',
           },
           ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         ],

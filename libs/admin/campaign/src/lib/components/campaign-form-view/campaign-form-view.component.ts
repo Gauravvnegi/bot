@@ -51,6 +51,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
 
   entityId: string;
   campaignId: string;
+  maxChip = 5;
 
   pageTitle: string;
   navRoutes: NavRouteOptions = [];
@@ -150,15 +151,25 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
       endDate: [new Date()],
       campaignState: ['DOES_NOT_REPEAT'],
       subject: [''],
-      campaignTags: [[]],
+      campaignTags: [, [Validators.maxLength(5)]],
       template: [''],
       message: [''],
       templateId: [''],
       recipients: [[]],
       id: [''],
     });
+    this.listenForTagChanges();
   }
 
+  listenForTagChanges(): void {
+    this.useForm.get('campaignTags').valueChanges.subscribe((val) => {
+      if (val.length >= this.maxChip) {
+        this.useForm.get('campaignTags').setErrors({ maxTags: true });
+      } else {
+        this.useForm.get('campaignTags').setErrors(null);
+      }
+    });
+  }
   initCampaignData() {
     this.$subscription.add(
       this.campaignService
@@ -231,7 +242,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
       };
   }
 
-  handleSubmit(action: 'send' | 'save') {
+  handleSubmit(action: 'schedule' | 'save') {
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(

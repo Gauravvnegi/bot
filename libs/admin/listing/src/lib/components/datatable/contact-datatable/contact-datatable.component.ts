@@ -29,6 +29,7 @@ import {
   GlobalFilterService,
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
 @Component({
   selector: 'hospitality-bot-contact-datatable',
@@ -156,8 +157,43 @@ export class ContactDatatableComponent extends BaseDatatableComponent
    * @function deleteContact To delete marketing contact fields value from record.
    */
   deleteContact() {
-    const ids = this.selectedRows.map((item) => ({ contact_id: item.id }));
+    let description = [`Are you sure you want to delete the contact?`];
 
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<ModalComponent> = {
+      heading: `Delete Contact`,
+      descriptions: description,
+      actions: [
+        {
+          label: 'Cancel',
+          onClick: () => {
+            dialogRef.close();
+          },
+          variant: 'outlined',
+        },
+        {
+          label: 'Delete',
+          onClick: () => {
+            this.onDeleteContact();
+            dialogRef.close();
+          },
+          variant: 'contained',
+        },
+      ],
+    };
+
+    dialogRef = openModal({
+      config: {
+        styleClass: 'confirm-dialog',
+        data: modalData,
+      },
+      dialogService: this.dialogService,
+      component: ModalComponent,
+    });
+  }
+
+  onDeleteContact() {
+    const ids = this.selectedRows.map((item) => ({ contact_id: item.id }));
     if (!this.add) {
       this.$subscription.add(
         this._listingService

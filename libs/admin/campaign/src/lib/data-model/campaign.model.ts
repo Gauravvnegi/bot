@@ -133,7 +133,8 @@ export class CampaignFormData {
       label: item?.name,
       value: item?.receiverId,
     }));
-    this.to = [...individualLabels, ...listings?.map((item) => item?.label)];
+    if (individualLabels && listings)
+      this.to = [...individualLabels, ...listings?.map((item) => item?.label)];
     this.recipients = listings;
     return this;
   }

@@ -266,7 +266,9 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
   updateCampaign(formData: PostCampaignForm) {
     this.$subscription.add(
       this.campaignService
-        .updateCampaign(this.entityId, formData, this.campaignId)
+        .updateCampaign(this.entityId, formData, this.campaignId, {
+          queryObj: `?channel=${this.campaignType}`,
+        })
         .subscribe((res) => {
           if (res) {
             this.snackbarService.openSnackBarAsText(

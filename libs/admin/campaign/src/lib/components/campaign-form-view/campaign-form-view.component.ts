@@ -149,7 +149,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
       endDate: [new Date()],
       campaignState: ['DOES_NOT_REPEAT'],
       subject: [''],
-      campaignTags: [, [Validators.maxLength(5)]],
+      campaignTags: [[]],
       template: [''],
       message: [''],
       templateId: [''],

@@ -7,7 +7,6 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'hospitality-bot-upload-csv',

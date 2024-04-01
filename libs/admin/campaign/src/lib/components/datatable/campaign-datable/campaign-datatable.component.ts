@@ -420,7 +420,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
           exportType: 'CSV',
           channel: this.selectedTab,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };

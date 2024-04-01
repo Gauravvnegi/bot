@@ -1,7 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  SubscriptionPlanService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
+  PermissionModuleNames,
+  ProductNames,
   QueryConfig,
   StatCard,
 } from '@hospitality-bot/admin/shared';
@@ -39,10 +44,22 @@ export class MarketingDashboardComponent implements OnInit, OnDestroy {
     private _adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private dateService: DateService,
-    public statsService: MarketingService
+    public statsService: MarketingService,
+    private subscriptionPlanService: SubscriptionPlanService
   ) {}
 
   ngOnInit(): void {
+    //check for permission
+    this.tabOptions.forEach((option) => {
+      if (
+        !this.subscriptionPlanService.checkViewPermission(option.moduleName)
+      ) {
+        this.tabOptions = this.tabOptions.filter(
+          (item) => item.value !== option.value
+        );
+      }
+    });
+
     this.listenForGlobalFilters();
   }
 

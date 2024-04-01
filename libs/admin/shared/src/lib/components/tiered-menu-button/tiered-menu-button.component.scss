@@ -15,7 +15,8 @@
     justify-content: center;
   }
   .disabled {
-    cursor: not-allowed !important;
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }
 

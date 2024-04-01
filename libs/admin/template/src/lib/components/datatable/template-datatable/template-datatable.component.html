@@ -7,6 +7,7 @@
     <hospitality-bot-button
       (click)="openCreateTemplate()"
       label=" {{ 'createTemplate' | translate }}"
+      [disabled]="!isPermissionTo.editEmail"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
       [additionalActionItems]="additionalActionItems"

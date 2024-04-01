@@ -4,17 +4,19 @@
     [routes]="navRoutes"
     [isBack]="false"
   >
-    <hospitality-bot-table-switch
+    <!-- <hospitality-bot-table-switch
       tableGroup="campaign"
       (onChange)="setTableType($event)"
-    ></hospitality-bot-table-switch>
+    ></hospitality-bot-table-switch> -->
+
     <hospitality-bot-tiered-menu-button
       class="tiered-menu-btn"
       label="+ Create Campaign"
       [splitButton]="true"
-      (clicked)="openCreateCampaign('EMAIL')"
+      (clicked)="openCreateCampaign()"
       [openNewWindow]="true"
       [items]="campaignCta"
+      [disabled]="isCreateDisabled"
     ></hospitality-bot-tiered-menu-button>
     <hospitality-bot-export-list
       (onDocumentActions)="onDocumentActions()"
@@ -194,8 +196,8 @@
 <ng-template #tabFilter>
   <hospitality-bot-tab-group
     [selectedIndex]="tabFilterIdx"
-    *ngIf="isTabFilters"
-    [listItems]="tabFilterItems"
+    *ngIf="isTabFilterOption"
+    [listItems]="tabFilterOptions"
     (selectedTabChange)="onSelectedTabFilterChange($event)"
   ></hospitality-bot-tab-group>
 </ng-template>

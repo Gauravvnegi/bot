@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { TemplateFormData } from '../constants/template';
 import { Template } from '../data-models/templateConfig.model';
+import { QueryConfig } from '@hospitality-bot/admin/shared';
 
 @Injectable()
 export class TemplateService extends ApiService {
@@ -92,9 +93,11 @@ export class TemplateService extends ApiService {
    * @param templateId dynamically getting templateId into api.
    * @returns patch api of update status.
    */
-  updateTemplateStatus(entityId, data, templateId) {
+  updateTemplateStatus(entityId, data, templateId, queryObj?: QueryConfig) {
     return this.patch(
-      `/api/v1/entity/${entityId}/templates/${templateId}/status`,
+      `/api/v1/entity/${entityId}/templates/${templateId}/status${
+        queryObj.params ?? ''
+      }`,
       data
     );
   }

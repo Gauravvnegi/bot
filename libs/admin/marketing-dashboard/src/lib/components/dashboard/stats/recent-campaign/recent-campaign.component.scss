@@ -93,11 +93,12 @@
 
   .stat-card-wrapper {
     width: 49%;
-    display: flex;
+    @include flex-all-center;
     flex-wrap: wrap;
     box-shadow: none;
-    gap: 1em;
-
+    gap: 0.8em;
+    border: solid 1px #e2e2e2;
+    padding: 15px;
     .stat-card {
       width: 48%;
       background: $white;

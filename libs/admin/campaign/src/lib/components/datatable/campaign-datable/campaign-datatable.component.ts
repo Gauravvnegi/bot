@@ -4,11 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   GlobalFilterService,
   RoutesConfigService,
+  SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
   NavRouteOption,
+  PermissionModuleNames,
+  eMarketTabFilterOptions,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -22,6 +25,7 @@ import { CampaignService } from '../../../services/campaign.service';
 import { CampaignType, MessageObj } from '../../../types/campaign.type';
 import { campaignStatus } from '../../../constants/response';
 import { MenuOptions } from '../../../constants/camapign';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'hospitality-bot-campaign-datatable',
@@ -57,6 +61,8 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   tableType: 'campaignType' | 'campaignDetails' = 'campaignType';
 
   campaignCta: MenuItem[] = [];
+  tabFilterOptions: any = eMarketTabFilterOptions;
+  isTabFilterOption: boolean = true;
 
   constructor(
     public fb: FormBuilder,
@@ -65,12 +71,24 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     protected snackbarService: SnackBarService,
     private campaignService: CampaignService,
     protected _translateService: TranslateService,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    private subscriptionPlanService: SubscriptionPlanService
   ) {
     super(fb);
   }
 
   ngOnInit(): void {
+    this.tabFilterOptions.forEach((option) => {
+      if (
+        !this.subscriptionPlanService.checkViewPermission(option.moduleName)
+      ) {
+        this.tabFilterOptions = this.tabFilterOptions.filter(
+          (item) => item.value !== option.value
+        );
+      }
+    });
+    this.selectedTab = this.tabFilterOptions[this.tabFilterIdx]?.value;
+
     this.listenForGlobalFilters();
     this.initDetails();
   }
@@ -99,6 +117,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
+    this.tabFilterIdx = event.index;
+    this.selectedTab = this.tabFilterOptions[this.tabFilterIdx].value;
+    this.loadData();
+  }
+
   initDetails() {
     this.campaignCta = [
       {
@@ -106,12 +130,18 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         command: () => {
           this.openCreateCampaign('EMAIL');
         },
+        disabled: !this.subscriptionPlanService.hasManageUserPermission(
+          PermissionModuleNames.EMAIL_CAMPAIGN
+        ),
       },
       {
         label: 'Whatsapp',
         command: () => {
           this.openCreateCampaign('WHATSAPP');
         },
+        disabled: !this.subscriptionPlanService.hasManageUserPermission(
+          PermissionModuleNames.WHATSAPP_CAMPAIGN
+        ),
       },
     ];
   }
@@ -146,10 +176,11 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   setRecords(data: Record<string, any>): void {
     const modData = new Campaigns().deserialize(data);
     this.values = modData.records;
+
     let entityTypeCounts =
       this.tableType === 'campaignDetails'
         ? modData.entityTypeCounts
-        : modData.entityChannelCounts;
+        : undefined;
 
     this.initFilters(
       entityTypeCounts,
@@ -189,7 +220,9 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     this.loading = true;
     this.$subscription.add(
       this.campaignService
-        .updateCampaignStatus(this.entityId, data, userData.id)
+        .updateCampaignStatus(this.entityId, data, userData.id, {
+          queryObj: `?channel=${this.selectedTab}`,
+        })
         .subscribe(
           (_response) => {
             this.loadData();
@@ -272,7 +305,9 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   /**
    * @function openCreateCampaign to create campaign page.
    */
-  openCreateCampaign(campaignType: CampaignType): void {
+  openCreateCampaign(
+    campaignType: CampaignType = this.selectedTab as CampaignType
+  ): void {
     this.routesConfigService.navigate({
       additionalPath: 'create-campaign',
       queryParams: {
@@ -454,5 +489,13 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+  }
+
+  get isCreateDisabled() {
+    return !this.subscriptionPlanService.hasManageUserPermission(
+      this.selectedTab === 'EMAIL'
+        ? PermissionModuleNames.EMAIL_CAMPAIGN
+        : PermissionModuleNames.WHATSAPP_CAMPAIGN
+    );
   }
 }

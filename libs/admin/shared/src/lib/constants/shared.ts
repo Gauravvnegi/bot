@@ -1,3 +1,5 @@
+import { PermissionModuleNames } from './subscriptionConfig';
+
 export const sharedConfig = {
   timeInterval: {
     date: 'date',
@@ -177,4 +179,21 @@ export const guestSalutation = [
   { label: 'Padma Bhushan', value: 'Padma Bhushan' },
   { label: 'Padma Shri', value: 'Padma Shri' },
   { label: 'Padma Vibhushan', value: 'Padma Vibhushan' },
+];
+
+export const eMarketTabFilterOptions: {
+  label: string;
+  value: 'EMAIL' | 'WHATSAPP';
+  moduleName: PermissionModuleNames;
+}[] = [
+  {
+    label: 'Email',
+    value: 'EMAIL',
+    moduleName: PermissionModuleNames.EMAIL_CAMPAIGN,
+  },
+  {
+    label: 'Whatsapp',
+    value: 'WHATSAPP',
+    moduleName: PermissionModuleNames.WHATSAPP_CAMPAIGN,
+  },
 ];

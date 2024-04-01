@@ -94,9 +94,14 @@ export class CampaignService extends ApiService {
    * @param campaignId dynamically getting campaignId into api.
    * @returns patch api of update status.
    */
-  updateCampaignStatus(entityId: string, data, campaignId: string) {
+  updateCampaignStatus(
+    entityId: string,
+    data,
+    campaignId: string,
+    queryConfig: QueryConfig
+  ) {
     return this.patch(
-      `/api/v1/cms/${entityId}/campaign/${campaignId}/toggle`,
+      `/api/v1/cms/${entityId}/campaign/${campaignId}/toggle${queryConfig?.queryObj}`,
       data
     );
   }

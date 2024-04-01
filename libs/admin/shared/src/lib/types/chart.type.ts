@@ -118,6 +118,7 @@ export type DualPlotDataset = {
   data: number[];
   label: string;
   fill: boolean;
+  id?: string;
 } & Partial<DualPlotGraphColor>;
 
 export interface DualPlotChartConfig {

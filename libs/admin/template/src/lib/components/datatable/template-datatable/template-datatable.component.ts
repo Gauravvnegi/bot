@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   BaseDatatableComponent,
   NavRouteOption,
+  PermissionModuleNames,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -17,7 +18,10 @@ import { Observable, Subscription } from 'rxjs';
 import { templateConfig } from '../../../constants/template';
 import { Templates } from '../../../data-models/templateConfig.model';
 import { TemplateService } from '../../../services/template.service';
-import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import {
+  RoutesConfigService,
+  SubscriptionPlanService,
+} from '@hospitality-bot/admin/core/theme';
 import { templateRoutes } from '../../../constants/routes';
 
 @Component({
@@ -36,7 +40,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   isAutoLayout = false;
   isCustomSort = true;
   triggerInitialData = false;
-  isAllTabFilterRequired = true;
+  isAllTabFilterRequired = false;
   globalQueries = [];
   $subscription = new Subscription();
   entityId: any;
@@ -48,6 +52,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
       link: './',
     },
   ];
+  selectedTab: string = 'WHATSAPP';
 
   constructor(
     public fb: FormBuilder,
@@ -59,12 +64,15 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     private templateService: TemplateService,
     private _topicService: TopicService,
     protected _translateService: TranslateService,
-    private routesConfigServices: RoutesConfigService
+    private routesConfigServices: RoutesConfigService,
+    private subscriptionPlanService: SubscriptionPlanService
   ) {
     super(fb);
   }
 
   ngOnInit(): void {
+    this.selectedTab = this.isPermissionTo.viewWhatsapp ? 'WHATSAPP' : 'EMAIL';
+
     this.templateService.templateFormData.next(null);
     this.listenForGlobalFilters();
   }
@@ -140,6 +148,14 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   setRecords(data): void {
     const responseData = new Templates().deserialize(data);
     this.values = responseData.records;
+
+    if (!this.isPermissionTo.viewEmail) {
+      delete responseData.entityTypeCounts['EMAIL'];
+    }
+    if (!this.isPermissionTo.viewWhatsapp) {
+      delete responseData.entityTypeCounts['WHATSAPP'];
+    }
+
     this.initFilters(
       responseData.entityTypeCounts,
       responseData.entityStateCounts,
@@ -174,7 +190,9 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   updateTemplateStatus(status, userData): void {
     this.loading = true;
     this.templateService
-      .updateTemplateStatus(this.entityId, { active: status }, userData.id)
+      .updateTemplateStatus(this.entityId, { active: status }, userData.id, {
+        params: `?channel=${this.selectedTab}`,
+      })
       .subscribe(
         (_) => {
           this.loadData();
@@ -307,5 +325,19 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
    */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+  }
+
+  get isPermissionTo() {
+    return {
+      viewEmail: this.subscriptionPlanService.checkViewPermission(
+        PermissionModuleNames.EMAIL_CAMPAIGN
+      ),
+      viewWhatsapp: this.subscriptionPlanService.checkViewPermission(
+        PermissionModuleNames.WHATSAPP_CAMPAIGN
+      ),
+      editEmail: this.subscriptionPlanService.hasManageUserPermission(
+        PermissionModuleNames.EMAIL_CAMPAIGN
+      ),
+    };
   }
 }

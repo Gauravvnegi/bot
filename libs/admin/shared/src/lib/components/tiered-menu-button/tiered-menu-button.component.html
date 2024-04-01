@@ -1,7 +1,11 @@
 <div class="tiered__wrapper">
   <div
     #btn
-    [ngClass]="{ 'tiered-button': !splitButton, 'split-button': splitButton }"
+    [ngClass]="{
+      'tiered-button': !splitButton,
+      'split-button': splitButton
+    }"
+    [style.cursor]="disabled ? 'not-allowed' : 'pointer'"
     (click)="!splitButton && menu.toggle($event)"
   >
     <span
@@ -9,10 +13,7 @@
       [ngClass]="{ disabled: disabled }"
       (click)="!disabled && labelClickedAction()"
       >{{ label }}</span
-    ><span
-      class="icon"
-      (click)="!disabled && splitButton && onToggle($event)"
-      title="Expand"
+    ><span class="icon" (click)="splitButton && onToggle($event)" title="Expand"
       ><i [ngClass]="'pi pi-chevron-down'"></i
     ></span>
   </div>

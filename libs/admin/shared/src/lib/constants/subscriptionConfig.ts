@@ -10,6 +10,8 @@ export enum PermissionModuleNames {
   SEGMENTS = 'SEGMENTS',
   RESERVATION = 'RESERVATION',
   AUDIT = 'AUDIT',
+  EMAIL_CAMPAIGN = 'EMAIL_CAMPAIGN',
+  WHATSAPP_CAMPAIGN = 'WHATSAPP_CAMPAIGN',
 }
 
 export enum ProductNames {

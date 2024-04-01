@@ -17,16 +17,6 @@
     <hospitality-bot-select
       *ngIf="campaignType === 'EMAIL'"
       class="half-width"
-      controlName="topic"
-      label="Topic"
-      [options]="topicList | async"
-      [props]="{
-        placeholder: 'Select Topic'
-      }"
-    ></hospitality-bot-select>
-    <hospitality-bot-select
-      *ngIf="campaignType === 'EMAIL'"
-      class="half-width"
       label="From"
       controlName="from"
       [options]="fromEmailList"
@@ -167,6 +157,7 @@
       label="Start Date"
       [settings]="{ enableTime: true }"
       [minDate]="minDate"
+      [maxDate]="maxDate"
     ></hospitality-bot-date>
     <hospitality-bot-date
       *ngIf="inputControls.campaignState.value !== 'DOES_NOT_REPEAT'"

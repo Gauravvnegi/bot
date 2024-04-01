@@ -12,7 +12,7 @@ import {
   TemplateMode,
 } from '../../types/campaign.type';
 import { campaignRoutes } from '../../constant/route';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import {
   GlobalFilterService,
   RoutesConfigService,
@@ -35,9 +35,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { EmailService } from '../../services/email.service';
 import { EmailList } from '../../data-model/email.model';
 import { CampaignFormData } from '../../data-model/campaign.model';
-import {
-  TemplateDataType,
-} from 'libs/admin/template/src/lib/data-models/templateConfig.model';
+import { TemplateDataType } from 'libs/admin/template/src/lib/data-models/templateConfig.model';
 
 @Component({
   selector: 'hospitality-bot-campaign-form-view',
@@ -60,10 +58,10 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
   isRouteData = false;
 
   minDate = new Date();
+  maxDate = new Date();
   triggerOptions: Option[] = [];
   eventOptions: Option[] = [];
   fromEmailList: Option[] = [];
-  topicList: Observable<Option[]>;
 
   campaignData = new CampaignFormData();
 
@@ -85,6 +83,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.campaignId = this.activatedRoute.snapshot.paramMap.get('id');
+    this.maxDate.setDate(this.minDate.getDate() + 365);
     this.initForm();
     this.listenRouteData();
   }
@@ -118,7 +117,6 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
     ];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
-    this.topicList = this.campaignService.mapTopicList(this.entityId);
     this.initNavRoutes();
     this.getFromEmails();
     if (this.campaignId && !this.isRouteData) {
@@ -140,13 +138,13 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
   }
 
   initForm() {
+    let startDate = this.campaignId ? '' : new Date();
     this.useForm = this.fb.group({
       campaignName: ['', [Validators.required]],
-      topic: [''],
       to: [[], [Validators.required]],
       from: ['', [Validators.required]],
       event: [''],
-      startDate: [new Date()],
+      startDate: [startDate],
       endDate: [new Date()],
       campaignState: ['DOES_NOT_REPEAT'],
       subject: [''],
@@ -166,11 +164,12 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
         .subscribe((res) => {
           if (res) {
             this.campaignData = new CampaignFormData().deserialize(res);
-            this.selectedTemplate = {
-              label: this.campaignData.templateName,
-              value: this.campaignData.templateId,
-            };
-            this.useForm.patchValue(this.campaignData, { emitEvent: false });
+            if (this.campaignData.templateId)
+              this.selectedTemplate = {
+                label: this.campaignData.templateName,
+                value: this.campaignData.templateId,
+              };
+            this.useForm.patchValue(this.campaignData);
           }
         })
     );

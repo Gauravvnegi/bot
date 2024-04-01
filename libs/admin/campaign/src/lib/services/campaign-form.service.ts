@@ -18,8 +18,8 @@ export class CampaignFormService {
   ) {
     let data = new PostCampaignForm();
 
-    const individualRecipients = formData.to.filter(
-      (item) => !formData.recipients.some((val) => val.label === item)
+    const individualRecipients = formData?.to?.filter(
+      (item) => !formData?.recipients.some((val) => val?.label === item)
     );
 
     const isEmailType = campaignType === 'EMAIL';
@@ -27,10 +27,10 @@ export class CampaignFormService {
       channel: campaignType,
       to: {
         individual: individualRecipients,
-        listing: formData.recipients.map((item) => item.value),
+        listing: formData?.recipients.map((item) => item?.value),
       },
       name: formData?.campaignName,
-      topicId: formData?.topic.length ? formData.topic : undefined,
+      // topicId: formdata?.topic.length ? formData.topic : undefined,
       from: formData?.from?.length ? formData.from : undefined,
       dateTime: new Date(formData.startDate).getTime(),
       message: formData?.message,

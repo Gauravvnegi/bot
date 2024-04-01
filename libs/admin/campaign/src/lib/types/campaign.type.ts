@@ -54,7 +54,7 @@ export class PostCampaignForm {
     individual: string[];
   };
   name: string;
-  topicId: string;
+  // topicId: string
   from?: string;
   subject?: {
     text: string;

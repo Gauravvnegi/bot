@@ -1,5 +1,14 @@
 import { ENTER, COMMA, TAB } from '@angular/cdk/keycodes';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+
+import {
+  AfterViewInit,
+  Component,
+  Inject,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ReceiversSearchItem } from '../../data-model/email.model';
 import { EmailService } from '../../services/email.service';
@@ -16,7 +25,8 @@ import { Option } from '@hospitality-bot/admin/shared';
   templateUrl: './receiver-field.component.html',
   styleUrls: ['./receiver-field.component.scss'],
 })
-export class ReceiverFieldComponent implements OnInit, OnDestroy {
+export class ReceiverFieldComponent
+  implements OnInit, AfterViewInit, OnDestroy {
   parentFG: FormGroup;
   @Input() controlName: string;
   chipList = [];
@@ -36,14 +46,34 @@ export class ReceiverFieldComponent implements OnInit, OnDestroy {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, TAB];
   $subscription = new Subscription();
   search = false;
+
   constructor(
     private _emailService: EmailService,
-    private controlContainer: ControlContainer
+    private controlContainer: ControlContainer,
+    @Inject(DOCUMENT) private document: Document
   ) {}
 
   ngOnInit(): void {
     this.parentFG = this.controlContainer.control as FormGroup;
     this.listenForEnableDropdown();
+  }
+
+  ngAfterViewInit() {
+    this.document?.addEventListener(
+      'click',
+      this.handleClickOutside.bind(this)
+    );
+  }
+
+  handleClickOutside(event: MouseEvent) {
+    const dropdown = document.getElementById('reciever-field'); // Get the dropdown element
+    if (
+      dropdown &&
+      !dropdown.contains(event.target as Node) &&
+      this._emailService?.$enableDropdown?.[this.controlName].value
+    ) {
+      this._emailService?.$enableDropdown?.[this.controlName]?.next(false);
+    }
   }
 
   /**
@@ -97,10 +127,18 @@ export class ReceiverFieldComponent implements OnInit, OnDestroy {
     data: ListType<TType>;
   }) {
     let recipientLabels = [...this.inputControls.to.value, event.data.name];
-    event.data.id &&
-      this.recipients.push({ label: event.data.name, value: event.data.id });
-    this.recipients = [...new Set(this.recipients)];
-    this.inputControls.recipients.patchValue(this.recipients);
+    if (event.data.id) {
+      // Check if a recipient with the same ID already exists
+      const recipientWithSameId = this.recipients.find(
+        (recipient) => recipient.value === event.data.id
+      );
+
+      if (!recipientWithSameId) {
+        this.recipients.push({ label: event.data.name, value: event.data.id });
+      }
+    }
+    if (event.data.id)
+      this.inputControls.recipients.patchValue(this.recipients);
     this.inputControls.to.patchValue([...new Set(recipientLabels)]);
   }
 
@@ -122,6 +160,10 @@ export class ReceiverFieldComponent implements OnInit, OnDestroy {
    * @function ngOnDestroy unsubscribe subscription
    */
   ngOnDestroy() {
+    this.document?.removeEventListener(
+      'click',
+      this.handleClickOutside.bind(this)
+    );
     this.$subscription.unsubscribe();
   }
 }

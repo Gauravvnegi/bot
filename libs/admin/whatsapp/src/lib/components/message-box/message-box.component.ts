@@ -143,7 +143,6 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
             update: true,
           });
           this.mentions = [];
-          debugger;
         })
     );
   }

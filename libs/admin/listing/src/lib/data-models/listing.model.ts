@@ -92,7 +92,7 @@ export class Contact {
       set({}, 'firstName', get(input, ['firstName'])),
       set({}, 'lastName', get(input, ['lastName'])),
       set({}, 'mobile', get(input, ['mobile'])),
-      set({}, 'id', get(input, ['id'], index)),
+      set({}, 'id', get(input, ['id'], '')),
       set({}, 'salutation', get(input, ['salutation'], ''))
     );
     return this;

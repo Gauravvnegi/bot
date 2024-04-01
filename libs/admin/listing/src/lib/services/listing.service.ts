@@ -119,6 +119,13 @@ export class ListingService extends ApiService {
     );
   }
 
+  updateContact(entityId: string, listId: string, data) {
+    return this.put(
+      `/api/v1/marketing/entity/${entityId}/listing/${listId}/contacts`,
+      data
+    );
+  }
+
   /**
    * @function exportContact exports contact.
    * @param entityId dynamically getting entityId into api.

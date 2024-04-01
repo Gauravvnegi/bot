@@ -12,6 +12,13 @@
       (click)="deleteContact()"
       *ngIf="selectedRows.length"
     />
+    <img
+      class="edit-icon"
+      src="assets/images/edit-icon.png"
+      alt="Edit"
+      (click)="openAddContact(true)"
+      *ngIf="selectedRows.length"
+    />
 
     <!-- <div class="import" (click)="openImportContact($event)">
       <img src="assets/svg/import.svg" alt="import" />
@@ -20,7 +27,7 @@
 
     <hospitality-bot-button
       label="{{ 'contact.add' | translate }}"
-      (onClick)="openAddContact($event)"
+      (onClick)="openAddContact()"
     >
     </hospitality-bot-button>
   </div>

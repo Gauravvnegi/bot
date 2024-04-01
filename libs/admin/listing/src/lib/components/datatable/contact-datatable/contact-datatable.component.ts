@@ -25,7 +25,10 @@ import { EditContactComponent } from '../../edit-contact/edit-contact.component'
 import { ImportContactComponent } from '../../import-contact/import-contact.component';
 import { TranslateService } from '@ngx-translate/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-contact-datatable',
@@ -56,7 +59,8 @@ export class ContactDatatableComponent extends BaseDatatableComponent
     private snackbarService: SnackBarService,
     protected _translateService: TranslateService,
     private dialogService: DialogService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private routeConfigService: RoutesConfigService
   ) {
     super(fb);
   }
@@ -153,6 +157,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
    */
   deleteContact() {
     const ids = this.selectedRows.map((item) => ({ contact_id: item.id }));
+
     if (!this.add) {
       this.$subscription.add(
         this._listingService
@@ -206,16 +211,22 @@ export class ContactDatatableComponent extends BaseDatatableComponent
    * @function openAddContact To open add contacts page.
    * @param event The event to stop propagation of the same event from being called.
    */
-  openAddContact(event) {
-    event.stopPropagation();
+  openAddContact(isEdit: boolean = false) {
     let dialogRef: DynamicDialogRef;
-    const modalData: Partial<EditContactComponent> = {
+
+    const addModalData: Partial<EditContactComponent> = {
       ...(this.add && { contacts: this.dataSource }),
     };
+
+    const editModalData: Partial<EditContactComponent> = {
+      contactList: this.selectedRows,
+      tableName: 'Edit Contact',
+    };
+
     dialogRef = openModal({
       config: {
         styleClass: 'confirm-dialog',
-        data: modalData,
+        data: isEdit ? editModalData : addModalData,
         width: '90em',
       },
       component: EditContactComponent,
@@ -225,16 +236,35 @@ export class ContactDatatableComponent extends BaseDatatableComponent
     dialogRef.onClose.subscribe((response) => {
       if (response.status) {
         if (!this.add) {
-          this.$subscription.add(
-            this._listingService
-              .updateListContact(this.entityId, this.list.id, response.data)
-              .subscribe(
-                (response) => {
-                  this.handleContactAddEvent(response);
-                },
-                ({ error }) => {}
-              )
-          );
+          if (isEdit) {
+            this.$subscription.add(
+              this._listingService
+                .updateContact(this.entityId, this.list.id, response.data)
+                .subscribe(
+                  (response) => {
+                    this.snackbarService.openSnackBarAsText(
+                      'Contact Updated successfully',
+                      '',
+                      { panelClass: 'success' }
+                    );
+
+                    this.routeConfigService.reload();
+                  },
+                  ({ error }) => {}
+                )
+            );
+          } else {
+            this.$subscription.add(
+              this._listingService
+                .updateListContact(this.entityId, this.list.id, response.data)
+                .subscribe(
+                  (response) => {
+                    this.handleContactAddEvent(response);
+                  },
+                  ({ error }) => {}
+                )
+            );
+          }
         } else this.handleContactAddEvent(response.data);
       }
     });

@@ -229,6 +229,7 @@
         *ngIf="inputControls.message?.value?.length"
         class="full-width"
         controlName="message"
+        [campaignType]="campaignType"
         (selectedMode)="selectedMode($event)"
       ></hospitality-bot-edit-content>
     </ng-container>

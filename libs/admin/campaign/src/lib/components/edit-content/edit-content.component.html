@@ -1,9 +1,6 @@
 <ng-container *ngIf="!viewMode; else viewModeContent" [formGroup]="campaignFG">
   <div class="field full-width">
-    <div
-      class="ck-editor full-width"
-      *ngIf="campaignFG?.get('message')?.value"
-    >
+    <div class="ck-editor full-width" *ngIf="campaignFG?.get('message')?.value">
       <div class="ck-editor__container">
         <ng-container [ngSwitch]="currentMode">
           <ng-container *ngSwitchCase="'backdrop'">
@@ -20,7 +17,7 @@
                   (click)="changeMode('view')"
                 />
               </div>
-              <div class="btn">
+              <div class="btn" *ngIf="campaignType === 'EMAIL'">
                 <img
                   [src]="campaignConfiguration.images.edit.url"
                   [alt]="campaignConfiguration.images.edit.alt"

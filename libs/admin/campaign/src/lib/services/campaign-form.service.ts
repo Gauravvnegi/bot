@@ -14,7 +14,7 @@ export class CampaignFormService {
   postFormData(
     formData: CampaignForm,
     campaignType: CampaignType,
-    action: 'send' | 'save'
+    action: 'schedule' | 'save'
   ) {
     let data = new PostCampaignForm();
 
@@ -40,6 +40,7 @@ export class CampaignFormService {
       bcc: formData?.bcc?.length ? formData?.bcc : undefined,
       isDraft: action === 'save',
       subject: isEmailType ? { text: formData.subject } : undefined,
+      isSchedule: action === 'schedule' ? true : undefined,
     };
 
     return data;

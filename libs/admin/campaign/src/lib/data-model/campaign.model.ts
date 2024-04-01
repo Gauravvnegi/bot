@@ -95,7 +95,7 @@ export class Campaign implements IDeserializable {
 
 export class CampaignFormData {
   campaignName: string;
-  topic: string;
+  // topic: string;
   to: string[];
   event: string;
   startDate: number;
@@ -115,7 +115,7 @@ export class CampaignFormData {
 
   deserialize(input: CampaignResponse) {
     this.campaignName = input?.name;
-    this.topic = input?.topicId;
+    // this.topic = input?.topicId;
     this.startDate = input?.dateTime;
     // this.campaignState = input.campaignType;
     this.message = input?.message;

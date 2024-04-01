@@ -3,10 +3,9 @@ import {
   AdminUtilityService,
   ModuleNames,
   NavRouteOptions,
-  Option,
 } from '@hospitality-bot/admin/shared';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { campaignConfig } from '../../constant/campaign';
 import { CampaignService } from '../../services/campaign.service';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
@@ -40,10 +39,8 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
   pageTitle: string;
   navRoutes: NavRouteOptions = [];
 
-  topicList: Observable<Option[]>;
   templateTopicList: TopicTemplatesData[];
 
-  selectedTopic: string;
   campaignForm: CampaignForm;
 
   loading = false;
@@ -84,13 +81,11 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
   initForm() {
     this.templateForm = this.fb.group({
       template: [''],
-      topic: [''],
     });
   }
 
   initDetails() {
     this.entityId = this.globalFilterService.entityId;
-    this.topicList = this.campaignService.mapTopicList(this.entityId);
     const { title, navRoutes } = campaignRoutes[
       this.campaignId ? 'editTemplate' : 'createTemplate'
     ];
@@ -115,9 +110,9 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
                 emitEvent: false,
               }
             );
-          this.inputControls?.topic.patchValue(this.campaignForm.topic, {
-            emitEvent: false,
-          });
+          // this.inputControls?.topic.patchValue(this.campaignForm.topic, {
+          //   emitEvent: false,
+          // });
         }
         this.getData();
       })
@@ -126,8 +121,8 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
 
   getData() {
     if (this.campaignType === 'EMAIL') {
-      this.campaignForm?.topic &&
-        this.getTemplateByTopicId(this.campaignForm.topic);
+      // this.campaignForm?.topic &&
+      //   this.getTemplateByTopicId(this.campaignForm.topic);
       this.getTemplateForAllTopics();
     } else {
       this.getWhatsappTemplates();
@@ -135,15 +130,15 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
   }
 
   listenChanges() {
-    this.listenForTopicChanges();
+    // this.listenForTopicChanges();
     if (this.campaignType === 'EMAIL') this.listenForTemplateChanges();
   }
 
-  listenForTopicChanges() {
-    this.inputControls.topic.valueChanges.subscribe((res) =>
-      this.getTemplateByTopicId(res)
-    );
-  }
+  // listenForTopicChanges() {
+  //   this.inputControls.topic.valueChanges.subscribe((res) =>
+  //     this.getTemplateByTopicId(res)
+  //   );
+  // }
 
   listenForTemplateChanges() {
     this.inputControls.template.valueChanges.subscribe((res) =>
@@ -175,12 +170,13 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
     );
   }
 
-  selectedTemplate(template: { templateId: string; htmlTemplate: string }) {
-    this.campaignForm = {
-      ...this.campaignForm,
-      message: template.htmlTemplate,
-      templateId: template.templateId,
-    };
+  selectedTemplate(template?: { templateId: string; htmlTemplate: string }) {
+    if (template)
+      this.campaignForm = {
+        ...this.campaignForm,
+        message: template.htmlTemplate,
+        templateId: template.templateId,
+      };
     const queryParams = {
       campaignType: this.campaignType,
       data: btoa(JSON.stringify(this.campaignForm)),
@@ -225,33 +221,33 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
    * @function getTemplateByTopicId function to get template across a particular topic id.
    * @param topic topic data.
    */
-  getTemplateByTopicId(topicId: string) {
-    if (topicId?.length) {
-      this.campaignForm = {
-        ...this.campaignForm,
-        topic: topicId,
-      };
-      this.loading = true;
-      this.$subscription.add(
-        this.campaignService
-          .getTemplateListByTopicId(this.entityId, topicId, this.getConfig())
-          .subscribe(
-            (response) => {
-              this.templateTopicList = [
-                {
-                  templates: response.records,
-                  topicId: response.topicId,
-                  topicName: response.topicName,
-                  totalTemplate: response.total,
-                },
-              ];
-            },
-            (error) => (this.loading = false),
-            () => (this.loading = false)
-          )
-      );
-    }
-  }
+  // getTemplateByTopicId(topicId: string) {
+  //   if (topicId?.length) {
+  //     this.campaignForm = {
+  //       ...this.campaignForm,
+  //       topic: topicId,
+  //     };
+  //     this.loading = true;
+  //     this.$subscription.add(
+  //       this.campaignService
+  //         .getTemplateListByTopicId(this.entityId, topicId, this.getConfig())
+  //         .subscribe(
+  //           (response) => {
+  //             this.templateTopicList = [
+  //               {
+  //                 templates: response.records,
+  //                 topicId: response.topicId,
+  //                 topicName: response.topicName,
+  //                 totalTemplate: response.total,
+  //               },
+  //             ];
+  //           },
+  //           (error) => (this.loading = false),
+  //           () => (this.loading = false)
+  //         )
+  //     );
+  //   }
+  // }
 
   getConfig() {
     const config = {
@@ -275,7 +271,6 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
    * @param value template type value.
    */
   templateTypeSelection(value: TemplateType) {
-    this.selectedTopic = campaignConfig.chipValue.all;
     this.getTemplateForAllTopics();
   }
 
@@ -288,7 +283,7 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
 
   get inputControls() {
     return this.templateForm.controls as Record<
-      keyof { topic: string; template: string },
+      keyof { template: string },
       AbstractControl
     >;
   }

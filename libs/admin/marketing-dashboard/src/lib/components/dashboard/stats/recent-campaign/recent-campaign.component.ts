@@ -97,7 +97,7 @@ export class RecentCampaignComponent implements OnInit {
     if (!oldValue) {
       return diff * 100;
     }
-    return (diff / oldValue) * 100 || 0;
+    return +((diff / oldValue) * 100 || 0).toFixed(2);
   }
 
   ngOnInit(): void {

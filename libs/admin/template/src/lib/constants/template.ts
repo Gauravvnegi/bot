@@ -95,7 +95,7 @@ export const templateConfig = {
 
   rowsPerPage: {
     datatableLimit: 5,
-    limit: 3,
+    limit: 10,
   },
 
   selectedTopic: {

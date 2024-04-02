@@ -77,7 +77,6 @@ export class EditListingComponent implements OnInit, OnDestroy {
           ...data['dateRange'].queryValue,
         ];
         this.entityId = this.globalFilterService.entityId;
-        this.getTopicList(this.entityId);
         this.getListingId();
       })
     );
@@ -87,32 +86,6 @@ export class EditListingComponent implements OnInit, OnDestroy {
     this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
       this.navRoutes = [...navRoutesRes, ...this.navRoutes];
     });
-  }
-
-  /**
-   * @function getTopicList To get topic record list.
-   * @param entityId The hotel id for which getTopicList will be done.
-   */
-  getTopicList(entityId) {
-    const config = {
-      queryObj: this.adminUtilityService.makeQueryParams([
-        {
-          entityState: listingConfig.list.entityState,
-          limit: listingConfig.list.limit,
-        },
-      ]),
-    };
-    this.$subscription.add(
-      this._listingService
-        .getTopicList(entityId, config)
-        .subscribe((response) => {
-          const data = new Topics()
-            .deserialize(response)
-            .records.map((item) => ({ label: item.name, value: item.id }));
-          this.topicList = [...this.topicList, ...data];
-          this.listFG.get('topicName').patchValue(this.topicList[0].value);
-        })
-    );
   }
 
   /**

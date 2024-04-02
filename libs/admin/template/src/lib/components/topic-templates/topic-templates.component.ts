@@ -45,18 +45,19 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
   loadData() {
     this.isTemplateLoaded = false;
     const config = {
-      queryObj: this.adminUtilityService.makeQueryParams([
+      params: this.adminUtilityService.makeQueryParams([
         {
           offset: this.offset + templateConfig.rowsPerPage.limit,
           limit: templateConfig.rowsPerPage.limit,
-          entityState: templateConfig.topicConfig.limit,
+          entityState: 'ACTIVE',
+          entityType: 'EMAIL',
           templateType: this.templateType,
         },
       ]),
     };
     this.$subscription.add(
       this.templateService
-        .getTemplateListByTopicId(this.entityId, this.template.topicId, config)
+        .getTemplateList(this.entityId, config)
         .subscribe((response) => {
           this.template.templates = [
             ...this.template.templates,

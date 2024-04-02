@@ -54,9 +54,7 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
   loadData() {
     this.offset = this.offset + campaignConfig.templateCard.limit;
     this.loading = true;
-    this.campaignType === 'WHATSAPP'
-      ? this.loadWhatsappTemplates()
-      : this.loadTemplates();
+    this.loadWhatsappTemplates();
   }
 
   loadWhatsappTemplates() {
@@ -66,7 +64,8 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
           entityState: 'ACTIVE',
           offset: this.offset,
           limit: 10,
-          entityType: 'WHATSAPP',
+          entityType: this.campaignType,
+          templateType: this.parentFG.get('template').value,
         },
       ]),
     };

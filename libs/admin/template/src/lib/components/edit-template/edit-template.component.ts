@@ -93,34 +93,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
         ];
         this.entityId = this.globalFilterService.entityId;
         this.getTemplateId();
-        this.getTopicList(this.entityId);
       })
-    );
-  }
-
-  /**
-   * @function getTopicList To get topic record list.
-   * @param entityId The hotel id for which getTopicList will be done.
-   */
-  getTopicList(entityId) {
-    const config = {
-      queryObj: this.adminUtilityService.makeQueryParams([
-        {
-          entityState: templateConfig.topicConfig.active,
-          limit: templateConfig.topicConfig.limit,
-        },
-      ]),
-    };
-    this.$subscription.add(
-      this.templateService
-        .getTopicList(entityId, config)
-        .subscribe((response) => {
-          const data = new Topics()
-            .deserialize(response)
-            .records.map((item) => ({ label: item.name, value: item.id }));
-          this.topicList = [...this.topicList, ...data];
-          this.templateForm.get('topicId').patchValue(this.topicList[0].value);
-        })
     );
   }
 

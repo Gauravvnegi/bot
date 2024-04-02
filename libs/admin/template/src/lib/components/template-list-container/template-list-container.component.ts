@@ -32,6 +32,7 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
   topicList = [];
   isSavedTemplateType: boolean = false;
   isEditTemplate: boolean = false;
+  templateType: string;
 
   navRoutes: NavRouteOptions = [];
 
@@ -89,8 +90,7 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
         ];
         this.entityId = this.globalFilterService.entityId;
         this.getTemplateId();
-        this.getTopicList();
-        this.getTemplateForAllTopics();
+        this.getTemplateList();
         this.listenForFormChanges();
       })
     );
@@ -149,47 +149,33 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
   }
 
   /**
-   * @function getTopicList function to get topic list.
+   * @function getTemplateList function to get template for all topics.
    */
-  getTopicList() {
-    const config = {
-      queryObj: this.adminUtilityService.makeQueryParams([
-        {
-          limit: templateConfig.topicConfig.limit,
-          entityState: templateConfig.topicConfig.active,
-        },
-      ]),
-    };
-    this.$subscription.add(
-      this.templateService
-        .getTopicList(this.entityId, config)
-        .subscribe((response) => {
-          this.topicList = new Topics()
-            .deserialize(response)
-            .records.map((item) => ({ label: item.name, value: item.id }));
-          this.topicList.unshift({ label: 'All', value: 'All' });
-        })
-    );
-  }
+  getTemplateList() {
+    this.templateType = this.isSavedTemplateType
+      ? 'SAVEDTEMPLATE'
+      : 'PREDESIGNTEMPLATE';
 
-  /**
-   * @function getTemplateForAllTopics function to get template for all topics.
-   */
-  getTemplateForAllTopics() {
     const config = {
-      queryObj: this.adminUtilityService.makeQueryParams([
+      params: this.adminUtilityService.makeQueryParams([
         {
           entityState: templateConfig.topicConfig.active,
           limit: templateConfig.rowsPerPage.limit,
-          templateType: this.typeOfTemplate,
+          entityType: 'EMAIL',
+          templateType: this.templateType,
         },
       ]),
     };
     this.$subscription.add(
       this.templateService
-        .getTemplateListByTopic(this.entityId, config)
+        .getTemplateList(this.entityId, config)
         .subscribe((response) => {
-          this.templateTopicList = response;
+          this.templateTopicList = [
+            {
+              templates: response.records,
+              totalTemplate: response.entityTypeCounts['EMAIL'],
+            },
+          ];
         })
     );
   }
@@ -199,46 +185,8 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
    */
   listenForFormChanges(): void {
     this.topicFG.valueChanges.subscribe((_) => {
-      if (this.topicFG.get('topicId').value === 'All')
-        this.getTemplateForAllTopics();
-      else this.getTemplateByTopicId();
+      this.getTemplateList();
     });
-  }
-
-  /**
-   * @function getTemplateByTopicId function to get template by topic id.
-   */
-  getTemplateByTopicId() {
-    const config = {
-      queryObj: this.adminUtilityService.makeQueryParams([
-        {
-          entityState: templateConfig.topicConfig.active,
-          limit: templateConfig.rowsPerPage.limit,
-          templateType: this.typeOfTemplate,
-        },
-      ]),
-    };
-    this.$subscription.add(
-      this.templateService
-        .getTemplateListByTopicId(
-          this.entityId,
-          this.topicFG.get('topicId').value,
-          config
-        )
-        .subscribe((response) => {
-          const data = this.topicList.filter(
-            (item) => item.value === this.topicFG.get('topicId').value
-          );
-          this.templateTopicList = [
-            {
-              templates: response.records,
-              topicId: this.topicFG.get('topicId').value,
-              topicName: data[0].label,
-              totalTemplate: response.total,
-            },
-          ];
-        })
-    );
   }
 
   /**

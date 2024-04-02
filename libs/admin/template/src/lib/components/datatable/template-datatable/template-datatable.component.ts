@@ -92,33 +92,14 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     });
   }
 
-  /**
-   * @function loadTableValue function to set tab filter items.
-   */
-  loadTableValue() {
-    this.loading = true;
-    const topicConfig = {
-      queryObj: this.adminUtilityService.makeQueryParams([
-        {
-          entityState: templateConfig.topicConfig.active,
-          limit: templateConfig.topicConfig.limit,
-        },
-      ]),
-    };
-    this.$subscription.add(
-      this._topicService
-        .getHotelTopic(topicConfig, this.entityId)
-        .subscribe((response) => {
-          this.loading = false;
-          this.loadInitialData([
-            {
-              order: sharedConfig.defaultOrder,
-              entityType: this.selectedTab,
-            },
-            ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
-          ]);
-        })
-    );
+  loadTableValue(): void {
+    this.loadInitialData([
+      {
+        order: sharedConfig.defaultOrder,
+        entityType: this.selectedTab,
+      },
+      ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
+    ]);
   }
 
   /**

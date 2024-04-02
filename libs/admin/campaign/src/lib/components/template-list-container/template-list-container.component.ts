@@ -120,18 +120,12 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
   }
 
   getData() {
-    if (this.campaignType === 'EMAIL') {
-      // this.campaignForm?.topic &&
-      //   this.getTemplateByTopicId(this.campaignForm.topic);
-      this.getTemplateForAllTopics();
-    } else {
-      this.getWhatsappTemplates();
-    }
+    this.getTemplates();
   }
 
   listenChanges() {
     // this.listenForTopicChanges();
-    if (this.campaignType === 'EMAIL') this.listenForTemplateChanges();
+    this.listenForTemplateChanges();
   }
 
   // listenForTopicChanges() {
@@ -146,13 +140,14 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
     );
   }
 
-  getWhatsappTemplates() {
+  getTemplates() {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
           entityState: 'ACTIVE',
           limit: this.limit,
-          entityType: 'WHATSAPP',
+          entityType: this.campaignType,
+          templateType: this.inputControls?.template?.value,
         },
       ]),
     };
@@ -163,7 +158,7 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
           this.templateTopicList = [
             {
               templates: res.records,
-              totalTemplate: res.entityTypeCounts.WHATSAPP,
+              totalTemplate: res.entityTypeCounts[this.campaignType],
             },
           ];
         })
@@ -197,25 +192,25 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * @function getTemplateForAllTopics function to get template across respective topic.
-   */
-  getTemplateForAllTopics() {
-    this.loading = true;
-    this.$subscription.add(
-      this.campaignService
-        .getTemplateByContentType(this.entityId, this.getConfig())
-        .subscribe(
-          (response) => {
-            if (response) {
-              this.templateTopicList = response;
-            }
-          },
-          (error) => (this.loading = false),
-          () => (this.loading = false)
-        )
-    );
-  }
+  // /**
+  //  * @function getTemplateForAllTopics function to get template across respective topic.
+  //  */
+  // getTemplateForAllTopics() {
+  //   this.loading = true;
+  //   this.$subscription.add(
+  //     this.campaignService
+  //       .getTemplateByContentType(this.entityId, this.getConfig())
+  //       .subscribe(
+  //         (response) => {
+  //           if (response) {
+  //             this.templateTopicList = response;
+  //           }
+  //         },
+  //         (error) => (this.loading = false),
+  //         () => (this.loading = false)
+  //       )
+  //   );
+  // }
 
   /**
    * @function getTemplateByTopicId function to get template across a particular topic id.
@@ -271,7 +266,7 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
    * @param value template type value.
    */
   templateTypeSelection(value: TemplateType) {
-    this.getTemplateForAllTopics();
+    this.getTemplates();
   }
 
   /**

@@ -27,17 +27,6 @@ export class AvgTimeComponent implements OnInit {
 
   readonly options = options;
 
-  tabFilterItems = [
-    {
-      label: 'Agent',
-      value: 'serviceItemUser',
-    },
-    {
-      label: 'Category',
-      value: 'category',
-    },
-  ];
-
   dataLoaded = false;
   data;
 
@@ -89,7 +78,7 @@ export class AvgTimeComponent implements OnInit {
         ...this.globalQueries,
         {
           entityType: 'FOCUSED',
-          type: this.tabFilterItems[this.selectedTabIndex].value,
+          type: 'serviceItemUser',
         },
       ]),
     };

@@ -1,6 +1,7 @@
 import {
   Component,
   ElementRef,
+  HostListener,
   EventEmitter,
   Input,
   OnDestroy,
@@ -48,13 +49,27 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
     private bookingDetailService: BookingDetailService,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    private elRef: ElementRef
   ) {}
 
   searchValue = false;
 
   ngOnInit(): void {
     this.registerListeners();
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event) {
+    if (
+      !this.elRef.nativeElement.contains(event.target) &&
+      this.searchDropdownVisible
+    ) {
+      this.searchDropdownVisible = false;
+      this.searchResult.hide();
+
+      this.searchValue = false;
+    }
   }
 
   registerListeners(): void {

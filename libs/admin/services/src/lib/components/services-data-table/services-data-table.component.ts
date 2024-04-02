@@ -89,7 +89,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
   onGlobalTabFilterChanges(event) {
     //to cancel previous api call in between when tab filter changes
     this.cancelRequests$.next();
-    this.isRestaurant = event.outletType === 'RESTAURANT' ? true : false;
+    this.isRestaurant = event.outletType === 'RESTAURANT';
     this.entityId = event.entityId[0];
     this.tabFilterIdx = 0;
     this.initTableValue();
@@ -240,6 +240,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
         },
       ]),
     };
+
     return config;
   }
 

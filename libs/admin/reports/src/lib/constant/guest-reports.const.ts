@@ -16,47 +16,47 @@ export const guestComplaintReportDataCols: Partial<ColsData<
   roomType: {
     header: 'Room / Room Type',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   guestName: {
     header: 'Guest Name',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   serviceItem: {
     header: 'Service Item',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   complaint: {
     header: 'Complaint',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   status: {
     header: 'Status',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   actionTakenBy: {
     header: 'Action Taken By',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   customerSentiment: {
     header: 'Customer Sentiment',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   sla: {
     header: 'SLA',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   jobDuration: {
     header: 'Job Duration',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };
 export const guestEscalationComplaintReportCols: Partial<ColsData<
@@ -66,12 +66,12 @@ export const guestEscalationComplaintReportCols: Partial<ColsData<
   escalationLevel: {
     header: 'Escalation Level',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   escalatedTo: {
     header: 'Escalated To',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -79,57 +79,57 @@ export const guestHistoryCols: ColsData<GuestHistoryData> = {
   guestName: {
     header: 'Guest Name',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   firstStayed: {
     header: 'First Stayed',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   lastStayed: {
     header: 'Last Stayed',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   noOfResv: {
     header: '# of Resv',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   roomCharges: {
     header: 'Room Charges',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   roomTax: {
     header: 'Room Tax',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   otherCharges: {
     header: 'Other Charges',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   totalCharges: {
     header: 'Total Charges',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   totalAmount: {
     header: 'Total Amount',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   amountPaid: {
     header: 'Amount Paid',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   balance: {
     header: 'Balance',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -143,30 +143,37 @@ export const guestContactReportCols: Partial<ColsData<
   salutation: {
     header: 'Salutation',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   name: {
     header: 'Name',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   address: {
     header: 'Address',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   city: {
     header: 'City',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   state: {
     header: 'State',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   country: {
     header: 'Country',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   nationality: {
     header: 'Nationality',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   // phone: {
   //   header: 'Phone',
@@ -175,6 +182,7 @@ export const guestContactReportCols: Partial<ColsData<
   mobileNo: {
     header: 'Mobile No',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   // fax: {
   //   header: 'Fax',
@@ -183,18 +191,22 @@ export const guestContactReportCols: Partial<ColsData<
   zipCode: {
     header: 'Zip',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   email: {
     header: 'Email',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   gender: {
     header: 'Gender',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   dateOfBirth: {
     header: 'DOB',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   // idType: {
   //   header: 'ID Type',
@@ -206,52 +218,52 @@ export const SalesByGuestCols: ColsData<SalesByGuestData> = {
   guestId: {
     header: 'Guest Id',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   firstName: {
     header: 'First Name',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   LastName: {
     header: 'Last Name',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   country: {
     header: 'Country',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   emailId: {
     header: 'Email Id',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   firstStayed: {
     header: 'First Stayed',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   lastStayed: {
     header: 'Last Stayed',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   noOfRes: {
     header: 'No. of Res',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   nights: {
     header: 'Nights',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   totalSales: {
     header: 'Total Sales',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -262,22 +274,22 @@ export const guestLedgerCols: ColsData<Omit<
   roomNo: {
     header: 'Room No',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   name: {
     header: 'Name',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   confirmationNo: {
     header: 'Conf. No.',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   balance: {
     header: 'Balance',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -288,66 +300,66 @@ export const guestTypeReportCols: ColsData<Omit<
   guestType: {
     header: 'Type',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   reservationNumber: {
     header: 'Res#',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   room: {
     header: 'Room',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   guestName: {
     header: 'Guest Name',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   checkIn: {
     header: 'Check In',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   checkOut: {
     header: 'Check Out',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   nights: {
     header: 'Nights',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   roomCharge: {
     header: 'Room Charge',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   roomTax: {
     header: 'Room Tax',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   otherCharges: {
     header: 'Other Charges',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   otherTax: {
     header: 'Other Tax',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   amount: {
     header: 'Amount',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   amountPaid: {
     header: 'Amount Paid',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };

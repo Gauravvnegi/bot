@@ -14,17 +14,17 @@ export const auditRoomDetailsReportCols: Partial<ColsData<
   roomDetails: {
     header: 'Room Details',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   noOfRooms: {
     header: 'No. of Rooms',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   noOfGuests: {
     header: 'No. of Guests',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -71,12 +71,12 @@ export const auditTaxReportCols: ColsData<AuditTaxReportCols> = {
   taxName: {
     header: 'Tax Name',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   taxAmount: {
     header: 'Tax Amount',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -100,22 +100,22 @@ export const mtdAndYtdReportCols: ColsData<MtdAndYtdReportData> = {
   name: {
     header: 'Name',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   day: {
     header: 'Day',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   month: {
     header: 'Month',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   year: {
     header: 'Year',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -241,27 +241,27 @@ export const mtdAndYtdReportRows = [
 export const nightAuditRevenueReportCols: ColsData<NightAuditRevenueData> = {
   firstCol: {
     header: '',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   secondCol: {
     header: '',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   thirdCol: {
     header: '',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   fourthCol: {
     header: '',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   fifthCol: {
     header: '',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
 };

@@ -86,7 +86,7 @@ export class TemplateService extends ApiService {
    * @param data getting form input data.
    * @returns put api of update Template record.
    */
-  updateTemplate(entityId, templateId, data) {
+  updateTemplate(entityId, templateId, data): Observable<any> {
     return this.put(`/api/v1/entity/${entityId}/templates/${templateId}`, data);
   }
 

@@ -7,23 +7,23 @@ import { ColsData } from '../types/reports.types';
 const managerReportCols: ColsData<ManagerReportData> = {
   emptyCell: {
     header: '',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   day: {
     header: 'DAY',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   month: {
     header: 'MONTH',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   year: {
     header: 'YEAR',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -53,7 +53,7 @@ export const managerFlashReportRows = [
   // {
   //   label: 'Rooms Occupied minus House Use',
   //   name: 'roomOccupiedMinusHouseUse',
-  
+
   // }, //`occupied rooms - house use rooms
   { label: 'Rooms Occupied minus Comp', name: 'roomOccupiedMinusComp' }, //occupied rooms - complimentary rooms
   { label: 'Day Use Rooms', name: 'dayUseRooms' },
@@ -86,7 +86,7 @@ export const managerFlashReportRows = [
   },
   {
     label: '% Room occupied minus OOS',
-    name: 'percentageRoomOccupiedMinusOOS'
+    name: 'percentageRoomOccupiedMinusOOS',
   },
   { label: 'Reservations Made Today', name: 'reservationsMadeToday' },
   { label: 'Room Nights Reserved Today', name: 'roomNightsReserved' },

@@ -10,28 +10,28 @@ export const allowanceReportCols: Partial<ColsData<AllowanceReportData>> = {
   date: {
     header: 'Date',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   res: {
     header: 'Res#',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   createdBy: {
     header: 'Created By',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   guestName: {
     header: 'Guest Name',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 
   allowance: {
     header: 'Allowance',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };
 export const discountAllowanceReportCols: Partial<ColsData<
@@ -40,7 +40,7 @@ export const discountAllowanceReportCols: Partial<ColsData<
   date: {
     header: 'Date',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   // group: {
   //   header: 'Group',
@@ -50,17 +50,17 @@ export const discountAllowanceReportCols: Partial<ColsData<
   res: {
     header: 'Res#',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   createdBy: {
     header: 'Created By',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   guestName: {
     header: 'Guest Name',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   // reasonForDiscount: {
   //   header: 'Reason For Discount',
@@ -70,7 +70,7 @@ export const discountAllowanceReportCols: Partial<ColsData<
   directDiscount: {
     header: 'Direct Discount',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   // allowance: {
   //   header: 'Allowance',
@@ -88,22 +88,26 @@ export const promoCodeReportCols: ColsData<PromoCodeReportData> = {
   promoCode: {
     header: 'Promo Code',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   discount: {
     header: 'Discount',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   redemptions: {
     header: 'Redemptions',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   totalNights: {
     header: 'Total Nights',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   totalRevenueEarned: {
     header: 'Total Revenue Earned',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };

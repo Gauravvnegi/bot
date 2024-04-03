@@ -10,17 +10,17 @@ export const historyAndForecastReportCols: ColsData<Omit<
 >> = {
   date: {
     header: 'Date',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   roomsOccupied: {
     header: `Rooms Occupied (ExclHouseUse)`,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   arrivalRooms: {
     header: `Arr. Rooms`,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   // complimentaryRooms: {
@@ -30,27 +30,27 @@ export const historyAndForecastReportCols: ColsData<Omit<
   // },
   occupancy: {
     header: 'Occ %',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   roomRevenue: {
     header: `Room Revenue`,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   revPAR: {
     header: 'RevPAR',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   averageRate: {
     header: 'Average Rate',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   departureRoom: {
     header: 'Dep. Rooms',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   // dayUseRooms: {
@@ -60,27 +60,27 @@ export const historyAndForecastReportCols: ColsData<Omit<
   // },
   noShow: {
     header: 'No Show',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   cancelRooms: {
     header: 'Cncl Rooms',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   DNRRooms: {
     header: 'DNR Rooms',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   houseUseRooms: {
     header: 'House Use Rooms',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   pax: {
     header: 'Pax',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
 };
@@ -96,47 +96,47 @@ export const historyAndForecastReportRows = Object.keys(
 export const houseCountReportCols: ColsData<HouseCountReportData> = {
   date: {
     header: 'Date',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   roomsAvailable: {
     header: 'Rooms Available',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   roomsOccupied: {
     header: 'Rooms Occupied',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   roomReserved: {
     header: 'Rooms Reserved',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   roomsSold: {
     header: 'Rooms Sold',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   total: {
     header: 'Total Rooms',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   guestOccupied: {
     header: 'Guest Occupied',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   guestReserved: {
     header: 'Guest Reserved',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   totalGuest: {
     header: 'Total Guest',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
 };

@@ -38,6 +38,8 @@ export class ComplaintDisengagementComponent implements OnInit {
     this.listenForGlobalFilters();
   }
 
+  distributionStats: DistributionStats;
+
   initGraphStats(): void {
     this.$subscription.add(
       this.analyticsService
@@ -52,6 +54,24 @@ export class ComplaintDisengagementComponent implements OnInit {
             this.complaintBreakDownData
           );
         })
+    );
+  }
+
+  handelBreakDownStat(index: number) {
+    const config: QueryConfig = {
+      params: this.adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          categoryName: this.complaintBreakDownData?.complaintCategoryStats
+            ?.labels?.[index],
+        },
+      ]),
+    };
+
+    this.$subscription.add(
+      this.analyticsService.getBreakDownStat(config).subscribe((res) => {
+        this.distributionStats = new DistributionStats().deserialize(res);
+      })
     );
   }
 
@@ -82,6 +102,7 @@ export class ComplaintDisengagementComponent implements OnInit {
     };
     return config;
   }
+
   initLabels(data: ComplaintBreakDownResponse) {
     this.labels = [];
     Object.keys(

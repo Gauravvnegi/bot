@@ -9,14 +9,13 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { BaseChartDirective } from 'ng2-charts';
 import {
   DualPlotChartConfig,
-  DualPlotFilterOptions,
-  DualPlotGraphColor,
   DualPlotDataset,
+  DualPlotGraphColor,
   DualPlotOptions,
 } from '../../types/chart.type';
-import { BaseChartDirective } from 'ng2-charts';
 
 const GraphType = {
   LINE: 'line',

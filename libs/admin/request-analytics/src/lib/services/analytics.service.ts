@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import {
   AverageStats,
   ComplaintBreakDownResponse,
+  DistributionStatsResponse,
   SentimentStatsResponse,
 } from '../types/response.types';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
@@ -86,7 +87,7 @@ export class AnalyticsService extends ApiService {
   }
 
   getAgentDistributionStats() {
-    return this.get(`/api/v1/request-analytics/distribution`);
+    return this.get(`/api/v1/request-analytics/distribution/stats`);
   }
 
   getComplaintBreakDown(
@@ -102,6 +103,12 @@ export class AnalyticsService extends ApiService {
   ): Observable<{ categoryStats: { [key: string]: number } }> {
     return this.get(
       `/api/v1/request-analytics/average-resolved-time${config?.params ?? ''}`
+    );
+  }
+
+  getBreakDownStat(config: QueryConfig): Observable<DistributionStatsResponse> {
+    return this.get(
+      `/api/v1/request-analytics/priority-breakdown${config.params ?? ''}`
     );
   }
 }

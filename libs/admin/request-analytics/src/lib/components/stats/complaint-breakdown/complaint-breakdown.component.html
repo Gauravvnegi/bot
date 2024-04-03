@@ -1,12 +1,21 @@
 <div class="stat-body">
-  <div class="heading">
-    {{ label }}
+  <div class="header-wrapper" [formGroup]="useForm">
+    <div class="heading">
+      {{ label }}
+    </div>
+
+    <hospitality-bot-select
+      class="stats-filter"
+      controlName="statsFilter"
+      [options]="optionList"
+    ></hospitality-bot-select>
   </div>
+
   <div
     class="stat-body-container"
     *skeleton="
       complaintCategoryBreakDownStats?.data == undefined;
-      height: '65vh';
+      height: '41vh';
       width: '100%'
     "
   >

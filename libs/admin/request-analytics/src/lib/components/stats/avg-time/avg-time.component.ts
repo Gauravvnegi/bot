@@ -8,6 +8,8 @@ import {
   getCalendarType,
 } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { complaintEntityFilterOption } from '../../../constant/stats';
 
 @Component({
   selector: 'avg-time',
@@ -19,22 +21,37 @@ export class AvgTimeComponent implements OnInit {
   globalQueries;
   selectedInterval;
   selectedTabIndex: number = 0;
+
+  readonly options = options;
+  dataLoaded = false;
+  data;
+
+  labels: string[];
+  readonly complaintEntityFilterOption = complaintEntityFilterOption;
+  useForm: FormGroup;
+
   constructor(
     private analyticsService: AnalyticsService,
     private adminUtilityService: AdminUtilityService,
-    private globalFilterService: GlobalFilterService
-  ) {}
-
-  readonly options = options;
-
-  dataLoaded = false;
-  data;
+    private globalFilterService: GlobalFilterService,
+    private fb: FormBuilder
+  ) {
+    this.initForm();
+  }
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
   }
 
-  labels: string[];
+  initForm() {
+    this.useForm = this.fb.group({
+      statsFilter: ['ALL'],
+    });
+
+    this.useForm.get('statsFilter').valueChanges.subscribe((res) => {
+      this.initGraphData();
+    });
+  }
 
   initGraphData(): void {
     this.$subscription.add(
@@ -77,7 +94,7 @@ export class AvgTimeComponent implements OnInit {
       params: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
-          entityType: 'FOCUSED',
+          entityType: this.useForm.get('statsFilter').value,
           type: 'serviceItemUser',
         },
       ]),

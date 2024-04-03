@@ -81,13 +81,23 @@ export type CategoryStatsResponse = {
   [category: string]: number;
 };
 
-export type DistributionStatsResponse = {
-  [key: string]: number;
-};
+// export type DistributionStatsResponse = {
+//   [key: string]: number;
+// };
 
 export type ComplaintBreakDownResponse = {
   totalCount: number;
-  distributionStats: DistributionStatsResponse;
   categoryStats: CategoryStatsResponse;
   complaintsData: ComplaintsDataResponse;
+};
+
+interface RequestStats {
+  ASAP: number;
+  HIGH: number;
+  MEDIUM: number;
+}
+
+export type DistributionStatsResponse = {
+  totalCount: number;
+  requestStats: RequestStats;
 };

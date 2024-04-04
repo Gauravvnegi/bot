@@ -47,7 +47,7 @@
     gap: 0.3em;
     width: 100%;
     .stat-card {
-      flex-basis: 33.3%;
+      width: 33.3%;
       background: $white;
       border: solid 1px $borderCol;
       border-radius: 5px;
@@ -106,10 +106,6 @@
     cursor: pointer;
     background: $hoverBG !important;
   }
-}
-
-.mb-20 {
-  margin-bottom: 20px;
 }
 
 :host ::ng-deep .stat-card {

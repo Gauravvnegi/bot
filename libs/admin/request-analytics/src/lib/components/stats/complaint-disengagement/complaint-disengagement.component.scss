@@ -4,12 +4,14 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  background-color: #ffff;
+  background-color: $white;
   padding: 20px;
+  box-shadow: 0 3px 6px 0 $boxShadow;
+  border-radius: 5px;
 
   .left {
     width: 40%;
-    border-right: 1px solid #e2e2e2;
+    border-right: 1px solid $borderCol;
   }
 
   .right {

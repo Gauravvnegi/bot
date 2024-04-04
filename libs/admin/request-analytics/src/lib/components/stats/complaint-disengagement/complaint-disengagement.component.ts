@@ -98,7 +98,10 @@ export class ComplaintDisengagementComponent implements OnInit {
 
   getQueryConfig(): QueryConfig {
     const config = {
-      params: this.adminUtilityService.makeQueryParams([...this.globalQueries]),
+      params: this.adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        { entityType: 'ALL' },
+      ]),
     };
     return config;
   }

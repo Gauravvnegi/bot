@@ -157,7 +157,7 @@ const options = {
     callbacks: {
       label: function (context) {
         if (context.value !== null) {
-          return context.value + ' hrs';
+          return context.value + ' Mins';
         }
       },
     },
@@ -168,7 +168,7 @@ const options = {
         ticks: {
           beginAtZero: true,
           callback: function (value, index, ticks) {
-            return value + ' hrs';
+            return value + ' Mins';
           },
         },
       },

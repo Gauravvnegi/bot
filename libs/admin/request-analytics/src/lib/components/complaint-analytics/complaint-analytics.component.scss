@@ -110,7 +110,7 @@
 
 :host ::ng-deep .stat-card {
   .wrapper {
-    // padding: 20px 20px 0 17.5px;
+    padding: 20px;
     .header-content {
       .stats-text {
         font-size: 20px;
@@ -144,33 +144,28 @@
 
 .additional-stats-container {
   display: flex;
-  gap: 1em;
+  justify-content: space-between;
+  overflow: hidden;
 }
 
 .stats-wrapper {
   display: flex;
   align-items: center;
-  gap: 1em;
+  gap: 0.3em;
 
   .stats {
     font-size: 41px;
     font-weight: 600;
-    color: #002046;
+    color: $secondary;
   }
   .text {
-    width: 86px;
-    height: 38px;
-    margin: 8px 25px 8px 10px;
+    max-width: 112px;
     opacity: 0.42;
-    font-family: Roboto;
     font-size: 14px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
     letter-spacing: 0.84px;
     text-align: left;
-    color: #002046;
+    color: $secondary;
   }
 }
 

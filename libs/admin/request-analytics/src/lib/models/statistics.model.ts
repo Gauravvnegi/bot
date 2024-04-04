@@ -122,14 +122,14 @@ export class AverageRequestStats {
     this.data.push({
       label: 'Avg Tickets & Time',
       key: 'Agent',
-      averageResolvedJobs: individualData?.averageStats?.averageResolvedJobs,
-      averageTimePerJob: individualData?.averageStats?.averageTimePerJob,
+      averageResolvedJobs: individualData?.totalCount ?? 0,
+      averageTimePerJob: individualData?.averageStats?.averageTimePerJob ?? 0,
     });
     this.data.push({
       label: 'Team’s Avg Tickets & Time',
       key: 'Group',
-      averageResolvedJobs: team?.averageStats?.averageResolvedJobs,
-      averageTimePerJob: team?.averageStats?.averageTimePerJob,
+      averageResolvedJobs: team?.totalCount ?? 0,
+      averageTimePerJob: team?.averageStats?.averageTimePerJob ?? 0,
     });
 
     return this;

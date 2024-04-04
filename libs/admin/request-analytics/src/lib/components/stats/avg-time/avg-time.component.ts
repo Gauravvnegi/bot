@@ -82,7 +82,10 @@ export class AvgTimeComponent implements OnInit {
           const data = Object.values(res.categoryStats) as any;
           datasets[1].data = data;
           const sum = data.reduce((acc, val) => acc + val);
-          datasets[0].data = new Array(data.length).fill(sum / data.length);
+
+          datasets[0].data = new Array(data.length).fill(
+            (sum / data.length).toFixed(2)
+          );
 
           this.data = datasets;
         })

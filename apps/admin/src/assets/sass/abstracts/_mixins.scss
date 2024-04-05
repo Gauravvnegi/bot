@@ -627,3 +627,24 @@
     display: none;
   }
 }
+
+// Mixin for setting flex container properties
+@mixin flex-container(
+  $direction: row,
+  $justify: flex-start,
+  $align: stretch,
+  $wrap: nowrap
+) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+  flex-wrap: $wrap;
+}
+
+// Mixin for setting flex item properties
+@mixin flex-item($grow: 0, $shrink: 1, $basis: auto) {
+  flex-grow: $grow;
+  flex-shrink: $shrink;
+  flex-basis: $basis;
+}

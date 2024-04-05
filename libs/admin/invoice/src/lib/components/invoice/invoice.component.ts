@@ -21,6 +21,7 @@ import {
   NavRouteOptions,
   Option,
   UserService,
+  getUniqueOptions,
   openModal,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -1359,10 +1360,10 @@ export class InvoiceComponent implements OnInit {
    */
 
   addNewDefaultDescription(option: DescriptionOption) {
-    this.defaultDescriptionOptions = [
+    this.defaultDescriptionOptions = getUniqueOptions([
       ...this.defaultDescriptionOptions,
       option,
-    ];
+    ]);
   }
 
   hasDiscount(itemId: string, date: number, isMenu: boolean = false) {

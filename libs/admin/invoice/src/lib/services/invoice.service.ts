@@ -210,26 +210,28 @@ export class InvoiceService extends ApiService {
     }
 
     const res: Partial<BillSummaryData> = {
-      companyDetails: {
-        id: '',
-        gstNumber: invoiceFormData.gstNumber,
-        companyName: invoiceFormData.companyName,
-        contactNumber: invoiceFormData.contactNumber,
-        email: invoiceFormData.email,
+      companyDetails: invoiceFormData.companyName
+        ? {
+            id: '',
+            gstNumber: invoiceFormData.gstNumber,
+            companyName: invoiceFormData.companyName,
+            contactNumber: invoiceFormData.contactNumber,
+            email: invoiceFormData.email,
 
-        address: {
-          city: invoiceFormData.city,
-          country: '',
-          postalCode: invoiceFormData.pin,
-          countryCode: '',
-          addressLine1: invoiceFormData.address,
-          addressLine2: '',
-          state: invoiceFormData.state,
-          reservationId: data.reservationId,
-          guestId: data.guestId,
-          guestType: '',
-        },
-      },
+            address: {
+              city: invoiceFormData.city,
+              country: '',
+              postalCode: invoiceFormData.pin,
+              countryCode: '',
+              addressLine1: invoiceFormData.address,
+              addressLine2: '',
+              state: invoiceFormData.state,
+              reservationId: data.reservationId,
+              guestId: data.guestId,
+              guestType: '',
+            },
+          }
+        : null,
       billItems,
       deleteInvoiceItems: deletedItemsId.length ? deletedItemsId : null,
       invoiceGenerated: false,

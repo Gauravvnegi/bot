@@ -12,14 +12,14 @@ import {
   StatCard,
   manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
-import { Subscription, forkJoin } from 'rxjs';
 import { DateService } from '@hospitality-bot/shared/utils';
-import { AnalyticsService } from '../../services/analytics.service';
-import { AverageStats, DistributionStats } from '../../types/response.types';
-import { AverageRequestStats } from '../../models/statistics.model';
 import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { CreateServiceItemComponent } from 'libs/admin/service-item/src/lib/components/create-service-item/create-service-item.component';
+import { Subscription, forkJoin } from 'rxjs';
 import { getTicketCountLabel } from '../../constant/stats';
+import { AverageRequestStats } from '../../models/statistics.model';
+import { AnalyticsService } from '../../services/analytics.service';
+import { DistributionStats } from '../../types/response.types';
 
 @Component({
   selector: 'complaint-analytics',
@@ -106,15 +106,17 @@ export class ComplaintAnalyticsComponent implements OnInit {
 
   //resolved
   initTicketsCreatedStats() {
-    forkJoin([
-      this.getPerDayStats('ALL'),
-      this.getPerDayStats('FOCUSED'),
-    ]).subscribe(([teamResponse, individualResponse]) => {
-      this.ticketsStats = new AverageRequestStats().deserialize(
-        teamResponse,
-        individualResponse
-      ).data;
-    });
+    this.$subscription.add(
+      forkJoin([
+        this.getPerDayStats('ALL'),
+        this.getPerDayStats('FOCUSED'),
+      ]).subscribe(([teamResponse, individualResponse]) => {
+        this.ticketsStats = new AverageRequestStats().deserialize(
+          teamResponse,
+          individualResponse
+        ).data;
+      })
+    );
   }
 
   getPerDayStats(statsType: 'ALL' | 'FOCUSED') {
@@ -130,18 +132,20 @@ export class ComplaintAnalyticsComponent implements OnInit {
   }
 
   getAgentStats() {
-    this.analyticsService
-      .getAgentDistributionStats()
-      .subscribe((res: DistributionStats) => {
-        this.agentStats = {
-          label: 'Agents Distrubution',
-          key: 'Agent',
-          score: res.distributionStats.availableUsers.toString(),
-        };
+    this.$subscription.add(
+      this.analyticsService
+        .getAgentDistributionStats()
+        .subscribe((res: DistributionStats) => {
+          this.agentStats = {
+            label: 'Agents Distrubution',
+            key: 'Agent',
+            score: res.distributionStats.availableUsers.toString(),
+          };
 
-        this.agentsOnTicket = res.distributionStats.occupiedUsers;
-        this.availableAgents = res.distributionStats.availableUsers;
-      });
+          this.agentsOnTicket = res.distributionStats.occupiedUsers;
+          this.availableAgents = res.distributionStats.availableUsers;
+        })
+    );
   }
 
   /**
@@ -194,5 +198,9 @@ export class ComplaintAnalyticsComponent implements OnInit {
         this.sidebarVisible = false;
       },
     });
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

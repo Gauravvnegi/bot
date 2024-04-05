@@ -53,14 +53,16 @@ export class ComplaintBreakdownComponent implements OnInit {
   }
 
   listenForGlobalFilters(): void {
-    this.globalFilterService.globalFilter$.subscribe((data) => {
-      //set-global query every time global filter changes
-      this.globalQueries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-      ];
-      this.initGraphStats();
-    });
+    this.$subscription.add(
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        //set-global query every time global filter changes
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ];
+        this.initGraphStats();
+      })
+    );
   }
 
   initGraphStats(): void {

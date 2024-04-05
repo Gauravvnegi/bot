@@ -130,6 +130,10 @@ export class AvgTimeComponent implements OnInit {
       this.initGraphData();
     });
   }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }
 
 const options = {

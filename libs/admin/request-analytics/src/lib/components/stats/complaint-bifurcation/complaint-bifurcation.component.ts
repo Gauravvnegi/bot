@@ -172,4 +172,8 @@ export class ComplaintBifurcationComponent implements OnInit {
       this.chart.colors[0].borderColor.push(data.color);
     });
   }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }

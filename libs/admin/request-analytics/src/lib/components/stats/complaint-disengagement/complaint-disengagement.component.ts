@@ -76,24 +76,26 @@ export class ComplaintDisengagementComponent implements OnInit {
   }
 
   listenForGlobalFilters(): void {
-    this.globalFilterService.globalFilter$.subscribe((data) => {
-      const calenderType = {
-        calenderType: this.dateService.getCalendarType(
-          data['dateRange'].queryValue[0].toDate,
-          data['dateRange'].queryValue[1].fromDate,
-          this.globalFilterService.timezone
-        ),
-      };
-      this.selectedInterval = calenderType.calenderType;
+    this.$subscription.add(
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        const calenderType = {
+          calenderType: this.dateService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate,
+            this.globalFilterService.timezone
+          ),
+        };
+        this.selectedInterval = calenderType.calenderType;
 
-      //set-global query every time global filter changes
-      this.globalQueries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-        calenderType,
-      ];
-      this.initGraphStats();
-    });
+        //set-global query every time global filter changes
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          calenderType,
+        ];
+        this.initGraphStats();
+      })
+    );
   }
 
   getQueryConfig(): QueryConfig {

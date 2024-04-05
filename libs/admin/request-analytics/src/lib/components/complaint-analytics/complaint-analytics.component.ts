@@ -11,6 +11,7 @@ import {
   AdminUtilityService,
   StatCard,
   manageMaskZIndex,
+  openModal,
 } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
@@ -20,6 +21,8 @@ import { getTicketCountLabel } from '../../constant/stats';
 import { AverageRequestStats } from '../../models/statistics.model';
 import { AnalyticsService } from '../../services/analytics.service';
 import { DistributionStats } from '../../types/response.types';
+import { UserPermissionDatatableComponent } from 'libs/admin/roles-and-permissions/src/lib/components/user-permission-datatable/user-permission-datatable.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'complaint-analytics',
@@ -61,7 +64,8 @@ export class ComplaintAnalyticsComponent implements OnInit {
     private analyticsService: AnalyticsService,
     private adminUtilityService: AdminUtilityService,
     private compiler: Compiler,
-    private resolver: ComponentFactoryResolver
+    private resolver: ComponentFactoryResolver,
+    private dialogService: DialogService
   ) {}
 
   statCard: StatCard[] = [];
@@ -198,6 +202,24 @@ export class ComplaintAnalyticsComponent implements OnInit {
         this.sidebarVisible = false;
       },
     });
+  }
+
+  openTableModal() {
+    event.stopPropagation();
+    const modalData: Partial<UserPermissionDatatableComponent> = {
+      tableType: 'AGENT_DESTRIBUTION',
+    };
+    const dialogRef = openModal({
+      config: {
+        width: '80%',
+        styleClass: 'dynamic-modal',
+        data: modalData,
+      },
+      dialogService: this.dialogService,
+      component: UserPermissionDatatableComponent,
+    });
+
+    dialogRef.onClose.subscribe((res) => {});
   }
 
   ngOnDestroy() {

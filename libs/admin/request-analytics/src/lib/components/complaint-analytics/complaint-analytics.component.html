@@ -58,7 +58,12 @@
       </ng-container>
     </hospitality-bot-stats-card>
 
-    <hospitality-bot-stats-card [stats]="agentStats" class="stat-card">
+    <hospitality-bot-stats-card
+      [stats]="agentStats"
+      click-allow
+      (click)="openTableModal()"
+      class="stat-card"
+    >
       <ng-container>
         <div class="additional-stats-container">
           <div class="stats-wrapper">

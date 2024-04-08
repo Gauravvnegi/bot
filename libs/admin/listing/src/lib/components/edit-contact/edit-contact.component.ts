@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { BaseDatatableComponent, Regex } from '@hospitality-bot/admin/shared';
-import { contactConfig } from '../../constants/contact';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subscription } from 'rxjs';
-import { ListingService } from '../../services/listing.service';
+import { contactConfig } from '../../constants/contact';
 import { Contact, ContactList } from '../../data-models/listing.model';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { SnackBarService } from '@hospitality-bot/shared/material';
+import { ListingService } from '../../services/listing.service';
 
 @Component({
   selector: 'hospitality-bot-edit-contact',
@@ -31,6 +31,7 @@ export class EditContactComponent extends BaseDatatableComponent
   fileName: string = '';
   contactList: Contact[];
   isContactImported: boolean = false;
+  @Input() initialNumberOfRow: number = 3;
 
   $subscription = new Subscription();
 
@@ -65,9 +66,9 @@ export class EditContactComponent extends BaseDatatableComponent
         return this.createContactFG(item);
       });
     } else {
-      this.generateContactField();
-      this.generateContactField();
-      this.generateContactField();
+      for (let i = 0; i < this.initialNumberOfRow; i++) {
+        this.generateContactField();
+      }
     }
   }
 
@@ -82,12 +83,12 @@ export class EditContactComponent extends BaseDatatableComponent
 
     return this.fb.group({
       id: [data?.id || null],
-      email: [data?.email || '', [Validators.required, emailPattern]],
+      email: [data?.email || ''],
       salutation: [data?.salutation || 'Mr', [Validators.required]],
       firstName: [data?.firstName || '', [Validators.required, namePattern]],
       lastName: [data?.lastName || '', [Validators.required, namePattern]],
       companyName: [data?.companyName || ''],
-      mobile: [data?.mobile || '', [Validators.required, numberPattern]],
+      mobile: [data?.mobile || ''],
     });
   }
 

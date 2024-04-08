@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  EventEmitter,
-  Output,
-  
-} from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { UserService } from '@hospitality-bot/admin/shared';
 import { PaymentStatus } from 'libs/admin/finance/src/lib/components/transaction-history-data-table/transaction-history-data-table.component';
@@ -206,15 +199,13 @@ export class AdminPaymentDetailsComponent implements OnInit {
 
   getStatusTextAndClass(
     paymentType: PaymentType,
-    status: 'SUCCESS' | 'FAILURE'
+    status: 'PAID' | 'FAILURE'
   ): { text: string; class: string } {
     switch (true) {
-      case paymentType === PaymentType.PAYMENT &&
-        status === PaymentStatus.SUCCESS:
+      case paymentType === PaymentType.PAYMENT && status === PaymentStatus.PAID:
         return { text: 'Paid', class: 'chip-contained-success' };
 
-      case paymentType === PaymentType.REFUND &&
-        status === PaymentStatus.SUCCESS:
+      case paymentType === PaymentType.REFUND && status === PaymentStatus.PAID:
         return { text: 'Refund', class: 'chip-contained-paid' };
 
       case (paymentType === PaymentType.PAYMENT ||

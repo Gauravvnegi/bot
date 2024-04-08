@@ -53,7 +53,7 @@ export class TransactionHistory {
   deserialize(input: TransactionHistoryResponse) {
     this.transactionId = input.transactionId ?? '';
     this.dateAndTime = input.created ?? 0;
-    this.status = input.status ?? '';
+    this.status = (input.status === 'SUCCESS' ? 'PAID' : input.status) ?? '';
     this.paymentMethod = input.paymentMethod ?? '';
     this.remarks = input.remarks ?? '';
     this.credit = input.amount ?? 0;

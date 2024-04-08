@@ -89,7 +89,7 @@ export const cols = {
       field: 'status',
       header: 'Status',
       sortType: 'string',
-      isSearchDisabled: true,
+      isSearchDisabled: false,
     },
     {
       field: 'paymentMethod',
@@ -178,6 +178,6 @@ export const transactionStatus: Record<
   },
   REFUND: {
     label: 'Refund',
-    type: 'active'
-  }
+    type: 'active',
+  },
 };

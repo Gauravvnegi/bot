@@ -128,13 +128,14 @@ export class CampaignFormData {
     this.id = input?.id;
 
     // Map individuals and listings in to array.
-    const individualLabels = input?.to?.individual?.map((item) => item?.name);
-    const listings = input?.to?.listing?.map((item) => ({
-      label: item?.name,
-      value: item?.receiverId,
-    }));
-    if (individualLabels && listings)
-      this.to = [...individualLabels, ...listings?.map((item) => item?.label)];
+    const individualLabels =
+      input?.to?.individual?.map((item) => item?.name) ?? [];
+    const listings =
+      input?.to?.listing?.map((item) => ({
+        label: item?.name,
+        value: item?.receiverId,
+      })) ?? [];
+    this.to = [...individualLabels, ...listings?.map((item) => item?.label)];
     this.recipients = listings;
     return this;
   }

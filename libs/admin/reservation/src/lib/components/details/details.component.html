@@ -278,12 +278,12 @@
           </mat-tab>
           <mat-tab
             label="Documents"
-            *ngIf="guestReservationDropdownList.length"
+            *ngIf="guestReservationDropdownList?.length"
           >
             <hospitality-bot-admin-documents-details
               *ngIf="
                 isReservationDetailFetched &&
-                guestReservationDropdownList.length
+                guestReservationDropdownList?.length
               "
               #adminDocumentsDetailsComponent
               [parentForm]="detailsForm"
@@ -293,7 +293,7 @@
           </mat-tab>
           <mat-tab
             [label]="getVisitDetaillabel()"
-            *ngIf="guestReservations.records.length"
+            *ngIf="guestReservations?.records?.length"
           >
             <hospitality-bot-stay-details
               *ngIf="isReservationDetailFetched"
@@ -306,14 +306,14 @@
               (addFGEvent)="addFGEvent($event)"
             ></hospitality-bot-stay-details>
           </mat-tab>
-          <mat-tab label="Add-ons" *ngIf="guestReservationDropdownList.length">
+          <mat-tab label="Add-ons" *ngIf="guestReservationDropdownList?.length">
             <hospitality-bot-admin-package-details
               *ngIf="isReservationDetailFetched"
               [parentForm]="detailsForm"
               [data]="details"
             ></hospitality-bot-admin-package-details>
           </mat-tab>
-          <mat-tab label="Payment" *ngIf="guestReservationDropdownList.length">
+          <mat-tab label="Payment" *ngIf="guestReservationDropdownList?.length">
             <hospitality-bot-admin-payment-details
               *ngIf="isReservationDetailFetched"
               [parentForm]="detailsForm"
@@ -324,7 +324,7 @@
           <mat-tab
             label="Activities"
             *ngIf="
-              hasComplaintViewPermission && guestReservationDropdownList.length
+              hasComplaintViewPermission && guestReservationDropdownList?.length
             "
           >
             <hospitality-bot-requests-table
@@ -337,7 +337,7 @@
         </mat-tab-group>
         <div
           *ngIf="
-            isReservationDetailFetched && guestReservationDropdownList.length
+            isReservationDetailFetched && guestReservationDropdownList?.length
           "
           class="tab-buttons"
         >

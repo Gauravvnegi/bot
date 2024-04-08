@@ -79,13 +79,7 @@ export class GuestData {
     this.rooms = new Room().deserialize(input.stayDetails);
     this.vip = input.vip;
     this.reservationId = input?.id;
-    set(
-      {},
-      'fullName',
-      `${trim(get(guest, ['firstName'], 'No'))} ${trim(
-        get(guest, ['lastName'], 'Name')
-      )}`
-    );
+    this.fullName = `${trim(this.firstName)} ${trim(this.lastName)}`;
 
     return this;
   }

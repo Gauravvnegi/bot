@@ -62,7 +62,13 @@
       >
         <div class="stat-lable-container">
           <div class="icon" [style.background]="item.color"></div>
-          <div class="stat-lable">{{ item.label | titlecase }}</div>
+          <div class="stat-lable">
+            {{
+              item.label === 'Ota'
+                ? (item.label | uppercase)
+                : (item.label | titlecase)
+            }}
+          </div>
         </div>
         <div class="stat-val">{{ item.value }}</div>
       </div>

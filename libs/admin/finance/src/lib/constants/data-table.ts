@@ -178,6 +178,6 @@ export const transactionStatus: Record<
   },
   REFUND: {
     label: 'Refund',
-    type: 'active'
-  }
+    type: 'active',
+  },
 };

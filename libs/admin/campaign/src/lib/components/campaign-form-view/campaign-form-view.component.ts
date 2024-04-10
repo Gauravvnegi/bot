@@ -161,7 +161,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
 
   listenForTagChanges(): void {
     this.useForm.get('campaignTags').valueChanges.subscribe((val) => {
-      if (val.length >= this.maxChip) {
+      if (val.length > this.maxChip) {
         this.useForm.get('campaignTags').setErrors({ maxTags: true });
       } else {
         this.useForm.get('campaignTags').setErrors(null);

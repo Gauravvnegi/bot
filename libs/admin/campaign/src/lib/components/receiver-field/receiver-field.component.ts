@@ -19,6 +19,7 @@ import {
   RecipientType,
 } from '../../types/campaign.type';
 import { Option } from '@hospitality-bot/admin/shared';
+import { CampaignService } from '../../services/campaign.service';
 
 @Component({
   selector: 'hospitality-bot-to-receiver-field',
@@ -50,6 +51,7 @@ export class ReceiverFieldComponent
   constructor(
     private _emailService: EmailService,
     private controlContainer: ControlContainer,
+    private _campaignService: CampaignService,
     @Inject(DOCUMENT) private document: Document
   ) {}
 
@@ -64,9 +66,8 @@ export class ReceiverFieldComponent
       this.handleClickOutside.bind(this)
     );
   }
-
   handleClickOutside(event: MouseEvent) {
-    const dropdown = document.getElementById('reciever-field'); // Get the dropdown element
+    const dropdown = document.getElementById('reciever-field');
     if (
       dropdown &&
       !dropdown.contains(event.target as Node) &&
@@ -143,10 +144,22 @@ export class ReceiverFieldComponent
   }
 
   onRemoveChip(value: string) {
+    const removedRecipient = this.recipients.find(
+      (recipient) => recipient.label === value
+    );
+    const removedRecipientId = removedRecipient ? removedRecipient.value : null;
+
     this.recipients = this.recipients.filter(
       (recipient) => recipient.label !== value
     );
+
     this.inputControls.recipients.patchValue(this.recipients);
+
+    const selectedIds = this._campaignService.selectedRecipient.value;
+    const updatedSelectedIds = selectedIds.filter(
+      (id) => id !== removedRecipientId
+    );
+    this._campaignService.selectedRecipient.next(updatedSelectedIds);
   }
 
   get inputControls() {

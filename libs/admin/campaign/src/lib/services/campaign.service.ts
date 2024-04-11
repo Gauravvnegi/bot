@@ -17,6 +17,8 @@ export class CampaignService extends ApiService {
 
   templateData = new BehaviorSubject<TemplateType>(null);
 
+  selectedRecipient = new BehaviorSubject<string[]>([]);
+
   mapTopicList(entityId: string) {
     return this.getTopicList(entityId, {
       queryObj: '?entityState=ACTIVE',

@@ -113,7 +113,9 @@ export class EditContactComponent extends BaseDatatableComponent
 
           this.isContactImported = true;
         },
-        ({ error }) => {}
+        ({ error }) => {
+          this.close();
+        }
       )
     );
   }

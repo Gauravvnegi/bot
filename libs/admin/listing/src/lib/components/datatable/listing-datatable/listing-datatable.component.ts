@@ -207,7 +207,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
           order: sharedConfig.defaultOrder,
           entityType: this.selectedTab,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({key:'entityState'}),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };

@@ -59,7 +59,6 @@ export class EditListingComponent implements OnInit, OnDestroy {
     this.listFG = this._fb.group({
       id: [''],
       name: ['', [Validators.required]],
-      topicName: [''],
       description: ['', [Validators.required]],
       marketingContacts: [[]],
       active: [true],
@@ -144,7 +143,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
   createList() {
     if (
       this.listFG.invalid ||
-      this.listFG.get('marketingContacts').value.length === 0
+      this.listFG.get('marketingContacts')?.value?.length === 0
     ) {
       this.snackbarService
         .openSnackBarWithTranslate(
@@ -204,7 +203,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
   updateList() {
     if (
       this.listFG.invalid ||
-      this.listFG.get('marketingContacts').value.length === 0
+      this.listFG.get('marketingContacts')?.value?.length === 0
     ) {
       this.snackbarService
         .openSnackBarWithTranslate(

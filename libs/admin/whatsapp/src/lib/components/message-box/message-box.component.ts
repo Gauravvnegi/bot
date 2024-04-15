@@ -175,7 +175,7 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
 
         const messagePayload = {
           mediaUrl: res.fileDownloadUri,
-          fileName: event.file.name,
+          filename: event.file.name,
           channelType: values.channelType,
           receiverId: this.selectedChat.phone,
           messageType: 'DOCUMENT',

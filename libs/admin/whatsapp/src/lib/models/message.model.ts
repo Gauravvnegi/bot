@@ -80,7 +80,7 @@ export class Chat {
         this.timestamp,
         'MMM_DD_YYYY_hh:mm:ss',
         timezone
-      )}.${type.split('/')[1].split(';')[0]}`;
+      )}.${type?.split('/')[1]?.split(';')[0]}`;
   }
 }
 

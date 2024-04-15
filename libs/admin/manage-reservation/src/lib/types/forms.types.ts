@@ -32,7 +32,7 @@ export class RoomReservationFormData {
   remarks?: string;
   printRate?: boolean;
   chargedAmount?: number;
-  sessionType: SessionType;
+  sessionType: string;
   slotId: string;
 }
 

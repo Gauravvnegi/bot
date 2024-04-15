@@ -50,7 +50,7 @@ export type ReservationInformation = {
   agentSourceName?: string;
   otaSourceName?: string;
   companySourceName?: string;
-  sessionType: SessionType;
+  sessionType: string;
   slotId: string;
 };
 

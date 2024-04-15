@@ -31,7 +31,6 @@
   width: 25px;
 }
 
-
 :host ::ng-deep .status-toggle {
   .wrapper {
     display: flex;
@@ -78,4 +77,8 @@
 
 :host ::ng-deep .action-header {
   margin: 0 0 15px;
+}
+
+.dropdwon {
+  width: 123px;
 }

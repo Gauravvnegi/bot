@@ -101,7 +101,9 @@ export class FormService {
       transactionId: input?.paymentMethod?.transactionId ?? '',
       cashierId: input?.paymentMethod?.cashierId ?? '',
     };
-
+    roomReservationData.sessionType =
+      input?.reservationInformation?.sessionType;
+    roomReservationData.slotId = input?.reservationInformation?.slotId;
     if (type === 'full') {
       if (input?.paymentRule?.amountToPay && input.paymentRule.partialPayment)
         roomReservationData.paymentRule = {

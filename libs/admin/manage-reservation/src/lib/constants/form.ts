@@ -3,6 +3,21 @@ import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
 
+export const SessionType = {
+  DAY_BOOKING: 'DAY_BOOKING',
+  NIGHT_BOOKING: 'NIGHT_BOOKING',
+} as const;
+
+export type SessionType = typeof SessionType[keyof typeof SessionType];
+
+export const CalendarInterval = {
+  DAY: 'PER_DAY',
+  SEVEN_DAYS: 'SEVEN_DAYS',
+  FIFTEEN_DAYS: 'FIFTEEN_DAYS',
+} as const;
+
+export type CalendarInterval = typeof CalendarInterval[keyof typeof CalendarInterval];
+
 export type ReservationForm = {
   reservationInformation: ReservationInformation;
   guestInformation: GuestInformation;
@@ -35,6 +50,8 @@ export type ReservationInformation = {
   agentSourceName?: string;
   otaSourceName?: string;
   companySourceName?: string;
+  sessionType: SessionType;
+  slotId: string;
 };
 
 export type GuestInformation = {

@@ -16,10 +16,12 @@ import {
   Validators,
 } from '@angular/forms';
 import {
+  AdminUtilityService,
   BookingDetailService,
   EntitySubType,
   ModuleNames,
   Option,
+  QueryConfig,
   manageMaskZIndex,
   openModal,
 } from '@hospitality-bot/admin/shared';
@@ -37,7 +39,10 @@ import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { RoomTypeOption } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
-import { ReservationForm } from 'libs/admin/manage-reservation/src/lib/constants/form';
+import {
+  ReservationForm,
+  SessionType,
+} from 'libs/admin/manage-reservation/src/lib/constants/form';
 import { debounceTime } from 'rxjs/operators';
 import { BookingInfoComponent } from '../booking-info/booking-info.component';
 import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
@@ -49,6 +54,7 @@ import { RoomReservationFormData } from 'libs/admin/manage-reservation/src/lib/t
 import { ReservationType } from 'libs/admin/manage-reservation/src/lib/constants/reservation-table';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AddRefundComponent } from 'libs/admin/invoice/src/lib/components/add-refund/add-refund.component';
+import { secondsToHHMM } from '../../constants/reservation';
 
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',
@@ -87,6 +93,8 @@ export class QuickReservationFormComponent implements OnInit {
   defaultRoomTypeId: string;
   selectedRoomType: RoomTypeOption;
   selectedAgent: AgentTableResponse;
+  bookingSlotList: Option[];
+  sessionType: SessionType;
 
   selectedRoom: string;
   date: IGCol;
@@ -132,7 +140,8 @@ export class QuickReservationFormComponent implements OnInit {
     public bookingDetailService: BookingDetailService,
     private compiler: Compiler,
     private resolver: ComponentFactoryResolver,
-    public dialogService: DialogService
+    public dialogService: DialogService,
+    private adminUtilityService: AdminUtilityService
   ) {
     this.formService.resetData();
     this.initForm();
@@ -153,6 +162,9 @@ export class QuickReservationFormComponent implements OnInit {
         roomTypeId: this.defaultRoomTypeId,
         roomNumber: this.selectedRoom,
         roomNumbers: [this.selectedRoom],
+      });
+      this.inputControls.reservationInformation.patchValue({
+        sessionType: this.sessionType,
       });
     }
   }
@@ -190,6 +202,8 @@ export class QuickReservationFormComponent implements OnInit {
         agentSourceName: [''],
         otaSourceName: [''],
         companySourceName: [''],
+        sessionType: [SessionType.NIGHT_BOOKING, Validators.required],
+        slotId: ['', Validators.required],
       }),
 
       roomInformation: this.fb.group({
@@ -225,6 +239,7 @@ export class QuickReservationFormComponent implements OnInit {
     this.entityId = this.globalFilterService.entityId;
     this.listenForDateChanges();
     this.listenForRoomChanges();
+    this.listenForRoomTypeChanges();
   }
 
   listenForRoomChanges() {
@@ -622,6 +637,36 @@ export class QuickReservationFormComponent implements OnInit {
         )
     );
   }
+  listenForRoomTypeChanges() {
+    this.roomControls.roomTypeId.valueChanges.subscribe((res) => {
+      this.getSlotListByRoomTypeId(res);
+    });
+  }
+
+  getSlotListByRoomTypeId(roomTypeId: string) {
+    const config: QueryConfig = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          entityId: this.entityId,
+          inventoryId: roomTypeId,
+          raw: true,
+          status: true,
+        },
+      ]),
+    };
+    this.$subscription.add(
+      this.manageReservationService
+        .getSlotsListsByRoomType(config)
+        .subscribe((res) => {
+          this.bookingSlotList = res.map((slot) => {
+            return {
+              label: secondsToHHMM(slot.duration),
+              value: slot.id,
+            };
+          });
+        })
+    );
+  }
 
   openDetailsPage() {
     this.bookingDetailService.openBookingDetailSidebar({
@@ -696,6 +741,7 @@ export type QuickReservationConfig = {
   selectedRoom?: string;
   defaultRoomTypeId?: string;
   date?: IGCol;
+  sessionType: SessionType;
 };
 
 export type GuestDetails = {

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { ReservationSummary } from '../types/forms.types';
 import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
-import { RoomUpgradeType } from '../types/response.type';
+import { BookingSlotResponse, RoomUpgradeType } from '../types/response.type';
 
 @Injectable({ providedIn: 'root' })
 export class ManageReservationService extends ApiService {
@@ -153,5 +153,11 @@ export class ManageReservationService extends ApiService {
       `/api/v1/reservation/${reservationId}/send-invoice?source=BOTSHOT_ADMIN`,
       data
     );
+  }
+
+  getSlotsListsByRoomType(
+    config: QueryConfig
+  ): Observable<BookingSlotResponse[]> {
+    return this.get(`/api/v1/booking-slots${config.params ?? ''}`);
   }
 }

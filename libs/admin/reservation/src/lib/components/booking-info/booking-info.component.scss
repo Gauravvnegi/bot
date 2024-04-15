@@ -13,6 +13,15 @@
   }
 }
 
+.full-width {
+  flex-basis: 100%;
+}
+.switcher {
+  display: block;
+  margin-left: auto;
+  width: fit-content;
+}
+
 .custom-width {
   flex-basis: 47%;
 }

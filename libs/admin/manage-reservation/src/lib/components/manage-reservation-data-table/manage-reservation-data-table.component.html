@@ -20,6 +20,18 @@
   </div>
 
   <div class="action-wrapper" *ngIf="!showCalendarView">
+    <!-- days dropdown -->
+    <hospitality-bot-toggle-switch-with-label
+      [isToggleOn]="sessionTypeControl.value === SessionType.DAY_BOOKING"
+      (onToggleSwitch)="handelToggleSwitch($event)"
+      class="switcher"
+      [config]="{
+        toggleOnLabel: 'Day',
+        toggleOffLabel: 'Night',
+        toggleOffColor: '#65b340'
+      }"
+    ></hospitality-bot-toggle-switch-with-label>
+
     <div class="pull-right">
       <label
         class="type-label"
@@ -64,6 +76,7 @@
 <div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
 
 <ng-container
+  [formGroup]="tableFG"
   *ngIf="tableFG?.get('tableType').value === 'calendar'; else tableView"
 >
   <hospitality-bot-reservation-calendar-view></hospitality-bot-reservation-calendar-view>
@@ -193,7 +206,7 @@
         <td>
           <div
             class="cell-content"
-            *ngIf="rowData?.guestName.length; else emptyCell"
+            *ngIf="rowData?.guestName?.length; else emptyCell"
           >
             <u
               class="primary-text"
@@ -201,7 +214,7 @@
               click-stop-propagation
               [ngStyle]="{ cursor: 'pointer' }"
             >
-              {{ rowData.guestName }}
+              {{ rowData?.guestName }}
             </u>
             <div class="secondary-text">
               {{ rowData?.companyName || '--' }}

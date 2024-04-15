@@ -175,7 +175,9 @@ const options = {
         ticks: {
           beginAtZero: true,
           callback: function (value, index, ticks) {
-            return value + ' Mins';
+            if (Math.floor(value) === value) {
+              return value + ' Mins';
+            }
           },
         },
       },

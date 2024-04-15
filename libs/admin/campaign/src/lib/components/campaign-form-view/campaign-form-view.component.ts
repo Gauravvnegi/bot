@@ -168,6 +168,7 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   initCampaignData() {
     this.$subscription.add(
       this.campaignService

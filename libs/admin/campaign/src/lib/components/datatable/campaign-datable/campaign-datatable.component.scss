@@ -47,6 +47,9 @@
   .p-datatable .p-datatable-tbody .table-row .primary-text {
     color: black;
   }
+  .p-datatable .p-datatable-thead .select-box {
+    width: 4%;
+  }
 }
 
 :host ::ng-deep .name {

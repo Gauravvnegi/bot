@@ -104,7 +104,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       jobDuration: [''],
       remarks: ['', [Validators.maxLength(200)]],
       quantity: [1, [Validators.required, Validators.min(1)]],
-      assigneeId: ['', [Validators.required]], //as per BE ()
+      assigneeId: [''], //as per BE ()
       // cc: ['+91'],
       // phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
       guestId: [''],
@@ -172,13 +172,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
         })
         .subscribe((response) => {
           this.isAssigneeList = !!response?.requestItemUsers?.length;
-          if (!this.isAssigneeList)
-            this.requestFG.get('assigneeId').clearValidators();
-          else
-            this.requestFG
-              .get('assigneeId')
-              .setValidators([Validators.required]);
-          this.requestFG.get('assigneeId').updateValueAndValidity();
           this.assigneeList = response.requestItemUsers.map((user) => {
             return {
               label: `${user.firstName} ${user.lastName}`,

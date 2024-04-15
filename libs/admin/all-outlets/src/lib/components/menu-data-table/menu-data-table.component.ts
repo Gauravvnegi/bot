@@ -98,7 +98,7 @@ export class MenuDataTableComponent extends BaseDatatableComponent
         {
           offset: this.first,
           limit: this.rowsPerPage,
-          menuId: this.menuId,
+          menuIds: this.menuId,
         },
       ]),
     };

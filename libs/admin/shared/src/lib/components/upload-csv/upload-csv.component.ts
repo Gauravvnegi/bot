@@ -14,47 +14,30 @@ import {
   styleUrls: ['./upload-csv.component.scss'],
 })
 export class UploadCsvComponent implements OnInit {
-  defaultValue = {
-    maxFileSize: 3145728,
-    fileType: '.csv, .xls, .xlsx',
-  };
-  _fileUploadData;
-
   @Input() uploadStatus: boolean;
 
   @Input() label: string = 'Upload';
   @Input() pageType: string;
   @Input() documentType: string;
   @Input() isDisable = false;
-  @Input('fileUploadData') set fileUploadData(value: {}) {
-    this._fileUploadData = { ...this.defaultValue, ...value };
-  }
-
-  get uploadFileData() {
-    return { ...this.defaultValue, ...this._fileUploadData };
-  }
-
-  @ViewChild('advancedfileinput') pInput: ElementRef;
+  @Input() chooseIcon: string = 'pi-arrow-down';
+  @Input() uploadIcon: string = 'pi-arrow-down';
+  @Input() maxFileSize: number = 3145728;
+  @Input() fileType: string = '.csv, .xls, .xlsx';
+  @Input() isAuto: boolean = true;
 
   constructor() {}
 
   @Output()
   fileData = new EventEmitter();
-
-  error = 'Invalid FileType';
-
   ngOnInit(): void {}
-
-  onClick() {
-    this.pInput.nativeElement.click();
-  }
 
   onSelectFile(event) {
     if (event.files && event.files[0]) {
       const file = event.files[0];
       const fileSize = file.size;
 
-      if (fileSize <= +this.uploadFileData.maxFileSize) {
+      if (fileSize <= +this.maxFileSize) {
         const reader = new FileReader();
         reader.onload = (_event) => {
           const binaryString = reader.result as string; // This will contain the binary data
@@ -72,9 +55,6 @@ export class UploadCsvComponent implements OnInit {
             binaryData: filteredContent, // Include the filtered binary data in the emitted data
           };
           this.fileData.emit(data);
-
-          // For Excel files (xlsx or xls)
-          // You can use a library like exceljs or xlsx to handle Excel files
         };
 
         // Read the file as binary data
@@ -86,6 +66,6 @@ export class UploadCsvComponent implements OnInit {
   }
 
   checkFileType(extension: string) {
-    return this.uploadFileData.fileType.includes(extension);
+    return this.fileType.includes(extension);
   }
 }

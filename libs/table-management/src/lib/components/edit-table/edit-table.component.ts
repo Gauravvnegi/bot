@@ -59,7 +59,7 @@ export class EditTableComponent implements OnInit {
   fields = [];
   formSubmissionType: TableFormSubmissionType = 'SINGLE';
   areaOffset: number = 0;
-  areaLimit: number = 10;
+  areaLimit: number = 0;
 
   areaList: Option[] = [];
   isLoadingAreaList: boolean = false;

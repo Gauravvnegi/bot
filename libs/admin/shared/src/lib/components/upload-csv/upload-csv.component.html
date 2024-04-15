@@ -2,12 +2,12 @@
   class="file-upload"
   #upload
   mode="basic"
-  [accept]="defaultValue.fileType"
-  [maxFileSize]="defaultValue.maxFileSize"
-  [auto]="true"
+  [accept]="fileType"
+  [maxFileSize]="maxFileSize"
+  [auto]="isAuto"
   [chooseLabel]="label"
   (onSelect)="onSelectFile($event)"
   [disabled]="isDisable"
-  [chooseIcon]="'pi-arrow-down'"
-  [uploadIcon]="'pi-arrow-down'"
+  [chooseIcon]="chooseIcon"
+  [uploadIcon]="uploadIcon"
 ></p-fileUpload>

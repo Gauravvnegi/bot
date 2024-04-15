@@ -182,6 +182,11 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
                 value: this.campaignData.templateId,
               };
             this.useForm.patchValue(this.campaignData);
+            const recipientValues = this.campaignData.recipients.map(
+              (recipient) => recipient.value
+            );
+
+            this.campaignService.updateSelectedRecipients(recipientValues);
           }
         })
     );

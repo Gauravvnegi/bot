@@ -128,18 +128,32 @@ export class ReceiverFieldComponent
     data: ListType<TType>;
   }) {
     let recipientLabels = [...this.inputControls.to.value, event.data.name];
+    let selectedRecipientIds = [
+      ...this._campaignService.selectedRecipient.value,
+    ];
+
     if (event.data.id) {
-      // Check if a recipient with the same ID already exists
-      const recipientWithSameId = this.recipients.find(
+      const index = this.recipients.findIndex(
         (recipient) => recipient.value === event.data.id
       );
 
-      if (!recipientWithSameId) {
+      if (index === -1) {
         this.recipients.push({ label: event.data.name, value: event.data.id });
+        selectedRecipientIds.push(event.data.id);
+      } else {
+        this.recipients.splice(index, 1);
+        recipientLabels = recipientLabels.filter(
+          (label) => label !== event.data.name
+        );
+        selectedRecipientIds = selectedRecipientIds.filter(
+          (id) => id !== event.data.id
+        );
       }
     }
-    if (event.data.id)
-      this.inputControls.recipients.patchValue(this.recipients);
+
+    this.inputControls.recipients.patchValue(this.recipients);
+    this._campaignService.updateSelectedRecipients(selectedRecipientIds);
+
     this.inputControls.to.patchValue([...new Set(recipientLabels)]);
   }
 
@@ -159,7 +173,8 @@ export class ReceiverFieldComponent
     const updatedSelectedIds = selectedIds.filter(
       (id) => id !== removedRecipientId
     );
-    this._campaignService.selectedRecipient.next(updatedSelectedIds);
+    this._campaignService.updateSelectedRecipients(updatedSelectedIds);
+    // this._campaignService.selectedRecipient.next(updatedSelectedIds);
   }
 
   get inputControls() {

@@ -575,6 +575,7 @@ export class ReservationCalendarViewComponent implements OnInit {
           },
         },
       ],
+      sessionType: this.sessionTypeControl?.value,
     };
 
     roomType.loading = true;

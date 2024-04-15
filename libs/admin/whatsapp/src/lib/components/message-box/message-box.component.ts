@@ -16,6 +16,7 @@ import {
   AdminUtilityService,
   Department,
   DepartmentList,
+  QueryConfig,
   User,
   UserList,
   UserService,
@@ -32,6 +33,7 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
   @Input() chatList;
   @Output() messageSent = new EventEmitter();
   @Input() entityId;
+
   items: Array<User | Department>;
   mentions = [];
 
@@ -85,9 +87,11 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
     }
 
     const values = this.chatFG.getRawValue();
+
     if (values.message.trim().length === 0) {
       return;
     }
+
     values.receiverId = this.selectedChat.phone;
     const mentions = this.mentions
       .map((mention) => {
@@ -112,12 +116,14 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
     const userMentions = mentions.filter((item) => !!item.mentionedUserId);
 
     const timestamp = this.dateService.getCurrentTimeStamp();
+
     this.messageSent.emit({
       message: encodeURIComponent(this.chatFG.get('message').value),
       timestamp,
       status: 'unsend',
       update: false,
     });
+
     values.message = encodeURIComponent(values.message);
 
     const getQueryArray = (list: typeof mentions, configName: string) => {
@@ -127,23 +133,61 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
       return [];
     };
 
-    const queryObj = this.adminUtilityService.makeQueryParams([
-      ...getQueryArray(userMentions, 'isMention'),
-      ...getQueryArray(departmentMentions, 'isDepartmentMention'),
-    ]);
+    const queryObj: QueryConfig = {
+      params: this.adminUtilityService.makeQueryParams([
+        ...getQueryArray(userMentions, 'isMention'),
+        ...getQueryArray(departmentMentions, 'isDepartmentMention'),
+      ]),
+    };
 
+    this.sentMessageDetails(values, queryObj, 'TEXT');
+  }
+
+  sentMessageDetails(
+    values,
+    queryObj: QueryConfig,
+    messageType?: 'DOCS' | 'TEXT'
+  ) {
     this.$subscription.add(
       this.messageService
         .sendMessage(this.entityId, values, queryObj)
         .subscribe((_) => {
           this.messageSent.emit({
             message: encodeURIComponent(this.chatFG.get('message').value),
-            timestamp,
+            timestamp: this.dateService.getCurrentTimeStamp(),
             status: 'sent',
             update: true,
           });
           this.mentions = [];
         })
+    );
+  }
+
+  uploadDoc(event) {
+    const formData = new FormData();
+    formData.append('files', event.file, event.file.name);
+    const config: QueryConfig = {
+      params: '?folder_name=BOTSHOT/CONVERSATION/TEST/VIDEO',
+    };
+    this.$subscription.add(
+      this.messageService.uploadData(config, formData).subscribe((res) => {
+        const values = this.chatFG.getRawValue();
+
+        const messagePayload = {
+          mediaUrl: res.fileDownloadUri,
+          fileName: event.file.name,
+          channelType: values.channelType,
+          receiverId: this.selectedChat.phone,
+          messageType: 'DOCUMENT',
+        };
+        this.messageSent.emit({
+          message: '',
+          timestamp: this.dateService.getCurrentTimeStamp(),
+          status: 'sent',
+          update: false,
+        });
+        this.sentMessageDetails(messagePayload, null, 'DOCS');
+      })
     );
   }
 

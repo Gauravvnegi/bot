@@ -7,6 +7,8 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import { ButtonVariant } from '../../types/form.type';
+import { FileUpload } from 'primeng/fileupload';
 
 @Component({
   selector: 'hospitality-bot-upload-csv',
@@ -18,6 +20,8 @@ export class UploadCsvComponent implements OnInit {
 
   @Input() label: string = 'Upload';
   @Input() pageType: string;
+  @Input() severity: ButtonSeverity = 'primary';
+  @Input() variant: ButtonVariant = 'contained';
   @Input() documentType: string;
   @Input() isDisable = false;
   @Input() chooseIcon: string = 'pi-arrow-down';
@@ -25,6 +29,7 @@ export class UploadCsvComponent implements OnInit {
   @Input() maxFileSize: number = 3145728;
   @Input() fileType: string = '.csv, .xls, .xlsx';
   @Input() isAuto: boolean = true;
+  @ViewChild('upload') upload: FileUpload;
 
   constructor() {}
 
@@ -59,6 +64,7 @@ export class UploadCsvComponent implements OnInit {
 
         // Read the file as binary data
         reader.readAsText(file);
+        this.resetFileInput();
       } else {
         // Handle case where file size exceeds the maximum allowed size
       }
@@ -68,4 +74,8 @@ export class UploadCsvComponent implements OnInit {
   checkFileType(extension: string) {
     return this.fileType.includes(extension);
   }
+  resetFileInput() {
+    this.upload.clear();
+  }
 }
+export type ButtonSeverity = 'reset' | 'secondary' | 'primary';

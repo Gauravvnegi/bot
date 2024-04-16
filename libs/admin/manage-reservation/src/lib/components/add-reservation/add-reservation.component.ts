@@ -75,6 +75,7 @@ export class AddReservationComponent extends BaseReservationComponent
   offerResponse: ManualOffer;
   loadSummary: boolean = false;
   bookingSlotList: Option[];
+  readonly sessionType = SessionType;
 
   constructor(
     private fb: FormBuilder,
@@ -97,6 +98,8 @@ export class AddReservationComponent extends BaseReservationComponent
     if (this.reservationId) this.getReservationDetails();
     this.initFormData();
     this.listenRouteData();
+    this.listenForSlotChanges();
+    this.listenForSessionTypeChanges();
   }
 
   initDetails() {
@@ -262,7 +265,8 @@ export class AddReservationComponent extends BaseReservationComponent
             return {
               label: secondsToHHMM(slot.duration),
               value: slot.id,
-              extras: slot.bookingSlotPrices[0].price as any,
+              itemAmount: slot.bookingSlotPrices[0].price,
+              duration: slot.duration,
             };
           });
         })
@@ -485,6 +489,7 @@ export class AddReservationComponent extends BaseReservationComponent
     const data: ReservationSummary = {
       from: this.reservationInfoControls.from.value,
       to: this.reservationInfoControls.to.value,
+      slotId: this.reservationInfoControls.slotId.value,
       bookingItems: this.roomControls.map((item) => ({
         roomDetails: {
           ratePlan: {
@@ -521,6 +526,32 @@ export class AddReservationComponent extends BaseReservationComponent
     };
 
     return data;
+  }
+
+  listenForSlotChanges() {
+    //to update checkout time in reservation Summary
+    this.reservationInfoControls.slotId.valueChanges.subscribe((res) => {
+      const selectedSlot = this.bookingSlotList.find(
+        (item) => item.value === res
+      );
+      const newCheckoutDate =
+        this.reservationInfoControls.from.value + selectedSlot.duration * 1000;
+
+      this.reservationInfoControls.to.patchValue(newCheckoutDate);
+    });
+  }
+
+  listenForSessionTypeChanges() {
+    this.reservationInfoControls.sessionType.valueChanges.subscribe((res) => {
+      if (res === this.sessionType.DAY_BOOKING) {
+        this.reservationInfoControls.to.patchValue(null);
+      } else {
+        this.reservationInfoControls.slotId.patchValue(null);
+        this.reservationInfoControls.to.patchValue(
+          new Date().setDate(new Date().getDate() + 1)
+        );
+      }
+    });
   }
 
   // Get total room, adult and child count for all room types
@@ -581,5 +612,9 @@ export class AddReservationComponent extends BaseReservationComponent
 
   get roomInfoControls() {
     return this.userForm.get('roomInformation') as FormGroup;
+  }
+
+  get isPrePatchedRoomType() {
+    return !this.reservationId;
   }
 }

@@ -27,6 +27,7 @@
         <hospitality-bot-room-iterator
           (listenChanges)="listenForFormChanges()"
           [itemValues]="roomTypeValues"
+          [isPrePatchedRoomType]="isPrePatchedRoomType"
           [bookingConfig]="{
             entityId: entityId,
             isDraftBooking: isDraftBooking,
@@ -81,9 +82,22 @@
             Checkin - Checkout
           </p>
           <p class="bk-summary_roomInfo_checkoutInfo_subText">
-            {{ reservationInfoControls.from.value | date: 'dd/MM/yyyy' }}
+            {{
+              reservationInfoControls.sessionType.value ===
+              sessionType.DAY_BOOKING
+                ? (reservationInfoControls.from.value
+                  | date: 'dd/MM/yyyy hh:mm a')
+                : (reservationInfoControls.from.value | date: 'dd/MM/yyyy')
+            }}
+
             -
-            {{ reservationInfoControls.to.value | date: 'dd/MM/yyyy' }}
+            {{
+              reservationInfoControls.sessionType.value ===
+              sessionType.DAY_BOOKING
+                ? (reservationInfoControls.to.value
+                  | date: 'dd/MM/yyyy hh:mm a')
+                : (reservationInfoControls.to.value | date: 'dd/MM/yyyy')
+            }}
           </p>
         </div>
         <div class="bk-summary_roomInfo_guestInfo summary-item">

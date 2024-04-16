@@ -433,8 +433,8 @@ export class AddGuestListComponent implements OnInit {
       this.configService.$config.subscribe((response) => {
         this.marketSegments =
           response.bookingConfig.marketSegment.map((item) => ({
-            label: item,
-            value: item,
+            label: item.value,
+            value: item.value,
           })) ?? [];
       })
     );

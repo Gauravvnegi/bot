@@ -598,8 +598,8 @@ export class BookingConfig {
   type: Option[] = [];
   deserialize(input): this {
     this.marketSegment = input?.marketSegment.map((item) => ({
-      label: item,
-      value: item,
+      label: item.value,
+      value: item.value,
     }));
     this.type = input?.type.map((item) => ({
       label: this.toCamelCase(item),

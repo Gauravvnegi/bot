@@ -60,6 +60,8 @@ export class RoomIteratorComponent extends IteratorComponent
   isDraftBooking: boolean = false;
   isConfirmedBooking: boolean = false;
 
+  @Input() isPrePatchedRoomType: boolean = false;
+
   @Input() set bookingConfig(value: BookingConfig) {
     for (const key in value) {
       const val = value[key];

@@ -115,8 +115,10 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
     }
   }
 
+  @Input() isPrePatched: boolean = false;
+
   @Input() set initItems(value: boolean) {
-    value && this.getItems();
+    value && this.getItems(this.isPrePatched);
   }
 
   @Output() clickedOption = new EventEmitter<Option>();

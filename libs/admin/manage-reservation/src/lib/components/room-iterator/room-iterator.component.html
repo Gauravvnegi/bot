@@ -68,6 +68,7 @@
             <hospitality-bot-quick-select
               *ngSwitchCase="'quick-select'"
               [controlName]="field.name"
+              [isPrePatched]="isPrePatchedRoomType"
               class="select dropdown-panel"
               [inputType]="'select'"
               [props]="{
@@ -130,7 +131,7 @@
     ></hospitality-bot-button>
   </div>
 </div>
-<!-- 
+<!--
 <p-dialog
   class="dialog"
   header="Room Upgrade"

@@ -409,6 +409,7 @@ export class QuickReservationFormComponent implements OnInit {
       });
     }
     this.isCheckedout && this.userForm.disable();
+    this.reservationInfoControls.sessionType.disable();
   }
 
   getGuestConfig() {

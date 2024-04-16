@@ -4,6 +4,7 @@ import { DateService } from 'libs/shared/utils/src/lib/services/date.service';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IChat } from '../models/message.model';
+import { QueryConfig } from '@hospitality-bot/admin/shared';
 
 @Injectable({ providedIn: 'root' })
 export class MessageService extends ApiService {
@@ -32,9 +33,9 @@ export class MessageService extends ApiService {
     );
   }
 
-  sendMessage(entityId: string, data, queryObj) {
+  sendMessage(entityId: string, data, queryObj: QueryConfig) {
     return this.post(
-      `/api/v1/entity/${entityId}/conversations/send${queryObj ?? ''}`,
+      `/api/v1/entity/${entityId}/conversations/send${queryObj?.params ?? ''}`,
       data
     );
   }
@@ -178,5 +179,9 @@ export class MessageService extends ApiService {
 
   setWhatsappUnreadContactCount(value) {
     this.whatsappUnreadContacts$.next(value);
+  }
+
+  uploadData(config: QueryConfig, data): Observable<any> {
+    return this.post(`/api/v1/uploads${config.params ?? ''}`, data);
   }
 }

@@ -52,6 +52,8 @@
       <div *ngIf="message.caption">
         {{ message.caption }}
       </div>
+      <div class="media__chat__file__filename">{{ message.fileName }}</div>
+
       <div class="media__chat__download__btn" (click)="downloadDoc()">
         <img src="assets/images/download-button.png" alt="" />
       </div>

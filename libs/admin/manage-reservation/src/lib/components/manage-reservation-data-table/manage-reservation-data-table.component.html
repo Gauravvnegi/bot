@@ -22,6 +22,7 @@
   <div class="action-wrapper" *ngIf="!showCalendarView">
     <!-- days dropdown -->
     <hospitality-bot-toggle-switch-with-label
+      *ngIf="tableFG?.get('tableType')?.value === 'calendar'"
       [isToggleOn]="sessionTypeControl.value === SessionType.DAY_BOOKING"
       (onToggleSwitch)="handelToggleSwitch($event)"
       class="switcher"

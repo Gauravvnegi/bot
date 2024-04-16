@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl } from '@angular/forms';
 import {
   GlobalFilterService,
   RoutesConfigService,
@@ -27,6 +27,7 @@ import { TableValue } from '../../../constants/tabFilterItem';
 import { ReservationService } from '../../../services/reservation.service';
 import { reservationStatus } from '../../../constants/response';
 import { NavigationEnd, Router } from '@angular/router';
+import { SessionType } from 'libs/admin/manage-reservation/src/lib/constants/form';
 
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
@@ -58,7 +59,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   isPopUploading: boolean = false;
   showCalendarView: boolean = false;
   selectedTableType: string;
-
+  readonly sessionType = SessionType;
   constructor(
     public fb: FormBuilder,
     protected _reservationService: ReservationService,
@@ -108,6 +109,10 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   checkReservationSubscription() {
     this.tableFG?.addControl('tableType', new FormControl('calendar'));
+    this.tableFG.addControl(
+      'sessionType',
+      new FormControl(SessionType.NIGHT_BOOKING)
+    );
     if (this.isCalendarViewAvailable) {
       this.tableFG.patchValue({ tableType: 'table' });
       this.selectedTableType = 'table';
@@ -387,6 +392,12 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     }
   }
 
+  handelToggleSwitch(value: boolean) {
+    this.sessionTypeControl.patchValue(
+      value ? SessionType.DAY_BOOKING : SessionType.NIGHT_BOOKING
+    );
+  }
+
   setTableType(value: string) {
     this.selectedTableType = value;
     this.tableFG.patchValue({ tableType: value });
@@ -398,5 +409,9 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   get dashboardConfig() {
     return dashboard;
+  }
+
+  get sessionTypeControl() {
+    return this.tableFG.get('sessionType') as AbstractControl;
   }
 }

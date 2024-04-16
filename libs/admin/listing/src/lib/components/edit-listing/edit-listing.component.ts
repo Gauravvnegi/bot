@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import {
@@ -16,8 +16,8 @@ import {
   NavRouteOptions,
   Option,
 } from 'libs/admin/shared/src';
-import { listingConfig } from '../../constants/listing';
 import { listingRoutes } from '../../constants/routes';
+import { ContactDatatableComponent } from '../datatable/contact-datatable/contact-datatable.component';
 
 @Component({
   selector: 'hospitality-bot-edit-listing',
@@ -37,6 +37,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
   pageTitle = 'Create Listing';
   navRoutes: NavRouteOptions = [];
   private $subscription = new Subscription();
+  @ViewChild(ContactDatatableComponent) listenReset: ContactDatatableComponent;
 
   constructor(
     private _fb: FormBuilder,
@@ -129,6 +130,8 @@ export class EditListingComponent implements OnInit, OnDestroy {
 
   resetForm() {
     this.listFG.reset();
+    this.listenReset.values = [];
+    this.listenReset.dataSource = [];
   }
 
   handleSubmit() {

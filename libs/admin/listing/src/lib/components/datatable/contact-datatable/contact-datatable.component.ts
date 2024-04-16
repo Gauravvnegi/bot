@@ -230,13 +230,15 @@ export class ContactDatatableComponent extends BaseDatatableComponent
    */
   updateDataSourceAfterDelete(ids, selectedRows = []) {
     if (selectedRows.length)
-      this.dataSource = this.dataSource.filter(
-        (data) => !selectedRows.some((el) => el.email === data.email)
-      );
+      this.dataSource =
+        this.dataSource.filter(
+          (data) => !selectedRows.some((el) => el.email === data.email)
+        ) ?? [];
     else
-      this.dataSource = this.dataSource.filter(
-        (data) => !ids.some((el) => el.contact_id === data.id)
-      );
+      this.dataSource =
+        this.dataSource.filter(
+          (data) => !ids.some((el) => el.contact_id === data.id)
+        ) ?? [];
     this.selectedRows = [];
     this.updateContacts.emit({ add: true, data: this.dataSource });
     this.totalRecords = this.dataSource.length;

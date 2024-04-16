@@ -108,8 +108,8 @@ export class AddCompanyComponent implements OnInit {
         .subscribe((response) => {
           this.marketSegment =
             response.bookingConfig.marketSegment.map((item) => ({
-              label: item,
-              value: item,
+              label: item.value,
+              value: item.value,
             })) ?? [];
         })
     );

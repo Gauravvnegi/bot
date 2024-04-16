@@ -589,9 +589,9 @@ export class ReservationCalendarViewComponent implements OnInit {
                 return {
                   ...item,
                   rowValue: event.rowValue,
-                  startPos: event.startPos,
-                  endPos: event.endPos,
-                  options: this.getMenuOptions(res),
+                  startPos: this.getDate(res.from),
+                  endPos: this.getDate(res.to),
+                  options: this.getMenuOptions(res as any),
                 };
               }
               return item; // Keep other items unchanged

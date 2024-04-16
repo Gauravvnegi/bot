@@ -29,6 +29,7 @@
             toggleOffLabel: 'Night',
             toggleOffColor: '#65b340'
           }"
+          [isDisabled]="reservationInfoControls?.sessionType?.disabled"
         ></hospitality-bot-toggle-switch-with-label>
       </div>
       <hospitality-bot-date

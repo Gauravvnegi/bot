@@ -55,8 +55,8 @@ export class Chat {
         '<br/>'
       );
     }
-    this.type = this.getType(input.type);
-    this.fileName = this.getFileName(input.type);
+    this.type = this.getType(input?.type?.toLowerCase());
+    this.fileName = this.getFileName(input);
     return this;
   }
 
@@ -73,15 +73,34 @@ export class Chat {
     else return type;
   }
 
-  getFileName(type, timezone = '+05:30') {
-    if (type === undefined) return undefined;
-    else
-      return `${DateService.getDateFromTimeStamp(
-        this.timestamp,
-        'MMM_DD_YYYY_hh:mm:ss',
-        timezone
-      )}.${type?.split('/')[1]?.split(';')[0]}`;
+  getFileName(input, timezone = '+05:30') {
+    const type = input?.type;
+
+    return `${DateService.getDateFromTimeStamp(
+      this.timestamp,
+      'MMM_DD_YYYY_hh:mm:ss',
+      timezone
+    )}.${
+      type?.split('/')[1]?.split(';')[0] ?? extractDocumentType(input?.url)
+    }`;
   }
+}
+
+function extractDocumentType(url) {
+  if (url === undefined) return;
+  // Create a URL object
+  var urlObject = new URL(url);
+
+  // Get the pathname from the URL
+  var pathname = urlObject.pathname;
+
+  // Split the pathname by '/' to get the filename
+  var filename = pathname.split('/').pop();
+
+  // Split the filename by '.' to get the document type (file extension)
+  var documentType = filename.split('.').pop();
+
+  return documentType;
 }
 
 export class ContactList {

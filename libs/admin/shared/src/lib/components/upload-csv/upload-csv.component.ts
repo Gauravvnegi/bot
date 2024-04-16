@@ -52,11 +52,13 @@ export class UploadCsvComponent implements OnInit {
           const nonEmptyRows = rows.filter((row) => row.trim().length > 0); // Filter out empty rows
           const filteredContent = nonEmptyRows.join('\n'); // Join non-empty rows back into CSV content
 
+          const docsType = this.extractDocumentType(file.name);
+
           // Emit the file data along with other parameters
           const data = {
             file: file,
             pageType: this.pageType,
-            documentType: this.documentType,
+            documentType: this.documentType ?? docsType,
             binaryData: filteredContent, // Include the filtered binary data in the emitted data
           };
           this.fileData.emit(data);
@@ -76,6 +78,44 @@ export class UploadCsvComponent implements OnInit {
   }
   resetFileInput() {
     this.upload.clear();
+  }
+
+  extractDocumentType(url) {
+    // Convert the URL to lowercase to make the comparison case-insensitive
+    var lowerCaseUrl = url.toLowerCase();
+
+    // Check if the URL contains keywords indicating an image
+    if (
+      lowerCaseUrl.includes('png') ||
+      lowerCaseUrl.includes('jpeg') ||
+      lowerCaseUrl.includes('jpg') ||
+      lowerCaseUrl.includes('gif')
+    ) {
+      return 'IMAGE';
+    }
+
+    // Check if the URL contains keywords indicating a video
+    if (
+      lowerCaseUrl.includes('mp4') ||
+      lowerCaseUrl.includes('avi') ||
+      lowerCaseUrl.includes('mov') ||
+      lowerCaseUrl.includes('wmv')
+    ) {
+      return 'VIDEO';
+    }
+
+    // Check if the URL contains keywords indicating an audio file
+    if (
+      lowerCaseUrl.includes('mp3') ||
+      lowerCaseUrl.includes('wav') ||
+      lowerCaseUrl.includes('ogg') ||
+      lowerCaseUrl.includes('aac')
+    ) {
+      return 'AUDIO';
+    }
+
+    // If the URL doesn't match any known types, return "unknown"
+    return 'DOCUMENT';
   }
 }
 export type ButtonSeverity = 'reset' | 'secondary' | 'primary';

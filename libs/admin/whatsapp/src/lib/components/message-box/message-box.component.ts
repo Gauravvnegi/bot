@@ -178,13 +178,14 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
           filename: event.file.name,
           channelType: values.channelType,
           receiverId: this.selectedChat.phone,
-          messageType: 'DOCUMENT',
+          messageType: event?.documentType,
         };
         this.messageSent.emit({
-          message: '',
+          message: res.fileDownloadUri,
           timestamp: this.dateService.getCurrentTimeStamp(),
           status: 'sent',
           update: false,
+          messageType: event?.documentType,
         });
         this.sentMessageDetails(messagePayload, null, 'DOCS');
       })

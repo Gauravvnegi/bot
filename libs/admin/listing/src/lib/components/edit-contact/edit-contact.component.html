@@ -22,7 +22,7 @@
       [resizableColumns]="isResizableColumns"
       [autoLayout]="isAutoLayout"
       [loading]="loading"
-      [columns]="cols"
+      [columns]="getUpdatedCols()"
       [value]="contactFA?.controls"
       [paginator]="false"
       [rows]="rowsPerPage"

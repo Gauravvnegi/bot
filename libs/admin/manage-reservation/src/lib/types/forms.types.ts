@@ -2,6 +2,7 @@ import { EntitySubType } from '@hospitality-bot/admin/shared';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
+import { SessionType } from '../constants/form';
 
 export class RoomReservationFormData {
   from: number;
@@ -31,6 +32,8 @@ export class RoomReservationFormData {
   remarks?: string;
   printRate?: boolean;
   chargedAmount?: number;
+  sessionType: string;
+  slotId: string;
 }
 
 export type BookingItemFormData = {

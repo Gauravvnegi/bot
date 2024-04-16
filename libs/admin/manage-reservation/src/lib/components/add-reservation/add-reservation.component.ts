@@ -14,6 +14,7 @@ import {
   EntitySubType,
   HotelDetailService,
   Option,
+  QueryConfig,
 } from '@hospitality-bot/admin/shared';
 import {
   JourneyState,
@@ -34,9 +35,14 @@ import {
   GlobalFilterService,
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
-import { ReservationForm, RoomInformation } from '../../constants/form';
+import {
+  ReservationForm,
+  RoomInformation,
+  SessionType,
+} from '../../constants/form';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ManualOffer } from '../form-components/booking-summary/booking-summary.component';
+import { secondsToHHMM } from 'libs/admin/reservation/src/lib/constants/reservation';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -68,6 +74,7 @@ export class AddReservationComponent extends BaseReservationComponent
   reservationFormData: ReservationFormData;
   offerResponse: ManualOffer;
   loadSummary: boolean = false;
+  bookingSlotList: Option[];
 
   constructor(
     private fb: FormBuilder,
@@ -192,6 +199,8 @@ export class AddReservationComponent extends BaseReservationComponent
         agentSourceName: [''],
         companySourceName: [''],
         marketSegment: ['', Validators.required],
+        sessionType: [SessionType.NIGHT_BOOKING, Validators.required],
+        slotId: ['', Validators.required],
       }),
       offerId: [''],
       instructions: this.fb.group({
@@ -211,6 +220,10 @@ export class AddReservationComponent extends BaseReservationComponent
       .get('roomTypes')
       .valueChanges.pipe(debounceTime(200))
       .subscribe((res) => {
+        if (res.length) {
+          this.getSlotListByRoomTypeId(res[0].roomTypeId);
+        }
+
         const data = this.inputControls.roomInformation.get(
           'roomTypes'
         ) as FormGroup;
@@ -228,6 +241,32 @@ export class AddReservationComponent extends BaseReservationComponent
           this.resetFormData();
         }
       });
+  }
+
+  getSlotListByRoomTypeId(roomTypeId: string) {
+    const config: QueryConfig = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          entityId: this.entityId,
+          inventoryId: roomTypeId,
+          raw: true,
+          status: true,
+        },
+      ]),
+    };
+    this.$subscription.add(
+      this.manageReservationService
+        .getSlotsListsByRoomType(config)
+        .subscribe((res) => {
+          this.bookingSlotList = res.map((slot) => {
+            return {
+              label: secondsToHHMM(slot.duration),
+              value: slot.id,
+              extras: slot.bookingSlotPrices[0].price as any,
+            };
+          });
+        })
+    );
   }
 
   initFormData() {

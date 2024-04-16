@@ -219,7 +219,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
    * @function removeDuplicate will remove duplicate from the option list
    * @var noMoreData stop pagination when limit will cross
    */
-  getItems() {
+  getItems(isPatchValue: boolean = false) {
     this.qsLoading = true;
     let paginationConfig = !this.isPagination
       ? { pagination: false }
@@ -247,6 +247,11 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
                     ? [this._qsProps.selectedOption]
                     : []),
                 ]);
+
+            isPatchValue &&
+              this.controlContainer.control
+                .get(this.controlName)
+                .setValue(this.menuOptions[0].value, { emitEvent: true });
 
             // To be improved later.
             this.emitResponse &&

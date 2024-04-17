@@ -135,7 +135,7 @@ export class SendMessageComponent implements OnInit {
     if (this.messageFG.invalid) {
       this.messageFG.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
-        'Invalid form: Please fix the errors.'
+        'Please check data and try again !'
       );
       return;
     }

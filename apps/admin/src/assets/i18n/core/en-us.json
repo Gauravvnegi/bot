@@ -15,7 +15,7 @@
   },
   "messages": {
     "validation": {
-      "INVALID_FORM": "Invalid Form.",
+      "INVALID_FORM": "Please check data and try again !",
       "DOCUMENT_ALREADY_VERIFIED": "Documents are already verified."
     },
     "SUCCESS": {

@@ -371,7 +371,7 @@ export class AddGuestListComponent implements OnInit {
   createReservation() {
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
-      this.snackbarService.openSnackBarAsText('Invalid Form !');
+      this.snackbarService.openSnackBarAsText('Please check data and try again !');
       return;
     }
 

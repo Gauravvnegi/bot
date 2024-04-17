@@ -608,7 +608,7 @@ export class PosReservationComponent implements OnInit {
     if (this.userForm.invalid) {
       this.userForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
-        'Invalid form: Please fix errors'
+        'Please check data and try again !'
       );
       return;
     }
@@ -639,7 +639,7 @@ export class PosReservationComponent implements OnInit {
     if (this.userForm.invalid) {
       this.userForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
-        'Invalid form: Please fix errors'
+        'Please check data and try again !'
       );
       return;
     }

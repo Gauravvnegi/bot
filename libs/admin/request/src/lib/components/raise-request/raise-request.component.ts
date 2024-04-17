@@ -193,7 +193,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   raiseRequest(): void {
     if (this.requestFG.invalid) {
       this.snackbarService.openSnackBarAsText(
-        'Invalid Form: Please fix the errors'
+        'Please check data and try again !'
       );
       this.requestFG.markAllAsTouched();
       return;

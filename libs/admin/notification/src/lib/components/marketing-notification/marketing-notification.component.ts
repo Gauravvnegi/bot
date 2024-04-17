@@ -321,7 +321,7 @@ export class MarketingNotificationComponent extends NotificationComponent
       this.snackbarService
         .openSnackBarWithTranslate({
           translateKey: 'messages.validation.INVALID_FORM',
-          priorityMessage: 'Invalid Form.',
+          priorityMessage: 'Please check data and try again !',
         })
         .subscribe();
       this.emailFG.markAllAsTouched();

@@ -1055,7 +1055,7 @@ export class InvoiceComponent implements OnInit {
 
     if (this.useForm.invalid) {
       this.snackbarService.openSnackBarAsText(
-        'Invalid form: Please fix the errors.'
+        'Please check data and try again !'
       );
       return;
     }

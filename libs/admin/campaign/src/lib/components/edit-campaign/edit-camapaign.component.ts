@@ -376,7 +376,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
       this.snackbarService
         .openSnackBarWithTranslate({
           translateKey: 'messages.validation.INVALID_FORM',
-          priorityMessage: 'Invalid Form.',
+          priorityMessage: 'Please check data and try again !',
         })
         .subscribe();
       return;
@@ -430,7 +430,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
       this.snackbarService
         .openSnackBarWithTranslate({
           translateKey: 'messages.error.fail',
-          priorityMessage: 'Invalid form.',
+          priorityMessage: 'Please check data and try again !',
         })
         .subscribe();
       this.campaignFG.markAllAsTouched();

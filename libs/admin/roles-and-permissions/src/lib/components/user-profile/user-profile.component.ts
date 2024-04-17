@@ -539,7 +539,9 @@ export class UserProfileComponent implements OnInit {
 
   savePermission() {
     if (!this.userForm.valid) {
-      this.snackbarService.openSnackBarAsText('Invalid Form');
+      this.snackbarService.openSnackBarAsText(
+        'Please check data and try again !'
+      );
       this.userForm.markAllAsTouched();
       return;
     }

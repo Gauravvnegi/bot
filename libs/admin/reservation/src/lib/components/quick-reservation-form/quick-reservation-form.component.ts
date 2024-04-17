@@ -505,7 +505,7 @@ export class QuickReservationFormComponent implements OnInit {
     if (this.userForm.invalid && !this.reservationId) {
       this.userForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
-        'Invalid form: Please fix errors'
+        'Please check data and try again !'
       );
       return;
     }

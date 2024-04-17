@@ -271,7 +271,7 @@ export class DayTimeTriggerComponent implements OnInit {
     if (!this.dynamicPricingService.triggerValidate(form)) {
       form.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
-        'Invalid form: Please fix errors'
+        'Please check data and try again !'
       );
       return;
     }

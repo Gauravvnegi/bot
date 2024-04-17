@@ -163,7 +163,7 @@ export class AddGuestComponent implements OnInit {
     if (this.guestForm.invalid) {
       this.guestForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
-        'Invalid form: Please fix errors'
+        'Please check data and try again !'
       );
       return;
     }

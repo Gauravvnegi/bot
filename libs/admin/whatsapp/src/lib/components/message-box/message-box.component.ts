@@ -31,9 +31,8 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
   @Input() chatFG: FormGroup;
   @Input() selectedChat;
   @Input() chatList;
-  @Output() messageSent = new EventEmitter();
+  @Output() messageSent = new EventEmitter<MessageData>();
   @Input() entityId;
-
   items: Array<User | Department>;
   mentions = [];
 
@@ -87,11 +86,9 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
     }
 
     const values = this.chatFG.getRawValue();
-
     if (values.message.trim().length === 0) {
       return;
     }
-
     values.receiverId = this.selectedChat.phone;
     const mentions = this.mentions
       .map((mention) => {
@@ -116,14 +113,12 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
     const userMentions = mentions.filter((item) => !!item.mentionedUserId);
 
     const timestamp = this.dateService.getCurrentTimeStamp();
-
     this.messageSent.emit({
       message: encodeURIComponent(this.chatFG.get('message').value),
       timestamp,
       status: 'unsend',
       update: false,
     });
-
     values.message = encodeURIComponent(values.message);
 
     const getQueryArray = (list: typeof mentions, configName: string) => {
@@ -133,28 +128,18 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
       return [];
     };
 
-    const queryObj: QueryConfig = {
-      params: this.adminUtilityService.makeQueryParams([
-        ...getQueryArray(userMentions, 'isMention'),
-        ...getQueryArray(departmentMentions, 'isDepartmentMention'),
-      ]),
-    };
+    const queryObj = this.adminUtilityService.makeQueryParams([
+      ...getQueryArray(userMentions, 'isMention'),
+      ...getQueryArray(departmentMentions, 'isDepartmentMention'),
+    ]);
 
-    this.sentMessageDetails(values, queryObj, 'TEXT');
-  }
-
-  sentMessageDetails(
-    values,
-    queryObj: QueryConfig,
-    messageType?: 'DOCS' | 'TEXT'
-  ) {
     this.$subscription.add(
       this.messageService
         .sendMessage(this.entityId, values, queryObj)
         .subscribe((_) => {
           this.messageSent.emit({
             message: encodeURIComponent(this.chatFG.get('message').value),
-            timestamp: this.dateService.getCurrentTimeStamp(),
+            timestamp,
             status: 'sent',
             update: true,
           });
@@ -180,14 +165,28 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
           receiverId: this.selectedChat.phone,
           messageType: event?.documentType,
         };
+
         this.messageSent.emit({
-          message: res.fileDownloadUri,
+          url: res.fileDownloadUri,
           timestamp: this.dateService.getCurrentTimeStamp(),
-          status: 'sent',
+          status: 'unsend',
           update: false,
-          messageType: event?.documentType,
+          type: event?.documentType,
         });
-        this.sentMessageDetails(messagePayload, null, 'DOCS');
+
+        this.$subscription.add(
+          this.messageService
+            .sendMessage(this.entityId, messagePayload, null)
+            .subscribe((_) => {
+              this.messageSent.emit({
+                url: res.fileDownloadUri,
+                timestamp: this.dateService.getCurrentTimeStamp(),
+                status: 'sent',
+                update: true,
+                type: event?.documentType,
+              });
+            })
+        );
       })
     );
   }
@@ -208,3 +207,12 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
     this.$subscription.unsubscribe();
   }
 }
+
+export type MessageData = {
+  message?: string;
+  timestamp: number;
+  status: string;
+  update: boolean;
+  url?: string;
+  type?: string;
+};

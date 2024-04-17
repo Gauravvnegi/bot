@@ -18,7 +18,7 @@ import { FileUpload } from 'primeng/fileupload';
 export class UploadCsvComponent implements OnInit {
   @Input() uploadStatus: boolean;
 
-  @Input() label: string = 'Upload';
+  @Input() label: string = null;
   @Input() pageType: string;
   @Input() severity: ButtonSeverity = 'primary';
   @Input() variant: ButtonVariant = 'contained';

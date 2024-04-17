@@ -19,19 +19,22 @@ import {
   Option,
   manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { AddAgentComponent } from 'libs/admin/agent/src/lib/components/add-agent/add-agent.component';
+import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
+import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
+import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
+import * as moment from 'moment';
+import { Subscription } from 'rxjs';
+import {
+  ReservationForm,
+  SessionType,
+} from '../../../../../manage-reservation/src/lib/constants/form';
 import {
   BookingConfig,
   ReservationCurrentStatus,
 } from '../../../../../manage-reservation/src/lib/models/reservations.model';
-import * as moment from 'moment';
 import { FormService } from '../../../../../manage-reservation/src/lib/services/form.service';
-import { ReservationForm } from '../../../../../manage-reservation/src/lib/constants/form';
-import { Subscription } from 'rxjs';
-import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
-import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
-import { AddAgentComponent } from 'libs/admin/agent/src/lib/components/add-agent/add-agent.component';
 
 @Component({
   selector: 'hospitality-bot-booking-info',
@@ -52,6 +55,7 @@ export class BookingInfoComponent implements OnInit {
   defaultDate: number;
   isCheckedIn: boolean = false;
   isCheckedOut: boolean = false;
+  readonly SessionType = SessionType;
   /**
    * Props to show extra information
    * @todo Need to handle label for col and row to show information
@@ -87,6 +91,7 @@ export class BookingInfoComponent implements OnInit {
   marketSegmentValue: string;
 
   $subscription = new Subscription();
+  @Input() bookingSlotList: Option[];
 
   sidebarVisible: boolean;
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
@@ -534,6 +539,12 @@ export class BookingInfoComponent implements OnInit {
     // });
   }
 
+  handelToggleSwitch(value: boolean) {
+    this.reservationInfoControls?.sessionType?.patchValue(
+      value ? SessionType.DAY_BOOKING : SessionType.NIGHT_BOOKING
+    );
+  }
+
   get reservationInfoControls() {
     return (this.controlContainer.control.get(
       'reservationInformation'
@@ -576,6 +587,13 @@ export class BookingInfoComponent implements OnInit {
 
   get roomControls() {
     return this.controlContainer.control.get('roomInformation') as FormGroup;
+  }
+
+  get isDayBooking() {
+    return (
+      this.reservationInfoControls?.sessionType?.value ===
+      SessionType.DAY_BOOKING
+    );
   }
 
   ngOnDestroy() {

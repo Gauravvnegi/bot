@@ -7,6 +7,8 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import { ButtonVariant } from '../../types/form.type';
+import { FileUpload } from 'primeng/fileupload';
 
 @Component({
   selector: 'hospitality-bot-upload-csv',
@@ -18,6 +20,8 @@ export class UploadCsvComponent implements OnInit {
 
   @Input() label: string = 'Upload';
   @Input() pageType: string;
+  @Input() severity: ButtonSeverity = 'primary';
+  @Input() variant: ButtonVariant = 'contained';
   @Input() documentType: string;
   @Input() isDisable = false;
   @Input() chooseIcon: string = 'pi-arrow-down';
@@ -25,6 +29,7 @@ export class UploadCsvComponent implements OnInit {
   @Input() maxFileSize: number = 3145728;
   @Input() fileType: string = '.csv, .xls, .xlsx';
   @Input() isAuto: boolean = true;
+  @ViewChild('upload') upload: FileUpload;
 
   constructor() {}
 
@@ -47,11 +52,13 @@ export class UploadCsvComponent implements OnInit {
           const nonEmptyRows = rows.filter((row) => row.trim().length > 0); // Filter out empty rows
           const filteredContent = nonEmptyRows.join('\n'); // Join non-empty rows back into CSV content
 
+          const docsType = this.extractDocumentType(file.name);
+
           // Emit the file data along with other parameters
           const data = {
             file: file,
             pageType: this.pageType,
-            documentType: this.documentType,
+            documentType: this.documentType ?? docsType,
             binaryData: filteredContent, // Include the filtered binary data in the emitted data
           };
           this.fileData.emit(data);
@@ -59,6 +66,7 @@ export class UploadCsvComponent implements OnInit {
 
         // Read the file as binary data
         reader.readAsText(file);
+        this.resetFileInput();
       } else {
         // Handle case where file size exceeds the maximum allowed size
       }
@@ -68,4 +76,46 @@ export class UploadCsvComponent implements OnInit {
   checkFileType(extension: string) {
     return this.fileType.includes(extension);
   }
+  resetFileInput() {
+    this.upload.clear();
+  }
+
+  extractDocumentType(url) {
+    // Convert the URL to lowercase to make the comparison case-insensitive
+    var lowerCaseUrl = url.toLowerCase();
+
+    // Check if the URL contains keywords indicating an image
+    if (
+      lowerCaseUrl.includes('png') ||
+      lowerCaseUrl.includes('jpeg') ||
+      lowerCaseUrl.includes('jpg') ||
+      lowerCaseUrl.includes('gif')
+    ) {
+      return 'IMAGE';
+    }
+
+    // Check if the URL contains keywords indicating a video
+    if (
+      lowerCaseUrl.includes('mp4') ||
+      lowerCaseUrl.includes('avi') ||
+      lowerCaseUrl.includes('mov') ||
+      lowerCaseUrl.includes('wmv')
+    ) {
+      return 'VIDEO';
+    }
+
+    // Check if the URL contains keywords indicating an audio file
+    if (
+      lowerCaseUrl.includes('mp3') ||
+      lowerCaseUrl.includes('wav') ||
+      lowerCaseUrl.includes('ogg') ||
+      lowerCaseUrl.includes('aac')
+    ) {
+      return 'AUDIO';
+    }
+
+    // If the URL doesn't match any known types, return "unknown"
+    return 'DOCUMENT';
+  }
 }
+export type ButtonSeverity = 'reset' | 'secondary' | 'primary';

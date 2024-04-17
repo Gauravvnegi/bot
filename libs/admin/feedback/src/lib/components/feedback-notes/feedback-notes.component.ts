@@ -51,7 +51,7 @@ export class FeedbackNotesComponent implements OnInit {
       this.snackbarService
         .openSnackBarWithTranslate({
           translateKey: 'messages.validation.notes_remarks',
-          priorityMessage: 'Invalid form.',
+          priorityMessage: 'Please check data and try again !',
         })
         .subscribe();
       return;

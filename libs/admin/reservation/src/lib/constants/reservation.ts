@@ -1,3 +1,4 @@
+import { SessionType } from 'libs/admin/manage-reservation/src/lib/constants/form';
 import {
   ReservationCurrentStatus,
   RoomReservation,
@@ -109,10 +110,20 @@ export function getBookingIndicators(data: RoomReservation): string[] {
     // if (data.guestType === 'single lady') {
     //     indicators.push('assets/images/single-lady.svg');
     // }
-    // if (data.bookingType === 'day') {
-    //     indicators.push('assets/images/day-booking.svg');
-    // }
+    if (data.sessionType === SessionType.DAY_BOOKING) {
+      indicators.push('assets/images/day-booking.svg');
+    }
   }
 
   return indicators;
+}
+
+export function secondsToHHMM(seconds: number): string {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+
+  const hoursStr = hours.toString().padStart(2, '0');
+  const minutesStr = minutes.toString().padStart(2, '0');
+
+  return `${hoursStr}:${minutesStr} Hrs`;
 }

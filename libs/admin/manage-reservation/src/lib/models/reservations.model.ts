@@ -22,6 +22,7 @@ import {
   MenuItemsData,
   PaymentRuleForm,
   RoomTypes,
+  SessionType,
   SpaItems,
 } from '../constants/form';
 import { ItemsData, OutletFormData } from '../types/forms.types';
@@ -60,6 +61,7 @@ export class RoomReservation {
   invoiceId: string;
   agentName?: string;
   groupCode?: string;
+  sessionType?: string;
 
   deserialize(input: RoomReservationResponse) {
     this.id = input.id;
@@ -85,6 +87,7 @@ export class RoomReservation {
     this.totalPaidAmount = input.pricingDetails.totalPaidAmount;
     this.totalDueAmount = input.pricingDetails.totalDueAmount;
     this.groupCode = input?.groupCode;
+    this.sessionType = input?.sessionType;
     // if (input?.bookingItems) {
     //   this.bookingItems = input?.bookingItems;
     //   this.roomTypes =
@@ -154,10 +157,18 @@ export class ReservationList {
   total: number;
   entityStateCounts: EntityState<string>;
   entityTypeCounts: EntityState<string>;
-  deserialize(input: ReservationListResponse) {
+  deserialize(input: ReservationListResponse, sessionType?: SessionType) {
     this.reservationData =
-      input.records?.map((item) => new RoomReservation().deserialize(item)) ??
-      [];
+      input.records?.map((item) => {
+        if (sessionType?.length) {
+          return (
+            item?.sessionType === sessionType &&
+            new RoomReservation().deserialize(item)
+          );
+        } else {
+          return new RoomReservation().deserialize(item);
+        }
+      }) ?? [];
     this.total = input.total;
     this.entityStateCounts = {
       CONFIRMED: input.entityStateCounts.CONFIRMED,
@@ -427,6 +438,8 @@ export class BookingInfo {
   status?: string;
   sourceName: string;
   marketSegment: string;
+  sessionType: string;
+  slotId: string;
 
   deserialize(input): this {
     this.from = input?.from;
@@ -437,6 +450,8 @@ export class BookingInfo {
     this.marketSegment = input?.marketSegment;
     this.status = input?.reservationType ?? '';
     this.dateAndTime = input?.from;
+    this.sessionType = input?.sessionType;
+    this.slotId = input?.slotId;
     return this;
   }
 }
@@ -583,8 +598,8 @@ export class BookingConfig {
   type: Option[] = [];
   deserialize(input): this {
     this.marketSegment = input?.marketSegment.map((item) => ({
-      label: item,
-      value: item,
+      label: item.value,
+      value: item.value,
     }));
     this.type = input?.type.map((item) => ({
       label: this.toCamelCase(item),

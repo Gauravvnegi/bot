@@ -233,13 +233,20 @@ export class ChatComponent
     this.chatList.receiver[response.receiver.receiverId] = this.chat.receiver;
   }
 
-  updateMessageToChatList(message, timestamp, status, update = false) {
+  updateMessageToChatList(
+    message,
+    timestamp,
+    status,
+    update = false,
+    type?: string
+  ) {
     let data;
     let messages = this.getMessagesFromTimeList();
     if (!update) {
       data = new Chat().deserialize({
         direction: 'OUTBOUND',
-        text: message,
+        url: message,
+        type,
         timestamp,
         status,
       });
@@ -310,10 +317,11 @@ export class ChatComponent
   handleSentMessage(event) {
     this.scrollToBottom();
     this.updateMessageToChatList(
-      event.message,
+      event.message ?? event.url,
       event.timestamp,
       event.status,
-      event.update
+      event.update,
+      event.messageType
     );
   }
 

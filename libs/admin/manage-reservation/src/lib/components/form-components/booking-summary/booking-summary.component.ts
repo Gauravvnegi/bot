@@ -128,7 +128,7 @@ export class BookingSummaryComponent implements OnInit {
     if (this.controlContainer.control.invalid && !this.reservationId) {
       this.controlContainer.control.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
-        'Invalid form: Please fix errors'
+        'Please check data and try again !'
       );
       return;
     }

@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  ControlContainer,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Clipboard } from '@angular/cdk/clipboard';
 import {
   GlobalFilterService,
@@ -63,6 +69,10 @@ import {
   JourneyData,
   ReservationFormService,
 } from '../../services/reservation-form.service';
+import {
+  CalendarInterval,
+  SessionType,
+} from 'libs/admin/manage-reservation/src/lib/constants/form';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',
@@ -97,6 +107,7 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   formProps: QuickFormProps;
   fullView: boolean;
+  startingDate: number = Date.now();
 
   constructor(
     private fb: FormBuilder,
@@ -111,8 +122,11 @@ export class ReservationCalendarViewComponent implements OnInit {
     private auditService: NightAuditService,
     private bookingDetailService: BookingDetailService,
     private dialogService: DialogService,
-    private formService: ReservationFormService
+    private formService: ReservationFormService,
+    private controlContainer: ControlContainer
   ) {}
+
+  parentFormGroup: FormGroup;
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
@@ -120,6 +134,8 @@ export class ReservationCalendarViewComponent implements OnInit {
       this.fullView = res;
     });
     this.checkAudit();
+    this.parentFormGroup = this.controlContainer.control as FormGroup;
+    this.listenForSessionTypeChanges();
   }
 
   initRoomTypes() {
@@ -192,7 +208,8 @@ export class ReservationCalendarViewComponent implements OnInit {
         .subscribe(
           (res) => {
             this.reservationListData = new ReservationList().deserialize(
-              res
+              res,
+              this.sessionTypeControl.value
             ).reservationData;
             this.roomTypes.forEach((roomType) => {
               this.mapGridData(roomType);
@@ -221,10 +238,10 @@ export class ReservationCalendarViewComponent implements OnInit {
     if (roomType.rooms) {
       const matchingReservations = this.reservationListData.filter(
         (reservation) =>
-          roomType.rooms.some((room) =>
-            reservation.bookingItems.some(
+          roomType?.rooms?.some((room) =>
+            reservation?.bookingItems?.some(
               (bookingItem) =>
-                bookingItem.roomDetails.roomNumber === room.roomNumber
+                bookingItem?.roomDetails?.roomNumber === room?.roomNumber
             )
           )
       );
@@ -302,8 +319,13 @@ export class ReservationCalendarViewComponent implements OnInit {
     }
   }
 
-  getDate(date: number) {
+  getDate(date) {
     const data = new Date(date);
+
+    if (this.isDayBooking) {
+      return data.setMinutes(0, 0, 0);
+    }
+    //set hours , seconds , min
     return data.setHours(0, 0, 0, 0);
   }
 
@@ -353,13 +375,20 @@ export class ReservationCalendarViewComponent implements OnInit {
         (res) => {
           const date = res?.shift() ?? Date.now();
           const nextDate = new Date(date);
-          this.initConfig(nextDate.setDate(nextDate.getDate() - 1));
+          this.startingDate = nextDate.setDate(nextDate.getDate() - 1);
+          this.initConfig(this.startingDate);
         },
         (error) => {
-          this.initConfig(Date.now());
+          this.initConfig(this.startingDate);
         }
       )
     );
+  }
+
+  listenForSessionTypeChanges() {
+    this.sessionTypeControl.valueChanges.subscribe(() => {
+      this.initConfig(this.startingDate);
+    });
   }
 
   initConfig(date: number) {
@@ -369,29 +398,51 @@ export class ReservationCalendarViewComponent implements OnInit {
     this.listenChanges();
   }
 
-  initDates(startDate: number, limit = 21) {
-    const dates = [];
-    const cols = [];
+  initDates(startDate: number, limit: number = 24) {
+    const dates: DateInfo[] = [];
+    const gridCols: number[] = [];
     const currentDate = new Date(startDate);
-    this.currentDate = currentDate;
 
-    for (let i = 0; i < limit; i++) {
-      const nextDate = new Date(currentDate);
-      nextDate.setDate(currentDate.getDate() + i);
-      const day = nextDate.getDay();
-      const data = {
-        day: daysOfWeek[day]?.substring(0, 3),
-        date: nextDate?.getDate(),
-        currentDate: nextDate,
-      };
-      dates.push(data);
+    if (this.isDayBooking) {
+      currentDate.setHours(0, 0, 0, 0);
 
-      const colsData = this.getDate(nextDate.getTime());
-      cols.push(colsData);
+      for (let i = 0; i < 24; i++) {
+        const nextDate = new Date(currentDate);
+        nextDate.setHours(nextDate.getHours() + i);
+        const day = nextDate.getDay();
+
+        const hour = nextDate.toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          hour12: true,
+        });
+
+        dates.push({
+          day: daysOfWeek[day]?.substring(0, 3),
+          date: hour as any,
+          currentDate: nextDate,
+        });
+
+        gridCols.push(nextDate.getTime());
+      }
+    } else {
+      for (let i = 0; i < limit; i++) {
+        const nextDate = new Date(currentDate);
+        nextDate.setDate(currentDate.getDate() + i);
+        const day = nextDate.getDay();
+        const data = {
+          day: daysOfWeek[day]?.substring(0, 3),
+          date: nextDate?.getDate(),
+          currentDate: nextDate,
+        };
+        dates.push(data);
+
+        const colsData = this.getDate(nextDate.getTime());
+        gridCols.push(colsData);
+      }
     }
 
     this.dates = dates;
-    this.gridCols = cols;
+    this.gridCols = gridCols;
     this.globalQueries = [
       { fromDate: this.gridCols[0] },
       { toDate: this.gridCols[limit - 1] },
@@ -524,6 +575,7 @@ export class ReservationCalendarViewComponent implements OnInit {
           },
         },
       ],
+      sessionType: this.sessionTypeControl?.value,
     };
 
     roomType.loading = true;
@@ -537,9 +589,9 @@ export class ReservationCalendarViewComponent implements OnInit {
                 return {
                   ...item,
                   rowValue: event.rowValue,
-                  startPos: event.startPos,
-                  endPos: event.endPos,
-                  options: this.getMenuOptions(res),
+                  startPos: this.getDate(res.from),
+                  endPos: this.getDate(res.to),
+                  options: this.getMenuOptions(res as any),
                 };
               }
               return item; // Keep other items unchanged
@@ -916,6 +968,17 @@ export class ReservationCalendarViewComponent implements OnInit {
     else return;
   }
 
+  get isDayBooking(): boolean {
+    return (
+      this.controlContainer.control.get('sessionType').value ===
+      SessionType.DAY_BOOKING
+    );
+  }
+
+  get sessionTypeControl(): AbstractControl {
+    return this.controlContainer.control.get('sessionType');
+  }
+
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
@@ -959,3 +1022,9 @@ export type IGDate = {
   date: number;
   currentDate: Date;
 };
+
+interface DateInfo {
+  day: string;
+  date: number;
+  currentDate: Date;
+}

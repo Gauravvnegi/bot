@@ -431,7 +431,7 @@ export class OccupancyComponent implements OnInit {
     if (!this.dynamicPricingService.occupancyValidate(form)) {
       form.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
-        'Invalid form: Please fix errors'
+        'Please check data and try again !'
       );
       return;
     }

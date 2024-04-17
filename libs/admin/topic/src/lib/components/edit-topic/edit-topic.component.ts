@@ -101,7 +101,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
         .openSnackBarWithTranslate(
           {
             translateKey: `message.validation.INVALID_FORM`,
-            priorityMessage: 'Invalid Form.',
+            priorityMessage: 'Please check data and try again !',
           },
           ''
         )

@@ -68,6 +68,7 @@
             <hospitality-bot-quick-select
               *ngSwitchCase="'quick-select'"
               [controlName]="field.name"
+              [isPrePatched]="isPrePatchedRoomType"
               class="select dropdown-panel"
               [inputType]="'select'"
               [props]="{
@@ -125,12 +126,12 @@
       class="action-btn"
       label="+ Add More Rooms"
       (onClick)="addNewField()"
-      [disabled]="formService.disableBtn"
+      [disabled]="formService.disableBtn || isDayBooking"
       variant="text"
     ></hospitality-bot-button>
   </div>
 </div>
-<!-- 
+<!--
 <p-dialog
   class="dialog"
   header="Room Upgrade"

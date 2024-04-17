@@ -14,6 +14,7 @@ import {
   EntitySubType,
   HotelDetailService,
   Option,
+  QueryConfig,
 } from '@hospitality-bot/admin/shared';
 import {
   JourneyState,
@@ -34,9 +35,15 @@ import {
   GlobalFilterService,
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
-import { ReservationForm, RoomInformation } from '../../constants/form';
+import {
+  ReservationForm,
+  RoomInformation,
+  SessionType,
+} from '../../constants/form';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ManualOffer } from '../form-components/booking-summary/booking-summary.component';
+import { secondsToHHMM } from 'libs/admin/reservation/src/lib/constants/reservation';
+import { filter } from 'lodash';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -68,6 +75,8 @@ export class AddReservationComponent extends BaseReservationComponent
   reservationFormData: ReservationFormData;
   offerResponse: ManualOffer;
   loadSummary: boolean = false;
+  bookingSlotList: Option[];
+  readonly sessionType = SessionType;
 
   constructor(
     private fb: FormBuilder,
@@ -90,6 +99,8 @@ export class AddReservationComponent extends BaseReservationComponent
     if (this.reservationId) this.getReservationDetails();
     this.initFormData();
     this.listenRouteData();
+    this.listenForSlotChanges();
+    this.listenForSessionTypeChanges();
   }
 
   initDetails() {
@@ -192,6 +203,8 @@ export class AddReservationComponent extends BaseReservationComponent
         agentSourceName: [''],
         companySourceName: [''],
         marketSegment: ['', Validators.required],
+        sessionType: [SessionType.NIGHT_BOOKING, Validators.required],
+        slotId: [''],
       }),
       offerId: [''],
       instructions: this.fb.group({
@@ -211,6 +224,10 @@ export class AddReservationComponent extends BaseReservationComponent
       .get('roomTypes')
       .valueChanges.pipe(debounceTime(200))
       .subscribe((res) => {
+        if (res.length) {
+          this.getSlotListByRoomTypeId(res[0].roomTypeId);
+        }
+
         const data = this.inputControls.roomInformation.get(
           'roomTypes'
         ) as FormGroup;
@@ -228,6 +245,33 @@ export class AddReservationComponent extends BaseReservationComponent
           this.resetFormData();
         }
       });
+  }
+
+  getSlotListByRoomTypeId(roomTypeId: string) {
+    const config: QueryConfig = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          entityId: this.entityId,
+          inventoryId: roomTypeId,
+          raw: true,
+          status: true,
+        },
+      ]),
+    };
+    this.$subscription.add(
+      this.manageReservationService
+        .getSlotsListsByRoomType(config)
+        .subscribe((res) => {
+          this.bookingSlotList = res.map((slot) => {
+            return {
+              label: secondsToHHMM(slot.duration),
+              value: slot.id,
+              itemAmount: slot.bookingSlotPrices[0].price,
+              duration: slot.duration,
+            };
+          });
+        })
+    );
   }
 
   initFormData() {
@@ -446,6 +490,7 @@ export class AddReservationComponent extends BaseReservationComponent
     const data: ReservationSummary = {
       from: this.reservationInfoControls.from.value,
       to: this.reservationInfoControls.to.value,
+      slotId: this.reservationInfoControls.slotId.value,
       bookingItems: this.roomControls.map((item) => ({
         roomDetails: {
           ratePlan: {
@@ -482,6 +527,55 @@ export class AddReservationComponent extends BaseReservationComponent
     };
 
     return data;
+  }
+
+  listenForSlotChanges() {
+    //to update checkout time in reservation Summary
+    this.reservationInfoControls.slotId.valueChanges
+      .pipe(debounceTime(300))
+      .subscribe((res) => {
+        if (res) {
+          const selectedSlot = this.bookingSlotList.find(
+            (item) => item.value === res
+          );
+          const newCheckoutDate =
+            this.reservationInfoControls.from.value +
+            selectedSlot.duration * 1000;
+
+          this.reservationInfoControls.to.patchValue(newCheckoutDate);
+        }
+      });
+  }
+
+  listenForSessionTypeChanges() {
+    this.reservationInfoControls.sessionType.valueChanges.subscribe(
+      (sessionType) => {
+        if (sessionType === SessionType.DAY_BOOKING) {
+          this.handleDayBooking();
+        } else {
+          this.handleNightBooking();
+        }
+      }
+    );
+  }
+
+  handleDayBooking() {
+    this.reservationInfoControls.to.patchValue(null);
+    this.reservationInfoControls.slotId.setValidators(Validators.required);
+    this.reservationInfoControls.to.clearValidators();
+    this.reservationInfoControls.slotId.updateValueAndValidity();
+  }
+
+  handleNightBooking() {
+    this.reservationInfoControls.slotId.clearValidators();
+    this.reservationInfoControls.to.setValidators(Validators.required);
+    this.reservationInfoControls.slotId.updateValueAndValidity();
+
+    this.reservationInfoControls.slotId.patchValue(null);
+
+    const nextDay = new Date(this.reservationInfoControls.from.value);
+    nextDay.setDate(nextDay.getDate() + 1);
+    this.reservationInfoControls.to.patchValue(nextDay.getTime());
   }
 
   // Get total room, adult and child count for all room types
@@ -542,5 +636,9 @@ export class AddReservationComponent extends BaseReservationComponent
 
   get roomInfoControls() {
     return this.userForm.get('roomInformation') as FormGroup;
+  }
+
+  get isPrePatchedRoomType() {
+    return !this.reservationId;
   }
 }

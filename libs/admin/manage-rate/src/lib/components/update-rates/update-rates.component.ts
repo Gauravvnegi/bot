@@ -1096,7 +1096,7 @@ export class UpdateRatesComponent implements OnInit {
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
-        'Invalid form: Please fix errors'
+        'Please check data and try again !'
       );
     }
     this.loading = true;

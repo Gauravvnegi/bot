@@ -527,9 +527,9 @@ export class PaymentDetailsConfig implements IDeserializable {
       input.depositRules
     );
     //to-do
-    this.roomRates = input.roomRates.map((item) =>
-      new RoomRateConfig().deserialize(item)
-    );
+    this.roomRates =
+      input.roomRates?.map((item) => new RoomRateConfig().deserialize(item)) ??
+      [];
     if (Array.isArray(input.transactionsHistory)) {
       this.transactionHistory = input.transactionsHistory.map(
         (item: TransactionHistoryResponse) =>

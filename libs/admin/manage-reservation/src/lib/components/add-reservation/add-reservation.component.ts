@@ -43,6 +43,7 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ManualOffer } from '../form-components/booking-summary/booking-summary.component';
 import { secondsToHHMM } from 'libs/admin/reservation/src/lib/constants/reservation';
+import { filter } from 'lodash';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -203,7 +204,7 @@ export class AddReservationComponent extends BaseReservationComponent
         companySourceName: [''],
         marketSegment: ['', Validators.required],
         sessionType: [SessionType.NIGHT_BOOKING, Validators.required],
-        slotId: ['', Validators.required],
+        slotId: [''],
       }),
       offerId: [''],
       instructions: this.fb.group({
@@ -530,28 +531,51 @@ export class AddReservationComponent extends BaseReservationComponent
 
   listenForSlotChanges() {
     //to update checkout time in reservation Summary
-    this.reservationInfoControls.slotId.valueChanges.subscribe((res) => {
-      const selectedSlot = this.bookingSlotList.find(
-        (item) => item.value === res
-      );
-      const newCheckoutDate =
-        this.reservationInfoControls.from.value + selectedSlot.duration * 1000;
+    this.reservationInfoControls.slotId.valueChanges
+      .pipe(debounceTime(300))
+      .subscribe((res) => {
+        if (res) {
+          const selectedSlot = this.bookingSlotList.find(
+            (item) => item.value === res
+          );
+          const newCheckoutDate =
+            this.reservationInfoControls.from.value +
+            selectedSlot.duration * 1000;
 
-      this.reservationInfoControls.to.patchValue(newCheckoutDate);
-    });
+          this.reservationInfoControls.to.patchValue(newCheckoutDate);
+        }
+      });
   }
 
   listenForSessionTypeChanges() {
-    this.reservationInfoControls.sessionType.valueChanges.subscribe((res) => {
-      if (res === this.sessionType.DAY_BOOKING) {
-        this.reservationInfoControls.to.patchValue(null);
-      } else {
-        this.reservationInfoControls.slotId.patchValue(null);
-        this.reservationInfoControls.to.patchValue(
-          new Date().setDate(new Date().getDate() + 1)
-        );
+    this.reservationInfoControls.sessionType.valueChanges.subscribe(
+      (sessionType) => {
+        if (sessionType === SessionType.DAY_BOOKING) {
+          this.handleDayBooking();
+        } else {
+          this.handleNightBooking();
+        }
       }
-    });
+    );
+  }
+
+  handleDayBooking() {
+    this.reservationInfoControls.to.patchValue(null);
+    this.reservationInfoControls.slotId.setValidators(Validators.required);
+    this.reservationInfoControls.to.clearValidators();
+    this.reservationInfoControls.slotId.updateValueAndValidity();
+  }
+
+  handleNightBooking() {
+    this.reservationInfoControls.slotId.clearValidators();
+    this.reservationInfoControls.to.setValidators(Validators.required);
+    this.reservationInfoControls.slotId.updateValueAndValidity();
+
+    this.reservationInfoControls.slotId.patchValue(null);
+
+    const nextDay = new Date(this.reservationInfoControls.from.value);
+    nextDay.setDate(nextDay.getDate() + 1);
+    this.reservationInfoControls.to.patchValue(nextDay.getTime());
   }
 
   // Get total room, adult and child count for all room types

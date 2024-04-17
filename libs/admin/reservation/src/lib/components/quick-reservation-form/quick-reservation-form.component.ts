@@ -203,7 +203,7 @@ export class QuickReservationFormComponent implements OnInit {
         otaSourceName: [''],
         companySourceName: [''],
         sessionType: [SessionType.NIGHT_BOOKING, Validators.required],
-        slotId: ['', Validators.required],
+        slotId: [''],
       }),
 
       roomInformation: this.fb.group({
@@ -638,6 +638,38 @@ export class QuickReservationFormComponent implements OnInit {
         )
     );
   }
+
+  listenForSessionTypeChanges() {
+    this.reservationInfoControls.sessionType.valueChanges.subscribe(
+      (sessionType) => {
+        if (sessionType === SessionType.DAY_BOOKING) {
+          this.handleDayBooking();
+        } else {
+          this.handleNightBooking();
+        }
+      }
+    );
+  }
+
+  handleDayBooking() {
+    this.reservationInfoControls.to.patchValue(null);
+    this.reservationInfoControls.slotId.setValidators(Validators.required);
+    this.reservationInfoControls.to.clearValidators();
+    this.reservationInfoControls.slotId.updateValueAndValidity();
+  }
+
+  handleNightBooking() {
+    this.reservationInfoControls.slotId.clearValidators();
+    this.reservationInfoControls.to.setValidators(Validators.required);
+    this.reservationInfoControls.slotId.updateValueAndValidity();
+
+    this.reservationInfoControls.slotId.patchValue(null);
+
+    const nextDay = new Date(this.reservationInfoControls.from.value);
+    nextDay.setDate(nextDay.getDate() + 1);
+    this.reservationInfoControls.to.patchValue(nextDay.getTime());
+  }
+
   listenForRoomTypeChanges() {
     this.roomControls.roomTypeId.valueChanges.subscribe((res) => {
       this.getSlotListByRoomTypeId(res);

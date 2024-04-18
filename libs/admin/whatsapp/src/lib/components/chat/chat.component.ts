@@ -25,6 +25,7 @@ import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
+import { MessageData } from '../message-box/message-box.component';
 
 @Component({
   selector: 'hospitality-bot-chat',
@@ -233,30 +234,24 @@ export class ChatComponent
     this.chatList.receiver[response.receiver.receiverId] = this.chat.receiver;
   }
 
-  updateMessageToChatList(
-    message,
-    timestamp,
-    status,
-    update = false,
-    type?: string
-  ) {
+  updateMessageToChatList(value: MessageData) {
     let data;
     let messages = this.getMessagesFromTimeList();
-    if (!update) {
+    if (!value.update) {
       data = new Chat().deserialize({
         direction: 'OUTBOUND',
-        url: message,
-        type,
-        timestamp,
-        status,
+        text: value.message,
+        ...value,
       });
+
       this.limit += 1;
       this.chatFG.get('message').setValue('');
       messages.push(data);
     } else {
       this.messageService.refreshData$.next(true);
       messages = messages.map((message) => {
-        if (message.timestamp === timestamp) message.status = status;
+        if (message.timestamp === value.timestamp)
+          message.status = value.status;
         return message;
       });
     }
@@ -314,15 +309,9 @@ export class ChatComponent
     this.$subscription.unsubscribe();
   }
 
-  handleSentMessage(event) {
+  handleSentMessage(data: MessageData) {
     this.scrollToBottom();
-    this.updateMessageToChatList(
-      event.message ?? event.url,
-      event.timestamp,
-      event.status,
-      event.update,
-      event.messageType
-    );
+    this.updateMessageToChatList(data);
   }
 
   checkWhatsappBotSubscription() {

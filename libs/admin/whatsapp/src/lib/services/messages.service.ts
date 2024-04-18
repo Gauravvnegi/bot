@@ -33,9 +33,9 @@ export class MessageService extends ApiService {
     );
   }
 
-  sendMessage(entityId: string, data, queryObj: QueryConfig) {
+  sendMessage(entityId: string, data, queryObj) {
     return this.post(
-      `/api/v1/entity/${entityId}/conversations/send${queryObj?.params ?? ''}`,
+      `/api/v1/entity/${entityId}/conversations/send${queryObj ?? ''}`,
       data
     );
   }

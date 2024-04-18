@@ -246,7 +246,16 @@
                     placeholder: 'Enter'
                   }"
                 ></hospitality-bot-input>
-                <div class="half-width"></div>
+                <hospitality-bot-select
+                  label="Rate Plan Type"
+                  class="half-width"
+                  controlName="ratePlanType"
+                  [props]="{
+                    placeholder: 'Select Rate Plan'
+                  }"
+                  [options]="ratePlanOptions"
+                >
+                </hospitality-bot-select>
                 <hospitality-bot-multiple-prefix-input
                   class="half-width"
                   [controls]="{
@@ -430,6 +439,14 @@
                   placeholder: 'Enter'
                 }"
               ></hospitality-bot-input>
+              <hospitality-bot-select
+                label="Rate Plan Type"
+                class="half-width"
+                controlName="ratePlanType"
+                [options]="ratePlanOptions"
+              >
+              </hospitality-bot-select>
+
               <hospitality-bot-prefix-field
                 class="half-width"
                 preControlName="currency"

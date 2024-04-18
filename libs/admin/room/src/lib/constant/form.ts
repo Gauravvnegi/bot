@@ -120,6 +120,7 @@ export type RatePlan = {
   tripleOccupancyCurrency?: string;
   doubleOccupancyPrice?: number;
   doubleOccupancyCurrency?: string;
+  ratePlanType: string;
 };
 
 export type AddedRatePlans = {
@@ -137,6 +138,7 @@ export type AddedRatePlans = {
   total?: number;
   sellingPrice?: number;
   variablePrice?: number;
+  ratePlanType: string;
 };
 
 export type ReservationRatePlan = {

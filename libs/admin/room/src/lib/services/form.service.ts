@@ -69,6 +69,7 @@ export class FormService {
       description: item.description,
       id: item.ratePlanId.length ? item.ratePlanId : null,
       status: item.status,
+      type: item?.ratePlanType,
       ...(!isPricingDynamic
         ? {
             discount: discount,
@@ -89,6 +90,7 @@ export class FormService {
       id: defaultRatePlan.ratePlanId,
       status: defaultRatePlan.status,
       variablePrice: defaultRatePlan.price,
+      type: defaultRatePlan?.ratePlanType,
       ...(!isPricingDynamic
         ? {
             discount: discount,

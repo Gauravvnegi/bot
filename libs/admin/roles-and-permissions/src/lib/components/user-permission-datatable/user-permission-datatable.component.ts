@@ -188,19 +188,24 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   }
 
   getQueryConfig() {
+    const selectedFilters = this.getSelectedQuickReplyFilters({
+      isStatusBoolean: true,
+    });
+    const tabFilterValue =
+      this.tabFilterItems[this.tabFilterIdx]?.value === 'ALL'
+        ? ''
+        : this.tabFilterItems[this.tabFilterIdx]?.value ?? '';
+
     const config = {
       params: this._adminUtilityService.makeQueryParams([
-        ...(this.tableType === UserTableType.AgentDestributuion
-          ? this.getSelectedQuickReplyFilters({ key: 'entityState' })
-          : this.getSelectedQuickReplyFilters({ isStatusBoolean: true })),
-        ...[{ order: 'DESC' }],
+        ...selectedFilters,
+        { order: 'DESC' },
         {
           offset: this.first,
           limit: this.rowsPerPage,
-          type:
-            this.tabFilterItems[this.tabFilterIdx]?.value === 'ALL'
-              ? ''
-              : this.tabFilterItems[this.tabFilterIdx]?.value ?? '',
+          ...(this.tableType === UserTableType.AgentDestributuion
+            ? { entityState: tabFilterValue }
+            : { type: tabFilterValue }),
         },
       ]),
     };
@@ -219,7 +224,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   exportCSV() {
     this.loading = true;
     this.$subscription.add(
-      this.getExportCsvApi().subscribe(
+      this.getExportCsvApi()?.subscribe(
         (res) => {
           FileSaver.saveAs(
             res,
@@ -235,15 +240,19 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   }
 
   getExportCsvApi(): Observable<any> {
+    const tabFilterValue =
+      this.tabFilterItems[this.tabFilterIdx]?.value === 'ALL'
+        ? ''
+        : this.tabFilterItems[this.tabFilterIdx]?.value ?? '';
+
     const config: QueryConfig = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.userId })),
         ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
         {
-          type:
-            this.tabFilterItems[this.tabFilterIdx]?.value === 'ALL'
-              ? ''
-              : this.tabFilterItems[this.tabFilterIdx]?.value ?? '',
+          ...(this.tableType === UserTableType.AgentDestributuion
+            ? { entityState: tabFilterValue }
+            : { type: tabFilterValue }),
           limit: this.totalRecords,
         },
       ]),
@@ -262,6 +271,16 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
           this.entityId,
           this.serviceItemId,
           config
+        );
+      case UserTableType.AgentDestributuion:
+        return this._managePermissionService.exportAgentDistributionUsers(
+          config
+        );
+
+      default:
+        return this._managePermissionService.exportCSV(
+          config,
+          this.tabFilterItems[this.tabFilterIdx].value === 'ALL'
         );
     }
   }

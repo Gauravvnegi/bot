@@ -351,13 +351,27 @@ export class ContactDatatableComponent extends BaseDatatableComponent
       this._listingService
         .importContact(this.entityId, formData)
         .subscribe((response) => {
-          this.snackbarService.openSnackBarAsText(
-            'Contact Imported successfully',
-            '',
-            { panelClass: 'success' }
-          );
-          //add data to contact table
-          this.handleContactAddEvent(response);
+          if (this.listingId) {
+            this.$subscription.add(
+              this._listingService
+                .updateListContact(this.entityId, this.list.id, response)
+                .subscribe(
+                  (response) => {
+                    this.snackbarService.openSnackBarAsText(
+                      'Contact Updated successfully',
+                      '',
+                      { panelClass: 'success' }
+                    );
+
+                    this.routeConfigService.reload();
+                  },
+                  ({ error }) => {}
+                )
+            );
+          } else {
+            //add data to contact table
+            this.handleContactAddEvent(response);
+          }
         })
     );
   }

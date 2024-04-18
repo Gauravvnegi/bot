@@ -227,4 +227,15 @@ export class ManagePermissionService extends ApiService {
       }
     );
   }
+
+  exportAgentDistributionUsers(config: QueryConfig): Observable<any> {
+    return this.get(
+      `/api/v1/request-analytics/distribution/export${
+        config.queryObj ? config.queryObj : ''
+      }`,
+      {
+        responseType: 'blob',
+      }
+    );
+  }
 }

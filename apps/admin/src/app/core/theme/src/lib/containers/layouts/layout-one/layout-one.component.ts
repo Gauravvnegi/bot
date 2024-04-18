@@ -591,11 +591,23 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   showComplaint() {
-    this.sidebarType = 'complaint';
-    this.sideBarService.openSidebar({
-      componentName: 'RaiseRequest',
-      onOpen: () => (this.sidebarVisible = true),
-      onClose: (res) => (this.sidebarVisible = false),
+    const lazyModulePromise = import(
+      'libs/admin/request/src/lib/admin-request.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminRequestModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+
+    lazyModulePromise.then(() => {
+      this.sidebarType = 'complaint';
+      this.sideBarService.openSidebar({
+        componentName: 'RaiseRequest',
+        onOpen: () => (this.sidebarVisible = true),
+        onClose: (res) => (this.sidebarVisible = false),
+      });
     });
   }
 

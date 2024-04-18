@@ -193,14 +193,26 @@ export class ComplaintAnalyticsComponent implements OnInit {
   }
 
   raiseRequest() {
-    this.sidebarService.openSidebar({
-      componentName: 'RaiseRequest',
-      containerRef: this.sidebarSlide,
-      onOpen: () => (this.sidebarVisible = true),
-      onClose: (res) => {
-        this.refreshStats();
-        this.sidebarVisible = false;
-      },
+    const lazyModulePromise = import(
+      'libs/admin/request/src/lib/admin-request.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminRequestModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+
+    lazyModulePromise.then(() => {
+      this.sidebarService.openSidebar({
+        componentName: 'RaiseRequest',
+        containerRef: this.sidebarSlide,
+        onOpen: () => (this.sidebarVisible = true),
+        onClose: (res) => {
+          this.refreshStats();
+          this.sidebarVisible = false;
+        },
+      });
     });
   }
 

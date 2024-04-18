@@ -49,6 +49,8 @@ export class ContactDatatableComponent extends BaseDatatableComponent
   @Input() entityId: string;
   @Output() updateContacts = new EventEmitter();
   @Input() list: List;
+  @Input() listingId: string;
+
   tableName = contactConfig.datatable.title;
   cols = contactConfig.datatable.cols;
   $subscription = new Subscription();
@@ -193,12 +195,13 @@ export class ContactDatatableComponent extends BaseDatatableComponent
   }
 
   onDeleteContact() {
-    const ids = this.selectedRows.map((item) => ({ contact_id: item.id }));
+    const ids = this.selectedRows.map((item) => ({ contacts: item.id }));
     if (!this.add) {
       this.$subscription.add(
         this._listingService
           .deleteContact(
             this.entityId,
+            this.listingId,
             this._adminUtilityService.makeQueryParams(ids)
           )
           .subscribe(
@@ -231,7 +234,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
   updateDataSourceAfterDelete(ids, selectedRows = []) {
     if (selectedRows.length)
       this.dataSource = this.dataSource.filter(
-        (data) => !selectedRows.some((el) => el.email === data.email)
+        (data) => !selectedRows.some((el) => el.id === data.id)
       );
     else
       this.dataSource = this.dataSource.filter(
@@ -264,6 +267,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
         styleClass: 'confirm-dialog',
         data: isEdit ? editModalData : addModalData,
         width: '90em',
+        dismissableMask: false,
       },
       component: EditContactComponent,
       dialogService: this.dialogService,
@@ -311,9 +315,17 @@ export class ContactDatatableComponent extends BaseDatatableComponent
    * @param data The data of a record for which this action will be done.
    */
   handleContactAddEvent(data) {
-    data.forEach((item) =>
-      this.dataSource.push(new Contact().deserialize(item, 0))
-    );
+    data.forEach((item, index) => {
+      const existingContact = this.dataSource.find(
+        (contact) => item.id === contact.id
+      );
+      if (existingContact) {
+        Object.assign(existingContact, item);
+      } else {
+        this.dataSource.push(new Contact().deserialize(item, index));
+      }
+    });
+
     this.totalRecords = this.dataSource.length + 1;
     this.changePage(this.currentPage);
     if (this.add) {
@@ -327,74 +339,27 @@ export class ContactDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function openImportContact To open contacts list to import.
-   * @param event The event to stop propagation of the same event from being called.
+   * @function importContact
+   * @description handel import contact
+   * @param event
    */
-  openImportContact(event) {
-    event.stopPropagation();
-    let dialogRef: DynamicDialogRef;
-    const modalData: Partial<ImportContactComponent> = {
-      entityId: this.entityId,
-    };
-    dialogRef = openModal({
-      config: {
-        styleClass: 'confirm-dialog',
-        data: modalData,
-      },
-      component: ImportContactComponent,
-      dialogService: this.dialogService,
-    });
-    dialogRef.onClose.subscribe((response) => {
-      if (response.status) this.handleContactImport(response.data);
-    });
-  }
-
-  /**
-   * @function handleContactImport To handle import of new contact field.
-   * @param data The data for which handleContactImport will be done.
-   */
-  handleContactImport(data) {
-    if (this.add) {
-      this.dataSource = [...this.dataSource, ...data];
-      this.totalRecords = this.dataSource.length;
-      this.updateContacts.emit({
-        add: true,
-        data: this.dataSource,
-      });
-      this.changePage(this.currentPage);
-    } else {
-      const reqData = [];
-      data.forEach((item) => {
-        const {
-          firstName,
-          lastName,
-          salutation,
-          companyName,
-          mobile,
-          email,
-        } = item;
-        reqData.push({
-          firstName,
-          lastName,
-          salutation,
-          companyName,
-          mobile,
-          email,
-        });
-      });
-      this.$subscription.add(
-        this._listingService
-          .updateListContact(this.entityId, this.list.id, reqData)
-          .subscribe(
-            (response) => {
-              this.dataSource = [...this.dataSource, ...data];
-              this.changePage(this.currentPage);
-              this.updateContacts.emit();
-            },
-            ({ error }) => {}
-          )
-      );
-    }
+  importContact(data) {
+    const formData = new FormData();
+    formData.append('file', data.file);
+    //get structured data from
+    this.$subscription.add(
+      this._listingService
+        .importContact(this.entityId, formData)
+        .subscribe((response) => {
+          this.snackbarService.openSnackBarAsText(
+            'Contact Imported successfully',
+            '',
+            { panelClass: 'success' }
+          );
+          //add data to contact table
+          this.handleContactAddEvent(response);
+        })
+    );
   }
 
   /**

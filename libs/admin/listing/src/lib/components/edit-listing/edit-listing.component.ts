@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import {
@@ -16,8 +16,8 @@ import {
   NavRouteOptions,
   Option,
 } from 'libs/admin/shared/src';
-import { listingConfig } from '../../constants/listing';
 import { listingRoutes } from '../../constants/routes';
+import { ContactDatatableComponent } from '../datatable/contact-datatable/contact-datatable.component';
 
 @Component({
   selector: 'hospitality-bot-edit-listing',
@@ -37,6 +37,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
   pageTitle = 'Create Listing';
   navRoutes: NavRouteOptions = [];
   private $subscription = new Subscription();
+  @ViewChild(ContactDatatableComponent) listenReset: ContactDatatableComponent;
 
   constructor(
     private _fb: FormBuilder,
@@ -59,7 +60,6 @@ export class EditListingComponent implements OnInit, OnDestroy {
     this.listFG = this._fb.group({
       id: [''],
       name: ['', [Validators.required]],
-      topicName: [''],
       description: ['', [Validators.required]],
       marketingContacts: [[]],
       active: [true],
@@ -130,6 +130,8 @@ export class EditListingComponent implements OnInit, OnDestroy {
 
   resetForm() {
     this.listFG.reset();
+    this.listenReset.values = [];
+    this.listenReset.dataSource = [];
   }
 
   handleSubmit() {
@@ -144,7 +146,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
   createList() {
     if (
       this.listFG.invalid ||
-      this.listFG.get('marketingContacts').value.length === 0
+      this.listFG.get('marketingContacts')?.value?.length === 0
     ) {
       this.snackbarService
         .openSnackBarWithTranslate(
@@ -193,7 +195,9 @@ export class EditListingComponent implements OnInit, OnDestroy {
           .subscribe();
         this.routesConfigService.goBack();
       },
-      ({ error }) => {},
+      ({ error }) => {
+        this.isSaving = false;
+      },
       () => (this.isSaving = false)
     );
   }
@@ -204,7 +208,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
   updateList() {
     if (
       this.listFG.invalid ||
-      this.listFG.get('marketingContacts').value.length === 0
+      this.listFG.get('marketingContacts')?.value?.length === 0
     ) {
       this.snackbarService
         .openSnackBarWithTranslate(
@@ -251,7 +255,9 @@ export class EditListingComponent implements OnInit, OnDestroy {
           .subscribe();
         this.routesConfigService.goBack();
       },
-      ({ error }) => {},
+      ({ error }) => {
+        this.isSaving = false;
+      },
       () => (this.isSaving = false)
     );
   }

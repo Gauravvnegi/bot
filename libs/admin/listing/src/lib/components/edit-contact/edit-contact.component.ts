@@ -1,7 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { BaseDatatableComponent, Regex } from '@hospitality-bot/admin/shared';
+import {
+  BaseDatatableComponent,
+  Cols,
+  Regex,
+} from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subscription } from 'rxjs';
@@ -36,7 +40,7 @@ export class EditContactComponent extends BaseDatatableComponent
   $subscription = new Subscription();
 
   readonly salutationList = contactConfig.datatable.salutationList;
-  readonly cols = contactConfig.datatable.cols;
+  cols = contactConfig.datatable.cols;
 
   constructor(
     public fb: FormBuilder,
@@ -57,6 +61,14 @@ export class EditContactComponent extends BaseDatatableComponent
       });
     }
     this.createFA();
+  }
+
+  // Inside your component class
+  getUpdatedCols(): Cols[] {
+    return this.cols.map((col) => ({
+      ...col,
+      isSortDisabled: true,
+    }));
   }
 
   ngOnInit(): void {
@@ -90,34 +102,6 @@ export class EditContactComponent extends BaseDatatableComponent
       companyName: [data?.companyName || ''],
       mobile: [data?.mobile || ''],
     });
-  }
-
-  importContact(event) {
-    const formData = new FormData();
-    formData.append('file', event.file);
-    this.$subscription.add(
-      this.listingService.importContact(this.entityId, formData).subscribe(
-        (response) => {
-          this.snackbarService.openSnackBarAsText(
-            'Contact Imported successfully',
-            '',
-            { panelClass: 'success' }
-          );
-
-          this.fileName = event.file.name;
-          this.contacts = new ContactList().deserialize(response).records;
-          this.createFA();
-          this.contactFA.controls = this.contacts.map((item) => {
-            return this.createContactFG(item);
-          });
-
-          this.isContactImported = true;
-        },
-        ({ error }) => {
-          this.close();
-        }
-      )
-    );
   }
 
   /**

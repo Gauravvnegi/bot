@@ -276,6 +276,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
           exportType: 'CSV',
           channel: this.selectedTab,
         },
+        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };

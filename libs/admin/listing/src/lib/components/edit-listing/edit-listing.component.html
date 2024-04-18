@@ -88,9 +88,18 @@
 
   <div class="table-block" *ngIf="!loading">
     <hospitality-bot-contact-datatable
+      [listingId]="listId"
       [add]="listId ? false : true"
-      [dataSource]="listFG?.get('marketingContacts')?.value"
-      [totalRecords]="listFG?.get('marketingContacts')?.value?.length"
+      [dataSource]="
+        listFG?.get('marketingContacts')?.value
+          ? listFG?.get('marketingContacts')?.value
+          : []
+      "
+      [totalRecords]="
+        listFG?.get('marketingContacts')?.value?.length
+          ? listFG?.get('marketingContacts')?.value.length
+          : []
+      "
       [entityId]="entityId"
       [list]="listId ? listFG?.getRawValue() : ''"
       (updateContacts)="updateContactList($event)"

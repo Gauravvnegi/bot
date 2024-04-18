@@ -103,9 +103,13 @@ export class ListingService extends ApiService {
    * @param contactId dynamically getting contactId into api.
    * @returns delete api of contact.
    */
-  deleteContact(entityId: string, contactId: string): Observable<any> {
+  deleteContact(
+    entityId: string,
+    listingId: string,
+    contactId: string
+  ): Observable<any> {
     return this.delete(
-      `/api/v1/marketing/entity/${entityId}/contacts${contactId}`
+      `/api/v1/marketing/entity/${entityId}/listing/${listingId}/contacts${contactId}`
     );
   }
 

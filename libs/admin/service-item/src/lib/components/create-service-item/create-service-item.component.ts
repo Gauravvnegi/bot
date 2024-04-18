@@ -82,7 +82,7 @@ export class CreateServiceItemComponent implements OnInit {
       itemName: ['', [Validators.required]],
       categoryId: ['', [Validators.required]],
       sla: ['', [Validators.required]],
-      users: [''],
+      users: [[]],
       remarks: [''],
       defaultItemUser: ['', [Validators.required]],
     });
@@ -96,7 +96,6 @@ export class CreateServiceItemComponent implements OnInit {
 
   listenForFormValuesChanges() {
     const { defaultItemUser, users } = this.serviceItemFormControls;
-
     defaultItemUser.valueChanges.subscribe((newValue) => {
       const currentValue = users.value;
 
@@ -104,7 +103,7 @@ export class CreateServiceItemComponent implements OnInit {
         currentValue.length &&
         currentValue?.filter((value) => value !== newValue);
 
-      if (currentValue.length !== filteredValue.length) {
+      if (filteredValue) {
         users.patchValue(filteredValue);
       }
     });

@@ -3,15 +3,6 @@
     [tableName]="tableName"
     (onModalClose)="close()"
   >
-    <hospitality-bot-upload-csv
-      class="upload-csv"
-      [isDisable]="false"
-      (fileData)="importContact($event)"
-      label="import"
-      *ngIf="!isEditContact && !isContactImported"
-      [variant]="text"
-    >
-    </hospitality-bot-upload-csv>
   </hospitality-bot-modal-header>
 
   <div class="table-wrapper">

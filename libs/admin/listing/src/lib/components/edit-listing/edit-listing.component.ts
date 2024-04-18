@@ -195,7 +195,9 @@ export class EditListingComponent implements OnInit, OnDestroy {
           .subscribe();
         this.routesConfigService.goBack();
       },
-      ({ error }) => {},
+      ({ error }) => {
+        this.isSaving = false;
+      },
       () => (this.isSaving = false)
     );
   }
@@ -253,7 +255,9 @@ export class EditListingComponent implements OnInit, OnDestroy {
           .subscribe();
         this.routesConfigService.goBack();
       },
-      ({ error }) => {},
+      ({ error }) => {
+        this.isSaving = false;
+      },
       () => (this.isSaving = false)
     );
   }

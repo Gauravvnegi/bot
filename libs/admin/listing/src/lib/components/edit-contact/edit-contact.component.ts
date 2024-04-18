@@ -104,34 +104,6 @@ export class EditContactComponent extends BaseDatatableComponent
     });
   }
 
-  importContact(event) {
-    const formData = new FormData();
-    formData.append('file', event.file);
-    this.$subscription.add(
-      this.listingService.importContact(this.entityId, formData).subscribe(
-        (response) => {
-          this.snackbarService.openSnackBarAsText(
-            'Contact Imported successfully',
-            '',
-            { panelClass: 'success' }
-          );
-
-          this.fileName = event.file.name;
-          this.contacts = new ContactList().deserialize(response).records;
-          this.createFA();
-          this.contactFA.controls = this.contacts.map((item) => {
-            return this.createContactFG(item);
-          });
-
-          this.isContactImported = true;
-        },
-        ({ error }) => {
-          this.close();
-        }
-      )
-    );
-  }
-
   /**
    * @function generateContactField To generates new add contact fields.
    */

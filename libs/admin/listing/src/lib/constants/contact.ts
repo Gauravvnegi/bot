@@ -15,7 +15,7 @@ export const contactConfig = {
         header: 'Salutation',
         sortType: 'string',
         width: '13%',
-        isSearchDisabled: false,
+        isSearchDisabled: true,
         isSortDisabled: false,
       },
       {

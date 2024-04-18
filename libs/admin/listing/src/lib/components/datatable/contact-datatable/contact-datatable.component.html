@@ -24,6 +24,14 @@
       <img src="assets/svg/import.svg" alt="import" />
       {{ 'contact.import' | translate }}
     </div> -->
+    <hospitality-bot-upload-csv
+      class="upload-csv"
+      [isDisable]="false"
+      (fileData)="importContact($event)"
+      label="import"
+      variant="outlined"
+    >
+    </hospitality-bot-upload-csv>
 
     <hospitality-bot-button
       label="{{ 'contact.add' | translate }}"
@@ -101,22 +109,30 @@
       </td>
       <td>
         <div class="cell-content" *ngIf="rowData.salutation; else emptyCell">
-          {{ rowData.salutation }}
+          <div class="primary-text">
+            {{ rowData.salutation }}
+          </div>
         </div>
       </td>
       <td>
         <div class="cell-content" *ngIf="rowData.firstName; else emptyCell">
-          {{ rowData.firstName }}
+          <div class="primary-text">
+            {{ rowData.firstName }}
+          </div>
         </div>
       </td>
       <td>
         <div class="cell-content" *ngIf="rowData.lastName; else emptyCell">
-          {{ rowData.lastName }}
+          <div class="primary-text">
+            {{ rowData.lastName }}
+          </div>
         </div>
       </td>
       <td>
         <div class="cell-content" *ngIf="rowData.companyName; else emptyCell">
-          {{ rowData.companyName }}
+          <div class="primary-text">
+            {{ rowData.companyName }}
+          </div>
         </div>
       </td>
       <td>

@@ -31,7 +31,7 @@ import {
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
 import { Subscription } from 'rxjs';
 import { roomFields, RoomTypeOption } from '../../constants/reservation';
-import { ReservationForm, RoomTypes } from '../../constants/form';
+import { ReservationForm, RoomTypes, SessionType } from '../../constants/form';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormService } from '../../services/form.service';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
@@ -523,6 +523,12 @@ export class RoomIteratorComponent extends IteratorComponent
         formKey: keyof ReservationForm['roomInformation']
       ) => AbstractControl;
     })[];
+  }
+
+  get isDayBooking() {
+    return (
+      this.reservationInfoControls.sessionType.value === SessionType.DAY_BOOKING
+    );
   }
 
   errorMessage(field: IteratorField) {

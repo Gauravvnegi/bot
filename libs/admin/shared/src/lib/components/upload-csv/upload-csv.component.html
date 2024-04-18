@@ -1,5 +1,13 @@
 <p-fileUpload
   class="file-upload"
+  [ngClass]="{
+    'file-upload__text': variant === 'text',
+    'file-upload__contained': variant === 'contained',
+    'file-upload__outlined': variant === 'outlined',
+    color__primary: severity === 'primary',
+    color__secondary: severity === 'secondary',
+    color__reset: severity === 'reset'
+  }"
   #upload
   mode="basic"
   [accept]="fileType"

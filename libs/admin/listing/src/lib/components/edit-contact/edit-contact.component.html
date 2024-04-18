@@ -9,6 +9,7 @@
       (fileData)="importContact($event)"
       label="import"
       *ngIf="!isEditContact && !isContactImported"
+      [variant]="text"
     >
     </hospitality-bot-upload-csv>
   </hospitality-bot-modal-header>

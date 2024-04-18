@@ -156,7 +156,7 @@ export class UpgradeRoomTypeComponent implements OnInit {
     if (this.roomUpgradeForm.invalid) {
       this.roomUpgradeForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
-        'Invalid form: Please fix errors'
+        'Please check data and try again !'
       );
       return;
     }

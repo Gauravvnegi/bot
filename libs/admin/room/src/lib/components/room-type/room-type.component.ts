@@ -489,7 +489,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     if (this.useForm.invalid) {
       this.loading = false;
       this.snackbarService.openSnackBarAsText(
-        'Invalid Form: Please fix the errors'
+        'Please check data and try again !'
       );
       this.useForm.markAllAsTouched();
       return;

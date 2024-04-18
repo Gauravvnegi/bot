@@ -158,7 +158,7 @@ export class CreateServiceItemComponent implements OnInit {
     if (this.serviceItemForm.invalid) {
       this.serviceItemForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
-        'Invalid form: Please fix the errors.'
+        'Please check data and try again !'
       );
       return;
     }

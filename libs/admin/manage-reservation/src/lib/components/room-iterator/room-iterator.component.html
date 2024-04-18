@@ -126,7 +126,7 @@
       class="action-btn"
       label="+ Add More Rooms"
       (onClick)="addNewField()"
-      [disabled]="formService.disableBtn"
+      [disabled]="formService.disableBtn || isDayBooking"
       variant="text"
     ></hospitality-bot-button>
   </div>

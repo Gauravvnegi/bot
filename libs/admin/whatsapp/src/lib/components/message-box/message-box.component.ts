@@ -16,6 +16,7 @@ import {
   AdminUtilityService,
   Department,
   DepartmentList,
+  QueryConfig,
   User,
   UserList,
   UserService,
@@ -30,7 +31,7 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
   @Input() chatFG: FormGroup;
   @Input() selectedChat;
   @Input() chatList;
-  @Output() messageSent = new EventEmitter();
+  @Output() messageSent = new EventEmitter<MessageData>();
   @Input() entityId;
   items: Array<User | Department>;
   mentions = [];
@@ -147,6 +148,49 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
     );
   }
 
+  uploadDoc(event) {
+    const formData = new FormData();
+    formData.append('files', event.file, event.file.name);
+    const config: QueryConfig = {
+      params: '?folder_name=BOTSHOT/CONVERSATION/TEST/VIDEO',
+    };
+    this.$subscription.add(
+      this.messageService.uploadData(config, formData).subscribe((res) => {
+        const values = this.chatFG.getRawValue();
+
+        const messagePayload = {
+          mediaUrl: res.fileDownloadUri,
+          filename: event.file.name,
+          channelType: values.channelType,
+          receiverId: this.selectedChat.phone,
+          messageType: event?.documentType,
+        };
+
+        this.messageSent.emit({
+          url: res.fileDownloadUri,
+          timestamp: this.dateService.getCurrentTimeStamp(),
+          status: 'unsend',
+          update: false,
+          type: event?.documentType,
+        });
+
+        this.$subscription.add(
+          this.messageService
+            .sendMessage(this.entityId, messagePayload, null)
+            .subscribe((_) => {
+              this.messageSent.emit({
+                url: res.fileDownloadUri,
+                timestamp: this.dateService.getCurrentTimeStamp(),
+                status: 'sent',
+                update: true,
+                type: event?.documentType,
+              });
+            })
+        );
+      })
+    );
+  }
+
   checkForEnterKey(event) {
     if (event.keyCode === 13) {
       this.sendMessage();
@@ -163,3 +207,12 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
     this.$subscription.unsubscribe();
   }
 }
+
+export type MessageData = {
+  message?: string;
+  timestamp: number;
+  status: string;
+  update: boolean;
+  url?: string;
+  type?: string;
+};

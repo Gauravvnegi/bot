@@ -493,6 +493,7 @@ export class AddReservationComponent extends BaseReservationComponent
       from: this.reservationInfoControls.from.value,
       to: this.reservationInfoControls.to.value,
       slotId: this.reservationInfoControls.slotId.value,
+      sessionType: this.reservationInfoControls.sessionType.value,
       bookingItems: this.roomControls.map((item) => ({
         roomDetails: {
           ratePlan: {

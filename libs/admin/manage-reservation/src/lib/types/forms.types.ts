@@ -119,6 +119,7 @@ export type ReservationSummary = {
   source?: string;
   sourceName?: string;
   slotId?: string;
+  sessionType?: string;
 };
 
 export type OccupancyDetails = {

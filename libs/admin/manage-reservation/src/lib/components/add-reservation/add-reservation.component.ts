@@ -538,14 +538,15 @@ export class AddReservationComponent extends BaseReservationComponent
       .pipe(debounceTime(300))
       .subscribe((res) => {
         if (res) {
-          const selectedSlot = this.bookingSlotList.find(
-            (item) => item.value === res
+          const selectedSlot = this.bookingSlotList?.find(
+            (item) => item?.value === res
           );
           const newCheckoutDate =
-            this.reservationInfoControls.from.value +
-            selectedSlot.duration * 1000;
+            this.reservationInfoControls?.from?.value +
+            selectedSlot?.duration * 1000;
 
-          this.reservationInfoControls.to.patchValue(newCheckoutDate);
+          newCheckoutDate &&
+            this.reservationInfoControls?.to?.patchValue(newCheckoutDate);
         }
       });
   }
@@ -563,7 +564,7 @@ export class AddReservationComponent extends BaseReservationComponent
   }
 
   handleDayBooking() {
-    this.reservationInfoControls.to.patchValue(null);
+    // this.reservationInfoControls.to.patchValue(null);
     this.reservationInfoControls.slotId.setValidators(Validators.required);
     this.reservationInfoControls.to.clearValidators();
     this.reservationInfoControls.slotId.updateValueAndValidity();

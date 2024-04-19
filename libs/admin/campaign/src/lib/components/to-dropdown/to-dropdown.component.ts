@@ -120,7 +120,16 @@ export class ToDropdownComponent implements OnInit, OnDestroy {
    * @param list list content.
    */
   selectItem<TType extends RecipientType>(type: TType, list: ListType<TType>) {
+    const selectedIds = this._campaignService.selectedRecipient.value;
+    const idSet = new Set(selectedIds);
+    idSet.add(list.id);
+    this._campaignService.selectedRecipient.next(Array.from(idSet));
     this.selectedList.emit({ type, data: list });
+  }
+
+  checkIfSelected(itemId: string): boolean {
+    const selectedIds = this._campaignService.selectedRecipient.value;
+    return selectedIds.includes(itemId);
   }
 
   /**

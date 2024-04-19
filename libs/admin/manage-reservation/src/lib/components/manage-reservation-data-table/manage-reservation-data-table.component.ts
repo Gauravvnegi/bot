@@ -491,4 +491,8 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   get sessionTypeControl() {
     return this.tableFG.get('sessionType') as AbstractControl;
   }
+
+  get isCalenderView() {
+    return this.tableFG?.get('tableType')?.value === 'calendar';
+  }
 }

@@ -777,6 +777,10 @@ export class QuickReservationFormComponent implements OnInit {
   get sessionTypeControl() {
     return this.reservationInfoControls.sessionType as AbstractControl;
   }
+
+  get isDayBooking() {
+    return this.sessionTypeControl?.value === SessionType.DAY_BOOKING;
+  }
 }
 
 export type QuickReservationConfig = {

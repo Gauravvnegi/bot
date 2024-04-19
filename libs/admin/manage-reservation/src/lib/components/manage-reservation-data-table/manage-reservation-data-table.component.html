@@ -5,7 +5,7 @@
 >
   <div class="heading-wrapper">
     <div class="heading">{{ tableName }}</div>
-    <ng-container *ngIf="tableFG?.get('tableType')?.value === 'calendar'">
+    <ng-container *ngIf="isCalenderView">
       <hospitality-bot-info-panel type="booking"></hospitality-bot-info-panel>
       <div [ngStyle]="{ cursor: 'pointer' }">
         <img
@@ -24,7 +24,7 @@
 
     <hospitality-bot-select
       class="session-type"
-      *ngIf="tableFG?.get('tableType')?.value === 'calendar'"
+      *ngIf="isCalenderView"
       controlName="sessionType"
       [options]="sessionTypeOptions"
       [loading]="loading"
@@ -62,7 +62,7 @@
       "
     ></hospitality-bot-button>
     <hospitality-bot-export-list
-      *ngIf="tableFG?.get('tableType').value !== 'calendar'"
+      *ngIf="!isCalenderView"
       [additionalActionItems]="additionalActionItems"
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
@@ -73,10 +73,7 @@
 </div>
 <div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
 
-<ng-container
-  [formGroup]="tableFG"
-  *ngIf="tableFG?.get('tableType').value === 'calendar'; else tableView"
->
+<ng-container [formGroup]="tableFG" *ngIf="isCalenderView; else tableView">
   <hospitality-bot-reservation-calendar-view></hospitality-bot-reservation-calendar-view>
 </ng-container>
 

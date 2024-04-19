@@ -164,7 +164,7 @@
             [options]="ratePlans"
           ></hospitality-bot-select>
           <hospitality-bot-multi-select
-            *ngIf="sessionTypeControl.value === 'NIGHT_BOOKING'"
+            *ngIf="!isDayBooking"
             class="half-width"
             controlName="roomNumbers"
             label="Room Number"
@@ -174,7 +174,7 @@
             }"
           ></hospitality-bot-multi-select>
           <hospitality-bot-select
-            *ngIf="sessionTypeControl.value === 'DAY_BOOKING'"
+            *ngIf="isDayBooking"
             class="half-width"
             controlName="roomNumbers"
             label="Room Number"

@@ -167,6 +167,18 @@ import {
 } from './complaint-report.const';
 import { OrderSummaryReport } from '../models/order-reports.models';
 import { orderSummaryReportCols } from './order-reports.const';
+import {
+  EmailCampaignReport,
+  EmailMarketingTemplateReport,
+  WhatsappCampaignReport,
+  WhatsappMarketingTemplateReport,
+} from '../models/campaign-reports.models';
+import {
+  emailCampaignReportCols,
+  emailMarketingTemplateReportCols,
+  whatsappCampaignReportCols,
+  whatsappMarketingTemplateReportCols,
+} from './campaign-reports.const';
 
 export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
   noShowReport: NoShowReport,
@@ -229,6 +241,11 @@ export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
   serviceItemWiseComplaintReport: ServiceItemWiseComplaintReport,
   categoryWiseComplaintReport: CategoryWiseComplaintReport,
   orderSummary: OrderSummaryReport,
+
+  emailCampaign: EmailCampaignReport,
+  whatsappCampaign: WhatsappCampaignReport,
+  emailMarketingTemplate: EmailMarketingTemplateReport,
+  whatsappMarketingTemplate: WhatsappMarketingTemplateReport,
 };
 
 function getColsArray(colsData: ColsData): Cols[] {
@@ -307,6 +324,10 @@ export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
   ),
   categoryWiseComplaintReport: getColsArray(categoryWiseComplaintReportCols),
   orderSummary: getColsArray(orderSummaryReportCols),
+  emailCampaign: getColsArray(emailCampaignReportCols),
+  whatsappCampaign: getColsArray(whatsappCampaignReportCols),
+  emailMarketingTemplate: getColsArray(emailMarketingTemplateReportCols),
+  whatsappMarketingTemplate: getColsArray(whatsappMarketingTemplateReportCols),
 };
 
 export const reportFiltersMapping: Record<
@@ -373,6 +394,10 @@ export const reportFiltersMapping: Record<
   serviceItemWiseComplaintReport: ['fromDate', 'toDate'],
   categoryWiseComplaintReport: ['fromDate', 'toDate'],
   orderSummary: ['fromDate', 'toDate'],
+  emailCampaign: ['fromDate', 'toDate'],
+  emailMarketingTemplate: ['fromDate', 'toDate'],
+  whatsappCampaign: ['fromDate', 'toDate'],
+  whatsappMarketingTemplate: ['fromDate', 'toDate'],
 };
 
 export const rowStylesMapping: Record<RowStylesKeys, string> = {

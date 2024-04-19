@@ -97,6 +97,11 @@ export type ReportsType = {
     | 'serviceItemWiseComplaintReport'
     | 'categoryWiseComplaintReport';
   ORDER_REPORT: 'orderSummary';
+  CAMPAIGN_REPORTS:
+    | 'emailCampaign'
+    | 'whatsappCampaign'
+    | 'emailMarketingTemplate'
+    | 'whatsappMarketingTemplate';
 };
 
 export type ReportsTypeValues = ReportsType[keyof ReportsType];

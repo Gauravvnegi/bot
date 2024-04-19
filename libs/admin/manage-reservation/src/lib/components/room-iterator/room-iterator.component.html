@@ -119,7 +119,7 @@
       class="action-btn"
       label="Upgrade Room"
       (onClick)="upgradeRoomType()"
-      [disabled]="isCheckedout"
+      [disabled]="isCheckedout || isDayBooking"
       variant="text"
     ></hospitality-bot-button>
     <hospitality-bot-button

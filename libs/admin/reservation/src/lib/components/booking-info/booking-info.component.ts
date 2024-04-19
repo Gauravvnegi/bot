@@ -596,6 +596,10 @@ export class BookingInfoComponent implements OnInit {
     );
   }
 
+  get isDayBooingAvailable(): boolean {
+    return this.configService.$isDayBookingAvailable.value;
+  }
+
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }

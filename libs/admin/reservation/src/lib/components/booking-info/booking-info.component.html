@@ -18,6 +18,7 @@
     <ng-container formGroupName="reservationInformation">
       <div class="full-width">
         <hospitality-bot-toggle-switch-with-label
+          *ngIf="isDayBooingAvailable"
           [isToggleOn]="
             reservationInfoControls?.sessionType?.value ===
             SessionType.DAY_BOOKING

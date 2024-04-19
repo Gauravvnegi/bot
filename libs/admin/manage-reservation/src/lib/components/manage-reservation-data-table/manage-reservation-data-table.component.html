@@ -24,7 +24,7 @@
 
     <hospitality-bot-select
       class="session-type"
-      *ngIf="isCalenderView"
+      *ngIf="isCalenderView && isDayBookingAvailable"
       controlName="sessionType"
       [options]="sessionTypeOptions"
       [loading]="loading"

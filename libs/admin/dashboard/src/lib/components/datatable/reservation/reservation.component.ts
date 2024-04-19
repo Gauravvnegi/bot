@@ -14,6 +14,7 @@ import {
   AdminUtilityService,
   BaseDatatableComponent,
   BookingDetailService,
+  ConfigService,
   FeedbackService,
   ModuleNames,
   sharedConfig,
@@ -74,7 +75,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     protected bookingDetailService: BookingDetailService,
     protected subscriptionPlanService: SubscriptionPlanService,
     protected routesConfigService: RoutesConfigService,
-    protected router: Router
+    protected router: Router,
+    private configService: ConfigService
   ) {
     super(fb);
   }
@@ -411,5 +413,9 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   get sessionTypeControl() {
     return this.tableFG.get('sessionType') as AbstractControl;
+  }
+
+  get isDayBooingAvailable(): boolean {
+    return this.configService.$isDayBookingAvailable.value;
   }
 }

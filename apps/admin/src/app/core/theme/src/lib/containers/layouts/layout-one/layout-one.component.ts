@@ -126,6 +126,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   @ViewChild('url') urlTemplate: TemplateRef<any>;
   iframeTempUrl: string;
   sidebarStyle: {};
+  entityId: string;
 
   constructor(
     private _router: Router,
@@ -167,6 +168,15 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
           this.initNotification();
         }
       })
+    );
+    this.entityId = this.globalFilterService.entityId;
+
+    this.$subscription.add(
+      this.configService
+        .getDayBookingConfiguration(this.entityId)
+        .subscribe((res) => {
+          this.configService.$isDayBookingAvailable.next(res.dayBooking);
+        })
     );
     //reset scroll to top on route change
     this._router.events.subscribe((event) => {

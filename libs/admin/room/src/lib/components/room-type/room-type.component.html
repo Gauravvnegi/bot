@@ -150,6 +150,13 @@
                     placeholder: 'Enter'
                   }"
                 ></hospitality-bot-input>
+                <hospitality-bot-select
+                  label="Rate Plan Type"
+                  class="half-width"
+                  controlName="ratePlanType"
+                  [options]="ratePlanOptions"
+                >
+                </hospitality-bot-select>
               </div>
               <hospitality-bot-discount-form
                 *ngIf="!isPricingDynamic"

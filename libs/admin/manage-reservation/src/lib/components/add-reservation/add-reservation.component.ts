@@ -11,6 +11,7 @@ import {
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import {
   AdminUtilityService,
+  ConfigService,
   EntitySubType,
   HotelDetailService,
   Option,
@@ -87,7 +88,8 @@ export class AddReservationComponent extends BaseReservationComponent
     protected hotelDetailService: HotelDetailService,
     protected routesConfigService: RoutesConfigService,
     private snackbarService: SnackBarService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private configService: ConfigService
   ) {
     super(activatedRoute, hotelDetailService, formService, routesConfigService);
     this.initForm();
@@ -640,5 +642,8 @@ export class AddReservationComponent extends BaseReservationComponent
 
   get isPrePatchedRoomType() {
     return !this.reservationId;
+  }
+  get isDayBooingAvailable(): boolean {
+    return this.configService.$isDayBookingAvailable.value;
   }
 }

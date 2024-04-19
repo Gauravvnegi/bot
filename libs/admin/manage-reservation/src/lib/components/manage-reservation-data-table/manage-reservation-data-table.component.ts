@@ -10,6 +10,7 @@ import {
   AdminUtilityService,
   BaseDatatableComponent as BaseDatableComponent,
   BookingDetailService,
+  ConfigService,
   EntitySubType,
   ModuleNames,
   Option,
@@ -101,7 +102,8 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     private _clipboard: Clipboard,
     private subscriptionPlanService: SubscriptionPlanService,
     private bookingDetailService: BookingDetailService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private configService: ConfigService
   ) {
     super(fb);
   }
@@ -470,6 +472,10 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.snackbarService.openSnackBarAsText('Booking number copied', '', {
       panelClass: 'success',
     });
+  }
+
+  get isDayBookingAvailable(): boolean {
+    return this.configService.$isDayBookingAvailable.value;
   }
 
   /**

@@ -23,7 +23,9 @@
   <div class="action-wrapper" *ngIf="!showCalendarView">
     <hospitality-bot-select
       class="session-type"
-      *ngIf="tableFG?.get('tableType')?.value === 'calendar'"
+      *ngIf="
+        tableFG?.get('tableType')?.value === 'calendar' && isDayBooingAvailable
+      "
       controlName="sessionType"
       [options]="sessionTypeOptions"
       [loading]="loading"

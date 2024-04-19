@@ -174,7 +174,9 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
       };
     const queryParams = {
       campaignType: this.campaignType,
-      data: btoa(JSON.stringify(this.campaignForm)),
+      data: btoa(
+        unescape(encodeURIComponent(JSON.stringify(this.campaignForm)))
+      ),
     };
 
     if (this.campaignForm?.id?.length) {

@@ -649,7 +649,6 @@ export class QuickReservationFormComponent implements OnInit {
         } else {
           this.handleNightBooking();
         }
-        this.roomControls.roomNumbers.patchValue(null);
       }
     );
   }

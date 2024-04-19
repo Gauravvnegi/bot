@@ -91,8 +91,8 @@ export class PromoCodeReport
       value.map((res) => {
         return {
           reservationId: res?.id,
-          promoCode: res?.offer?.packageCode,
-          discount: toCurrency(res?.offer?.discountedPrice),
+          promoCode: res?.offer[0]?.packageCode,
+          discount: toCurrency(res?.reservationItemsPayment?.totalRoomDiscount),
           redemptions: getFormattedDate(res?.arrivalTime),
           totalNights: res?.nightCount,
           totalRevenueEarned: toCurrency(res?.paymentSummary?.totalAmount),

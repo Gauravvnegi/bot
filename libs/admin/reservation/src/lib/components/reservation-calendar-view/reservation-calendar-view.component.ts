@@ -69,10 +69,7 @@ import {
   JourneyData,
   ReservationFormService,
 } from '../../services/reservation-form.service';
-import {
-  CalendarInterval,
-  SessionType,
-} from 'libs/admin/manage-reservation/src/lib/constants/form';
+import { SessionType } from 'libs/admin/manage-reservation/src/lib/constants/form';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',
@@ -374,12 +371,11 @@ export class ReservationCalendarViewComponent implements OnInit {
       this.auditService.checkAudit(this.entityId).subscribe(
         (res) => {
           const date = res?.shift() ?? Date.now();
-          const nextDate = new Date(date);
-          this.startingDate = nextDate.setDate(nextDate.getDate() - 1);
-          this.initConfig(this.startingDate);
+          this.startingDate = date;
+          this.initConfig(date);
         },
         (error) => {
-          this.initConfig(this.startingDate);
+          this.initConfig(Date.now());
         }
       )
     );
@@ -392,7 +388,16 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   initConfig(date: number) {
-    this.initDates(date);
+    const nextDate = new Date(date);
+    let newDate: number;
+
+    if (this.sessionTypeControl.value === SessionType.DAY_BOOKING) {
+      newDate = nextDate.getTime();
+    } else {
+      newDate = nextDate.setDate(nextDate.getDate() - 1);
+    }
+
+    this.initDates(newDate);
     this.initForm();
     this.initRoomTypes();
     this.listenChanges();
@@ -402,6 +407,7 @@ export class ReservationCalendarViewComponent implements OnInit {
     const dates: DateInfo[] = [];
     const gridCols: number[] = [];
     const currentDate = new Date(startDate);
+    this.currentDate = currentDate;
 
     if (this.isDayBooking) {
       currentDate.setHours(0, 0, 0, 0);

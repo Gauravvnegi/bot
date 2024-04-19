@@ -88,6 +88,7 @@ export class QuickReservationFormComponent implements OnInit {
   isCheckinCompleted = false;
   isCheckedout = false;
   initItems = false;
+  isPrePatchedRoomType: boolean = false;
 
   selectedGuest: Option;
   defaultRoomTypeId: string;
@@ -117,6 +118,7 @@ export class QuickReservationFormComponent implements OnInit {
   @Input() set isNewBooking(value: boolean) {
     if (value === true) {
       this.isDataLoaded = true;
+      this.isPrePatchedRoomType = true;
       this.initItems = true;
     }
   }
@@ -647,6 +649,7 @@ export class QuickReservationFormComponent implements OnInit {
         } else {
           this.handleNightBooking();
         }
+        this.roomControls.roomNumbers.patchValue(null);
       }
     );
   }
@@ -672,7 +675,7 @@ export class QuickReservationFormComponent implements OnInit {
 
   listenForRoomTypeChanges() {
     this.roomControls.roomTypeId.valueChanges.subscribe((res) => {
-      this.getSlotListByRoomTypeId(res);
+      if (res) this.getSlotListByRoomTypeId(res);
     });
   }
 
@@ -691,12 +694,15 @@ export class QuickReservationFormComponent implements OnInit {
       this.manageReservationService
         .getSlotsListsByRoomType(config)
         .subscribe((res) => {
-          this.bookingSlotList = res.map((slot) => {
-            return {
-              label: secondsToHHMM(slot.duration),
-              value: slot.id,
-            };
-          });
+          if (res) {
+            this.bookingSlotList = res.map((slot) => {
+              return {
+                label: secondsToHHMM(slot.duration),
+                value: slot.id,
+                itemAmount: slot.bookingSlotPrices[0].price,
+              };
+            });
+          }
         })
     );
   }
@@ -766,6 +772,10 @@ export class QuickReservationFormComponent implements OnInit {
       keyof ReservationForm['roomInformation'],
       AbstractControl
     >;
+  }
+
+  get sessionTypeControl() {
+    return this.reservationInfoControls.sessionType as AbstractControl;
   }
 }
 

@@ -2,7 +2,6 @@
 
 .form-block {
   @include form-block;
-  margin-bottom: 40px;
 }
 
 .booking-info {
@@ -11,7 +10,6 @@
   column-gap: 6%;
   row-gap: 40px;
   max-height: 20rem;
-  // margin-bottom: 64px;
 }
 
 .half-width {

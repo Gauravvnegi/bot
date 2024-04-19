@@ -27,7 +27,10 @@ import { TableValue } from '../../../constants/tabFilterItem';
 import { ReservationService } from '../../../services/reservation.service';
 import { reservationStatus } from '../../../constants/response';
 import { NavigationEnd, Router } from '@angular/router';
-import { SessionType } from 'libs/admin/manage-reservation/src/lib/constants/form';
+import {
+  SessionType,
+  sessionTypeOptions,
+} from 'libs/admin/manage-reservation/src/lib/constants/form';
 
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
@@ -40,6 +43,7 @@ import { SessionType } from 'libs/admin/manage-reservation/src/lib/constants/for
 export class ReservationDatatableComponent extends BaseDatatableComponent
   implements OnInit {
   readonly reservationStatus = reservationStatus;
+  readonly sessionTypeOptions = sessionTypeOptions;
   @Input() tableName = 'Reservations';
   actionButtons = true;
   isResizableColumns = true;
@@ -390,12 +394,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       case 'PI':
         return 'status-text-pending';
     }
-  }
-
-  handelToggleSwitch(value: boolean) {
-    this.sessionTypeControl.patchValue(
-      value ? SessionType.DAY_BOOKING : SessionType.NIGHT_BOOKING
-    );
   }
 
   setTableType(value: string) {

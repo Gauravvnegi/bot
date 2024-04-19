@@ -363,7 +363,7 @@ export class InvoiceComponent implements OnInit {
             res?.pmsStatus === ReservationCurrentStatus.INHOUSE;
           this.isCheckout =
             res?.pmsStatus === ReservationCurrentStatus.CHECKEDOUT;
-          this.isLateCheckoutValid();
+          res?.sessionType === 'NIGHT_BOOKING' && this.isLateCheckoutValid();
         },
         (error) => (this.isInitialized = true),
         () => (this.isInitialized = true)

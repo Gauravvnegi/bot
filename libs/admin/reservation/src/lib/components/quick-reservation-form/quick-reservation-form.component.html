@@ -131,6 +131,7 @@
           controlName="roomTypeId"
           class="half-width select"
           label="Room Type"
+          [isPrePatched]="isPrePatchedRoomType"
           [inputType]="'select'"
           [props]="{
             showChips: false,
@@ -163,6 +164,7 @@
             [options]="ratePlans"
           ></hospitality-bot-select>
           <hospitality-bot-multi-select
+            *ngIf="sessionTypeControl.value === 'NIGHT_BOOKING'"
             class="half-width"
             controlName="roomNumbers"
             label="Room Number"
@@ -171,6 +173,16 @@
               placeholder: 'Select'
             }"
           ></hospitality-bot-multi-select>
+          <hospitality-bot-select
+            *ngIf="sessionTypeControl.value === 'DAY_BOOKING'"
+            class="half-width"
+            controlName="roomNumbers"
+            label="Room Number"
+            [options]="roomOptions"
+            [props]="{
+              placeholder: 'Select'
+            }"
+          ></hospitality-bot-select>
         </ng-container>
         <hospitality-bot-select
           *ngIf="reservationId"

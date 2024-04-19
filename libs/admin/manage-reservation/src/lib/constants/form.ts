@@ -10,13 +10,16 @@ export const SessionType = {
 
 export type SessionType = typeof SessionType[keyof typeof SessionType];
 
-export const CalendarInterval = {
-  DAY: 'PER_DAY',
-  SEVEN_DAYS: 'SEVEN_DAYS',
-  FIFTEEN_DAYS: 'FIFTEEN_DAYS',
-} as const;
-
-export type CalendarInterval = typeof CalendarInterval[keyof typeof CalendarInterval];
+export const sessionTypeOptions: Option<SessionType>[] = [
+  {
+    label: '21 Days',
+    value: SessionType.NIGHT_BOOKING,
+  },
+  {
+    label: 'Day',
+    value: SessionType.DAY_BOOKING,
+  },
+];
 
 export type ReservationForm = {
   reservationInformation: ReservationInformation;

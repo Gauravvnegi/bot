@@ -50,7 +50,7 @@ import { tableTypes } from 'libs/admin/dashboard/src/lib/constants/cols';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { getBookingIndicators } from 'libs/admin/reservation/src/lib/constants/reservation';
-import { CalendarInterval, SessionType } from '../../constants/form';
+import { SessionType, sessionTypeOptions } from '../../constants/form';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -86,6 +86,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   roomReservationList: RoomReservationResponse[] = [];
   readonly SessionType = SessionType;
+  readonly sessionTypeOptions = sessionTypeOptions;
 
   constructor(
     public fb: FormBuilder,
@@ -469,12 +470,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.snackbarService.openSnackBarAsText('Booking number copied', '', {
       panelClass: 'success',
     });
-  }
-
-  handelToggleSwitch(value: boolean) {
-    this.sessionTypeControl.patchValue(
-      value ? SessionType.DAY_BOOKING : SessionType.NIGHT_BOOKING
-    );
   }
 
   /**

@@ -21,17 +21,14 @@
     </ng-container>
   </div>
   <div class="action-wrapper" *ngIf="!showCalendarView">
-    <hospitality-bot-toggle-switch-with-label
+    <hospitality-bot-select
+      class="session-type"
       *ngIf="tableFG?.get('tableType')?.value === 'calendar'"
-      [isToggleOn]="sessionTypeControl.value === sessionType.DAY_BOOKING"
-      (onToggleSwitch)="handelToggleSwitch($event)"
-      class="switcher"
-      [config]="{
-        toggleOnLabel: 'Day',
-        toggleOffLabel: 'Night',
-        toggleOffColor: '#65b340'
-      }"
-    ></hospitality-bot-toggle-switch-with-label>
+      controlName="sessionType"
+      [options]="sessionTypeOptions"
+      [loading]="loading"
+    ></hospitality-bot-select>
+
     <div class="pull-right" *ngIf="tableTypes.length">
       <label class="type-label" *ngFor="let option of tableTypes">
         <input

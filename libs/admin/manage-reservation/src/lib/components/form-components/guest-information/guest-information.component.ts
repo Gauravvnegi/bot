@@ -140,13 +140,13 @@ export class GuestInformationComponent implements OnInit {
   }
 
   getConfig(type = 'get') {
-    if (type === 'search') return { type: 'GUEST' };
+    if (type === 'search') return { type: 'GUEST,NON_RESIDENT_GUEST' };
     const queries = {
       entityId: this.entityId,
       toDate: this.globalQueries[0].toDate,
       fromDate: this.globalQueries[1].fromDate,
       entityState: 'ALL',
-      type: 'GUEST',
+      type: 'GUEST,NON_RESIDENT_GUEST',
     };
     return queries;
   }

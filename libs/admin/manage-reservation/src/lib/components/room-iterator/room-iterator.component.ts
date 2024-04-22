@@ -25,6 +25,7 @@ import {
 import {
   AdminUtilityService,
   EntitySubType,
+  Option,
   QueryConfig,
   openModal,
 } from 'libs/admin/shared/src';
@@ -55,6 +56,7 @@ export class RoomIteratorComponent extends IteratorComponent
   roomTypeArray: FormArray;
 
   @Output() listenChanges = new EventEmitter();
+  @Output() listenSlotList = new EventEmitter();
 
   @Input() reservationId: string;
   isDraftBooking: boolean = false;
@@ -62,12 +64,6 @@ export class RoomIteratorComponent extends IteratorComponent
 
   @Input() isPrePatchedRoomType: boolean = false;
 
-  @Input() set bookingConfig(value: BookingConfig) {
-    for (const key in value) {
-      const val = value[key];
-      this[key] = val;
-    }
-  }
   fields = roomFields;
 
   entityId: string;
@@ -85,12 +81,35 @@ export class RoomIteratorComponent extends IteratorComponent
   initItems = false;
 
   itemValuesCount = 0;
-  selectedRoomNumber: string = '';
+  selectedRoom: string = '';
   isCheckedIn = false;
   isCheckedout = false;
   isRouteData = false;
 
   @ViewChild('main') main: ElementRef;
+
+  @Input() set bookingConfig(value: BookingConfig) {
+    for (const key in value) {
+      const val = value[key];
+      this[key] = val;
+    }
+  }
+
+  @Input() set sessionType(value: SessionType) {
+    if (value === 'DAY_BOOKING') {
+      this.roomControls.forEach((control, index) => {
+        index !== 0 && this.roomTypeArray.removeAt(index);
+      });
+      this.fields[3].name = 'roomNumber';
+      this.fields[3].type = 'select';
+      this.fields[2].disabled = true;
+      this.roomControls[0].get('roomCount').patchValue(1);
+    } else {
+      this.fields[3].name = 'roomNumbers';
+      this.fields[3].type = 'multi-select';
+      this.fields[2].disabled = false;
+    }
+  }
 
   constructor(
     protected fb: FormBuilder,
@@ -127,6 +146,7 @@ export class RoomIteratorComponent extends IteratorComponent
     this.mapJourney();
     this.createNewFields(true);
     this.listenForFormChanges();
+
     if (!this.reservationId) this.initItems = true;
   }
 
@@ -276,7 +296,7 @@ export class RoomIteratorComponent extends IteratorComponent
         this.fields[3].type = 'select';
       }
       // Patch room details in the form array
-      this.selectedRoomNumber = value?.roomNumber;
+      this.selectedRoom = value?.roomNumber;
       this.roomControls[index].patchValue(
         {
           roomTypeId: value.roomTypeId,
@@ -327,20 +347,7 @@ export class RoomIteratorComponent extends IteratorComponent
       this.roomControls[index].patchValue(
         {
           ratePlans: ratePlanOptions,
-          rooms:
-            (this.selectedRoomNumber?.length &&
-              !roomType.rooms.some(
-                (room) => room?.value === this.selectedRoomNumber
-              )) ||
-            this.updatedRoomsLoaded
-              ? [
-                  {
-                    label: this.selectedRoomNumber,
-                    value: this.selectedRoomNumber,
-                  },
-                  ...roomType.rooms,
-                ]
-              : roomType.rooms,
+          rooms: this.getRoomsByRoomType(roomType.rooms),
         },
         { emitEvent: false }
       );
@@ -374,6 +381,27 @@ export class RoomIteratorComponent extends IteratorComponent
     }
   }
 
+  getRoomsByRoomType(rooms: Option[]) {
+    const roomExists = rooms.some((room) => room?.value === this.selectedRoom);
+
+    if (
+      (this.selectedRoom?.length && !roomExists) ||
+      (this.updatedRoomsLoaded && this.selectedRoom?.length)
+    ) {
+      // Include the selected room number if it doesn't already exist
+      return [
+        {
+          label: this.selectedRoom,
+          value: this.selectedRoom,
+        },
+        ...rooms,
+      ];
+    }
+
+    // Return the original room list
+    return rooms;
+  }
+
   listenForFormChanges(): void {
     this.listenChanges.emit();
 
@@ -396,6 +424,13 @@ export class RoomIteratorComponent extends IteratorComponent
         }
       }
     );
+    let currRoomTypeId = this.roomControls[0].get('roomTypeId').value;
+    this.roomControls[0].get('roomTypeId').valueChanges.subscribe((res) => {
+      if (res) {
+        if (res !== currRoomTypeId) this.listenSlotList.emit();
+        currRoomTypeId = res;
+      }
+    });
   }
 
   getConfig() {

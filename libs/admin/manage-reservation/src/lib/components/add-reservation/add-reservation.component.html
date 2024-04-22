@@ -35,6 +35,8 @@
             isRouteData: isRouteData,
             isConfirmedBooking: isConfirmedBooking
           }"
+          [sessionType]="reservationInfoControls.sessionType.value"
+          (listenSlotList)="listenRoomTypeChange()"
         >
         </hospitality-bot-room-iterator>
       </p-accordionTab>

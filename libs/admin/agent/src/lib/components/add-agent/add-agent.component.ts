@@ -122,7 +122,6 @@ export class AddAgentComponent implements OnInit {
       this.configService
         .getColorAndIconConfig(this.entityId)
         .subscribe((response) => {
-          debugger;
           this.marketSegment =
             response.bookingConfig.marketSegment.map((item) => ({
               label: item.value,

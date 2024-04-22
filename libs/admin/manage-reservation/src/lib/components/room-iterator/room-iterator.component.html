@@ -115,7 +115,7 @@
   </div>
   <div class="btn-wrapper">
     <hospitality-bot-button
-      *ngIf="isConfirmedBooking"
+      *ngIf="isConfirmedBooking && !isDayBooking"
       class="action-btn"
       label="Upgrade Room"
       (onClick)="upgradeRoomType()"

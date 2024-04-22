@@ -29,6 +29,7 @@ export const roomFields: IteratorField[] = [
     placeholder: 'Enter',
     width: '10%',
     minValue: 1,
+    disabled: false,
   },
   {
     label: 'Room Number',

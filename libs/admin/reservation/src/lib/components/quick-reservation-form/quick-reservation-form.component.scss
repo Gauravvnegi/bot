@@ -95,15 +95,15 @@
   overflow: auto;
 }
 
-:host ::ng-deep .p-dropdown {
-  border: 1px solid rgba(0, 0, 0, 0.38) !important;
-  &:hover {
-    border-color: $primary-cta !important;
-  }
-  &:focus {
-    border-color: $primary-cta !important;
-  }
-}
+// :host ::ng-deep .p-dropdown {
+//   border: 1px solid rgba(0, 0, 0, 0.38) !important;
+//   &:hover {
+//     border-color: $primary-cta !important;
+//   }
+//   &:focus {
+//     border-color: $primary-cta !important;
+//   }
+// }
 
 :host ::ng-deep .select {
   .option-items {

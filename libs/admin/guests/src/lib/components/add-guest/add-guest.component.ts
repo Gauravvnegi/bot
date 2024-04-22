@@ -103,7 +103,7 @@ export class AddGuestComponent implements OnInit {
       gender: [''],
       dateOfBirth: [''],
       age: [{ value: '', disabled: true }],
-      address: ['', [Validators.required]],
+      address: [''],
       type: [this.guestType],
     });
   }

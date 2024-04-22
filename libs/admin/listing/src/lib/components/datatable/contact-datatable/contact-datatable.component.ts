@@ -319,7 +319,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
       const existingContact = this.dataSource.find(
         (contact) => item.id === contact.id
       );
-      if (existingContact) {
+      if (existingContact && item?.id) {
         Object.assign(existingContact, item);
       } else {
         this.dataSource.push(new Contact().deserialize(item, index));

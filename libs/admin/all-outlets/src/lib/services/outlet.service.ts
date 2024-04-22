@@ -162,10 +162,16 @@ export class OutletService extends ApiService {
     );
   }
 
-  getMenuList(entityId: string): Observable<MenuListResponse> {
-    return this.get(`/api/v1/menus`, {
-      headers: { 'entity-id': entityId },
-    });
+  getMenuList(
+    entityId: string,
+    entityState?: boolean
+  ): Observable<MenuListResponse> {
+    return this.get(
+      `/api/v1/menus?${entityState ? 'entityState=ACTIVE' : ''}`,
+      {
+        headers: { 'entity-id': entityId },
+      }
+    );
   }
 
   getFoodPackageList(

@@ -1,13 +1,17 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BaseDatatableComponent, Regex } from '@hospitality-bot/admin/shared';
-import { contactConfig } from '../../constants/contact';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  BaseDatatableComponent,
+  Cols,
+  Regex,
+} from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subscription } from 'rxjs';
-import { ListingService } from '../../services/listing.service';
+import { contactConfig } from '../../constants/contact';
 import { Contact, ContactList } from '../../data-models/listing.model';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { SnackBarService } from '@hospitality-bot/shared/material';
+import { ListingService } from '../../services/listing.service';
 
 @Component({
   selector: 'hospitality-bot-edit-contact',
@@ -31,11 +35,12 @@ export class EditContactComponent extends BaseDatatableComponent
   fileName: string = '';
   contactList: Contact[];
   isContactImported: boolean = false;
+  @Input() initialNumberOfRow: number = 3;
 
   $subscription = new Subscription();
 
   readonly salutationList = contactConfig.datatable.salutationList;
-  readonly cols = contactConfig.datatable.cols;
+  cols = contactConfig.datatable.cols;
 
   constructor(
     public fb: FormBuilder,
@@ -58,6 +63,14 @@ export class EditContactComponent extends BaseDatatableComponent
     this.createFA();
   }
 
+  // Inside your component class
+  getUpdatedCols(): Cols[] {
+    return this.cols.map((col) => ({
+      ...col,
+      isSortDisabled: true,
+    }));
+  }
+
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     if (this.contactList?.length) {
@@ -65,9 +78,9 @@ export class EditContactComponent extends BaseDatatableComponent
         return this.createContactFG(item);
       });
     } else {
-      this.generateContactField();
-      this.generateContactField();
-      this.generateContactField();
+      for (let i = 0; i < this.initialNumberOfRow; i++) {
+        this.generateContactField();
+      }
     }
   }
 
@@ -82,39 +95,13 @@ export class EditContactComponent extends BaseDatatableComponent
 
     return this.fb.group({
       id: [data?.id || null],
-      email: [data?.email || '', [Validators.required, emailPattern]],
+      email: [data?.email || ''],
       salutation: [data?.salutation || 'Mr', [Validators.required]],
       firstName: [data?.firstName || '', [Validators.required, namePattern]],
       lastName: [data?.lastName || '', [Validators.required, namePattern]],
       companyName: [data?.companyName || ''],
-      mobile: [data?.mobile || '', [Validators.required, numberPattern]],
+      mobile: [data?.mobile || ''],
     });
-  }
-
-  importContact(event) {
-    const formData = new FormData();
-    formData.append('file', event.file);
-    this.$subscription.add(
-      this.listingService.importContact(this.entityId, formData).subscribe(
-        (response) => {
-          this.snackbarService.openSnackBarAsText(
-            'Contact Imported successfully',
-            '',
-            { panelClass: 'success' }
-          );
-
-          this.fileName = event.file.name;
-          this.contacts = new ContactList().deserialize(response).records;
-          this.createFA();
-          this.contactFA.controls = this.contacts.map((item) => {
-            return this.createContactFG(item);
-          });
-
-          this.isContactImported = true;
-        },
-        ({ error }) => {}
-      )
-    );
   }
 
   /**

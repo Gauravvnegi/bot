@@ -1,18 +1,18 @@
-import { Injectable, Inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Inject, Injectable } from '@angular/core';
+import {
+  PermissionOption,
+  UserConfig,
+  UserResponse,
+} from '@hospitality-bot/admin/shared';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { QueryConfig } from '../types';
 import {
   ServiceItemUserListResponse,
   UserListResponse,
 } from '../types/response';
-import {
-  PermissionOption,
-  UserConfig,
-  UserResponse,
-} from '@hospitality-bot/admin/shared';
 
 @Injectable({ providedIn: 'root' })
 export class ManagePermissionService extends ApiService {
@@ -203,6 +203,14 @@ export class ManagePermissionService extends ApiService {
     );
   }
 
+  getAgentDestributionUserList(config: {
+    params: string;
+  }): Observable<UserListResponse> {
+    return this.get(
+      `/api/v1/request-analytics/distribution${config?.params ?? ''}`
+    );
+  }
+
   exportServiceItemUsers(
     entityId: string,
     serviceItemId: string,
@@ -212,6 +220,17 @@ export class ManagePermissionService extends ApiService {
       `/api/v1/entity/${
         config.entityId
       }/cms-services/${serviceItemId}/users/export${
+        config.queryObj ? config.queryObj : ''
+      }`,
+      {
+        responseType: 'blob',
+      }
+    );
+  }
+
+  exportAgentDistributionUsers(config: QueryConfig): Observable<any> {
+    return this.get(
+      `/api/v1/request-analytics/distribution/export${
         config.queryObj ? config.queryObj : ''
       }`,
       {

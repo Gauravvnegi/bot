@@ -9,7 +9,7 @@ import { Cols, TableFieldSearch } from '../../../types/table.type';
 })
 export class TableHeaderComponent {
   @Input() showCheckbox: boolean;
-  @Input() showSearch: boolean;
+  @Input() showSearch: boolean = true;
   @Input() rowSpan = 2;
   @Input() columns: Cols[];
   @Input() isSearchActive = true;

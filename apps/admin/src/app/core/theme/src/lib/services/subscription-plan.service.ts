@@ -267,11 +267,7 @@ export class SubscriptionPlanService extends ApiService {
     return isProductViewTrue || isModuleViewTrue;
   }
 
-  show(): {
-    isPermissionToEditReservation: boolean;
-    isCalenderView: boolean;
-    isPermissionToCreateReservation: boolean;
-  } {
+  show() {
     const data = {
       isPermissionToEditReservation:
         this.hasManageUserPermission(PermissionModuleNames.RESERVATION) &&
@@ -289,6 +285,10 @@ export class SubscriptionPlanService extends ApiService {
       isCalenderView:
         this.checkProductSubscription(ModuleNames.PREDICTO_PMS) &&
         this.hasUserPermissionForProduct(ProductNames.PREDICTO_PMS),
+
+      isPermissionToViewReservation: this.checkViewPermission(
+        PermissionModuleNames.RESERVATION
+      ),
     };
     return data;
   }

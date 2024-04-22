@@ -40,7 +40,8 @@ export class SelectComponent extends FormComponent {
     return {
       ...this.inputNgClasses,
       'input-margin-top': this.floatInsideLabel,
-      select__horizontal: this.optionAlignment === 'horizontal',
+      select__horizontal:
+        this.optionAlignment === 'horizontal' && this.menuOptions?.length,
     };
   }
 

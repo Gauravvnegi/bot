@@ -18,6 +18,16 @@
         (keyup.enter)="sendMessage()"
       ></textarea>
       <!-- <img src="assets/svg/smile.svg" class="smileImg" /> -->
+      <hospitality-bot-upload-csv
+        class="upload"
+        (fileData)="uploadDoc($event)"
+        [fileType]="null"
+        [chooseIcon]="'pi-plus'"
+        [uploadIcon]="'pi-plus'"
+        variant="text"
+        severity="primary"
+      >
+      </hospitality-bot-upload-csv>
     </div>
   </div>
   <div class="cursor" (click)="sendMessage()">

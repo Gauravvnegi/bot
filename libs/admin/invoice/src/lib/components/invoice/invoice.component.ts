@@ -21,6 +21,7 @@ import {
   NavRouteOptions,
   Option,
   UserService,
+  getUniqueOptions,
   openModal,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -362,7 +363,7 @@ export class InvoiceComponent implements OnInit {
             res?.pmsStatus === ReservationCurrentStatus.INHOUSE;
           this.isCheckout =
             res?.pmsStatus === ReservationCurrentStatus.CHECKEDOUT;
-          this.isLateCheckoutValid();
+          res?.sessionType === 'NIGHT_BOOKING' && this.isLateCheckoutValid();
         },
         (error) => (this.isInitialized = true),
         () => (this.isInitialized = true)
@@ -1054,7 +1055,7 @@ export class InvoiceComponent implements OnInit {
 
     if (this.useForm.invalid) {
       this.snackbarService.openSnackBarAsText(
-        'Invalid form: Please fix the errors.'
+        'Please check data and try again !'
       );
       return;
     }
@@ -1359,10 +1360,10 @@ export class InvoiceComponent implements OnInit {
    */
 
   addNewDefaultDescription(option: DescriptionOption) {
-    this.defaultDescriptionOptions = [
+    this.defaultDescriptionOptions = getUniqueOptions([
       ...this.defaultDescriptionOptions,
       option,
-    ];
+    ]);
   }
 
   hasDiscount(itemId: string, date: number, isMenu: boolean = false) {

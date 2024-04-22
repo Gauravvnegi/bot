@@ -9,21 +9,32 @@
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.05);
   background-color: #ffffff;
 
-  .heading {
-    font-size: 16px;
-    font-weight: 600;
-    color: #002046;
-    padding-bottom: 20px;
+  .header-wrapper{
+    display: inline-flex;
+    justify-content: space-between;
+    padding-bottom: 12px;
+
+    .heading {
+        font-size: 16px;
+        font-weight: 600;
+        color: #002046;
+        padding-bottom: 20px;
+      }
+    .stats-filter{
+      width: 160px;
+    }
+
   }
+
 
   &-container {
     display: flex;
     flex-direction: column;
     padding: 15px;
     overflow-y: auto;
-    max-height: 49vh;
+    height: 42vh;
     @media screen and (max-width: 1024px) {
-      max-height: 32vh;
+     height: 32vh;
     }
 
     .progress-container {

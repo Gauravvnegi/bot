@@ -11,15 +11,18 @@ import {
   AdminUtilityService,
   StatCard,
   manageMaskZIndex,
+  openModal,
 } from '@hospitality-bot/admin/shared';
-import { Subscription, forkJoin } from 'rxjs';
 import { DateService } from '@hospitality-bot/shared/utils';
-import { AnalyticsService } from '../../services/analytics.service';
-import { AverageStats, DistributionStats } from '../../types/response.types';
-import { AverageRequestStats } from '../../models/statistics.model';
 import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { CreateServiceItemComponent } from 'libs/admin/service-item/src/lib/components/create-service-item/create-service-item.component';
+import { Subscription, forkJoin } from 'rxjs';
 import { getTicketCountLabel } from '../../constant/stats';
+import { AverageRequestStats } from '../../models/statistics.model';
+import { AnalyticsService } from '../../services/analytics.service';
+import { DistributionStats } from '../../types/response.types';
+import { UserPermissionDatatableComponent } from 'libs/admin/roles-and-permissions/src/lib/components/user-permission-datatable/user-permission-datatable.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'complaint-analytics',
@@ -61,7 +64,8 @@ export class ComplaintAnalyticsComponent implements OnInit {
     private analyticsService: AnalyticsService,
     private adminUtilityService: AdminUtilityService,
     private compiler: Compiler,
-    private resolver: ComponentFactoryResolver
+    private resolver: ComponentFactoryResolver,
+    private dialogService: DialogService
   ) {}
 
   statCard: StatCard[] = [];
@@ -106,15 +110,17 @@ export class ComplaintAnalyticsComponent implements OnInit {
 
   //resolved
   initTicketsCreatedStats() {
-    forkJoin([
-      this.getPerDayStats('ALL'),
-      this.getPerDayStats('FOCUSED'),
-    ]).subscribe(([teamResponse, individualResponse]) => {
-      this.ticketsStats = new AverageRequestStats().deserialize(
-        teamResponse,
-        individualResponse
-      ).data;
-    });
+    this.$subscription.add(
+      forkJoin([
+        this.getPerDayStats('ALL'),
+        this.getPerDayStats('FOCUSED'),
+      ]).subscribe(([teamResponse, individualResponse]) => {
+        this.ticketsStats = new AverageRequestStats().deserialize(
+          teamResponse,
+          individualResponse
+        ).data;
+      })
+    );
   }
 
   getPerDayStats(statsType: 'ALL' | 'FOCUSED') {
@@ -130,18 +136,20 @@ export class ComplaintAnalyticsComponent implements OnInit {
   }
 
   getAgentStats() {
-    this.analyticsService
-      .getAgentDistributionStats()
-      .subscribe((res: DistributionStats) => {
-        this.agentStats = {
-          label: 'Agents Distrubution',
-          key: 'Agent',
-          score: res.distributionStats.availableUsers.toString(),
-        };
+    this.$subscription.add(
+      this.analyticsService
+        .getAgentDistributionStats()
+        .subscribe((res: DistributionStats) => {
+          this.agentStats = {
+            label: 'Agents Distrubution',
+            key: 'Agent',
+            score: res.distributionStats.availableUsers.toString(),
+          };
 
-        this.agentsOnTicket = res.distributionStats.occupiedUsers;
-        this.availableAgents = res.distributionStats.availableUsers;
-      });
+          this.agentsOnTicket = res.distributionStats.occupiedUsers;
+          this.availableAgents = res.distributionStats.availableUsers;
+        })
+    );
   }
 
   /**
@@ -185,14 +193,48 @@ export class ComplaintAnalyticsComponent implements OnInit {
   }
 
   raiseRequest() {
-    this.sidebarService.openSidebar({
-      componentName: 'RaiseRequest',
-      containerRef: this.sidebarSlide,
-      onOpen: () => (this.sidebarVisible = true),
-      onClose: (res) => {
-        this.refreshStats();
-        this.sidebarVisible = false;
-      },
+    const lazyModulePromise = import(
+      'libs/admin/request/src/lib/admin-request.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminRequestModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+
+    lazyModulePromise.then(() => {
+      this.sidebarService.openSidebar({
+        componentName: 'RaiseRequest',
+        containerRef: this.sidebarSlide,
+        onOpen: () => (this.sidebarVisible = true),
+        onClose: (res) => {
+          this.refreshStats();
+          this.sidebarVisible = false;
+        },
+      });
     });
+  }
+
+  openTableModal() {
+    event.stopPropagation();
+    const modalData: Partial<UserPermissionDatatableComponent> = {
+      tableType: 'AGENT_DESTRIBUTION',
+    };
+    const dialogRef = openModal({
+      config: {
+        width: '80%',
+        styleClass: 'dynamic-modal',
+        data: modalData,
+      },
+      dialogService: this.dialogService,
+      component: UserPermissionDatatableComponent,
+    });
+
+    dialogRef.onClose.subscribe((res) => {});
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

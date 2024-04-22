@@ -34,6 +34,7 @@ export class UpgradeRoomTypeComponent implements OnInit {
   selectedRoomType: RoomTypeOption;
   ratePlans: ReservationRatePlan[] = [];
   $subscription = new Subscription();
+  slotId: string;
   constructor(
     private fb: FormBuilder,
     public formService: FormService,
@@ -79,6 +80,7 @@ export class UpgradeRoomTypeComponent implements OnInit {
           ratePlanId: this.inputControls.ratePlanId.value,
           roomNumber: this.inputControls.roomNumber.value,
           effectiveDate: this.effectiveDate,
+          slotId: this.slotId ?? null,
         },
       ]),
     };
@@ -94,6 +96,7 @@ export class UpgradeRoomTypeComponent implements OnInit {
       roomUpgrade: true,
       effectiveDate: this.effectiveDate,
       reservationId: this.reservationId,
+      slotId: this.slotId,
     };
 
     return queries;
@@ -156,7 +159,7 @@ export class UpgradeRoomTypeComponent implements OnInit {
     if (this.roomUpgradeForm.invalid) {
       this.roomUpgradeForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
-        'Invalid form: Please fix errors'
+        'Please check data and try again !'
       );
       return;
     }

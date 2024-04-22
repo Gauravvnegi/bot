@@ -198,7 +198,7 @@ export class BarPriceComponent implements OnInit {
       this.useForm.markAllAsTouched();
       this.openAllInvalidAccordion();
       this.snackbarService.openSnackBarAsText(
-        'Invalid form: Please fix the errors.'
+        'Please check data and try again !'
       );
       return;
     }

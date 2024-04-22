@@ -176,15 +176,13 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
 
   getStatusTextAndClass(
     paymentType: PaymentType,
-    status: 'SUCCESS' | 'FAILURE'
+    status: 'PAID' | 'FAILURE'
   ): { text: string; class: string } {
     switch (true) {
-      case paymentType === PaymentType.PAYMENT &&
-        status === PaymentStatus.SUCCESS:
+      case paymentType === PaymentType.PAYMENT && status === PaymentStatus.PAID:
         return { text: 'Paid', class: 'chip-contained-success' };
 
-      case paymentType === PaymentType.REFUND &&
-        status === PaymentStatus.SUCCESS:
+      case paymentType === PaymentType.REFUND && status === PaymentStatus.PAID:
         return { text: 'Refund', class: 'chip-contained-paid' };
 
       case (paymentType === PaymentType.PAYMENT ||
@@ -215,6 +213,6 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
 }
 
 export enum PaymentStatus {
-  SUCCESS = 'SUCCESS',
+  PAID = 'PAID',
   FAILURE = 'FAILURE',
 }

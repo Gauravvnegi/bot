@@ -124,8 +124,8 @@ export class AddAgentComponent implements OnInit {
         .subscribe((response) => {
           this.marketSegment =
             response.bookingConfig.marketSegment.map((item) => ({
-              label: item,
-              value: item,
+              label: item.value,
+              value: item.value,
             })) ?? [];
         })
     );
@@ -186,7 +186,7 @@ export class AddAgentComponent implements OnInit {
     if (this.agentForm.invalid) {
       this.agentForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
-        'Invalid form: Please fix errors'
+        'Please check data and try again !'
       );
       return;
     }

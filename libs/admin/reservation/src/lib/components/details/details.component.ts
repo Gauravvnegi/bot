@@ -139,7 +139,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private routesConfigService: RoutesConfigService,
     protected sidebarService: SideBarService,
     private bookingDetailService: BookingDetailService,
-    private formService: ReservationFormService
+    private formService: ReservationFormService,
+    private subscriptionPlanService: SubscriptionPlanService
   ) {
     this.self = this;
     this.initDetailsForm();
@@ -211,7 +212,14 @@ export class DetailsComponent implements OnInit, OnDestroy {
       this._reservationService.getGuestById(this.guestId).subscribe(
         (response) => {
           this.guestData = new Guest().deserialize(response);
-          this.loadGuestReservations();
+          if (
+            this.subscriptionPlanService.show().isPermissionToViewReservation
+          ) {
+            this.loadGuestReservations();
+          } else {
+            this.guestReservations = new GuestDetails();
+            this.isReservationDetailFetched = true;
+          }
         },
         ({ error }) => {
           this.closeDetails();

@@ -25,13 +25,14 @@ import {
 import {
   AdminUtilityService,
   EntitySubType,
+  Option,
   QueryConfig,
   openModal,
 } from 'libs/admin/shared/src';
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
 import { Subscription } from 'rxjs';
 import { roomFields, RoomTypeOption } from '../../constants/reservation';
-import { ReservationForm, RoomTypes } from '../../constants/form';
+import { ReservationForm, RoomTypes, SessionType } from '../../constants/form';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormService } from '../../services/form.service';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
@@ -55,17 +56,14 @@ export class RoomIteratorComponent extends IteratorComponent
   roomTypeArray: FormArray;
 
   @Output() listenChanges = new EventEmitter();
+  @Output() listenSlotList = new EventEmitter();
 
   @Input() reservationId: string;
   isDraftBooking: boolean = false;
   isConfirmedBooking: boolean = false;
 
-  @Input() set bookingConfig(value: BookingConfig) {
-    for (const key in value) {
-      const val = value[key];
-      this[key] = val;
-    }
-  }
+  @Input() isPrePatchedRoomType: boolean = false;
+
   fields = roomFields;
 
   entityId: string;
@@ -83,12 +81,35 @@ export class RoomIteratorComponent extends IteratorComponent
   initItems = false;
 
   itemValuesCount = 0;
-  selectedRoomNumber: string = '';
+  selectedRoom: string = '';
   isCheckedIn = false;
   isCheckedout = false;
   isRouteData = false;
 
   @ViewChild('main') main: ElementRef;
+
+  @Input() set bookingConfig(value: BookingConfig) {
+    for (const key in value) {
+      const val = value[key];
+      this[key] = val;
+    }
+  }
+
+  @Input() set sessionType(value: SessionType) {
+    if (value === 'DAY_BOOKING') {
+      while (this.roomTypeArray.length > 1) {
+        this.roomTypeArray.removeAt(1); // Remove all items except the first one
+      }
+      this.fields[3].name = 'roomNumber';
+      this.fields[3].type = 'select';
+      this.fields[2].disabled = true;
+      this.roomControls[0].get('roomCount').patchValue(1);
+    } else {
+      this.fields[3].name = 'roomNumbers';
+      this.fields[3].type = 'multi-select';
+      this.fields[2].disabled = false;
+    }
+  }
 
   constructor(
     protected fb: FormBuilder,
@@ -125,6 +146,7 @@ export class RoomIteratorComponent extends IteratorComponent
     this.mapJourney();
     this.createNewFields(true);
     this.listenForFormChanges();
+
     if (!this.reservationId) this.initItems = true;
   }
 
@@ -274,7 +296,7 @@ export class RoomIteratorComponent extends IteratorComponent
         this.fields[3].type = 'select';
       }
       // Patch room details in the form array
-      this.selectedRoomNumber = value?.roomNumber;
+      this.selectedRoom = value?.roomNumber;
       this.roomControls[index].patchValue(
         {
           roomTypeId: value.roomTypeId,
@@ -325,20 +347,7 @@ export class RoomIteratorComponent extends IteratorComponent
       this.roomControls[index].patchValue(
         {
           ratePlans: ratePlanOptions,
-          rooms:
-            (this.selectedRoomNumber?.length &&
-              !roomType.rooms.some(
-                (room) => room?.value === this.selectedRoomNumber
-              )) ||
-            this.updatedRoomsLoaded
-              ? [
-                  {
-                    label: this.selectedRoomNumber,
-                    value: this.selectedRoomNumber,
-                  },
-                  ...roomType.rooms,
-                ]
-              : roomType.rooms,
+          rooms: this.getRoomsByRoomType(roomType.rooms),
         },
         { emitEvent: false }
       );
@@ -372,6 +381,27 @@ export class RoomIteratorComponent extends IteratorComponent
     }
   }
 
+  getRoomsByRoomType(rooms: Option[]) {
+    const roomExists = rooms.some((room) => room?.value === this.selectedRoom);
+
+    if (
+      (this.selectedRoom?.length && !roomExists) ||
+      (this.updatedRoomsLoaded && this.selectedRoom?.length)
+    ) {
+      // Include the selected room number if it doesn't already exist
+      return [
+        {
+          label: this.selectedRoom,
+          value: this.selectedRoom,
+        },
+        ...rooms,
+      ];
+    }
+
+    // Return the original room list
+    return rooms;
+  }
+
   listenForFormChanges(): void {
     this.listenChanges.emit();
 
@@ -394,6 +424,13 @@ export class RoomIteratorComponent extends IteratorComponent
         }
       }
     );
+    let currRoomTypeId = this.roomControls[0].get('roomTypeId').value;
+    this.roomControls[0].get('roomTypeId').valueChanges.subscribe((res) => {
+      if (res) {
+        if (res !== currRoomTypeId) this.listenSlotList.emit();
+        currRoomTypeId = res;
+      }
+    });
   }
 
   getConfig() {
@@ -471,6 +508,7 @@ export class RoomIteratorComponent extends IteratorComponent
             ? Date.now()
             : this.reservationInfoControls.from.value,
           toDate: this.reservationInfoControls.to.value,
+          slotId: this.reservationInfoControls.slotId.value,
         },
       },
       component: UpgradeRoomTypeComponent,
@@ -521,6 +559,12 @@ export class RoomIteratorComponent extends IteratorComponent
         formKey: keyof ReservationForm['roomInformation']
       ) => AbstractControl;
     })[];
+  }
+
+  get isDayBooking() {
+    return (
+      this.reservationInfoControls.sessionType.value === SessionType.DAY_BOOKING
+    );
   }
 
   errorMessage(field: IteratorField) {

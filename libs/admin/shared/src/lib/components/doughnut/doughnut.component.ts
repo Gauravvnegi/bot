@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { deepCopy } from '../../utils/shared';
 
@@ -88,6 +95,8 @@ export class DoughnutComponent implements OnInit {
   @Input() loading: boolean = false;
   @Input() selectedColor: string = '#e61042';
 
+  @Output() selectedItemIndex = new EventEmitter<number>(null);
+
   selectedIndex: number = 0;
   backUpData: DoughnutChartData;
 
@@ -95,14 +104,17 @@ export class DoughnutComponent implements OnInit {
     if (data?.total) {
       this.backUpData = data;
       this.initGraphData(data);
-      this.initTransparentGraph(
-        this.doughnutGraphData.Data.findIndex((item) => item !== 0)
+      const selectedIndex = this.doughnutGraphData.Data.findIndex(
+        (item) => item !== 0
       );
+      this.initTransparentGraph(selectedIndex);
+      this.selectedItemIndex.emit(selectedIndex);
     } else {
       /**
        * need to refactor just random code
        */
       this.total = 0;
+      this.selectedItemIndex.emit(0);
 
       this.backUpData = this.doughnutTransparentGraphData = {
         Labels: ['No Data'],
@@ -178,6 +190,7 @@ export class DoughnutComponent implements OnInit {
   handleCircularGraphClick(data: any) {
     if (data.event.type === 'click' && this.doughnutGraphData.total) {
       const clickedIndex = data.active[0]?._index;
+      this.selectedItemIndex.emit(clickedIndex);
       this.initGraphData(this.backUpData);
       this.initTransparentGraph(clickedIndex);
     }

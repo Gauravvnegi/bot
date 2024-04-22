@@ -38,6 +38,8 @@ export class ComplaintDisengagementComponent implements OnInit {
     this.listenForGlobalFilters();
   }
 
+  distributionStats: DistributionStats;
+
   initGraphStats(): void {
     this.$subscription.add(
       this.analyticsService
@@ -55,33 +57,57 @@ export class ComplaintDisengagementComponent implements OnInit {
     );
   }
 
-  listenForGlobalFilters(): void {
-    this.globalFilterService.globalFilter$.subscribe((data) => {
-      const calenderType = {
-        calenderType: this.dateService.getCalendarType(
-          data['dateRange'].queryValue[0].toDate,
-          data['dateRange'].queryValue[1].fromDate,
-          this.globalFilterService.timezone
-        ),
-      };
-      this.selectedInterval = calenderType.calenderType;
+  handelBreakDownStat(index: number) {
+    const config: QueryConfig = {
+      params: this.adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          categoryName: this.complaintBreakDownData?.complaintCategoryStats
+            ?.labels?.[index],
+        },
+      ]),
+    };
 
-      //set-global query every time global filter changes
-      this.globalQueries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-        calenderType,
-      ];
-      this.initGraphStats();
-    });
+    this.$subscription.add(
+      this.analyticsService.getBreakDownStat(config).subscribe((res) => {
+        this.distributionStats = new DistributionStats().deserialize(res);
+      })
+    );
+  }
+
+  listenForGlobalFilters(): void {
+    this.$subscription.add(
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        const calenderType = {
+          calenderType: this.dateService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate,
+            this.globalFilterService.timezone
+          ),
+        };
+        this.selectedInterval = calenderType.calenderType;
+
+        //set-global query every time global filter changes
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          calenderType,
+        ];
+        this.initGraphStats();
+      })
+    );
   }
 
   getQueryConfig(): QueryConfig {
     const config = {
-      params: this.adminUtilityService.makeQueryParams([...this.globalQueries]),
+      params: this.adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        { entityType: 'ALL' },
+      ]),
     };
     return config;
   }
+
   initLabels(data: ComplaintBreakDownResponse) {
     this.labels = [];
     Object.keys(
@@ -102,6 +128,24 @@ export class ComplaintDisengagementComponent implements OnInit {
       );
     });
   }
+
+  options = {
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+            userCallback: function (label, index, labels) {
+              // when the floored value is the same as the value we have a whole number
+              if (Math.floor(label) === label) {
+                return label;
+              }
+            },
+          },
+        },
+      ],
+    },
+  };
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();

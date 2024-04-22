@@ -152,7 +152,11 @@
           <hospitality-bot-status-dropdown-toggle
             class="toggle-btn"
             (onClick)="updateCampaignStatus($event, rowData)"
-            [menuOptions]="menuOptions"
+            [menuOptions]="
+              rowData?.archieved
+                ? [{ label: 'Clone', value: 'CLONE' }]
+                : menuOptions
+            "
             (onMenuItemClick)="handleMenuClick($event, rowData)"
             [state]="rowData.status"
           >
@@ -181,7 +185,7 @@
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
-    (action)="openCreateCampaign('EMAIL')"
+    (action)="openCreateCampaign()"
     [content]="{
       description:
         'No Campaign found. Tap the +Create campaign to create campaign',

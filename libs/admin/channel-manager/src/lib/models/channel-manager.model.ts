@@ -60,8 +60,9 @@ export class UpdateInventory {
         occupancy: number;
       }
     >();
+
     const totalRoomCount = roomTypes.reduce(
-      (sum, curr) => sum + curr?.roomCount,
+      (sum, curr) => sum + (curr?.roomCount ?? 0),
       0
     );
 

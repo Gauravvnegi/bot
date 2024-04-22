@@ -10,7 +10,7 @@ import { DualPlotDataset } from '@hospitality-bot/admin/shared';
 export class ComplaintBreakDown {
   total: number;
   complaintCategoryStats: ComplaintCategoryStats;
-  distributionStats: DistributionStats;
+  // distributionStats: DistributionStats;
   complaintsData: ComplaintsData;
   complaintCategoryBreakDownStats: ComplaintCategoryBreakDownStats;
 
@@ -20,9 +20,9 @@ export class ComplaintBreakDown {
     );
     this.total = input?.totalCount;
 
-    this.distributionStats = new DistributionStats().deserialize(
-      input?.distributionStats
-    );
+    // this.distributionStats = new DistributionStats().deserialize(
+    //   input?.distributionStats
+    // );
 
     this.complaintsData = new ComplaintsData().deserialize(
       input?.complaintsData
@@ -75,7 +75,7 @@ export class ComplaintCategoryBreakDownStats {
   maxNumber: number = 0;
 
   deserialize(input: CategoryStatsResponse) {
-    Object.entries(input).forEach(([key, value]) => {
+    Object?.entries(input)?.forEach(([key, value]) => {
       this.maxNumber = Math.max(this.maxNumber, value);
       this.data.push({
         label: key,
@@ -97,7 +97,7 @@ export class ComplaintCategoryStats {
   borderColor: string[] = [];
 
   deserialize(input: CategoryStatsResponse) {
-    Object.entries(input).forEach(([key, value]) => {
+    Object?.entries(input)?.forEach(([key, value]) => {
       this.labels.push(key);
       this.data.push(value);
       this.borderColor.push('transparent');
@@ -119,14 +119,15 @@ export class DistributionStats {
       ASAP: '#FF6384',
     };
 
-    Object.entries(input).forEach(([key, value]) => {
-      this.total += value;
+    this.total = input?.totalCount;
+
+    Object?.entries(input.requestStats)?.forEach(([key, value]) => {
       this.data.push({
         label: key,
         count: value,
         color: colorConfig[key],
         score: () => {
-          return `${(value * 100) / this.total}%`;
+          return `${(value * 100) / input?.totalCount}%`;
         },
       });
     });

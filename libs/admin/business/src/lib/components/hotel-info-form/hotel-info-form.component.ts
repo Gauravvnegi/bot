@@ -210,7 +210,7 @@ export class HotelInfoFormComponent implements OnInit {
   submitForm() {
     if (this.useForm.invalid) {
       this.snackbarService.openSnackBarAsText(
-        'Invalid Form: Please fix the errors'
+        'Please check data and try again !'
       );
       this.useForm.markAllAsTouched();
       return;

@@ -45,6 +45,29 @@
     cursor: pointer;
   }
 }
+
+:host ::ng-deep .chatFG {
+  .upload {
+    display: block;
+    width: 102px;
+    position: absolute;
+    right: 0;
+  }
+
+  .p-button {
+    right: 0px;
+    top: 0px;
+  }
+
+  .p-fileupload {
+    border: none;
+    justify-content: right;
+    position: relative;
+    bottom: 41px;
+    width: 100px;
+  }
+}
+
 .whatsAppRule {
   height: 62px;
   width: 100%;

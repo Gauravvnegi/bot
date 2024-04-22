@@ -19,6 +19,7 @@ import {
   RecipientType,
 } from '../../types/campaign.type';
 import { Option } from '@hospitality-bot/admin/shared';
+import { CampaignService } from '../../services/campaign.service';
 
 @Component({
   selector: 'hospitality-bot-to-receiver-field',
@@ -50,6 +51,7 @@ export class ReceiverFieldComponent
   constructor(
     private _emailService: EmailService,
     private controlContainer: ControlContainer,
+    private _campaignService: CampaignService,
     @Inject(DOCUMENT) private document: Document
   ) {}
 
@@ -64,9 +66,8 @@ export class ReceiverFieldComponent
       this.handleClickOutside.bind(this)
     );
   }
-
   handleClickOutside(event: MouseEvent) {
-    const dropdown = document.getElementById('reciever-field'); // Get the dropdown element
+    const dropdown = document.getElementById('reciever-field');
     if (
       dropdown &&
       !dropdown.contains(event.target as Node) &&
@@ -127,26 +128,53 @@ export class ReceiverFieldComponent
     data: ListType<TType>;
   }) {
     let recipientLabels = [...this.inputControls.to.value, event.data.name];
+    let selectedRecipientIds = [
+      ...this._campaignService.selectedRecipient.value,
+    ];
+
     if (event.data.id) {
-      // Check if a recipient with the same ID already exists
-      const recipientWithSameId = this.recipients.find(
+      const index = this.recipients.findIndex(
         (recipient) => recipient.value === event.data.id
       );
 
-      if (!recipientWithSameId) {
+      if (index === -1) {
         this.recipients.push({ label: event.data.name, value: event.data.id });
+        selectedRecipientIds.push(event.data.id);
+      } else {
+        this.recipients.splice(index, 1);
+        recipientLabels = recipientLabels.filter(
+          (label) => label !== event.data.name
+        );
+        selectedRecipientIds = selectedRecipientIds.filter(
+          (id) => id !== event.data.id
+        );
       }
     }
-    if (event.data.id)
-      this.inputControls.recipients.patchValue(this.recipients);
+
+    this.inputControls.recipients.patchValue(this.recipients);
+    this._campaignService.updateSelectedRecipients(selectedRecipientIds);
+
     this.inputControls.to.patchValue([...new Set(recipientLabels)]);
   }
 
   onRemoveChip(value: string) {
+    const removedRecipient = this.recipients.find(
+      (recipient) => recipient.label === value
+    );
+    const removedRecipientId = removedRecipient ? removedRecipient.value : null;
+
     this.recipients = this.recipients.filter(
       (recipient) => recipient.label !== value
     );
+
     this.inputControls.recipients.patchValue(this.recipients);
+
+    const selectedIds = this._campaignService.selectedRecipient.value;
+    const updatedSelectedIds = selectedIds.filter(
+      (id) => id !== removedRecipientId
+    );
+    this._campaignService.updateSelectedRecipients(updatedSelectedIds);
+    // this._campaignService.selectedRecipient.next(updatedSelectedIds);
   }
 
   get inputControls() {

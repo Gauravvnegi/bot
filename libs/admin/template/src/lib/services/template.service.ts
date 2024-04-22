@@ -112,13 +112,10 @@ export class TemplateService extends ApiService {
    * @param config dynamically getting global query filter into api.
    * @returns get api of export csv report of table.
    */
-  exportCSV(entityId, config) {
-    return this.get(
-      `/api/v1/entity/${entityId}/templates/export${config.queryObj}`,
-      {
-        responseType: 'blob',
-      }
-    );
+  exportCSV(entityId: string, config) {
+    return this.get(`/api/v1/entity/${entityId}/templates${config.queryObj}`, {
+      responseType: 'blob',
+    });
   }
 
   /**

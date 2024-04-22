@@ -3,14 +3,6 @@
     [tableName]="tableName"
     (onModalClose)="close()"
   >
-    <hospitality-bot-upload-csv
-      class="upload-csv"
-      [isDisable]="false"
-      (fileData)="importContact($event)"
-      label="import"
-      *ngIf="!isEditContact && !isContactImported"
-    >
-    </hospitality-bot-upload-csv>
   </hospitality-bot-modal-header>
 
   <div class="table-wrapper">
@@ -22,7 +14,7 @@
       [resizableColumns]="isResizableColumns"
       [autoLayout]="isAutoLayout"
       [loading]="loading"
-      [columns]="cols"
+      [columns]="getUpdatedCols()"
       [value]="contactFA?.controls"
       [paginator]="false"
       [rows]="rowsPerPage"
@@ -50,7 +42,7 @@
           hospitality-bot-table-header
           [columns]="columns"
           [showCheckbox]="isSelectable"
-          (search)="handleFieldSearch($event)"
+          [showSearch]="false"
         ></tr>
       </ng-template>
       <!-- **************************************BODY********************************* -->

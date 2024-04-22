@@ -7,8 +7,7 @@
     <div class="heading">{{ tableName }}</div>
     <ng-container
       *ngIf="
-        tableFG?.get('tableType')?.value === 'calendar' &&
-        tableTypes.length
+        tableFG?.get('tableType')?.value === 'calendar' && tableTypes.length
       "
     >
       <hospitality-bot-info-panel type="booking"></hospitality-bot-info-panel>
@@ -22,6 +21,16 @@
     </ng-container>
   </div>
   <div class="action-wrapper" *ngIf="!showCalendarView">
+    <hospitality-bot-select
+      class="session-type"
+      *ngIf="
+        tableFG?.get('tableType')?.value === 'calendar' && isDayBooingAvailable
+      "
+      controlName="sessionType"
+      [options]="sessionTypeOptions"
+      [loading]="loading"
+    ></hospitality-bot-select>
+
     <div class="pull-right" *ngIf="tableTypes.length">
       <label class="type-label" *ngFor="let option of tableTypes">
         <input
@@ -54,6 +63,7 @@
 <div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
 
 <ng-container
+  [formGroup]="tableFG"
   *ngIf="
     tableFG?.get('tableType')?.value === 'calendar' && tableTypes.length;
     else tableView

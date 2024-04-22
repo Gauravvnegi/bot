@@ -24,7 +24,6 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 export class ImportContactComponent implements OnInit, OnDestroy {
   @Output() onImportClosed = new EventEmitter();
   entityId: string;
-  fileUploadData = contactConfig.datatable.fileUploadData;
   contacts: IContact[];
   fileName = '';
   $subscription = new Subscription();

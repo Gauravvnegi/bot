@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import {
   AdminUtilityService,
   BookingDetailService,
+  ConfigService,
   FeedbackService,
 } from '@hospitality-bot/admin/shared';
 import {
@@ -43,7 +44,8 @@ export class ReservationDatatableModalComponent
     protected subscriptionPlanService: SubscriptionPlanService,
     protected routesConfigService: RoutesConfigService,
     private dialogRef: DynamicDialogRef,
-    public dialogConfig: DynamicDialogConfig //generic not supported yet,
+    public dialogConfig: DynamicDialogConfig, //generic not supported yet,
+    public _configService: ConfigService
   ) {
     super(
       fb,
@@ -55,7 +57,8 @@ export class ReservationDatatableModalComponent
       bookingDetailService,
       subscriptionPlanService,
       routesConfigService,
-      router
+      router,
+      _configService
     );
 
     /**

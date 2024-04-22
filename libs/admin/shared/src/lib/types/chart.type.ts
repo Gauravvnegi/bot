@@ -1,3 +1,5 @@
+import { ChartElementsOptions, ChartScales } from 'chart.js';
+
 export type CircularChart = {
   labels: string[];
   data: number[][];
@@ -64,33 +66,8 @@ export type DualPlotFilterOptions = {
 
 export interface DualPlotOptions {
   responsive: boolean;
-  elements: {
-    line: {
-      tension: number;
-    };
-    point: {
-      radius: number;
-      borderWidth: number;
-      hitRadius: number;
-      hoverRadius: number;
-      hoverBorderWidth: number;
-    };
-  };
-  scales: {
-    xAxes: {
-      gridLines: {
-        display: boolean;
-      };
-    }[];
-    yAxes: {
-      gridLines: {
-        display: boolean;
-      };
-      ticks: {
-        min: number;
-      };
-    }[];
-  };
+  elements: ChartElementsOptions;
+  scales: ChartScales;
   tooltips: {
     backgroundColor: string;
     bodyFontColor: string;

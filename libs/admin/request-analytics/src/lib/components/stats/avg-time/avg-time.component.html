@@ -7,6 +7,14 @@
       graphType="bar"
       [title]="'Avg time to resolve task'"
       (onSelectedTabFilterChange)="onSelectedTabFilterChange($event)"
-    ></hospitality-bot-dual-plot>
+    >
+      <div [formGroup]="useForm" class="stats-filter">
+        <hospitality-bot-select
+          class="stats-filter"
+          controlName="statsFilter"
+          [options]="complaintEntityFilterOption"
+        ></hospitality-bot-select>
+      </div>
+    </hospitality-bot-dual-plot>
   </div>
 </div>

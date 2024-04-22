@@ -28,6 +28,7 @@ export class User {
     value: boolean;
     type: string;
   };
+  contactNumber: string;
   deserialize(input: UserResponse) {
     this.firstName = input.firstName;
     this.lastName = input.lastName;
@@ -48,6 +49,7 @@ export class User {
       value: input?.available,
       type: input.available ? 'success' : 'failed',
     };
+    this.contactNumber = `${input.cc} ${input.phoneNumber}`;
     return this;
   }
 
@@ -69,6 +71,8 @@ export class User {
       value: input?.available,
       type: input.available ? 'success' : 'failed',
     };
+    this.contactNumber = `${input.cc} ${input.phoneNumber}`;
+
     return this;
   }
 

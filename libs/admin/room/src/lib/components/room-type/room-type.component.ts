@@ -78,6 +78,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   paidServices: Service[] = [];
   compServices: Service[] = [];
   discountTypes: Option[] = [];
+  ratePlanOptions: Option[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -103,6 +104,22 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.initForm();
     this.initOptionConfig();
     this.initNavRoutes();
+    this.getConfig();
+  }
+
+  getConfig() {
+    this.subscription$.add(
+      this.configService.$config.subscribe((response) => {
+        if (response) {
+          this.ratePlanOptions = response.roomRatePlans.map((item) => {
+            return {
+              label: item.label,
+              value: item.key,
+            };
+          });
+        }
+      })
+    );
   }
 
   initNavRoutes() {
@@ -240,6 +257,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           paxChildBelowFive: ['', [Validators.required, Validators.min(0)]],
           ratePlanId: [''],
           status: [true],
+          ratePlanType: ['EP', Validators.required],
         })
       );
     else
@@ -266,6 +284,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           paxChildPrice: ['', [Validators.required, Validators.min(0)]],
           paxChildBelowFive: ['', [Validators.required, Validators.min(0)]],
           ratePlanId: [''],
+          ratePlanType: [''],
           status: [true],
         })
       );
@@ -327,6 +346,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       label: ['', [Validators.required, Validators.maxLength(60)]],
       currency: ['INR', [Validators.required]],
       extraPrice: ['', [Validators.required, Validators.min(0)]],
+      ratePlanType: ['', Validators.required],
       description: [''],
       ratePlanId: [''],
       status: [true],
@@ -489,7 +509,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     if (this.useForm.invalid) {
       this.loading = false;
       this.snackbarService.openSnackBarAsText(
-        'Invalid Form: Please fix the errors'
+        'Please check data and try again !'
       );
       this.useForm.markAllAsTouched();
       return;

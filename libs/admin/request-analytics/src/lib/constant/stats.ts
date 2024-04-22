@@ -1,4 +1,4 @@
-import { StatCard } from '@hospitality-bot/admin/shared';
+import { Option, StatCard } from '@hospitality-bot/admin/shared';
 
 export const statCard: StatCard[] = [
   {
@@ -47,3 +47,14 @@ export const getTicketCountLabel = (action: string, key: string) => {
 
   return keyPair[key];
 };
+
+export const complaintEntityFilterOption: Option[] = [
+  {
+    label: 'All',
+    value: 'ALL',
+  },
+  {
+    label: 'Focused',
+    value: 'FOCUSED',
+  },
+];

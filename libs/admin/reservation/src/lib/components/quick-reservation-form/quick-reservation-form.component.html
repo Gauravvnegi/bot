@@ -75,7 +75,9 @@
           disabledForm: isExternalBooking,
           defaultDate: date
         }"
+        [bookingSlotList]="bookingSlotList"
         class="booking-info"
+        style="margin-bottom: 64px;"
         #bookingInfo
       >
         <!-- Guest Information -->
@@ -129,6 +131,7 @@
           controlName="roomTypeId"
           class="half-width select"
           label="Room Type"
+          [isPrePatched]="isPrePatchedRoomType"
           [inputType]="'select'"
           [props]="{
             showChips: false,
@@ -161,6 +164,7 @@
             [options]="ratePlans"
           ></hospitality-bot-select>
           <hospitality-bot-multi-select
+            *ngIf="!isDayBooking"
             class="half-width"
             controlName="roomNumbers"
             label="Room Number"
@@ -171,7 +175,7 @@
           ></hospitality-bot-multi-select>
         </ng-container>
         <hospitality-bot-select
-          *ngIf="reservationId"
+          *ngIf="reservationId || isDayBooking"
           class="half-width"
           controlName="roomNumber"
           label="Room Number"

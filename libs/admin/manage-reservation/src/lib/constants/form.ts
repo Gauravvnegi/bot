@@ -3,6 +3,24 @@ import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
 
+export const SessionType = {
+  DAY_BOOKING: 'DAY_BOOKING',
+  NIGHT_BOOKING: 'NIGHT_BOOKING',
+} as const;
+
+export type SessionType = typeof SessionType[keyof typeof SessionType];
+
+export const sessionTypeOptions: Option<SessionType>[] = [
+  {
+    label: '21 Days',
+    value: SessionType.NIGHT_BOOKING,
+  },
+  {
+    label: 'Day',
+    value: SessionType.DAY_BOOKING,
+  },
+];
+
 export type ReservationForm = {
   reservationInformation: ReservationInformation;
   guestInformation: GuestInformation;
@@ -35,6 +53,8 @@ export type ReservationInformation = {
   agentSourceName?: string;
   otaSourceName?: string;
   companySourceName?: string;
+  sessionType: string;
+  slotId: string;
 };
 
 export type GuestInformation = {

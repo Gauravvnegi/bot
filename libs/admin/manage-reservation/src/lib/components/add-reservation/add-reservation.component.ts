@@ -11,9 +11,11 @@ import {
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import {
   AdminUtilityService,
+  ConfigService,
   EntitySubType,
   HotelDetailService,
   Option,
+  QueryConfig,
 } from '@hospitality-bot/admin/shared';
 import {
   JourneyState,
@@ -34,9 +36,14 @@ import {
   GlobalFilterService,
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
-import { ReservationForm, RoomInformation } from '../../constants/form';
+import {
+  ReservationForm,
+  RoomInformation,
+  SessionType,
+} from '../../constants/form';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ManualOffer } from '../form-components/booking-summary/booking-summary.component';
+import { secondsToHHMM } from 'libs/admin/reservation/src/lib/constants/reservation';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -68,6 +75,8 @@ export class AddReservationComponent extends BaseReservationComponent
   reservationFormData: ReservationFormData;
   offerResponse: ManualOffer;
   loadSummary: boolean = false;
+  bookingSlotList: Option[];
+  readonly sessionType = SessionType;
 
   constructor(
     private fb: FormBuilder,
@@ -78,7 +87,8 @@ export class AddReservationComponent extends BaseReservationComponent
     protected hotelDetailService: HotelDetailService,
     protected routesConfigService: RoutesConfigService,
     private snackbarService: SnackBarService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private configService: ConfigService
   ) {
     super(activatedRoute, hotelDetailService, formService, routesConfigService);
     this.initForm();
@@ -87,14 +97,18 @@ export class AddReservationComponent extends BaseReservationComponent
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.initDetails();
-    if (this.reservationId) this.getReservationDetails();
     this.initFormData();
     this.listenRouteData();
+    this.listenForSlotChanges();
+    if (!this.reservationId) this.listenForSessionTypeChanges();
   }
 
   initDetails() {
     this.listenFormServiceChanges();
     this.reservationTypes = roomReservationTypes;
+    if (this.reservationId) {
+      this.getReservationDetails();
+    }
   }
 
   listenRouteData() {
@@ -192,6 +206,8 @@ export class AddReservationComponent extends BaseReservationComponent
         agentSourceName: [''],
         companySourceName: [''],
         marketSegment: ['', Validators.required],
+        sessionType: [SessionType.NIGHT_BOOKING, Validators.required],
+        slotId: [''],
       }),
       offerId: [''],
       instructions: this.fb.group({
@@ -200,6 +216,11 @@ export class AddReservationComponent extends BaseReservationComponent
       printRate: [true],
       rateImprovement: [false],
     });
+  }
+
+  listenRoomTypeChange() {
+    this.reservationInfoControls.sessionType.value ===
+      SessionType.DAY_BOOKING && this.getSlotListByRoomTypeId();
   }
 
   /**
@@ -228,6 +249,34 @@ export class AddReservationComponent extends BaseReservationComponent
           this.resetFormData();
         }
       });
+  }
+
+  getSlotListByRoomTypeId() {
+    const config: QueryConfig = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          entityId: this.entityId,
+          inventoryId: this.roomControls[0].value.roomTypeId,
+          raw: true,
+          status: true,
+        },
+      ]),
+    };
+
+    this.$subscription.add(
+      this.manageReservationService
+        .getSlotsListsByRoomType(config)
+        .subscribe((res) => {
+          this.bookingSlotList = res.map((slot) => {
+            return {
+              label: secondsToHHMM(slot.duration),
+              value: slot.id,
+              itemAmount: slot.bookingSlotPrices[0].price,
+              duration: slot.duration,
+            };
+          });
+        })
+    );
   }
 
   initFormData() {
@@ -390,16 +439,26 @@ export class AddReservationComponent extends BaseReservationComponent
 
   getSummaryData(): void {
     this.cancelRequests$.next();
-    const configData = this.getFormData();
+    const configData = this.getFormSummaryData();
     let isAdultAndRoomCount = configData.bookingItems.every((item) => {
       return item.occupancyDetails.maxAdult && item.roomDetails.roomCount;
     });
 
-    if (isAdultAndRoomCount && (!this.reservationId || configData.guestId)) {
+    // Here check if the slot id is selected in case of day booking.
+    const isDayBookingWithSlotId =
+      (configData.sessionType === SessionType.DAY_BOOKING &&
+        configData.slotId) ||
+      configData.sessionType === SessionType.NIGHT_BOOKING;
+
+    if (
+      isAdultAndRoomCount &&
+      isDayBookingWithSlotId &&
+      (!this.reservationId || configData.guestId)
+    ) {
       this.loadSummary = true;
       this.$subscription.add(
         this.manageReservationService
-          .getSummaryData(this.entityId, this.getFormData(), {
+          .getSummaryData(this.entityId, configData, {
             params: `?type=${EntitySubType.ROOM_TYPE}`,
           })
           .pipe(
@@ -440,12 +499,16 @@ export class AddReservationComponent extends BaseReservationComponent
     }
   }
 
-  getFormData() {
+  getFormSummaryData() {
     // Summary data for booking summary
     const source = this.reservationInfoControls.source?.value;
     const data: ReservationSummary = {
       from: this.reservationInfoControls.from.value,
       to: this.reservationInfoControls.to.value,
+      slotId: this.reservationInfoControls.slotId?.value?.length
+        ? this.reservationInfoControls.slotId?.value
+        : undefined,
+      sessionType: this.reservationInfoControls.sessionType?.value,
       bookingItems: this.roomControls.map((item) => ({
         roomDetails: {
           ratePlan: {
@@ -462,11 +525,11 @@ export class AddReservationComponent extends BaseReservationComponent
       })),
       offerId: this.inputControls.offerId.value
         ? this.inputControls.offerId.value
-        : null,
+        : undefined,
       guestId: this.inputControls.guestInformation.get('guestDetails')?.value
         ? this.inputControls.guestInformation.get('guestDetails')?.value
-        : null,
-      source: source || null,
+        : undefined,
+      source: source || undefined,
       sourceName:
         (source &&
           source === 'OTA' &&
@@ -478,10 +541,60 @@ export class AddReservationComponent extends BaseReservationComponent
           source === 'COMPANY' &&
           this.reservationInfoControls.companySourceName?.value) ||
         this.reservationInfoControls?.sourceName?.value ||
-        null,
+        undefined,
     };
 
     return data;
+  }
+
+  listenForSlotChanges() {
+    //to update checkout time in reservation Summary
+    this.reservationInfoControls.slotId.valueChanges
+      .pipe(debounceTime(300))
+      .subscribe((res) => {
+        if (res) {
+          const selectedSlot = this.bookingSlotList?.find(
+            (item) => item?.value === res
+          );
+          const newCheckoutDate =
+            this.reservationInfoControls?.from?.value +
+            selectedSlot?.duration * 1000;
+
+          newCheckoutDate &&
+            this.reservationInfoControls?.to?.patchValue(newCheckoutDate);
+        }
+      });
+  }
+
+  listenForSessionTypeChanges() {
+    this.reservationInfoControls.sessionType.valueChanges.subscribe(
+      (sessionType) => {
+        if (sessionType === SessionType.DAY_BOOKING) {
+          this.handleDayBooking();
+          this.getSlotListByRoomTypeId();
+        } else {
+          this.handleNightBooking();
+        }
+      }
+    );
+  }
+
+  handleDayBooking() {
+    // this.reservationInfoControls.to.patchValue(null);
+    this.reservationInfoControls.slotId.setValidators(Validators.required);
+    this.reservationInfoControls.to.clearValidators();
+    this.reservationInfoControls.slotId.updateValueAndValidity();
+  }
+
+  handleNightBooking() {
+    this.reservationInfoControls.slotId.clearValidators();
+    this.reservationInfoControls.to.setValidators(Validators.required);
+    this.reservationInfoControls.slotId.updateValueAndValidity();
+    this.reservationInfoControls.slotId.patchValue(null);
+
+    const nextDay = new Date(this.reservationInfoControls.from.value);
+    nextDay.setDate(nextDay.getDate() + 1);
+    this.reservationInfoControls.to.patchValue(nextDay.getTime());
   }
 
   // Get total room, adult and child count for all room types
@@ -542,5 +655,12 @@ export class AddReservationComponent extends BaseReservationComponent
 
   get roomInfoControls() {
     return this.userForm.get('roomInformation') as FormGroup;
+  }
+
+  get isPrePatchedRoomType() {
+    return !this.reservationId;
+  }
+  get isDayBooingAvailable(): boolean {
+    return this.configService.$isDayBookingAvailable.value;
   }
 }

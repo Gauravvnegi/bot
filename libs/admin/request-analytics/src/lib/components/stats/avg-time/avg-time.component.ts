@@ -8,6 +8,8 @@ import {
   getCalendarType,
 } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { complaintEntityFilterOption } from '../../../constant/stats';
 
 @Component({
   selector: 'avg-time',
@@ -19,22 +21,37 @@ export class AvgTimeComponent implements OnInit {
   globalQueries;
   selectedInterval;
   selectedTabIndex: number = 0;
+
+  readonly options = options;
+  dataLoaded = false;
+  data;
+
+  labels: string[];
+  readonly complaintEntityFilterOption = complaintEntityFilterOption;
+  useForm: FormGroup;
+
   constructor(
     private analyticsService: AnalyticsService,
     private adminUtilityService: AdminUtilityService,
-    private globalFilterService: GlobalFilterService
-  ) {}
-
-  readonly options = options;
-
-  dataLoaded = false;
-  data;
+    private globalFilterService: GlobalFilterService,
+    private fb: FormBuilder
+  ) {
+    this.initForm();
+  }
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
   }
 
-  labels: string[];
+  initForm() {
+    this.useForm = this.fb.group({
+      statsFilter: ['ALL'],
+    });
+
+    this.useForm.get('statsFilter').valueChanges.subscribe((res) => {
+      this.initGraphData();
+    });
+  }
 
   initGraphData(): void {
     this.$subscription.add(
@@ -65,7 +82,10 @@ export class AvgTimeComponent implements OnInit {
           const data = Object.values(res.categoryStats) as any;
           datasets[1].data = data;
           const sum = data.reduce((acc, val) => acc + val);
-          datasets[0].data = new Array(data.length).fill(sum / data.length);
+
+          datasets[0].data = new Array(data.length).fill(
+            (sum / data.length).toFixed(2)
+          );
 
           this.data = datasets;
         })
@@ -77,7 +97,7 @@ export class AvgTimeComponent implements OnInit {
       params: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
-          entityType: 'FOCUSED',
+          entityType: this.useForm.get('statsFilter').value,
           type: 'serviceItemUser',
         },
       ]),
@@ -110,6 +130,10 @@ export class AvgTimeComponent implements OnInit {
       this.initGraphData();
     });
   }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }
 
 const options = {
@@ -140,7 +164,7 @@ const options = {
     callbacks: {
       label: function (context) {
         if (context.value !== null) {
-          return context.value + ' hrs';
+          return context.value + ' Mins';
         }
       },
     },
@@ -151,7 +175,9 @@ const options = {
         ticks: {
           beginAtZero: true,
           callback: function (value, index, ticks) {
-            return value + ' hrs';
+            if (Math.floor(value) === value) {
+              return value + ' Mins';
+            }
           },
         },
       },

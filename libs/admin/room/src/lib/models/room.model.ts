@@ -185,6 +185,7 @@ export class RoomTypeForm {
         doubleOccupancyPrice: input.pricingDetails.paxDoubleOccupancy,
         tripleOccupancyCurrency: input.pricingDetails.currency,
         tripleOccupancyPrice: input.pricingDetails.paxTripleOccupancy,
+        ratePlanType: defaultRatePlan[0].type,
       };
       this.dynamicRatePlans = {
         paxPriceCurrency: input.pricingDetails.currency,
@@ -205,6 +206,7 @@ export class RoomTypeForm {
         doubleOccupancyPrice: input.pricingDetails.paxDoubleOccupancy,
         tripleOccupancyCurrency: input.pricingDetails.currency,
         tripleOccupancyPrice: input.pricingDetails.paxTripleOccupancy,
+        ratePlanType: defaultRatePlan[0].type,
       };
     }
     this.ratePlans = input?.ratePlans
@@ -219,6 +221,7 @@ export class RoomTypeForm {
         status: item.status,
         sellingPrice: item?.sellingPrice,
         total: item?.total ?? 0,
+        ratePlanType: item.type,
       }));
     return this;
   }

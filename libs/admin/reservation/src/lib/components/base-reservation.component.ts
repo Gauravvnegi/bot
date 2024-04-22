@@ -95,6 +95,7 @@ export class BaseReservationComponent {
         this.formService.disableBtn = true;
         this.disableBtn = true;
       };
+      this.reservationInfoControls.sessionType.disable();
       const reservationType = this.reservationInfoControls.reservationType;
       switch (true) {
         case status === ReservationCurrentStatus.CHECKEDOUT ||

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
 import {
   GlobalFilterService,
@@ -10,6 +10,7 @@ import {
   AdminUtilityService,
   BaseDatatableComponent as BaseDatableComponent,
   BookingDetailService,
+  ConfigService,
   EntitySubType,
   ModuleNames,
   Option,
@@ -50,6 +51,7 @@ import { tableTypes } from 'libs/admin/dashboard/src/lib/constants/cols';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { getBookingIndicators } from 'libs/admin/reservation/src/lib/constants/reservation';
+import { SessionType, sessionTypeOptions } from '../../constants/form';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -84,6 +86,8 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   showCalendarView = false;
 
   roomReservationList: RoomReservationResponse[] = [];
+  readonly SessionType = SessionType;
+  readonly sessionTypeOptions = sessionTypeOptions;
 
   constructor(
     public fb: FormBuilder,
@@ -98,7 +102,8 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     private _clipboard: Clipboard,
     private subscriptionPlanService: SubscriptionPlanService,
     private bookingDetailService: BookingDetailService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private configService: ConfigService
   ) {
     super(fb);
   }
@@ -129,6 +134,10 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   checkReservationSubscription() {
     this.tableFG?.addControl('tableType', new FormControl(''));
+    this.tableFG.addControl(
+      'sessionType',
+      new FormControl(SessionType.NIGHT_BOOKING)
+    );
 
     if (this.subscriptionPlanService.show().isCalenderView) {
       this.setTableType(this.tableTypes[0].value);
@@ -465,6 +474,10 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     });
   }
 
+  get isDayBookingAvailable(): boolean {
+    return this.configService.$isDayBookingAvailable.value;
+  }
+
   /**
    * @function handleError to show the error
    * @param param network error
@@ -479,5 +492,13 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+  }
+
+  get sessionTypeControl() {
+    return this.tableFG.get('sessionType') as AbstractControl;
+  }
+
+  get isCalenderView() {
+    return this.tableFG?.get('tableType')?.value === 'calendar';
   }
 }

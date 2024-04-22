@@ -4,7 +4,7 @@
     [selected]="!expandAccordion"
   >
     <div class="form-block">
-      <ng-container [ngTemplateOutlet]="bookingInfo"></ng-container>
+      <ng-container [ngTemplateOutlet]="bookingInfo"> </ng-container>
     </div>
   </p-accordionTab>
 </ng-container>
@@ -16,12 +16,31 @@
 <ng-template #bookingInfo>
   <ng-container [formGroup]="parentFormGroup">
     <ng-container formGroupName="reservationInformation">
+      <div class="full-width">
+        <hospitality-bot-toggle-switch-with-label
+          *ngIf="isDayBooingAvailable"
+          [isToggleOn]="
+            reservationInfoControls?.sessionType?.value ===
+            SessionType.DAY_BOOKING
+          "
+          (onToggleSwitch)="handelToggleSwitch($event)"
+          class="switcher"
+          [config]="{
+            toggleOnLabel: 'Day',
+            toggleOffLabel: 'Night',
+            toggleOffColor: '#65b340'
+          }"
+          [isDisabled]="reservationInfoControls?.sessionType?.disabled"
+        ></hospitality-bot-toggle-switch-with-label>
+      </div>
       <hospitality-bot-date
         [ngClass]="isQuickReservation ? 'custom-width' : 'half-width'"
         controlName="from"
         label="Check-In Date"
         [settings]="{
-          enableTime: false
+          enableTime:
+            reservationInfoControls?.sessionType?.value ===
+            SessionType.DAY_BOOKING
         }"
         [props]="{
           placeholder: 'DD/MM/YY'
@@ -30,7 +49,9 @@
         [maxDate]="maxDate"
         [disabled]="disabledForm || isCheckedIn"
       ></hospitality-bot-date>
+
       <hospitality-bot-date
+        *ngIf="!isDayBooking"
         [ngClass]="isQuickReservation ? 'custom-width' : 'half-width'"
         controlName="to"
         label="Check-Out Date"
@@ -44,6 +65,20 @@
         [maxDate]="maxDate"
         [disabled]="disabledForm || isCheckedOut"
       ></hospitality-bot-date>
+
+      <hospitality-bot-select
+        *ngIf="isDayBooking"
+        [ngClass]="isQuickReservation ? 'custom-width' : 'half-width'"
+        label="Hours"
+        controlName="slotId"
+        [options]="bookingSlotList"
+        [props]="{ placeholder: 'Select Slot' }"
+        [settings]="{
+          optionAlignment: 'horizontal'
+        }"
+      >
+      </hospitality-bot-select>
+
       <hospitality-bot-select
         *ngIf="reservationTypes.length"
         [ngClass]="isQuickReservation ? 'custom-width' : 'half-width'"
@@ -202,7 +237,9 @@
         [options]="configData?.marketSegment"
         [props]="{ placeholder: 'Select' }"
       ></hospitality-bot-select>
-      <ng-content></ng-content>
+      <ng-container>
+        <ng-content></ng-content>
+      </ng-container>
     </ng-container>
   </ng-container>
 </ng-template>

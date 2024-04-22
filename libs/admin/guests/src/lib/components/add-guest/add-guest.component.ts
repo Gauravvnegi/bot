@@ -103,7 +103,7 @@ export class AddGuestComponent implements OnInit {
       gender: [''],
       dateOfBirth: [''],
       age: [{ value: '', disabled: true }],
-      address: ['', [Validators.required]],
+      address: [''],
       type: [this.guestType],
     });
   }
@@ -163,7 +163,7 @@ export class AddGuestComponent implements OnInit {
     if (this.guestForm.invalid) {
       this.guestForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
-        'Invalid form: Please fix errors'
+        'Please check data and try again !'
       );
       return;
     }

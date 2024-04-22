@@ -48,17 +48,22 @@
         <div class="additional-stats-container">
           <div class="stats-wrapper">
             <span class="stats">{{ data.averageResolvedJobs }}</span>
-            <div class="text">Tickets</div>
+            <div class="text">Total Tickets</div>
           </div>
           <div class="stats-wrapper">
             <div class="stats">{{ data.averageTimePerJob }}</div>
-            <div class="text">Mins</div>
+            <div class="text">Minutes Avg. Time</div>
           </div>
         </div>
       </ng-container>
     </hospitality-bot-stats-card>
 
-    <hospitality-bot-stats-card [stats]="agentStats" class="stat-card">
+    <hospitality-bot-stats-card
+      [stats]="agentStats"
+      click-allow
+      (click)="openTableModal()"
+      class="stat-card"
+    >
       <ng-container>
         <div class="additional-stats-container">
           <div class="stats-wrapper">

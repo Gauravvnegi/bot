@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl } from '@angular/forms';
 import {
   GlobalFilterService,
   RoutesConfigService,
@@ -14,6 +14,7 @@ import {
   AdminUtilityService,
   BaseDatatableComponent,
   BookingDetailService,
+  ConfigService,
   FeedbackService,
   ModuleNames,
   sharedConfig,
@@ -27,6 +28,10 @@ import { TableValue } from '../../../constants/tabFilterItem';
 import { ReservationService } from '../../../services/reservation.service';
 import { reservationStatus } from '../../../constants/response';
 import { NavigationEnd, Router } from '@angular/router';
+import {
+  SessionType,
+  sessionTypeOptions,
+} from 'libs/admin/manage-reservation/src/lib/constants/form';
 
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
@@ -39,6 +44,7 @@ import { NavigationEnd, Router } from '@angular/router';
 export class ReservationDatatableComponent extends BaseDatatableComponent
   implements OnInit {
   readonly reservationStatus = reservationStatus;
+  readonly sessionTypeOptions = sessionTypeOptions;
   @Input() tableName = 'Reservations';
   actionButtons = true;
   isResizableColumns = true;
@@ -58,7 +64,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   isPopUploading: boolean = false;
   showCalendarView: boolean = false;
   selectedTableType: string;
-
+  readonly sessionType = SessionType;
   constructor(
     public fb: FormBuilder,
     protected _reservationService: ReservationService,
@@ -69,7 +75,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     protected bookingDetailService: BookingDetailService,
     protected subscriptionPlanService: SubscriptionPlanService,
     protected routesConfigService: RoutesConfigService,
-    protected router: Router
+    protected router: Router,
+    private configService: ConfigService
   ) {
     super(fb);
   }
@@ -108,6 +115,10 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   checkReservationSubscription() {
     this.tableFG?.addControl('tableType', new FormControl('calendar'));
+    this.tableFG.addControl(
+      'sessionType',
+      new FormControl(SessionType.NIGHT_BOOKING)
+    );
     if (this.isCalendarViewAvailable) {
       this.tableFG.patchValue({ tableType: 'table' });
       this.selectedTableType = 'table';
@@ -398,5 +409,13 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   get dashboardConfig() {
     return dashboard;
+  }
+
+  get sessionTypeControl() {
+    return this.tableFG.get('sessionType') as AbstractControl;
+  }
+
+  get isDayBooingAvailable(): boolean {
+    return this.configService.$isDayBookingAvailable.value;
   }
 }

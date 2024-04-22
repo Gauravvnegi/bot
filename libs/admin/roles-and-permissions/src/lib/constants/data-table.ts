@@ -14,14 +14,14 @@ export const cols: Cols[] = [
     field: 'email',
     header: 'Mobile / Email',
     sortType: 'string',
-    searchField: ['getContactDetails', 'email'],
+    searchField: ['phoneNumber', 'email'],
   },
 
   {
     field: 'jobTitle',
     header: 'Job title',
     sortType: 'string',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   {
     field: 'availableStatus.label',

@@ -17,6 +17,20 @@ export class CampaignService extends ApiService {
 
   templateData = new BehaviorSubject<TemplateType>(null);
 
+  selectedRecipient = new BehaviorSubject<string[]>([]);
+
+  updateSelectedRecipients(recipients: string[]) {
+    this.selectedRecipient.next(recipients);
+  }
+
+  removeRecipient(id: string) {
+    const selectedIds = this.selectedRecipient.value;
+    const updatedSelectedIds = selectedIds.filter(
+      (selectedId) => selectedId !== id
+    );
+    this.selectedRecipient.next(updatedSelectedIds);
+  }
+
   mapTopicList(entityId: string) {
     return this.getTopicList(entityId, {
       queryObj: '?entityState=ACTIVE',

@@ -97,9 +97,9 @@ export class RoomIteratorComponent extends IteratorComponent
 
   @Input() set sessionType(value: SessionType) {
     if (value === 'DAY_BOOKING') {
-      this.roomControls.forEach((control, index) => {
-        index !== 0 && this.roomTypeArray.removeAt(index);
-      });
+      while (this.roomTypeArray.length > 1) {
+        this.roomTypeArray.removeAt(1); // Remove all items except the first one
+      }
       this.fields[3].name = 'roomNumber';
       this.fields[3].type = 'select';
       this.fields[2].disabled = true;

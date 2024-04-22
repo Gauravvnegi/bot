@@ -164,6 +164,7 @@
             [options]="ratePlans"
           ></hospitality-bot-select>
           <hospitality-bot-multi-select
+            *ngIf="!isDayBooking"
             class="half-width"
             controlName="roomNumbers"
             label="Room Number"
@@ -174,7 +175,7 @@
           ></hospitality-bot-multi-select>
         </ng-container>
         <hospitality-bot-select
-          *ngIf="reservationId"
+          *ngIf="reservationId || isDayBooking"
           class="half-width"
           controlName="roomNumber"
           label="Room Number"

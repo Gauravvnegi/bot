@@ -370,6 +370,7 @@ export class ChatComponent
     this.dialogRef = openModal({
       config: {
         data: data,
+        styleClass: 'confirm-dialog',
       },
       component: ModalComponent,
       dialogService: this.dialogService,

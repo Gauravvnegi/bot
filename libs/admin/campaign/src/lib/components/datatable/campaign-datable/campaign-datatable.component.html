@@ -152,7 +152,11 @@
           <hospitality-bot-status-dropdown-toggle
             class="toggle-btn"
             (onClick)="updateCampaignStatus($event, rowData)"
-            [menuOptions]="menuOptions"
+            [menuOptions]="
+              rowData?.archieved
+                ? [{ label: 'Clone', value: 'CLONE' }]
+                : menuOptions
+            "
             (onMenuItemClick)="handleMenuClick($event, rowData)"
             [state]="rowData.status"
           >

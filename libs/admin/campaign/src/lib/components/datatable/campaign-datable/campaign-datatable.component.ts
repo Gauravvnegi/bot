@@ -1,6 +1,5 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
   GlobalFilterService,
   RoutesConfigService,
@@ -11,7 +10,6 @@ import {
   BaseDatatableComponent,
   NavRouteOption,
   PermissionModuleNames,
-  eMarketTabFilterOptions,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -25,7 +23,6 @@ import { CampaignService } from '../../../services/campaign.service';
 import { CampaignType, MessageObj } from '../../../types/campaign.type';
 import { campaignStatus } from '../../../constants/response';
 import { MenuOptions } from '../../../constants/camapign';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'hospitality-bot-campaign-datatable',

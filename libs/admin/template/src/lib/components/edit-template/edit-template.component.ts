@@ -19,7 +19,6 @@ import {
 } from 'libs/admin/shared/src';
 import { templateRoutes } from '../../constants/routes';
 import { Location } from '@angular/common';
-import { Data } from 'libs/admin/feedback/src/lib/data-models/statistics.model';
 
 @Component({
   selector: 'hospitality-bot-edit-template',

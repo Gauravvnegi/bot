@@ -5,6 +5,12 @@
   box-shadow: none;
 }
 
+:host ::ng-deep .empty-table {
+  .wrapper {
+    border: none;
+  }
+}
+
 .container {
   @include flex-col;
   height: fit-content;
@@ -192,4 +198,3 @@
   height: 65vh;
   @include flex-justify-align-center;
 }
-

@@ -8,42 +8,42 @@ export const serviceItemWiseComplaintReportCols: ColsData<ServiceItemWiseComplai
   name: {
     header: 'Name',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   category: {
     header: 'Category',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   sla: {
     header: 'SLA',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   totalComplaints: {
     header: 'Total Complaints',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   unResolvedComplaints: {
     header: 'Unresolved Complaints',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   resolvedComplaints: {
     header: 'Resolved Complaints',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   cancelledComplaints: {
     header: 'Cancelled Complaints',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   escalatedComplaints: {
     header: 'Escalated Complaints',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -51,36 +51,36 @@ export const categoryWiseComplaintReportCols: ColsData<CategoryWiseComplaintRepo
   category: {
     header: 'Category Name',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   totalServiceItems: {
     header: 'Total Service Items',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   totalComplaints: {
     header: 'Total Complaints',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   unResolvedComplaints: {
     header: 'Unresolved Complaints',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   resolvedComplaints: {
     header: 'Resolved Complaints',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   cancelledComplaints: {
     header: 'Cancelled Complaints',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   escalatedComplaints: {
     header: 'Escalated Complaints',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };

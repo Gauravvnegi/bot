@@ -14,58 +14,62 @@ export const financialReportCols: ColsData<FinancialReportData> = {
   bookingNo: {
     header: 'Res#',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   folioNo: {
     header: 'Folio#',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   nights: {
     header: 'Nights',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   lodging: {
     header: 'Lodging',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   lodgingTax: {
     header: 'Lodging Tax',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   discount: {
     header: 'Discount',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   otherCharges: {
     header: 'Other Charges',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   otherChargesTax: {
     header: 'Other Charges Tax',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   otherChargesDiscount: {
     header: 'Other Charges Discount',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   postTaxTotal: {
     header: 'Post Tax Total',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   paid: {
     header: 'Paid',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   balance: {
     header: 'Balance',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -76,6 +80,7 @@ export const advanceDepositPaymentCols: ColsData<Omit<
   bookingNo: {
     header: 'Res#',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   // groupreservationId: {
   //   header: 'Group Id',
@@ -84,18 +89,22 @@ export const advanceDepositPaymentCols: ColsData<Omit<
   checkIn: {
     header: 'Check In',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   checkOut: {
     header: 'Check Out',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   advancedDepositDate: {
     header: 'Advanced Deposit Date',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   paymentMode: {
     header: 'Payment Mode',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   // paymentType: {
   //   header: 'Payment Type',
@@ -104,6 +113,7 @@ export const advanceDepositPaymentCols: ColsData<Omit<
   advancedDepositAmount: {
     header: 'Advanced Deposit Amount',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -111,26 +121,32 @@ export const revParReportCols: ColsData<RevParRoomReportData> = {
   totalRoomInventory: {
     header: 'Total Room Inventory',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   revParIncludeInclusion: {
     header: 'RevPAR (Incl. Inclusions)',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   revParExcludeInclusion: {
     header: 'RevPAR (Excl. Inclusions)',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   totalRoomRent: {
     header: 'Total Room Rent',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   totalRoomInclusions: {
     header: 'Total Room Inclusions',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   totalTaxes: {
     header: 'Total Taxes',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   // totalOtherCharges: {
   //   header: 'Total Other Charges',
@@ -143,6 +159,7 @@ export const revParReportCols: ColsData<RevParRoomReportData> = {
   grossTotal: {
     header: 'Gross Total',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -150,38 +167,47 @@ export const closeOutBalanceCols: ColsData<CloseOutBalanceData> = {
   bookingNo: {
     header: 'Res#',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   folioNo: {
     header: 'Folio#',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   checkOut: {
     header: 'Check Out',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   guestName: {
     header: 'Guest Name',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   lodgingAndTax: {
     header: 'Lodging & Tax',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   otherChargesAndTax: {
     header: 'Other Charges & Tax',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   amount: {
     header: 'Amount',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   collected: {
     header: 'Collected',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   openBalance: {
     header: 'Open Balance',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -189,62 +215,77 @@ export const depositReportCols: ColsData<DepositReportData> = {
   bookingNo: {
     header: 'Res#',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   guestName: {
     header: 'Guest Name',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   checkIn: {
     header: 'Check In',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   checkOut: {
     header: 'Check Out',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   nights: {
     header: 'Nights',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   lodging: {
     header: 'Lodging',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   otherCharges: {
     header: 'Other Charges',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   taxes: {
     header: 'Taxes',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   btc: {
     header: 'BTC',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   cash: {
     header: 'Cash',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   bankTransfer: {
     header: 'Bank Transfer',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   payAtDesk: {
     header: 'Pay At Desk',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   onlinePaymentGateway: {
     header: 'Online Payment Gateway',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   totalPaid: {
     header: 'Total Paid',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   lastDepositDate: {
     header: 'Last Deposit Date',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -252,30 +293,37 @@ export const postingAuditReportCols: ColsData<PostingAuditReportData> = {
   room: {
     header: 'Room',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   name: {
     header: 'Name',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   user: {
     header: 'User',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   trxAmount: {
     header: 'Trx Amount',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   baseAmount: {
     header: 'Base Amount',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   cgst: {
     header: 'CGST',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   sgst: {
     header: 'SGST',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -285,34 +333,42 @@ export const monthlySummaryReportCols: Partial<ColsData<
   day: {
     header: 'Day',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   roomCount: {
     header: 'Room Count',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   occupancy: {
     header: 'OCCUPANCY (%)',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   avgDailyRateIncludeInclusion: {
     header: 'ADR (Incl. Inclusions)',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   avgDailyRateExcludeInclusion: {
     header: 'ADR (Excl. Inclusions)',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   roomRent: {
     header: 'Room Rent',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   roomInclusions: {
     header: 'Room Inclusions',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   totalTaxes: {
     header: 'Total Taxes',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   // directSales: {
   //   header: 'Direct Sales',         //to be added in future
@@ -325,6 +381,7 @@ export const monthlySummaryReportCols: Partial<ColsData<
   grossTotal: {
     header: 'Gross Total',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -333,7 +390,7 @@ export const dailyRevenueReportCols: Partial<ColsData<
 >> = {
   emptyCell: {
     header: '',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   // gross: {
@@ -349,17 +406,17 @@ export const dailyRevenueReportCols: Partial<ColsData<
   today: {
     header: 'TODAY',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   month: {
     header: 'MONTH',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   year: {
     header: 'YEAR',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };
 

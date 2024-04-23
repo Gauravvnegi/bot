@@ -5,73 +5,76 @@ export const folioListReportHeaderCols: ColsData<FolioListReportData> = {
   bookingNo: {
     header: 'Res#',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   folioNo: {
     header: 'Folio#',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   guestName: {
     header: 'Guest Name',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   discount: {
     header: 'Discount',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   amount: {
     header: 'Amount',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   tax: {
     header: 'Tax',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   btc: {
     header: 'BTC',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   cash: {
     header: 'Cash',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   bankTransfer: {
     header: 'Bank Transfer',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   payAtDesk: {
     header: 'Pay at Desk',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   onlinePaymentGateway: {
     header: 'Online Payment Gateway',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   other: {
     header: 'Other',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   paid: {
     header: 'Paid',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   balance: {
     header: 'Balance',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   date: {
     header: 'Date',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
 };

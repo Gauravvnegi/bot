@@ -5,38 +5,42 @@ export const marketSourceReportCols: ColsData<MarketSourceReportData> = {
   company: {
     header: 'Company',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   nights: {
     header: 'Nights',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   occupancy: {
     header: 'Occupancy',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   pax: {
     header: 'Pax',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   roomRevenue: {
     header: 'Room Revenue',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   revenue: {
     header: 'Revenue',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   arrOrAgr: {
     header: 'ARR/AGR',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   arp: {
     header: 'ARP',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };
 

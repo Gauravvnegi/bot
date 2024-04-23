@@ -37,8 +37,8 @@
 
     <ng-container *ngIf="htmlTemplate?.value; else createContent">
       <div class="full-width">
-        <div>
-          {{ 'contentForm.editContent' | translate }}
+        <div *ngIf="template?.channel === 'WHATSAPP'; else editContent">
+          {{ 'contentForm.viewContent' | translate }}
         </div>
         <div class="manually-add">
           <div class="manually-add-templates">
@@ -52,23 +52,35 @@
                   [alt]="templateConfiguration.images.view.alt"
                 />
               </div>
-              <!-- <div mat-raised-button (click)="moveToEditor(false)">
+              <div
+                *ngIf="template?.channel === 'EMAIL'"
+                mat-raised-button
+                (click)="moveToEditor(false)"
+              >
                 <img
                   [src]="templateConfiguration.images.edit.url"
                   [alt]="templateConfiguration.images.edit.alt"
                 />
               </div>
-              <div (click)="deleteTemplate()">
+              <div
+                *ngIf="template?.channel === 'EMAIL'"
+                (click)="deleteTemplate()"
+              >
                 <img
                   [src]="templateConfiguration.images.delete.url"
                   [alt]="templateConfiguration.images.delete.alt"
                 />
-              </div> -->
+              </div>
             </div>
           </div>
         </div>
       </div>
     </ng-container>
+    <ng-template #editContent>
+      <div>
+        {{ 'contentForm.editContent' | translate }}
+      </div>
+    </ng-template>
     <ng-template #createContent>
       <div class="full-width">
         <div>

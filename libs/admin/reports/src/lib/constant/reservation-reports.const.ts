@@ -22,26 +22,32 @@ const reservationReportCols: ColsData<Omit<
   bookingNo: {
     header: 'Res/Group',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   guestName: {
     header: 'Guest Name',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   otherCharges: {
     header: 'Other Charges',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   amountPaid: {
     header: 'Amount Paid',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   balance: {
     header: 'Balance',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   bookingAmount: {
     header: 'Booking Amount',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -53,24 +59,28 @@ export const noShowReportCols: ColsData<Omit<
   dateOfArrival: {
     header: 'Date of Arrival',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   noShowOn: {
     header: 'No-Show On',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   guestName: {
     header: 'Guest Name',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   bookingAmount: reservationReportCols.bookingAmount,
   noShowCharge: {
     header: 'No Show Charge',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   noShowReason: {
     header: 'No Show Reason',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   otherCharge: reservationReportCols.otherCharges,
   amountPaid: reservationReportCols.amountPaid,
@@ -86,31 +96,38 @@ export const cancellationReportCols: ColsData<Omit<
   roomType: {
     header: 'Room/Type',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   checkIn: {
     header: 'Check In',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   checkOut: {
     header: 'Check Out',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   night: {
     header: 'Nights',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   cancelledOn: {
     header: 'Cancelled On',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   bookingAmount: reservationReportCols.bookingAmount,
   cancellationCharge: {
     header: 'Cancellation Charge',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   cancellationReason: {
     header: 'Cancellation Reason',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   otherCharge: reservationReportCols.otherCharges,
   amountPaid: reservationReportCols.amountPaid,
@@ -126,27 +143,33 @@ export const arrivalReportCols: ColsData<Omit<
   roomType: {
     header: 'Room/Type',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   checkIn: {
     header: 'Check In',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   checkOut: {
     header: 'Check Out',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   bookingAmount: { ...reservationReportCols.bookingAmount },
   status: {
     header: 'Status',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   remark: {
     header: 'Remarks',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   arrivalTime: {
     header: 'Arrival Time',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
 };
 const { arrivalTime, ...rest } = arrivalReportCols;
@@ -159,6 +182,7 @@ export const departureReportCols: ColsData<Omit<
   departureTime: {
     header: 'Departure Time',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -171,22 +195,27 @@ export const draftReservationReportCols: ColsData<Omit<
   roomType: {
     header: 'Room/Type',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   checkIn: {
     header: 'Check In',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   checkOut: {
     header: 'Check Out',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   nights: {
     header: 'Nights',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   tempReservedNumber: {
     header: 'Temp Reserved No.',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   bookingAmount: reservationReportCols.bookingAmount,
   paidAmount: reservationReportCols.amountPaid,
@@ -194,6 +223,7 @@ export const draftReservationReportCols: ColsData<Omit<
   status: {
     header: 'Status',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -204,6 +234,7 @@ export const employeeWiseReservationReportCols: ColsData<Omit<
   userName: {
     header: 'User Name',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   bookingNo: reservationReportCols.bookingNo,
   guestName: reservationReportCols.guestName,
@@ -212,26 +243,27 @@ export const employeeWiseReservationReportCols: ColsData<Omit<
   nights: {
     header: 'Nights',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   roomCharge: {
     header: 'Room Charge',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   tax: {
     header: 'Tax',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   otherCharges: {
     header: 'Other Charges',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   totalCharge: {
     header: 'Total Charge',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   amountPaid: reservationReportCols.amountPaid,
 };
@@ -245,31 +277,38 @@ export const reservationAdrReportCols: ColsData<Omit<
   roomType: {
     header: 'Room Type',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
+
   roomNo: {
     header: 'Room No.',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   checkIn: {
     header: 'Check In',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   checkOut: {
     header: 'Check Out',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   nights: {
     header: 'Nights',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   roomRent: {
     header: 'Room Rent',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   adr: {
     header: 'ADR',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -284,21 +323,22 @@ export const incomeSummaryReportCols: ColsData<Omit<
   nights: {
     header: 'Nights',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   lodgingAndOtherCharges: {
     header: 'Lodging & Other Charges',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   taxTotal: {
     header: 'Post Tax Total',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   paidAmount: {
     header: 'Total Paid',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -309,48 +349,57 @@ export const reservationSummaryReportCols: ColsData<Omit<
   businessSource: {
     header: 'Business Source',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   marketSegment: {
     header: 'Market Segment',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   phoneNumber: {
     header: 'Phone',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   email: {
     header: 'Email',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   roomType: {
     header: 'Room Type',
+    isSearchDisabled: false,
     isSortDisabled: true,
   },
   room: {
     header: 'Room',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   createdOn: {
     header: 'Created On',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   checkIn: {
     header: 'Check In',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   checkOut: {
     header: 'Check Out',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   lodging: {
     header: 'Lodging',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   lodgingTax: {
     header: 'Lodging Tax',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   otherCharges: {
     header: 'Other Charges',
@@ -359,22 +408,22 @@ export const reservationSummaryReportCols: ColsData<Omit<
   otherChargesTax: {
     header: 'Other Charges Tax',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   avgRoomRate: {
     header: 'Avg Room Rate',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   paidAndRevenueLoss: {
     header: 'Paid & Revenue Loss',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   balance: {
     header: 'Balance',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -385,38 +434,47 @@ export const housekeepingReportCols: ColsData<Omit<
   roomNo: {
     header: 'Room No.',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   roomType: {
     header: 'Room Type',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   bookingNo: {
     header: 'Res#',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   guestName: {
     header: 'Guest Name',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   checkIn: {
     header: 'Check In',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   checkOut: {
     header: 'Check Out',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   nights: {
     header: 'Nights',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   roomNotes: {
     header: 'Room Notes',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   status: {
     header: 'Status',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -428,31 +486,36 @@ export const expressCheckInReportCols: ColsData<Omit<
   bookingNo: {
     header: 'Res#',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   guestName: {
     header: 'Guest Name',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   roomType: {
     header: 'Room/Type',
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   checkIn: {
     header: 'Check In',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   checkOut: {
     header: 'Check Out',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   bookingAmount: {
     header: 'Booking Amount',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   status: {
     header: 'Status',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
 };
 
@@ -460,30 +523,36 @@ export const addOnRequestReportCols: ColsData<AddOnRequestReportData> = {
   packageName: {
     header: 'Package Name',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   packageCode: {
     header: 'Package Code',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   source: {
     header: 'Source',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   amount: {
     header: 'Amount',
     isSortDisabled: true,
-    isSearchDisabled: true,
+    isSearchDisabled: false,
   },
   category: {
     header: 'Category',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   active: {
     header: 'Active',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
   bookingNo: {
     header: 'Res#',
     isSortDisabled: true,
+    isSearchDisabled: false,
   },
 };

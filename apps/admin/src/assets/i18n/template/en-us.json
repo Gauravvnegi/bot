@@ -61,7 +61,8 @@
 
   "contentForm": {
     "editContent": "Edit Content",
-    "createContent": "Create Content"
+    "createContent": "Create Content",
+    "viewContent": "View Content"
   },
 
   "selectAsset": "Select Asset",

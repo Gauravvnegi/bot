@@ -136,7 +136,7 @@
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
-    link="create"
+    (click)="openCreateTemplate()"
     [content]="{
       description:
         'No templates found. Tap the +Create Template to  get started by creating your own templates',

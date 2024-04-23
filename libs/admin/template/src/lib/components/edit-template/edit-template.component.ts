@@ -19,7 +19,6 @@ import {
 } from 'libs/admin/shared/src';
 import { templateRoutes } from '../../constants/routes';
 import { Location } from '@angular/common';
-import { Data } from 'libs/admin/feedback/src/lib/data-models/statistics.model';
 
 @Component({
   selector: 'hospitality-bot-edit-template',
@@ -223,7 +222,9 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
             }
             if (event.data.preview) this.isDisabled = true;
           },
-          ({ error }) => {},
+          ({ error }) => {
+            this.isSaving = false;
+          },
           () => (this.isSaving = false)
         )
       );
@@ -292,7 +293,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
    * @function moveToEditor function to move to editor.
    * @param disabled content not editable.
    */
-  moveToEditor(disabled) {
+  moveToEditor(disabled: boolean) {
     this.templateService?.templateFormData.next(
       this.templateForm?.getRawValue()
     );

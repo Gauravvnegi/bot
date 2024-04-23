@@ -31,6 +31,10 @@ export class CampaignService extends ApiService {
     this.selectedRecipient.next(updatedSelectedIds);
   }
 
+  resetFormValues() {
+    this.selectedRecipient = new BehaviorSubject<string[]>([]);
+  }
+
   mapTopicList(entityId: string) {
     return this.getTopicList(entityId, {
       queryObj: '?entityState=ACTIVE',

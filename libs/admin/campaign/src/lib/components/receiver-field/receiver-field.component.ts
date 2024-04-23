@@ -30,6 +30,11 @@ export class ReceiverFieldComponent
   implements OnInit, AfterViewInit, OnDestroy {
   parentFG: FormGroup;
   @Input() controlName: string;
+  @Input() set selectedRecipients(value: Option[]) {
+    if (value?.length) {
+      this.recipients = [...this.recipients, ...value];
+    }
+  }
   chipList = [];
   recipients: Option[] = [];
   entityId: string;
@@ -150,22 +155,33 @@ export class ReceiverFieldComponent
         );
       }
     }
-
     this.inputControls.recipients.patchValue(this.recipients);
     this._campaignService.updateSelectedRecipients(selectedRecipientIds);
 
-    this.inputControls.to.patchValue([...new Set(recipientLabels)]);
+    this.inputControls.to.patchValue([...new Set(this.recipients)]);
   }
 
-  onRemoveChip(value: string) {
-    const removedRecipient = this.recipients.find(
-      (recipient) => recipient.label === value
-    );
-    const removedRecipientId = removedRecipient ? removedRecipient.value : null;
+  onRemoveChip(chip: string | Option) {
+    let removedRecipient;
+    let removedRecipientId: string;
 
-    this.recipients = this.recipients.filter(
-      (recipient) => recipient.label !== value
-    );
+    if (typeof chip === 'string') {
+      removedRecipient = this.recipients.find(
+        (recipient) => recipient.label === chip
+      );
+      removedRecipientId = removedRecipient ? removedRecipient.value : null;
+      this.recipients = this.recipients.filter(
+        (recipient) => recipient.label !== chip
+      );
+    } else {
+      removedRecipient = this.recipients.find(
+        (recipient) => recipient.value === chip.value
+      );
+      removedRecipientId = removedRecipient ? removedRecipient.value : null;
+      this.recipients = this.recipients.filter(
+        (recipient) => recipient.value !== chip.value
+      );
+    }
 
     this.inputControls.recipients.patchValue(this.recipients);
 

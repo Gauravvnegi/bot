@@ -315,5 +315,6 @@ export class CampaignFormViewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();
+    this.campaignService.resetFormValues();
   }
 }

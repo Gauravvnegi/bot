@@ -39,7 +39,7 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
   pageTitle: string;
   navRoutes: NavRouteOptions = [];
 
-  templateTopicList: TopicTemplatesData[];
+  templateTopicList: TopicTemplatesData[] = [];
 
   campaignForm: CampaignForm;
 

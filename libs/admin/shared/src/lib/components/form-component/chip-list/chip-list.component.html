@@ -27,7 +27,7 @@
   >
     <ng-template let-item pTemplate="item">
       <div>
-        {{ item }}
+        {{ item?.label ? item.label : item }}
       </div>
     </ng-template>
   </p-chips>

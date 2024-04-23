@@ -41,6 +41,9 @@
     <div class="reciever-wrapper full-width">
       <hospitality-bot-to-receiver-field
         controlName="to"
+        [selectedRecipients]="
+          campaignData?.recipients ? campaignData.recipients : []
+        "
         [recieverProps]="{
           entityId: entityId,
           chipList: inputControls?.to?.value,

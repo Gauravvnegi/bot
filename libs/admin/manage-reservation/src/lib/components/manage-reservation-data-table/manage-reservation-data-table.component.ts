@@ -136,7 +136,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.tableFG?.addControl('tableType', new FormControl(''));
     this.tableFG.addControl(
       'sessionType',
-      new FormControl(SessionType.NIGHT_BOOKING)
+      new FormControl(SessionType.DAY_BOOKING)
     );
 
     if (this.subscriptionPlanService.show().isCalenderView) {

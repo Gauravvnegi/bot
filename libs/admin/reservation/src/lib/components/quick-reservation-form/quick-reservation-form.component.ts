@@ -18,6 +18,7 @@ import {
 import {
   AdminUtilityService,
   BookingDetailService,
+  ConfigService,
   EntitySubType,
   ModuleNames,
   Option,
@@ -135,6 +136,7 @@ export class QuickReservationFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private snackbarService: SnackBarService,
+    private configService: ConfigService,
     private globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected formService: FormService,
@@ -204,7 +206,12 @@ export class QuickReservationFormComponent implements OnInit {
         agentSourceName: [''],
         otaSourceName: [''],
         companySourceName: [''],
-        sessionType: [SessionType.NIGHT_BOOKING, Validators.required],
+        sessionType: [
+          this.isDayBookingAvailable
+            ? SessionType.DAY_BOOKING
+            : SessionType.NIGHT_BOOKING,
+          Validators.required,
+        ],
         slotId: [''],
       }),
 
@@ -779,6 +786,10 @@ export class QuickReservationFormComponent implements OnInit {
 
   get isDayBooking() {
     return this.sessionTypeControl?.value === SessionType.DAY_BOOKING;
+  }
+
+  get isDayBookingAvailable(): boolean {
+    return this.configService.$isDayBookingAvailable.value;
   }
 }
 

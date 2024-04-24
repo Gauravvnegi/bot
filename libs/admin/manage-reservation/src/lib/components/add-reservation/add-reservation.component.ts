@@ -206,7 +206,12 @@ export class AddReservationComponent extends BaseReservationComponent
         agentSourceName: [''],
         companySourceName: [''],
         marketSegment: ['', Validators.required],
-        sessionType: [SessionType.NIGHT_BOOKING, Validators.required],
+        sessionType: [
+          this.isDayBookingAvailable
+            ? SessionType.DAY_BOOKING
+            : SessionType.NIGHT_BOOKING,
+          Validators.required,
+        ],
         slotId: [''],
       }),
       offerId: [''],
@@ -660,7 +665,7 @@ export class AddReservationComponent extends BaseReservationComponent
   get isPrePatchedRoomType() {
     return !this.reservationId;
   }
-  get isDayBooingAvailable(): boolean {
+  get isDayBookingAvailable(): boolean {
     return this.configService.$isDayBookingAvailable.value;
   }
 }

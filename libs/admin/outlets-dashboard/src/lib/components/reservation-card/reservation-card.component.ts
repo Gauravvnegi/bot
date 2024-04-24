@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { OutletReservation } from '../../models/outlet-reservation.model';
 import {
   OrderPaymentConfig,
-  ReservationStatusColorConfig,
   TableStatusConfig,
 } from '../../constants/data-table';
 import { Option } from '@hospitality-bot/admin/shared';
@@ -15,7 +14,6 @@ import { Option } from '@hospitality-bot/admin/shared';
 export class ReservationCardComponent implements OnInit {
   @Input() data: OutletReservation;
   readonly orderPaymentConfig = OrderPaymentConfig;
-  readonly statusColorConfig = ReservationStatusColorConfig;
   readonly tableStatusConfig = TableStatusConfig;
   constructor() {}
 

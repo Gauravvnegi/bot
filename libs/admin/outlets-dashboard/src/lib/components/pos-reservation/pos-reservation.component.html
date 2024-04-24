@@ -209,8 +209,9 @@
       [disabled]="isDisabledForm"
     ></hospitality-bot-button>
     <hospitality-bot-button
+      *ngIf="isDraftOrder || !orderId"
       label="Hold"
-      (onClick)="handleSave()"
+      (onClick)="holdKot()"
       minWidth="120px"
       height="40px"
       [disabled]="isDisabledForm"
@@ -224,7 +225,7 @@
     ></hospitality-bot-button>
     <hospitality-bot-button
       label="KOT & Print"
-      (onClick)="handleKOT()"
+      (onClick)="handleSaveKot()"
       minWidth="120px"
       height="40px"
       [disabled]="isDisabledForm"

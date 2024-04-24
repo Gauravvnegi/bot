@@ -107,15 +107,6 @@ export const TableStatusConfig: Record<
   },
 };
 
-export const ReservationStatusColorConfig: Record<
-  OrderReservationStatus,
-  string
-> = {
-  COMPLETED: '#52B33F',
-  CONFIRMED: '#3166F0',
-  CANCELED: '#F43636',
-};
-
 export const TableReservationStatusDetails: Record<
   TableStatus,
   { label: string; type?: FlagType; color?: string }
@@ -153,6 +144,10 @@ export const OrderReservationStatusDetails: Record<
   CANCELED: {
     label: 'Canceled',
     type: 'failed',
+  },
+  DRAFT: {
+    label: 'Draft',
+    type: 'warning',
   },
 };
 

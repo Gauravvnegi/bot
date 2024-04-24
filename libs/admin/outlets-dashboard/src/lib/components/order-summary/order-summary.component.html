@@ -18,7 +18,9 @@
                       <p-accordionTab
                         click
                         [selected]="
-                          i === currentKotIndex || !selectedItems.length
+                          i === currentKotIndex ||
+                          !selectedItems.length ||
+                          isDraftOrder
                         "
                       >
                         <p-header>
@@ -31,7 +33,7 @@
                               (onClick)="clear()"
                               minWidth="50px"
                               height="20px"
-                              [disabled]="kotControls.value.id"
+                              [disabled]="kotControls.value.id && !isDraftOrder"
                             ></hospitality-bot-button>
                             <span class="item-units"
                               >Qty:
@@ -63,7 +65,7 @@
                                     [src]="
                                       mealPreferenceConfig[
                                         itemControls.value.mealPreference
-                                      ].image
+                                      ]?.image
                                     "
                                   />
                                   <div class="item-name">
@@ -94,7 +96,8 @@
                                   <img
                                     src="assets/svg/remove-item-black.svg"
                                     [ngClass]="{
-                                      'disabled-form': kotControls.value.id
+                                      'disabled-form':
+                                        kotControls.value.id && !isDraftOrder
                                     }"
                                     (click)="decrementQuantity(itemControls)"
                                   />
@@ -106,7 +109,8 @@
                                   <img
                                     src="assets/svg/add-item-black.svg"
                                     [ngClass]="{
-                                      'disabled-form': kotControls.value.id
+                                      'disabled-form':
+                                        kotControls.value.id && !isDraftOrder
                                     }"
                                     (click)="incrementQuantity(itemControls)"
                                   />
@@ -178,7 +182,7 @@
                 (click)="viewOffer = true"
                 class="apply-btn"
                 [ngClass]="{
-                  'disabled-form': orderId
+                  'disabled-form': orderId && !isDraftOrder
                 }"
                 >Apply Offer</span
               >
@@ -199,7 +203,7 @@
                 <span
                   class="remove-btn"
                   [ngClass]="{
-                    'disabled-form': orderId
+                    'disabled-form': orderId && !isDraftOrder
                   }"
                   (click)="viewOffer = false"
                   >Remove</span

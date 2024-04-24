@@ -94,7 +94,11 @@ export type KotMenuItem = {
 
 export type PaymentStatus = 'PAID' | 'UNPAID';
 
-export type OrderReservationStatus = 'COMPLETED' | 'CONFIRMED' | 'CANCELED';
+export type OrderReservationStatus =
+  | 'COMPLETED'
+  | 'CONFIRMED'
+  | 'CANCELED'
+  | 'DRAFT';
 
 export type PaymentData = {
   icon: string;

@@ -14,6 +14,7 @@ import {
 import {
   PosReservationResponse,
   PosOrderResponse,
+  OrderReservationStatus,
 } from '../types/reservation-table';
 import {
   OrderSummaryData,
@@ -63,7 +64,11 @@ export class OutletFormService {
     this.getOrderSummary.next(false);
   }
 
-  getOutletFormData(data: MenuForm, reservationData?: PosReservationResponse) {
+  getOutletFormData(
+    data: MenuForm,
+    reservationData?: PosReservationResponse,
+    orderStatus: 'CONFIRMED' | 'DRAFT' = 'CONFIRMED'
+  ) {
     const {
       reservationInformation,
       paymentInformation,
@@ -82,7 +87,7 @@ export class OutletFormService {
     } = reservationInformation;
 
     const orderData: CreateOrderData = {
-      status: 'CONFIRMED',
+      status: orderStatus,
       type: orderType,
       source: 'Offline',
       kots: kotInformation.kotItems
@@ -118,7 +123,7 @@ export class OutletFormService {
               status: 'CONFIRMED',
               tableIds: [tableNumber],
               areaId: areaId,
-              currentJourney: 'SEATED',
+              currentJourney: orderStatus === 'DRAFT' ? 'WAITLISTED' : 'SEATED',
               id: id ? id : undefined,
             }
           : undefined,
@@ -135,7 +140,11 @@ export class OutletFormService {
     return orderData;
   }
 
-  getOutletUpdateData(data: MenuForm, reservationData: PosReservationResponse) {
+  getOutletUpdateData(
+    data: MenuForm,
+    reservationData: PosReservationResponse,
+    orderStatus: OrderReservationStatus
+  ) {
     const {
       reservationInformation,
       paymentInformation,
@@ -145,7 +154,7 @@ export class OutletFormService {
     } = data;
 
     const orderData: CreateOrderData = {
-      status: 'CONFIRMED',
+      status: orderStatus,
       type: reservationInformation.orderType,
       source: 'Offline',
       kots: kotInformation.kotItems.map((kotItem) => ({

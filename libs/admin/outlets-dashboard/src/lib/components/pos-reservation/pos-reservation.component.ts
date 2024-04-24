@@ -48,7 +48,10 @@ import { OutletTableService } from '../../services/outlet-table.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { reservationTabFilters } from '../../constants/data-table';
-import { PosReservationResponse } from '../../types/reservation-table';
+import {
+  KotMenuItem,
+  PosReservationResponse,
+} from '../../types/reservation-table';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { GuestAddress } from 'libs/admin/agent/src/lib/types/response';
@@ -91,6 +94,7 @@ export class PosReservationComponent implements OnInit {
   isPopular = true;
   initialMenuItemsLoad = false;
   isDisabledForm = false;
+  isDraftOrder = false;
 
   searchApi: string = '/api/v1/search/menu-items';
   selectedPreference: MealPreferences = MealPreferences.ALL;
@@ -218,6 +222,8 @@ export class PosReservationComponent implements OnInit {
             this.updateOrderValidators(
               formData.reservationInformation.orderType
             );
+            this.isDraftOrder = res.status === 'DRAFT';
+            this.isDraftOrder && this.mapItemsForDraftOrder(res?.items);
 
             this.mapGuestAddress(res.deliveryAddress);
             this.mapDefaultReservationData(res.reservation);
@@ -239,6 +245,8 @@ export class PosReservationComponent implements OnInit {
             const formData = this.formService.mapReservationData(res);
             this.userForm.patchValue(formData, { emitEvent: false });
             this.formService.getOrderSummary.next(true);
+            this.isDraftOrder = res.order.status === 'DRAFT';
+            this.isDraftOrder && this.mapItemsForDraftOrder(res?.order?.items);
           } else {
             const reservationInformation = {
               tableNumber: res?.tableIdOrRoomId,
@@ -267,6 +275,20 @@ export class PosReservationComponent implements OnInit {
     };
     this.defaultReservationData = data;
     this.getTableData();
+  }
+
+  /**
+   * Map items in selected items in form service for draft order
+   */
+  mapItemsForDraftOrder(kotMenuItems: KotMenuItem[]) {
+    setTimeout(() => {
+      kotMenuItems.forEach((item) => {
+        if (item?.menuItem) {
+          const addItem = new MenuItem().deserialize(item?.menuItem);
+          this.formService.addItemToSelectedItems(addItem);
+        }
+      });
+    }, 50);
   }
 
   getMenus() {
@@ -600,11 +622,15 @@ export class PosReservationComponent implements OnInit {
 
   postToRoom() {}
 
-  handleSave() {
+  holdKot() {
+    this.orderId ? this.updateOrder('DRAFT') : this.createOrder('DRAFT');
+  }
+
+  handleSaveKot() {
     this.orderId ? this.updateOrder() : this.createOrder();
   }
 
-  createOrder() {
+  createOrder(orderStatus: 'DRAFT' | 'CONFIRMED' = 'CONFIRMED') {
     if (this.userForm.invalid) {
       this.userForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
@@ -614,7 +640,8 @@ export class PosReservationComponent implements OnInit {
     }
     const data = this.formService.getOutletFormData(
       this.userForm.getRawValue() as MenuForm,
-      this.defaultReservationData
+      this.defaultReservationData,
+      orderStatus
     );
     this.$subscription.add(
       this.outletTableService.createOrder(this.entityId, data).subscribe(
@@ -635,7 +662,7 @@ export class PosReservationComponent implements OnInit {
     );
   }
 
-  updateOrder() {
+  updateOrder(orderStatus: 'DRAFT' | 'CONFIRMED' = 'CONFIRMED') {
     if (this.userForm.invalid) {
       this.userForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
@@ -643,9 +670,14 @@ export class PosReservationComponent implements OnInit {
       );
       return;
     }
+    const currOrderStatus =
+      this.defaultReservationData.status === 'DRAFT'
+        ? orderStatus
+        : this.defaultReservationData.status;
     const data = this.formService.getOutletUpdateData(
       this.userForm.getRawValue() as MenuForm,
-      this.defaultReservationData
+      this.defaultReservationData,
+      currOrderStatus
     );
     this.$subscription.add(
       this.outletTableService

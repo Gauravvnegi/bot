@@ -25,6 +25,8 @@ import { debounceTime } from 'rxjs/operators';
 export class OrderSummaryComponent implements OnInit {
   @Input() orderId: string;
   @Input() reservationId: string;
+  isDraftOrder: boolean;
+
   selectedItems: MenuItem[] = [];
 
   readonly mealPreferenceConfig = mealPreferenceConfig;
@@ -80,7 +82,8 @@ export class OrderSummaryComponent implements OnInit {
     const formGroup = this.fb.group(data);
     this.kotFormArray.push(formGroup);
 
-    if (this.orderId) this.parentFormGroup.get('offer').disable();
+    if (this.orderId && !this.isDraftOrder)
+      this.parentFormGroup.get('offer').disable();
 
     const kotItemFormGroup = this.fb.group({
       kotItems: this.kotFormArray,
@@ -137,7 +140,8 @@ export class OrderSummaryComponent implements OnInit {
           const menuItems = res.kots[0].items.map((item) =>
             new MenuItem().deserialize(item.menuItem)
           );
-          this.currentKotIndex = res?.kots?.length;
+          this.isDraftOrder = res.status === 'DRAFT';
+          this.currentKotIndex = this.isDraftOrder ? 0 : res?.kots?.length;
           let kotIndex = 0;
           // Process all KOTs efficiently using a single loop
           for (const kot of res.kots) {
@@ -243,7 +247,8 @@ export class OrderSummaryComponent implements OnInit {
           if (
             this.currentKotIndex > 0 &&
             this.selectedItems.length &&
-            !newKotAdded
+            !newKotAdded &&
+            !this.isDraftOrder
           ) {
             this.addNewKOT(this.currentKotIndex);
             newKotAdded = true;
@@ -287,7 +292,7 @@ export class OrderSummaryComponent implements OnInit {
 
   mapItemOffers() {
     this.offerList = this.selectedItems?.reduce((acc, item) => {
-      const offers = item?.offers.map((offer) => ({
+      const offers = item?.offers?.map((offer) => ({
         label: offer.name,
         value: offer.id,
         offerDescription: offer.description,
@@ -297,7 +302,7 @@ export class OrderSummaryComponent implements OnInit {
       }));
 
       // Merge offers from the current item with accumulated offers, filtering out duplicates
-      offers.forEach((offer) => {
+      offers?.forEach((offer) => {
         const existingOfferIndex = acc.findIndex(
           (accOffer) => accOffer.value === offer.value
         );
@@ -313,7 +318,7 @@ export class OrderSummaryComponent implements OnInit {
   removeItemFields(index: number) {
     this.itemFormArray.removeAt(index);
     !this.itemFormArray.value.length &&
-      this.kotFormArray.at(this.currentKotIndex).patchValue({
+      this.kotFormArray.at(this.currentKotIndex)?.patchValue({
         viewKotInstruction: false,
       });
   }

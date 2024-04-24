@@ -148,7 +148,7 @@ export type CreateOrderData = {
     sourceName?: string;
     marketSegment?: string;
     areaId?: string;
-    currentJourney?: string;
+    currentJourney?: 'SEATED' | 'WAITLISTED';
   };
   paymentDetails?: {
     paymentMethod: string;

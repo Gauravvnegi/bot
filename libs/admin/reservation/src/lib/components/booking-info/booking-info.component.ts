@@ -139,9 +139,10 @@ export class BookingInfoComponent implements OnInit {
    */
   initDefaultDates() {
     if (!this.reservationId) {
-      this.startMinDate = this.defaultDate
-        ? new Date(this.defaultDate)
-        : new Date();
+      this.startMinDate =
+        this.defaultDate && !this.isDayBooking
+          ? new Date(this.defaultDate)
+          : new Date();
       this.endMinDate = new Date(this.startMinDate);
       this.endMinDate.setDate(this.endMinDate.getDate() + 1);
       this.minToDate = new Date(this.endMinDate);
@@ -156,6 +157,12 @@ export class BookingInfoComponent implements OnInit {
     this.toDateValue = this.endMinDate;
 
     this.maxDate.setDate(this.startMinDate.getDate() + 365);
+
+    if (this.isDayBooking) {
+      this.reservationInfoControls.to.patchValue(Date.now(), {
+        emitEvent: false,
+      });
+    }
   }
 
   /**

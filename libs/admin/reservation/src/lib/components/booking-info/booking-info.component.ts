@@ -158,10 +158,20 @@ export class BookingInfoComponent implements OnInit {
 
     this.maxDate.setDate(this.startMinDate.getDate() + 365);
 
-    if (this.isDayBooking) {
-      this.reservationInfoControls.to.patchValue(Date.now(), {
-        emitEvent: false,
-      });
+    /**
+     * Hnadles the case when the selected time is before the current
+     * time in day booking so that user can't create past bookings.
+     */
+    if (this.isDayBooking && !this.reservationId) {
+      if (this.defaultDate < Date.now()) {
+        this.reservationInfoControls.from.patchValue(Date.now(), {
+          emitEvent: false,
+        });
+      } else {
+        this.reservationInfoControls.from.patchValue(this.defaultDate, {
+          emitEvent: false,
+        });
+      }
     }
   }
 
@@ -174,11 +184,13 @@ export class BookingInfoComponent implements OnInit {
 
     const toDateControl = this.reservationInfoControls?.to;
     const fromDateControl = this.reservationInfoControls?.from;
-    const dateAndTimeControl = this.reservationInfoControls?.dateAndTime;
 
     // Listen to from and to date changes in ROOM_TYPE and set
     // min and max dates accordingly
-    if (!this.reservationId) {
+    if (
+      !this.reservationId &&
+      (!this.isDayBooking || !this.isQuickReservation)
+    ) {
       fromDateControl.setValue(startTime);
       toDateControl.setValue(endTime);
     }

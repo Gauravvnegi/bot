@@ -54,7 +54,9 @@
         <div class="guestInfoEditWrapper">
           <div
             class="guestInfoEditContainer"
-            *ngIf="buttonConfig[selectedIndex].button"
+            *ngIf="
+              buttonConfig[selectedIndex].button && isComplaintTrackerSubscribed
+            "
             (click)="handleButtonClick()"
           >
             <img [src]="buttonConfig[selectedIndex].icon" alt="" />

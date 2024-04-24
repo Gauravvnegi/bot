@@ -441,6 +441,12 @@ export class ChatComponent
     );
   }
 
+  get isComplaintTrackerSubscribed() {
+    return this.subscriptionPlanService.checkProductSubscription(
+      ModuleNames.COMPLAINT_TRACKER
+    );
+  }
+
   get chatList() {
     return this.messageService.chatList;
   }

@@ -290,7 +290,9 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
     return (
       items.map((item) => {
         const label = Array.isArray(model.values?.label)
-          ? `${item[model.values?.label[0]]} ${item[model.values?.label[1]]}` // Concatenate labels in case of an array
+          ? `${item[model.values?.label[0]]} ${
+              item[model.values?.label[1]] ? item[model.values?.label[1]] : ''
+            }` // Concatenate labels in case of an array
           : this.getNestedPropertyValue(item, model?.values?.label);
 
         let extras =

@@ -72,6 +72,7 @@
                       *ngIf="objectData?.icon && keyIndex == 0"
                       [ngClass]="objectData.icon"
                     ></i>
+                    <img *ngIf="objectData?.image" [src]="objectData?.image" />
                     <span
                       class="text {{ keyIndex == 0 && objectData?.preText }} {{
                         keyIndex != 0 && objectData?.postText

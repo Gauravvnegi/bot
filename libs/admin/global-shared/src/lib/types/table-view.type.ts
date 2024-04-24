@@ -18,6 +18,7 @@ interface DropDownItem {
 export interface TableObjectData {
   [key: string]: string | number | boolean;
   [TableObjectStyleKeys.icon]?: string;
+  [TableObjectStyleKeys.image]?: string;
   [TableObjectStyleKeys.styleClass]?: 'active-text' | string;
   [TableObjectStyleKeys.textInlineBlock]?: boolean;
   [TableObjectStyleKeys.textSeparator]?: string;

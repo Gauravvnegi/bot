@@ -7,4 +7,5 @@ export enum TableObjectStyleKeys {
   preText = 'preText',
   postText = 'postText',
   disabled = 'disabled',
+  image = 'image',
 }

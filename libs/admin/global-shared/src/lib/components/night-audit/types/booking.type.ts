@@ -1,4 +1,5 @@
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
+import { SessionType } from 'libs/admin/manage-reservation/src/lib/constants/form';
 
 interface Offer {
   id: string;
@@ -65,5 +66,7 @@ export interface BookingResponse {
   status: string;
   to: number;
   updated: number;
-  invoiceCode?: string;
+  invoiceId?: string;
+  groupCode?: string;
+  sessionType?: SessionType;
 }

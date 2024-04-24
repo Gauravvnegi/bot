@@ -24,9 +24,13 @@ export class CheckedInReservation {
     const roomDetails = input.bookingItems[0]?.roomDetails;
     const guest = input?.guest;
     this.id = input.id ?? '';
-    this.invoiceId = input?.invoiceCode ?? '';
+    this.invoiceId = input?.invoiceId ?? '';
     this.roomInfo = roomDetails?.roomNumber && {
-      icon: 'pi pi-users',
+      image: input.groupCode
+        ? 'assets/images/group-booking.svg'
+        : input.sessionType === 'DAY_BOOKING'
+        ? 'assets/images/day-booking.svg'
+        : '',
       styleClass: 'active-text',
       room: `${roomDetails.roomNumber + ' - ' + roomDetails.roomTypeLabel}`,
     };

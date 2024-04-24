@@ -42,7 +42,8 @@
         format="millisecond"
       ></hospitality-bot-time-picker>
       <hospitality-bot-select
-        [class]="isSidebar ? 'full-width' : 'half-width'"
+        [ngClass]="isSidebar ? 'full-width' : 'half-width'"
+        class="select"
         [options]="userList"
         label="Default user"
         controlName="defaultItemUser"

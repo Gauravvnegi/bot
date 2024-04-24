@@ -8,3 +8,9 @@
   overflow: auto;
   height: calc(100vh - 52px);
 }
+
+:host ::ng-deep .select {
+  .option-items {
+    flex-direction: column;
+  }
+}

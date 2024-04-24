@@ -443,6 +443,7 @@ export class GuestPaymentDetails {
     this.rooms = new Room().deserialize(input.stayDetails);
     this.vip = input.vip;
     this.reservationId = input?.id;
+    this.fullName = getFullName(this.firstName, this.lastName);
 
     convertToNormalCase;
     set(

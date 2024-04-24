@@ -651,7 +651,9 @@ export class PosReservationComponent implements OnInit {
           this.close(true);
           // this.resetForm();
           this.snackbarService.openSnackBarAsText(
-            'Order created successfully',
+            orderStatus === 'DRAFT'
+              ? 'Draft order created'
+              : 'Order created successfully',
             '',
             {
               panelClass: 'success',
@@ -670,10 +672,8 @@ export class PosReservationComponent implements OnInit {
       );
       return;
     }
-    const currOrderStatus =
-      this.defaultReservationData.status === 'DRAFT'
-        ? orderStatus
-        : this.defaultReservationData.status;
+    const currOrderStatus = this.isDraftOrder ? orderStatus : 'CONFIRMED';
+
     const data = this.formService.getOutletUpdateData(
       this.userForm.getRawValue() as MenuForm,
       this.defaultReservationData,
@@ -689,7 +689,9 @@ export class PosReservationComponent implements OnInit {
             this.close(true);
             this.resetForm();
             this.snackbarService.openSnackBarAsText(
-              'Order updated successfully',
+              orderStatus === 'DRAFT'
+                ? 'Draft order updated'
+                : 'Order updated successfully',
               '',
               {
                 panelClass: 'success',

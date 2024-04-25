@@ -1,8 +1,8 @@
 import { EntityState, EntitySubType } from '@hospitality-bot/admin/shared';
 import { KotItemsResponse, OutletPricingDetails } from './form';
-import { OutletGuest } from './guest.type';
 import { OrderTypes } from './menu-order';
 import { MenuItemResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
+import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 
 export type ReservationTableListResponse = {
   total: number;
@@ -34,7 +34,7 @@ export type PosOrderResponse = {
   };
   offer?: { id?: string };
   kots: KotItemsResponse[];
-  guest?: OutletGuest;
+  guest?: GuestType;
   reservation?: Omit<PosReservationResponse, 'order'>;
   source: 'Offline';
   nextStates: string[];
@@ -71,7 +71,7 @@ export type PosReservationResponse = {
   printRate: boolean;
   tableIdOrRoomId: string;
   externalBooking: boolean;
-  guest: OutletGuest;
+  guest: GuestType;
   areaId: string;
   areaName: string;
   order?: Omit<PosOrderResponse, 'reservation'>;

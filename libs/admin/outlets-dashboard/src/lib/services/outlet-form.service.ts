@@ -40,9 +40,16 @@ export class OutletFormService {
     false
   );
 
-  addItemToSelectedItems(item: MenuItem): void {
+  addItemToSelectedItems(item: MenuItem | MenuItem[]): void {
     const currentItems = this.selectedMenuItems.value;
-    const updatedItems = currentItems ? [...currentItems, item] : [item];
+    let updatedItems: MenuItem[];
+    if (Array.isArray(item)) {
+      // If item is an array, merge it with the current items
+      updatedItems = currentItems ? [...currentItems, ...item] : [...item];
+    } else {
+      // If item is a single item, add it to the current items
+      updatedItems = currentItems ? [...currentItems, item] : [item];
+    }
     this.selectedMenuItems.next(updatedItems);
   }
 

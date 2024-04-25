@@ -112,12 +112,12 @@ export class OrderSummaryComponent implements OnInit {
     ) as FormArray;
   }
 
-  createNewItemFields(newItem: MenuItem, kotIndex: number = 0) {
+  createNewItemFields(newItem: MenuItem, isEdit: boolean = false) {
     const data: Record<
       keyof MenuItem & { viewItemInstruction: boolean },
       any
     > = {
-      id: [null],
+      id: [isEdit ? newItem?.id : null],
       itemId: [newItem?.itemId],
       itemName: [newItem?.name],
       unit: [1],
@@ -140,10 +140,10 @@ export class OrderSummaryComponent implements OnInit {
           const menuItems = res.kots[0].items.map((item) =>
             new MenuItem().deserialize(item.menuItem)
           );
-          this.isDraftOrder = res.status === 'DRAFT';
+
           this.currentKotIndex = this.isDraftOrder ? 0 : res?.kots?.length;
           let kotIndex = 0;
-          // Process all KOTs efficiently using a single loop
+          // Process all KOTs
           for (const kot of res.kots) {
             kotIndex > 0 && this.addNewKOT(kotIndex); // Create KOT with unique ID
 
@@ -151,9 +151,11 @@ export class OrderSummaryComponent implements OnInit {
               .filter((item) => item.menuItem) // Filter only items with menu items
               .map((item) => new MenuItem().deserialize(item.menuItem)); // Deserialize menu items
 
-            menuItems.forEach((item) => this.createNewItemFields(item));
+            menuItems.forEach((item) => this.createNewItemFields(item, true));
             kotIndex++; // Increment the index for the next KOT
           }
+
+          this.isDraftOrder = res.status === 'DRAFT';
 
           const offer = res?.items.filter(
             (item) => item.type === 'ITEM_OFFER'

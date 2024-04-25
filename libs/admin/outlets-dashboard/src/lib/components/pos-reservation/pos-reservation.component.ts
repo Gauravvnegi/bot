@@ -224,8 +224,7 @@ export class PosReservationComponent implements OnInit {
             );
             this.isDraftOrder = res.status === 'DRAFT';
             this.isDraftOrder && this.mapItemsForDraftOrder(res?.items);
-
-            this.mapGuestAddress(res.deliveryAddress);
+            this.mapGuestData(res.guest, res.deliveryAddress);
             this.mapDefaultReservationData(res.reservation);
             this.formService.getOrderSummary.next(true);
           }
@@ -262,7 +261,7 @@ export class PosReservationComponent implements OnInit {
             );
             this.updateOrderValidators(reservationInformation.orderType);
           }
-          this.mapGuestAddress(res?.deliveryAddress);
+          this.mapGuestData(res.guest, res?.deliveryAddress);
           this.mapDefaultReservationData(res);
         }
       });
@@ -282,12 +281,16 @@ export class PosReservationComponent implements OnInit {
    */
   mapItemsForDraftOrder(kotMenuItems: KotMenuItem[]) {
     setTimeout(() => {
+      let menuItems: MenuItem[] = [];
       kotMenuItems.forEach((item) => {
         if (item?.menuItem) {
-          const addItem = new MenuItem().deserialize(item?.menuItem);
-          this.formService.addItemToSelectedItems(addItem);
+          const addItem = new MenuItem().deserialize(item?.menuItem, true);
+          menuItems.unshift(addItem);
         }
       });
+
+      // Map all data at once.
+      this.formService.addItemToSelectedItems(menuItems);
     }, 50);
   }
 
@@ -544,13 +547,13 @@ export class PosReservationComponent implements OnInit {
     }
   }
 
-  mapGuestData(guest: GuestType) {
+  mapGuestData(guest: GuestType, reservationAddress?: GuestAddress) {
     this.selectedGuest = {
       label: guest?.label
         ? guest.label
         : `${guest?.firstName} ${guest?.lastName}`,
       value: guest.value ? guest.value : guest.id,
-      address: guest?.address,
+      address: reservationAddress ?? guest?.address,
     };
     this.mapGuestAddress();
   }

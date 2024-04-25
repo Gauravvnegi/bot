@@ -24,7 +24,9 @@
     <hospitality-bot-select
       class="session-type"
       *ngIf="
-        tableFG?.get('tableType')?.value === 'calendar' && isDayBooingAvailable
+        tableFG?.get('tableType')?.value === 'calendar' &&
+        isDayBooingAvailable &&
+        tableTypes.length
       "
       controlName="sessionType"
       [options]="sessionTypeOptions"

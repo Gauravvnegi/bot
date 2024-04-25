@@ -164,13 +164,21 @@ export class BookingInfoComponent implements OnInit {
      */
     if (this.isDayBooking && !this.reservationId) {
       if (this.defaultDate < Date.now()) {
-        this.reservationInfoControls.from.patchValue(Date.now(), {
-          emitEvent: false,
-        });
+        this.inputControls.reservationInformation.patchValue(
+          {
+            from: Date.now(),
+            to: Date.now() + 3600 * 1000,
+          },
+          { emitEvent: false }
+        );
       } else {
-        this.reservationInfoControls.from.patchValue(this.defaultDate, {
-          emitEvent: false,
-        });
+        this.inputControls.reservationInformation.patchValue(
+          {
+            from: this.defaultDate,
+            to: this.defaultDate + 3600 * 1000,
+          },
+          { emitEvent: false }
+        );
       }
     }
   }

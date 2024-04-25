@@ -199,7 +199,7 @@ export class QuickReservationFormComponent implements OnInit {
     this.userForm = this.fb.group({
       reservationInformation: this.fb.group({
         from: ['', Validators.required],
-        to: ['', Validators.required],
+        to: ['', this.isDayBookingAvailable ? [] : [Validators.required]],
         source: ['', Validators.required],
         sourceName: ['', [Validators.required, Validators.maxLength(60)]],
         marketSegment: ['', Validators.required],
@@ -249,6 +249,8 @@ export class QuickReservationFormComponent implements OnInit {
     this.listenForDateChanges();
     this.listenForRoomChanges();
     this.listenForRoomTypeChanges();
+    this.listenForSessionTypeChanges();
+    this.listenForSlotIdChanges();
   }
 
   listenForRoomChanges() {
@@ -424,8 +426,6 @@ export class QuickReservationFormComponent implements OnInit {
   getGuestConfig() {
     const queries = {
       entityId: this.entityId,
-      toDate: this.reservationInfoControls.to.value,
-      fromDate: this.reservationInfoControls.from.value,
       entityState: 'ALL',
       type: 'GUEST,NON_RESIDENT_GUEST',
     };
@@ -660,6 +660,22 @@ export class QuickReservationFormComponent implements OnInit {
     );
   }
 
+  listenForSlotIdChanges() {
+    this.reservationInfoControls.slotId.valueChanges.subscribe((slotId) => {
+      if (slotId) {
+        const selectedSlot = this.bookingSlotList?.find(
+          (item) => item?.value === slotId
+        );
+        const newCheckoutDate =
+          this.reservationInfoControls?.from?.value +
+          selectedSlot?.duration * 1000;
+
+        newCheckoutDate &&
+          this.reservationInfoControls?.to?.patchValue(newCheckoutDate);
+      }
+    });
+  }
+
   handleDayBooking() {
     this.reservationInfoControls.to.patchValue(null);
     this.reservationInfoControls.slotId.setValidators(Validators.required);
@@ -708,9 +724,10 @@ export class QuickReservationFormComponent implements OnInit {
                 itemAmount: slot.bookingSlotPrices[0].price,
               };
             });
-            this.reservationInfoControls.slotId.patchValue(
-              this.bookingSlotList[0].value
-            );
+            this.bookingSlotList.length &&
+              this.reservationInfoControls.slotId.patchValue(
+                this.bookingSlotList[0].value
+              );
           }
         })
     );

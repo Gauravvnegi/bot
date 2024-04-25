@@ -284,7 +284,7 @@ export class PosReservationComponent implements OnInit {
       let menuItems: MenuItem[] = [];
       kotMenuItems.forEach((item) => {
         if (item?.menuItem) {
-          const addItem = new MenuItem().deserialize(item?.menuItem, true);
+          const addItem = new MenuItem().deserialize(item?.menuItem);
           menuItems.unshift(addItem);
         }
       });

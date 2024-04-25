@@ -391,6 +391,12 @@ export class BookingInfoComponent implements OnInit {
           value: this.marketSegmentValue,
         });
       this.patchValue(this.marketSegmentControl, this.marketSegmentValue);
+    } else if (this.configData?.marketSegment.length) {
+      // Map the default market segment according to the config.
+      this.configData.marketSegment.map((item, index) => {
+        if (item.isDefault)
+          this.patchValue(this.marketSegmentControl, item.value);
+      });
     }
   }
 

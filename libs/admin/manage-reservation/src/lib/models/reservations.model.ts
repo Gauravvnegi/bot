@@ -600,6 +600,7 @@ export class BookingConfig {
     this.marketSegment = input?.marketSegment.map((item) => ({
       label: item.value,
       value: item.value,
+      isDefault: item?.default,
     }));
     this.type = input?.type.map((item) => ({
       label: this.toCamelCase(item),

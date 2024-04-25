@@ -73,13 +73,7 @@
           [disabled]="liveChatStatus.value"
           >Hand Over to Bot</mat-slide-toggle
           > -->
-        <ng-container
-          *ngIf="
-            checkWhatsappBotSubscription() &&
-            !liveChatStatus.value &&
-            loadingChat
-          "
-        >
+        <ng-container *ngIf="!liveChatStatus.value && loadingChat">
           <img
             class="end-chat"
             [src]="'assets/svg/end-chat.svg'"

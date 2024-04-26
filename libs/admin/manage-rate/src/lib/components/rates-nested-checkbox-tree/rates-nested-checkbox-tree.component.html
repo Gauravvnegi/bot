@@ -1,8 +1,11 @@
-<div class="panel-tree__wrapper">
-  <hospitality-bot-nested-panel
-    *ngFor="let room of roomsData; let i = index"
-    class="nested-panel"
-    [roomsData]="room"
-    (objectUpdated)="onRoomChange($event, i)"
-  ></hospitality-bot-nested-panel>
+<div class="panel-tree__wrapper" [formGroup]="controlContainer.control">
+  <ng-container *ngFor="let room of _roomsData.controls; let i = index">
+    <div [formGroup]="room">
+      <hospitality-bot-nested-panel
+        class="nested-panel"
+        [roomsData]="room"
+        (objectUpdated)="onRoomChange($event, i)"
+      ></hospitality-bot-nested-panel>
+    </div>
+  </ng-container>
 </div>

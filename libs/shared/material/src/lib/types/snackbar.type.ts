@@ -67,6 +67,7 @@ export type MessageSnackbarConfig = {
   position?: MessagePosition;
   title?: String;
   iconSrc?: String;
+  panelClass?: string;
 } & Message;
 
 export enum ToastKeys {

@@ -57,3 +57,13 @@
     padding: 0;
   }
 }
+
+:host ::ng-deep .snackbar-message__default {
+  .p-toast {
+    .p-toast-message {
+      .p-toast-message-content {
+        background-color: $white;
+      }
+    }
+  }
+}

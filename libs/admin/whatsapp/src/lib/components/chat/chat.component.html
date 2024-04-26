@@ -47,6 +47,14 @@
 
     <div class="mr-10" [formGroup]="liveChatFG">
       <div class="req_button">
+        <i
+          class="pi pi-refresh refresh"
+          (click)="refreshChat()"
+          [ngClass]="{ 'pi-spin': isLoading }"
+          pTooltip="Refresh Chat"
+          tooltipPosition="bottom"
+        ></i>
+
         <div class="export-chat" (click)="exportChat()">
           <img src="assets/svg/documentColor.svg" alt="csv" />
           <div>Export Chat</div>

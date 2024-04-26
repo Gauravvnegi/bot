@@ -1,5 +1,12 @@
 <router-outlet></router-outlet>
-<div class="snackbar-message__wrapper {{ snackbarConfig?.key }}">
+<div
+  class="snackbar-message__wrapper {{ snackbarConfig?.key }}"
+  [ngClass]="{
+    'snackbar-message__default':
+      snackbarConfig?.key === 'default' &&
+      snackbarConfig.panelClass === 'notification'
+  }"
+>
   <!-- Default Toast -->
   <p-toast
     [position]="snackbarConfig?.position"

@@ -56,7 +56,7 @@ export class RoomIteratorComponent extends IteratorComponent
   roomTypeArray: FormArray;
 
   @Output() listenChanges = new EventEmitter();
-  @Output() listenSlotList = new EventEmitter();
+  @Output() listenSlotList = new EventEmitter<string>();
 
   @Input() reservationId: string;
   isDraftBooking: boolean = false;
@@ -293,7 +293,6 @@ export class RoomIteratorComponent extends IteratorComponent
         !this.isDraftBooking &&
         !this.isRouteData
       ) {
-        debugger;
         this.fields[3].name = 'roomNumber';
         this.fields[3].type = 'select';
       }
@@ -429,7 +428,7 @@ export class RoomIteratorComponent extends IteratorComponent
     let currRoomTypeId = this.roomControls[0].get('roomTypeId').value;
     this.roomControls[0].get('roomTypeId').valueChanges.subscribe((res) => {
       if (res) {
-        if (res !== currRoomTypeId) this.listenSlotList.emit();
+        if (res !== currRoomTypeId) this.listenSlotList.emit(res);
         currRoomTypeId = res;
       }
     });

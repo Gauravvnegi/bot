@@ -231,9 +231,9 @@ export class AddReservationComponent extends BaseReservationComponent
     });
   }
 
-  listenRoomTypeChange() {
+  listenRoomTypeChange(roomTypeId: string) {
     this.reservationInfoControls.sessionType.value ===
-      SessionType.DAY_BOOKING && this.getSlotListByRoomTypeId();
+      SessionType.DAY_BOOKING && this.getSlotListByRoomTypeId(roomTypeId);
   }
 
   /**
@@ -264,18 +264,20 @@ export class AddReservationComponent extends BaseReservationComponent
       });
   }
 
-  getSlotListByRoomTypeId() {
+  getSlotListByRoomTypeId(roomTypeId: string) {
+    const defaultRoomTypeId = this.roomControls[0].value.roomTypeId;
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
         {
           entityId: this.entityId,
-          inventoryId: this.roomControls[0].value.roomTypeId,
+          inventoryId: defaultRoomTypeId.length
+            ? defaultRoomTypeId
+            : roomTypeId,
           raw: true,
           status: true,
         },
       ]),
     };
-
     this.$subscription.add(
       this.manageReservationService
         .getSlotsListsByRoomType(config)
@@ -584,7 +586,7 @@ export class AddReservationComponent extends BaseReservationComponent
       (sessionType) => {
         if (sessionType === SessionType.DAY_BOOKING) {
           this.handleDayBooking();
-          this.getSlotListByRoomTypeId();
+          // this.getSlotListByRoomTypeId();
         } else {
           this.handleNightBooking();
         }

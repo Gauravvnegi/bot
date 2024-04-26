@@ -11,7 +11,7 @@
             <hospitality-bot-checkbox
               [label]="variant?.value?.name"
               controlName="isSelected"
-              (change)="onVariantChange(!variant.isSelected, variantIndex)"
+              (change)="onVariantChange($event.checked, variantIndex)"
             >
             </hospitality-bot-checkbox>
           </span>

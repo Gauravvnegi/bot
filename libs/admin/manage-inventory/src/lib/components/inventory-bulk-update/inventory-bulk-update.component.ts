@@ -132,14 +132,14 @@ export class InventoryBulkUpdateComponent implements OnInit {
   }
 
   onSubmit() {
-    // if (!this.isFormValid) {
-    //   this.snackbarService.openSnackBarAsText(
-    //     'Please Fix Form before submit',
-    //     '',
-    //     { panelClass: 'error' }
-    //   );
-    //   return;
-    // }
+    if (!this.isFormValid) {
+      this.snackbarService.openSnackBarAsText(
+        'Please Fix Form before submit',
+        '',
+        { panelClass: 'error' }
+      );
+      return;
+    }
 
     this.loading = true;
     const data = UpdateInventory.buildBulkUpdateRequest(

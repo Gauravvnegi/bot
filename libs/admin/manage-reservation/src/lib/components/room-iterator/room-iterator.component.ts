@@ -97,7 +97,7 @@ export class RoomIteratorComponent extends IteratorComponent
 
   @Input() set sessionType(value: SessionType) {
     if (value === 'DAY_BOOKING') {
-      while (this.roomTypeArray.length > 1) {
+      while (this.roomTypeArray?.length > 1) {
         this.roomTypeArray.removeAt(1); // Remove all items except the first one
       }
       this.fields[3].name = 'roomNumber';
@@ -139,8 +139,6 @@ export class RoomIteratorComponent extends IteratorComponent
   }
 
   ngOnInit(): void {
-    this.fields[3].name = 'roomNumbers';
-    this.fields[3].type = 'multi-select';
     this.initDetails();
     this.listenForGlobalFilters();
     this.mapJourney();
@@ -212,9 +210,12 @@ export class RoomIteratorComponent extends IteratorComponent
       this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
     }
 
+    // Multiselect only in case of night booking
     if (!this.reservationId) {
-      this.fields[3].name = 'roomNumbers';
-      this.fields[3].type = 'multi-select';
+      if (!this.isDayBooking) {
+        this.fields[3].name = 'roomNumbers';
+        this.fields[3].type = 'multi-select';
+      }
       this.listenForRoomChanges(index);
     }
   }
@@ -292,6 +293,7 @@ export class RoomIteratorComponent extends IteratorComponent
         !this.isDraftBooking &&
         !this.isRouteData
       ) {
+        debugger;
         this.fields[3].name = 'roomNumber';
         this.fields[3].type = 'select';
       }

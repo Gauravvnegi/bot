@@ -221,6 +221,14 @@ export class AddReservationComponent extends BaseReservationComponent
       printRate: [true],
       rateImprovement: [false],
     });
+
+    // subscribe to isDayBooking as its api may delay.
+    this.configService.$isDayBookingAvailable.subscribe((res) => {
+      !this.reservationId &&
+        this.reservationInfoControls.sessionType.patchValue(
+          res ? SessionType.DAY_BOOKING : SessionType.NIGHT_BOOKING
+        );
+    });
   }
 
   listenRoomTypeChange() {
@@ -665,6 +673,7 @@ export class AddReservationComponent extends BaseReservationComponent
   get isPrePatchedRoomType() {
     return !this.reservationId;
   }
+
   get isDayBookingAvailable(): boolean {
     return this.configService.$isDayBookingAvailable.value;
   }

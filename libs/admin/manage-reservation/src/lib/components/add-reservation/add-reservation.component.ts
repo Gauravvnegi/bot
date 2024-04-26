@@ -265,19 +265,17 @@ export class AddReservationComponent extends BaseReservationComponent
   }
 
   getSlotListByRoomTypeId(roomTypeId: string) {
-    const defaultRoomTypeId = this.roomControls[0].value.roomTypeId;
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
         {
           entityId: this.entityId,
-          inventoryId: defaultRoomTypeId.length
-            ? defaultRoomTypeId
-            : roomTypeId,
+          inventoryId: roomTypeId,
           raw: true,
           status: true,
         },
       ]),
     };
+
     this.$subscription.add(
       this.manageReservationService
         .getSlotsListsByRoomType(config)
@@ -290,6 +288,10 @@ export class AddReservationComponent extends BaseReservationComponent
               duration: slot.duration,
             };
           });
+          !this.reservationId &&
+            this.reservationInfoControls.slotId.patchValue(
+              this.bookingSlotList[0]?.value
+            );
         })
     );
   }

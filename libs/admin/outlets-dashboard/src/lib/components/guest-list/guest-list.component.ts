@@ -417,6 +417,10 @@ export class GuestListComponent implements OnInit {
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
+
+  isHiddenCTA(guest: GuestReservation): boolean {
+    return guest.status === 'CANCELED';
+  }
 }
 
 export type HandelQuickCTA = 'SEATED' | 'DELETE';

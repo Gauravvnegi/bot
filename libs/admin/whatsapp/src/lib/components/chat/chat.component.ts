@@ -321,6 +321,7 @@ export class ChatComponent
   }
 
   getLiveChat() {
+    this.isLoading = true;
     this.$subscription.add(
       this.messageService
         .getLiveChat(
@@ -328,7 +329,15 @@ export class ChatComponent
           this.selectedChat.receiverId,
           this.selectedChat.phone
         )
-        .subscribe((response) => this.liveChatFG.patchValue(response))
+        .subscribe(
+          (response) => this.liveChatFG.patchValue(response),
+          ({ error }) => {
+            this.isLoading = false;
+          },
+          () => {
+            this.isLoading = false;
+          }
+        )
     );
   }
 
@@ -425,7 +434,6 @@ export class ChatComponent
     });
     return;
   }
-
   exportChat() {
     this.$subscription.add(
       this.messageService
@@ -439,6 +447,10 @@ export class ChatComponent
           );
         })
     );
+  }
+
+  refreshChat() {
+    this.getChat();
   }
 
   get isComplaintTrackerSubscribed() {

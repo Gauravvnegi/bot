@@ -292,3 +292,8 @@
 :host ::ng-deep mr-10 ng-untouched ng-pristine ng-valid {
   display: inline !important;
 }
+
+.refresh {
+  font-size: 1.3rem;
+  color: $primary-cta;
+}

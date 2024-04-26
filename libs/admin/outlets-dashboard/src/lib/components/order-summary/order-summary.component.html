@@ -1,8 +1,6 @@
 <div class="summary-wrapper">
   <ng-container *ngIf="!loadingKotData; else loader">
-    <ng-container
-      *ngIf="selectedItems.length || currentKotIndex; else emptyView"
-    >
+    <ng-container *ngIf="isAnyItemAdded(); else emptyView">
       <ng-container [formGroup]="parentFormGroup">
         <div class="items-wrapper">
           <ng-container formGroupName="kotInformation">
@@ -12,7 +10,9 @@
               >
                 <ng-container [formGroupName]="i">
                   <ng-container
-                    *ngIf="selectedItems.length || kotControls.value.id"
+                    *ngIf="
+                      getTotalItemUnits(kotControls.get('items').controls) > 0
+                    "
                   >
                     <p-accordion [multiple]="true">
                       <p-accordionTab
@@ -33,7 +33,9 @@
                               (onClick)="clear()"
                               minWidth="50px"
                               height="20px"
-                              [disabled]="kotControls.value.id && !isDraftOrder"
+                              [disabled]="
+                                isDisabledForm || kotControls.value.isPrepared
+                              "
                             ></hospitality-bot-button>
                             <span class="item-units"
                               >Qty:
@@ -97,20 +99,18 @@
                                     src="assets/svg/remove-item-black.svg"
                                     [ngClass]="{
                                       'disabled-form':
-                                        kotControls.value.id && !isDraftOrder
+                                        isDisabledForm ||
+                                        kotControls.value.isPrepared
                                     }"
                                     (click)="decrementQuantity(itemControls)"
                                   />
                                   <p>{{ itemControls.value.unit }}</p>
-                                  <!-- <hospitality-bot-input
-                                    class="item-input"
-                                    controlName="unit"
-                                  ></hospitality-bot-input> -->
                                   <img
                                     src="assets/svg/add-item-black.svg"
                                     [ngClass]="{
                                       'disabled-form':
-                                        kotControls.value.id && !isDraftOrder
+                                        isDisabledForm ||
+                                        kotControls.value.isPrepared
                                     }"
                                     (click)="incrementQuantity(itemControls)"
                                   />

@@ -270,6 +270,7 @@ export class OutletFormService {
         kotInstruction: kot?.instructions,
         viewKotInstruction: false,
         id: kot?.id,
+        isPrepared: kot.status === 'PREPARED',
       })),
     };
 
@@ -315,6 +316,7 @@ export class OutletFormService {
         kotInstruction: kot?.instructions,
         viewKotInstruction: false,
         id: kot?.id,
+        isPrepared: kot.status === 'PREPARED',
       })),
     };
 

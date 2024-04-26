@@ -25,6 +25,7 @@ import { debounceTime } from 'rxjs/operators';
 export class OrderSummaryComponent implements OnInit {
   @Input() orderId: string;
   @Input() reservationId: string;
+  @Input() isDisabledForm = false;
   isDraftOrder: boolean;
 
   selectedItems: MenuItem[] = [];
@@ -105,6 +106,7 @@ export class OrderSummaryComponent implements OnInit {
       kotInstruction: [''],
       viewKotInstruction: [false],
       id: [null],
+      isPrepared: [false],
     };
     this.kotFormArray.push(this.fb.group(data));
     this.itemFormArray = this.kotFormArray.controls[kotIndex].get(
@@ -184,7 +186,8 @@ export class OrderSummaryComponent implements OnInit {
     this.totalAmount = this.totalAmount - itemControl.get('price').value;
 
     if (itemControl.value.unit === 0) {
-      this.formService.removeItemFromSelectedItems(itemControl.value.itemId);
+      if (!itemControl.value.id)
+        this.formService.removeItemFromSelectedItems(itemControl.value.itemId);
     } else {
       this.formService.getOrderSummary.next(true);
     }
@@ -343,6 +346,19 @@ export class OrderSummaryComponent implements OnInit {
 
   trackItemControls(index: number, item: FormGroup) {
     return item.get('itemId').value;
+  }
+
+  /**
+   * @returns true only if any item is added in the kot
+   */
+  isAnyItemAdded() {
+    return this.kotFormArray.controls.some((kotFormGroup) => {
+      const itemsArray = kotFormGroup.get('items') as FormArray;
+      return itemsArray.controls.some((itemFormGroup) => {
+        const unit = itemFormGroup.get('unit').value;
+        return unit && unit > 0;
+      });
+    });
   }
 
   /**

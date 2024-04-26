@@ -158,11 +158,18 @@ export class BookingInfoComponent implements OnInit {
 
     this.maxDate.setDate(this.startMinDate.getDate() + 365);
 
-    /**
-     * Hnadles the case when the selected time is before the current
-     * time in day booking so that user can't create past bookings.
-     */
+    this.mapDayBookingDates();
+  }
+
+  /**
+   * Handles the case when the selected time is before the current
+   * time in day booking so that user can't create past bookings.
+   */
+  mapDayBookingDates() {
     if (this.isDayBooking && !this.reservationId) {
+      if (!this.defaultDate) {
+        this.patchValue(this.reservationInfoControls.from, new Date());
+      }
       if (this.defaultDate < Date.now()) {
         this.inputControls.reservationInformation.patchValue(
           {

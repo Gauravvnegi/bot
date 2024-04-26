@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/api';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import {
   MessageSnackbarConfig,
+  SnackBarConfig,
   ToastKeys,
 } from 'libs/shared/material/src/lib/types/snackbar.type';
 import { ProgressSpinnerService } from './core/theme/src/lib/services/progress-spinner.service';
@@ -27,7 +28,7 @@ import { NotificationPopupComponent } from './core/theme/src/lib/containers/noti
 export class AppComponent implements OnInit {
   readonly toastKeys = ToastKeys;
 
-  snackbarConfig: MessageSnackbarConfig;
+  snackbarConfig: MessageSnackbarConfig & SnackBarConfig;
   title = '';
 
   constructor(

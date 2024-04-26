@@ -24,8 +24,9 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductReportConfig, ReportConfig } from '../../models/report.models';
-import { switchMap } from 'rxjs/operators';
+import { debounceTime, switchMap } from 'rxjs/operators';
 import { Subscription, of } from 'rxjs';
+import { FormBuilder, FormGroup } from '@angular/forms';
 @Component({
   selector: 'hospitality-bot-reports',
   templateUrl: './reports.component.html',
@@ -35,6 +36,7 @@ export class ReportsComponent implements OnInit {
   showMenu = false;
   reportTitle = '';
   reportsMenuOptions: ReportsMenu = [];
+  backupMenuOptions: ReportsMenu = [];
   selectedReportModule: ReportModules;
   selectedReport: ReportsMenu[number];
   navRoutes: NavRouteOptions = [];
@@ -42,17 +44,20 @@ export class ReportsComponent implements OnInit {
   selectedProduct: keyof typeof ProductNames;
   isLoading: boolean = false;
   subscription$ = new Subscription();
+  reportForm: FormGroup;
 
   constructor(
     private reportsService: ReportsService,
     private routesConfigService: RoutesConfigService,
     private router: Router,
     private route: ActivatedRoute,
-    private subscriptionPlanService: SubscriptionPlanService
+    private subscriptionPlanService: SubscriptionPlanService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.getReportConfig();
+    this.initForm();
   }
 
   getReportConfig() {
@@ -60,6 +65,28 @@ export class ReportsComponent implements OnInit {
       this.subscriptionPlanService.getReportConfig()
     ).reportConfig;
     this.initConfiguration();
+  }
+
+  initForm() {
+    this.reportForm = this.fb.group({
+      search: [''],
+    });
+    this.listenFormReportSearch();
+  }
+
+  listenFormReportSearch() {
+    this.reportForm
+      .get('search')
+      .valueChanges.pipe(debounceTime(300))
+      .subscribe((res) => {
+        if (res) {
+          this.reportsMenuOptions = this.backupMenuOptions.filter((menu) =>
+            menu.label.toLowerCase().includes(res.toLowerCase())
+          ) as any;
+        } else {
+          this.reportsMenuOptions = this.backupMenuOptions;
+        }
+      });
   }
 
   initConfiguration() {
@@ -131,6 +158,7 @@ export class ReportsComponent implements OnInit {
     this.reportsMenuOptions =
       this.reportConfig[this.selectedProduct][this.selectedReportModule]
         ?.menu ?? [];
+    this.backupMenuOptions = this.reportsMenuOptions;
   }
 
   initNavRoutes() {

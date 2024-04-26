@@ -221,11 +221,19 @@ export class AddReservationComponent extends BaseReservationComponent
       printRate: [true],
       rateImprovement: [false],
     });
+
+    // subscribe to isDayBooking as its api may delay.
+    this.configService.$isDayBookingAvailable.subscribe((res) => {
+      !this.reservationId &&
+        this.reservationInfoControls.sessionType.patchValue(
+          res ? SessionType.DAY_BOOKING : SessionType.NIGHT_BOOKING
+        );
+    });
   }
 
-  listenRoomTypeChange() {
+  listenRoomTypeChange(roomTypeId: string) {
     this.reservationInfoControls.sessionType.value ===
-      SessionType.DAY_BOOKING && this.getSlotListByRoomTypeId();
+      SessionType.DAY_BOOKING && this.getSlotListByRoomTypeId(roomTypeId);
   }
 
   /**
@@ -256,12 +264,12 @@ export class AddReservationComponent extends BaseReservationComponent
       });
   }
 
-  getSlotListByRoomTypeId() {
+  getSlotListByRoomTypeId(roomTypeId: string) {
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
         {
           entityId: this.entityId,
-          inventoryId: this.roomControls[0].value.roomTypeId,
+          inventoryId: roomTypeId,
           raw: true,
           status: true,
         },
@@ -280,6 +288,10 @@ export class AddReservationComponent extends BaseReservationComponent
               duration: slot.duration,
             };
           });
+          !this.reservationId &&
+            this.reservationInfoControls.slotId.patchValue(
+              this.bookingSlotList[0]?.value
+            );
         })
     );
   }
@@ -576,7 +588,7 @@ export class AddReservationComponent extends BaseReservationComponent
       (sessionType) => {
         if (sessionType === SessionType.DAY_BOOKING) {
           this.handleDayBooking();
-          this.getSlotListByRoomTypeId();
+          // this.getSlotListByRoomTypeId();
         } else {
           this.handleNightBooking();
         }
@@ -665,6 +677,7 @@ export class AddReservationComponent extends BaseReservationComponent
   get isPrePatchedRoomType() {
     return !this.reservationId;
   }
+
   get isDayBookingAvailable(): boolean {
     return this.configService.$isDayBookingAvailable.value;
   }

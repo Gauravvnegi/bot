@@ -36,7 +36,7 @@
             isConfirmedBooking: isConfirmedBooking
           }"
           [sessionType]="reservationInfoControls.sessionType.value"
-          (listenSlotList)="listenRoomTypeChange()"
+          (listenSlotList)="listenRoomTypeChange($event)"
         >
         </hospitality-bot-room-iterator>
       </p-accordionTab>

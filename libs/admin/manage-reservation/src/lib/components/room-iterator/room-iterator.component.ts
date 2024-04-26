@@ -56,7 +56,7 @@ export class RoomIteratorComponent extends IteratorComponent
   roomTypeArray: FormArray;
 
   @Output() listenChanges = new EventEmitter();
-  @Output() listenSlotList = new EventEmitter();
+  @Output() listenSlotList = new EventEmitter<string>();
 
   @Input() reservationId: string;
   isDraftBooking: boolean = false;
@@ -97,7 +97,7 @@ export class RoomIteratorComponent extends IteratorComponent
 
   @Input() set sessionType(value: SessionType) {
     if (value === 'DAY_BOOKING') {
-      while (this.roomTypeArray.length > 1) {
+      while (this.roomTypeArray?.length > 1) {
         this.roomTypeArray.removeAt(1); // Remove all items except the first one
       }
       this.fields[3].name = 'roomNumber';
@@ -139,8 +139,6 @@ export class RoomIteratorComponent extends IteratorComponent
   }
 
   ngOnInit(): void {
-    this.fields[3].name = 'roomNumbers';
-    this.fields[3].type = 'multi-select';
     this.initDetails();
     this.listenForGlobalFilters();
     this.mapJourney();
@@ -212,9 +210,12 @@ export class RoomIteratorComponent extends IteratorComponent
       this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
     }
 
+    // Multiselect only in case of night booking
     if (!this.reservationId) {
-      this.fields[3].name = 'roomNumbers';
-      this.fields[3].type = 'multi-select';
+      if (!this.isDayBooking) {
+        this.fields[3].name = 'roomNumbers';
+        this.fields[3].type = 'multi-select';
+      }
       this.listenForRoomChanges(index);
     }
   }
@@ -427,7 +428,7 @@ export class RoomIteratorComponent extends IteratorComponent
     let currRoomTypeId = this.roomControls[0].get('roomTypeId').value;
     this.roomControls[0].get('roomTypeId').valueChanges.subscribe((res) => {
       if (res) {
-        if (res !== currRoomTypeId) this.listenSlotList.emit();
+        if (res !== currRoomTypeId) this.listenSlotList.emit(res);
         currRoomTypeId = res;
       }
     });

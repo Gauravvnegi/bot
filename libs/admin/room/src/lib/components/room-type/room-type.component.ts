@@ -269,7 +269,10 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
             [Validators.required, Validators.maxLength(60)],
           ],
           basePriceCurrency: ['INR', [Validators.required]],
-          basePrice: ['', [Validators.required, Validators.min(0)]],
+          basePrice: [
+            { value: '', disabled: true },
+            [Validators.required, Validators.min(0)],
+          ],
           price: ['', [Validators.required, Validators.min(0)]],
           discountType: ['PERCENTAGE'],
           discountValue: ['0', [Validators.required, Validators.min(0)]],
@@ -284,7 +287,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           paxChildPrice: ['', [Validators.required, Validators.min(0)]],
           paxChildBelowFive: ['', [Validators.required, Validators.min(0)]],
           ratePlanId: [''],
-          ratePlanType: [''],
+          ratePlanType: ['EP', Validators.required],
           status: [true],
         })
       );

@@ -724,7 +724,8 @@ export class QuickReservationFormComponent implements OnInit {
                 itemAmount: slot.bookingSlotPrices[0].price,
               };
             });
-            this.bookingSlotList.length &&
+            !this.reservationId &&
+              this.bookingSlotList.length &&
               this.reservationInfoControls.slotId.patchValue(
                 this.bookingSlotList[0].value
               );

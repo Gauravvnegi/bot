@@ -80,7 +80,8 @@ export class ReportsComponent implements OnInit {
       .valueChanges.pipe(debounceTime(300))
       .subscribe((res) => {
         if (res) {
-          this.reportsMenuOptions = this.backupMenuOptions.filter((menu) =>
+          this.reportsMenuOptions = (this
+            .backupMenuOptions as any)?.filter((menu) =>
             menu.label.toLowerCase().includes(res.toLowerCase())
           ) as any;
         } else {

@@ -298,15 +298,10 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
         let extras =
           model.values?.extras &&
           (Array.isArray(model.values?.extras)
-            ? `${
-                item[model.values?.extras[0]]
-                  ? item[model.values?.extras[0]] + ' '
-                  : ''
-              }${
-                item[model.values?.extras[1]]
-                  ? item[model.values?.extras[1]]
-                  : ''
-              }`
+            ? `${this.getNestedPropertyValue(
+                item,
+                model?.values?.extras[0]
+              )}${this.getNestedPropertyValue(item, model?.values?.extras[1])}`
             : this.getNestedPropertyValue(item, model?.values?.extras));
 
         return {
@@ -328,7 +323,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
         (acc, key) => (acc && acc[key] !== undefined ? acc[key] : undefined),
         obj
       );
-    return returnval;
+    return returnval ?? '';
   }
 
   /**

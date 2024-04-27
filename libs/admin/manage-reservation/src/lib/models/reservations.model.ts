@@ -622,7 +622,7 @@ export class BookingConfig {
   toCamelCase(txt) {
     switch (txt) {
       case 'CREATE_WITH':
-        return 'Booking Engine';
+        return 'Create With';
       case 'OTA':
         return 'OTA';
       case 'WALK_IN':

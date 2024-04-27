@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Variant } from 'libs/admin/channel-manager/src/lib/types/bulk-update.types';
 import { FormComponent } from 'libs/admin/shared/src/lib/components/form-component/form.components';
-import { FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'hospitality-bot-inventory-nested-checkbox-tree',
@@ -9,14 +9,15 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./inventory-nested-checkbox-tree.component.scss'],
 })
 export class InventoryNestedCheckboxTreeComponent extends FormComponent {
-  private _variants: Variant[];
-  @Input() set variants(value: Variant[]) {
+  _variants: FormArray;
+
+  @Input() set variants(value: FormArray) {
     this._variants = value;
     this._variants &&
       this.patchChildrenData(this.childrenControlName.roomTypeIds);
   }
 
-  get variants() {
+  get variants(): FormArray {
     return this._variants;
   }
   @Input() childrenControlName = {
@@ -31,19 +32,21 @@ export class InventoryNestedCheckboxTreeComponent extends FormComponent {
   }
 
   onChannelChange(status: boolean, variantIndex: number, channelIndex: number) {
-    const selectedObject = this.variants[variantIndex];
-    selectedObject.channels[channelIndex].isSelected = status;
-    selectedObject.isSelected = selectedObject.channels.every(
-      (item) => item.isSelected
-    );
+    // const selectedObject = this._variants.at(variantIndex) as FormGroup
+
+    // (selectedObject.get('channels') as FormArray).controls.at(channelIndex).get('isSelected').value = status;
+
+    // selectedObject.isSelected = selectedObject.channels.every(
+    //   (item) => item.isSelected
+    // );
     this.objectChange.emit();
     this.patchChildrenData(this.childrenControlName.channelIds);
   }
 
-  onVariantChange(status: boolean, variantIndex) {
-    const selectedObject = this.variants[variantIndex];
-    selectedObject.isSelected = status;
-    selectedObject.channels.map((item) => (item.isSelected = status));
+  onVariantChange(status: boolean, variantIndex: number) {
+    const selectedObject = this._variants.at(variantIndex);
+    selectedObject.get('isSelected').patchValue(status);
+    // selectedObject.channels.map((item) => (item.isSelected = status));
     this.objectChange.emit();
     this.patchChildrenData(this.childrenControlName.roomTypeIds);
   }
@@ -55,8 +58,11 @@ export class InventoryNestedCheckboxTreeComponent extends FormComponent {
   patchChildrenData(controlName) {
     (this.parentFG.controls[this.controlName].value as FormGroup).patchValue(
       {
-        [controlName]: this.variants
-          .map((variant) => variant.isSelected && variant.id)
+        [controlName]: this.variants.controls
+          .map(
+            (variant) =>
+              variant.get('isSelected').value && variant.get('id').value
+          )
           .filter((item) => item),
       },
       { emitEvent: false }

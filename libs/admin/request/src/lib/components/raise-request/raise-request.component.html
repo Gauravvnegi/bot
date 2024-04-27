@@ -23,7 +23,7 @@
         }"
       ></hospitality-bot-input>
       <hospitality-bot-select
-      [loading]="loadingServiceItem"
+        [loading]="loadingServiceItem"
         class="half-width service-item"
         [options]="items"
         label="Service Name"
@@ -56,7 +56,8 @@
             key: 'records',
             values: {
               label: ['firstName', 'lastName'],
-              value: 'id'
+              value: 'id',
+              extras: ['contactDetails.cc', 'contactDetails.contactNumber']
             }
           },
           queryParams: getConfig(),

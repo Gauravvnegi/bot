@@ -69,7 +69,7 @@
           class="option-name"
         ></div>
 
-        <span *ngIf="option.phoneNumber && option.email" class="option-details">
+        <span *ngIf="option.phoneNumber || option.email" class="option-details">
           <span [ngStyle]="{ 'padding-right': '10px' }">{{
             option.phoneNumber
           }}</span>

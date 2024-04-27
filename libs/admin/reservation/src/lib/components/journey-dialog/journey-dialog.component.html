@@ -15,10 +15,12 @@
       </p>
     </div>
     <p *ngIf="isSendInvoice" [formGroup]="useForm" class="invoice">
-      <hospitality-bot-input-switch
-        controlName="invoiceStatus"
-      ></hospitality-bot-input-switch>
-      Do you want send invoice ?
+      <hospitality-bot-checkbox
+        label="Do you want send invoice ?"
+        [value]="useForm.get('invoiceStatus').value"
+        (change)="triggerInvoiceStatus($event)"
+      >
+      </hospitality-bot-checkbox>
     </p>
 
     <!-- <mat-form-field>

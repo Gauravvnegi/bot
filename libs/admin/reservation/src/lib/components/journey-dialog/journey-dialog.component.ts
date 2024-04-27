@@ -40,6 +40,12 @@ export class JourneyDialogComponent implements OnInit {
     });
   }
 
+  triggerInvoiceStatus(event: HTMLInputElement) {
+    this.useForm.get('invoiceStatus').patchValue(event.checked, {
+      emitEvent: false,
+    });
+  }
+
   handleClose() {
     this.dialogRef.close();
   }

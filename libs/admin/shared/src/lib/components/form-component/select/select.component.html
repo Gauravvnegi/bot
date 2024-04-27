@@ -54,28 +54,24 @@
           class="option-label"
           >{{ option.label }}</span
         >
-
-        <span
-          *ngIf="option?.extras && option?.extras.length"
-          class="option-name"
-        >
-          {{ option.extras }}
-        </span>
-
-        <!-- Offer description -->
-        <div
-          *ngIf="option?.offerDescription"
-          [innerHTML]="option?.offerDescription"
-          class="option-name"
-        ></div>
-
-        <span *ngIf="option.phoneNumber || option.email" class="option-details">
-          <span [ngStyle]="{ 'padding-right': '10px' }">{{
-            option.phoneNumber
-          }}</span>
-          <span>{{ option.email }}</span>
-        </span>
       </div>
+      <span *ngIf="option?.extras && option?.extras.length" class="option-name">
+        {{ option.extras }}
+      </span>
+
+      <!-- Offer description -->
+      <div
+        *ngIf="option?.offerDescription"
+        [innerHTML]="option?.offerDescription"
+        class="option-name"
+      ></div>
+
+      <span *ngIf="option.phoneNumber || option.email" class="option-details">
+        <span [ngStyle]="{ 'padding-right': '10px' }">{{
+          option.phoneNumber
+        }}</span>
+        <span>{{ option.email }}</span>
+      </span>
 
       <span *ngIf="option?.itemAmount" class="option-amount">
         {{ option.itemAmount | currency: 'INR' }}

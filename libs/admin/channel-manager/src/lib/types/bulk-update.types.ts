@@ -14,7 +14,6 @@ export interface RoomTypes extends TreeType {
 export interface Variant extends TreeType {
   channels: Channel[];
   pax?: Pax[];
-  price?: number;
 }
 
 export type Channel = TreeType;

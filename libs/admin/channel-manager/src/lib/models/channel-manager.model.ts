@@ -119,15 +119,7 @@ export class UpdateInventory {
 
   static buildBulkUpdateRequest(formData) {
     let updates: UpdateInventoryType[] = [];
-
-    let {
-      fromDate,
-      toDate,
-      roomTypes,
-      selectedDays,
-      updateValue,
-      inventoryTreeList,
-    } = formData;
+    let { fromDate, toDate, roomTypes, selectedDays, updateValue } = formData;
     let currentDay = new Date(fromDate);
     let lastDay = new Date(toDate);
     lastDay.setDate(lastDay.getDate() + 1);
@@ -138,16 +130,10 @@ export class UpdateInventory {
         updates.push({
           startDate: currentDay.getTime(),
           endDate: currentDay.getTime(),
-          rooms: roomTypes.value.roomTypeIds.map((item) => {
-            const currentRoomType = inventoryTreeList.find(
-              (roomType) => roomType.id === item
-            );
-
-            return {
-              roomTypeId: item,
-              available: +currentRoomType?.available,
-            };
-          }),
+          rooms: roomTypes.value.roomTypeIds.map((item) => ({
+            roomTypeId: item,
+            available: +updateValue,
+          })),
         });
       currentDay.setDate(currentDay.getDate() + 1);
     }
@@ -433,51 +419,45 @@ export class UpdateRates {
           endDate: currentDay.getTime(),
           rates: roomTypes.reduce((prev, currItem) => {
             let currRPInfo: Variant;
+            // Check if the configuration type is pax
+            if (configType == RATE_CONFIG_TYPE.pax) {
+              // Find the current room based on roomTypeId
+              const currentRoom = roomInfo.find(
+                (room) => room.id == currItem.roomTypeId
+              );
 
-            // Find the current room based on roomTypeId
-            const currentRoom = roomInfo.find(
-              (room) => room.id == currItem.roomTypeId
-            );
-
-            // Find the rate plan info based on ratePlanId
-            currRPInfo = currentRoom?.variants?.find(
-              (rp) => rp.id == currItem.ratePlanId
-            );
-
-            // This is for only non pax base configuration, mapping
-            const paxData =
-              configType !== RATE_CONFIG_TYPE.pax
-                ? [
-                    {
-                      roomTypeId: currItem.roomTypeId,
-                      rate: currRPInfo?.price,
-                      ratePlanId: currItem.ratePlanId,
-                      dynamicPricing: false, // TODO, Manage dynamic pricing according to your need
-                    },
-                  ] ?? []
-                : // If currRPInfo is available, push additional rate updates for pax
-                  currRPInfo?.pax
-                    ?.filter((pax) => pax.isSelected)
-                    .map((paxInfo, paxInd: number) => ({
-                      roomTypeId: currItem.roomTypeId,
-                      rate: paxInfo.price,
-                      pax: paxInfo?.id,
-                      ratePlanId: currItem.ratePlanId,
-                      dynamicPricing: false,
-                    })) ?? [];
-
-            if (configType === RATE_CONFIG_TYPE.pax) {
-              paxData.unshift({
-                roomTypeId: currItem.roomTypeId,
-                rate: currRPInfo.price,
-                pax: 1,
-                ratePlanId: currItem.ratePlanId,
-                dynamicPricing: false,
-              } as any);
+              // Find the rate plan info based on ratePlanId
+              currRPInfo = currentRoom?.variants?.find(
+                (rp) => rp.id == currItem.ratePlanId
+              );
             }
 
             // Push the base rate update object to the rates array
-            return [...prev, ...paxData];
+            return [
+              ...prev,
+
+              // This is for only non pax base configuration, mapping
+              ...(configType !== RATE_CONFIG_TYPE.pax
+                ? [
+                    {
+                      roomTypeId: currItem.roomTypeId,
+                      rate: +updateValue,
+                      ratePlanId: currItem.ratePlanId,
+                      dynamicPricing: false, // TODO, Manage dynamic pricing according to your need
+                    },
+                  ]
+                : []),
+              // If currRPInfo is available, push additional rate updates for pax
+              ...(currRPInfo?.pax
+                ?.filter((pax) => pax.isSelected)
+                .map((paxInfo, paxInd: number) => ({
+                  roomTypeId: currItem.roomTypeId,
+                  rate: +updateValue,
+                  pax: paxInfo?.id,
+                  ratePlanId: currItem.ratePlanId,
+                  dynamicPricing: false,
+                })) ?? []),
+            ];
           }, []),
         });
 

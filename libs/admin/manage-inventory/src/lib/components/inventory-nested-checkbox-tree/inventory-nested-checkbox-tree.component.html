@@ -1,34 +1,33 @@
 <div class="panel-tree">
   <p-accordion [multiple]="true" class="w-full">
     <p-accordionTab
-      *ngFor="let variant of _variants?.controls; let variantIndex = index"
-      [formGroup]="variant"
+      *ngFor="let variant of variants; let variantIndex = index"
       class="disable-parent"
     >
       <p-header>
         <div class="varient__heading label-checkbox-wrapper">
           <span class="panel-tree__header-checkbox">
-            <hospitality-bot-checkbox
-              [label]="variant?.value?.name"
-              controlName="isSelected"
-              (change)="onVariantChange($event.checked, variantIndex)"
+            <div
+              class="checkbox"
+              [name]="'variant-' + variant.name"
+              [id]="variant.id"
+              [checked]="variant.isSelected"
+              (click)="
+                onVariantChange(!variant.isSelected, variantIndex);
+                $event.stopPropagation()
+              "
+              class="custom-checkbox enable-child checkbox"
             >
-            </hospitality-bot-checkbox>
+              <img
+                *ngIf="variant.isSelected"
+                class="checkbox__img"
+                src="assets/svg/checkboxSelect.svg"
+                alt="select"
+              />
+            </div>
           </span>
 
-          <hospitality-bot-input
-            min="0"
-            controlName="available"
-            [props]="{
-              type: 'number',
-              errorMessages: {
-                min: 'Invalid'
-              }
-            }"
-            [isHideSpinners]="true"
-          ></hospitality-bot-input>
-
-          <!-- <span class="panel-tree__header-checkbox variant-wrapper">
+          <span class="panel-tree__header-checkbox variant-wrapper">
             <span
               class="enable-child"
               (click)="
@@ -36,16 +35,16 @@
                 $event.stopPropagation()
               "
               >{{ variant.name }}</span
-            > -->
-          <!-- TODO: This feature may be used in future -->
-          <!-- <hospitality-bot-menu-button
+            >
+            <!-- TODO: This feature may be used in future -->
+            <!-- <hospitality-bot-menu-button
               class="channel-heading enable-child"
               [label]="variant.channels.length + ' Channels'"
             ></hospitality-bot-menu-button> -->
-          <!-- </span> -->
+          </span>
         </div>
       </p-header>
-      <!-- <label
+      <label
         class="channel label-checkbox-wrapper panel-tree__header enable-child"
         *ngFor="let channel of variant.channels; let channelIndex = index"
         [for]="variant.id + '-' + channel.id"
@@ -75,7 +74,7 @@
             {{ channel.name }}
           </span>
         </span>
-      </label> -->
+      </label>
     </p-accordionTab>
   </p-accordion>
 </div>

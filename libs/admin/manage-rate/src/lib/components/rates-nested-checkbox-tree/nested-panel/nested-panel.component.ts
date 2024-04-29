@@ -1,11 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import {
-  AbstractControl,
-  ControlContainer,
-  FormArray,
-  FormGroup,
-} from '@angular/forms';
-import {
   RoomTypes,
   UpdatedEmitType,
 } from 'libs/admin/channel-manager/src/lib//types/bulk-update.types';
@@ -16,12 +10,14 @@ import {
   styleUrls: ['./nested-panel.component.scss'],
 })
 export class NestedPanelComponent {
-  @Input() roomsData: FormGroup;
+  @Input() roomsData: RoomTypes;
   @Output() objectUpdated: EventEmitter<UpdatedEmitType> = new EventEmitter();
   parentHeadingStyle = {
     'font-size': '14px',
     'font-weight': 'bold',
   };
+  constructor() {}
+
   onRoomChange(
     status: boolean,
     id: string,
@@ -29,54 +25,39 @@ export class NestedPanelComponent {
     variantIndex?: number,
     channelIndex?: number
   ) {
-    const otherVariantConfig = (
-      type: 'channels' | 'pax',
-      index: number,
-      status: boolean
-    ) => {
-      this.roomsData
-        .get(`variants.${variantIndex}.${type}.${index}.isSelected`)
-        .setValue(status);
+    const otherVariantConfig = (type: 'channels' | 'pax', index: number) => {
+      this.roomsData.variants[variantIndex][type][index].isSelected = status;
+      this.roomsData.variants[
+        variantIndex
+      ].isSelected = this.roomsData.variants[variantIndex][type].every(
+        (item) => item.isSelected
+      );
 
-      const variant = this.roomsData.get(
-        `variants.${variantIndex}`
-      ) as FormGroup;
-
-      this.updateParentSelected(variant, 'pax');
-      this.updateParentSelected(this.roomsData, 'variants');
-
-      const targetFormGroup = this.roomsData.get(
-        `variants.${variantIndex}.${type}.${index}`
-      ) as FormGroup;
-
-      this.changeChildrenStatus(targetFormGroup);
+      this.roomsData.isSelected = this.roomsData.variants.every(
+        (item) => item.isSelected
+      );
+      this.changeChildrenStatus(
+        this.roomsData.variants[variantIndex][type][index]
+      );
     };
 
     switch (source) {
       case 'parent':
-        this.roomTypeParentControl.isSelected.patchValue(status);
+        this.roomsData.isSelected = status;
         this.changeChildrenStatus(this.roomsData);
         break;
       case 'variant':
-        this.variantControls
-          .at(variantIndex)
-          .get('isSelected')
-          .patchValue(status);
-
-        this.roomTypeParentControl.isSelected.patchValue(
-          this.variantControls.controls.every(
-            (item) => item.get('isSelected').value
-          )
+        this.roomsData.variants[variantIndex].isSelected = status;
+        this.roomsData.isSelected = this.roomsData.variants.every(
+          (item) => item.isSelected
         );
-        this.changeChildrenStatus(
-          this.variantControls.at(variantIndex) as FormGroup
-        );
+        this.changeChildrenStatus(this.roomsData.variants[variantIndex]);
         break;
       case 'channel':
-        otherVariantConfig('channels', channelIndex, status);
+        otherVariantConfig('channels', channelIndex);
         break;
       case 'pax':
-        otherVariantConfig('pax', channelIndex, status);
+        otherVariantConfig('pax', channelIndex);
         break;
     }
 
@@ -88,86 +69,30 @@ export class NestedPanelComponent {
       channelIndex: channelIndex,
     } as UpdatedEmitType);
   }
-
-  private changeChildrenStatus(formGroup: FormGroup) {
-    const stack: AbstractControl[] = [formGroup];
-
+  private changeChildrenStatus(parent) {
+    const stack = [parent];
     while (stack.length > 0) {
       const current = stack.pop();
-
-      if (current instanceof FormGroup) {
-        const variantsControl = current.get('variants') as FormArray;
-        if (variantsControl instanceof FormArray) {
-          const variants = variantsControl.controls;
-
-          variants.forEach((variant) => {
-            if (variant instanceof FormGroup) {
-              variant
-                .get('isSelected')
-                .setValue(current.get('isSelected').value);
-
-              const channelsControl = variant.get('channels') as FormArray;
-              if (channelsControl instanceof FormArray) {
-                const channels = channelsControl.controls;
-                channels.forEach((channel) => {
-                  channel
-                    .get('isSelected')
-                    .setValue(current.get('isSelected').value);
-                });
-              }
-              stack.push(variant);
-            }
+      if ('variants' in current) {
+        current.variants.forEach((variant) => {
+          variant.isSelected = current.isSelected;
+          variant.channels.forEach((channel) => {
+            channel.isSelected = current.isSelected;
           });
-        }
+          stack.push(variant);
+        });
+      }
+      if ('pax' in current) {
+        current.pax.forEach((pax) => {
+          pax.isSelected = current.isSelected;
+        });
+      }
 
-        const paxControl = current.get('pax') as FormArray;
-        if (paxControl instanceof FormArray) {
-          const pax = paxControl.controls;
-          pax.forEach((paxControl) => {
-            paxControl
-              .get('isSelected')
-              .setValue(current.get('isSelected').value);
-          });
-        }
-
-        const channelsControl = current.get('channels') as FormArray;
-        if (channelsControl instanceof FormArray) {
-          const channels = channelsControl.controls;
-          channels.forEach((channel) => {
-            channel.get('isSelected').setValue(current.get('isSelected').value);
-          });
-        }
+      if ('channels' in current) {
+        current.channels.forEach((channel) => {
+          channel.isSelected = current.isSelected;
+        });
       }
     }
   }
-
-  private updateParentSelected(
-    control: FormGroup,
-    key: 'variants' | 'channels' | 'pax' = 'variants'
-  ): void {
-    const parentSelected =
-      control.get(key) &&
-      (control.get(key) as FormArray).controls.every(
-        (variant) => variant.get('isSelected').value
-      );
-    control.get('isSelected').patchValue(parentSelected, { emitEvent: false });
-  }
-
-  get roomTypeParentControl() {
-    return this.roomsData.controls as Record<
-      keyof RoomTreeDataType,
-      AbstractControl
-    >;
-  }
-
-  get variantControls() {
-    return this.roomTypeParentControl.variants as FormArray;
-  }
 }
-
-type RoomTreeDataType = {
-  id: string;
-  label: string;
-  isSelected: boolean;
-  variants: FormArray;
-};

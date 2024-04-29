@@ -1,33 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormArray,
   FormBuilder,
   FormGroup,
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
-import {
-  GlobalFilterService,
-  RoutesConfigService,
-} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   ModuleNames,
   NavRouteOptions,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
-import { SnackBarService } from '@hospitality-bot/shared/material';
-import { inventoryRestrictions } from 'libs/admin/channel-manager/src/lib/constants/data';
+import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
 import {
   CheckBoxTreeFactory,
   RoomTypes,
 } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
-import { UpdateInventory } from 'libs/admin/channel-manager/src/lib/models/channel-manager.model';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
+import { UpdateInventory } from 'libs/admin/channel-manager/src/lib/models/channel-manager.model';
 import { ChannelManagerService } from '../../services/channel-manager.service';
+import { Router } from '@angular/router';
+import { inventoryRestrictions } from 'libs/admin/channel-manager/src/lib/constants/data';
 
 @Component({
   selector: 'hospitality-bot-inventory-bulk-update',
@@ -47,8 +46,6 @@ export class InventoryBulkUpdateComponent implements OnInit {
   roomTypes: RoomTypes[] = [];
   today = new Date();
   seventhDate = new Date();
-  inventoryTreeListControl: FormArray;
-
   constructor(
     private fb: FormBuilder,
     private globalFilter: GlobalFilterService,
@@ -115,19 +112,12 @@ export class InventoryBulkUpdateComponent implements OnInit {
       !this.isRoomsEmpty && this.loadTree(this.useForm.getRawValue());
     });
   }
-
   loadTree(controls) {
-    this.useForm.addControl('inventoryTreeList', new FormArray([]));
-    this.inventoryTreeListControl = this.useForm.get(
-      'inventoryTreeList'
-    ) as FormArray;
-
-    this.inventoryTreeListControl.controls = CheckBoxTreeFactory.buildTree(
+    this.inventoryTreeList = CheckBoxTreeFactory.buildTree(
       this.roomTypes,
       controls.roomType,
       { isInventory: true }
-    ).controls;
-
+    );
     this.loading = false;
   }
 

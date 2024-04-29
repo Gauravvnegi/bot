@@ -1,12 +1,5 @@
+import { Component, OnInit } from '@angular/core';
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnInit,
-} from '@angular/core';
-import {
-  AbstractControl,
-  FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -18,10 +11,7 @@ import {
   NavRouteOptions,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
-import {
-  CheckBoxTreeFactory,
-  Pax,
-} from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
+import { CheckBoxTreeFactory } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
 import {
   GlobalFilterService,
@@ -66,8 +56,6 @@ export class RatesBulkUpdateComponent implements OnInit {
     roomLoading: boolean;
   }>();
 
-  roomDataControls: FormArray;
-
   constructor(
     private fb: FormBuilder,
     private globalFilter: GlobalFilterService,
@@ -98,7 +86,6 @@ export class RatesBulkUpdateComponent implements OnInit {
     this.initConfigType();
     this.loadRooms();
     this.initNavRoutes();
-    this.listenChanges();
   }
 
   initNavRoutes() {
@@ -144,13 +131,10 @@ export class RatesBulkUpdateComponent implements OnInit {
   filterConfiguration() {
     if (this.configType == RATE_CONFIG_TYPE.ratePlan) {
       //Removing all pax, if configuration is ratePlan type
-      this.roomDataControls.controls?.forEach((control) => {
-        (control.get('variants') as FormArray).controls.forEach(
-          (variantControls: FormGroup) => {
-            variantControls.setControl('pax', new FormArray([]));
-          }
-        );
-      });
+      this.roomsData = this.roomsData?.map((item) => ({
+        ...item,
+        variants: item.variants.map((v) => ({ ...v, pax: [] })),
+      }));
     }
   }
 
@@ -175,50 +159,41 @@ export class RatesBulkUpdateComponent implements OnInit {
   }
 
   loadTree(controls) {
-    this.useForm.addControl('roomTypeNestedData', this.fb.array([]));
-    this.roomDataControls = this.useForm.get('roomTypeNestedData') as FormArray;
-
-    this.roomDataControls.controls = CheckBoxTreeFactory.buildTree(
+    this.roomsData = CheckBoxTreeFactory.buildTree(
       this.roomTypes,
       controls.roomType,
-      {
-        isInventory: false,
-      }
-    ).controls;
-
+      { isInventory: false }
+    ) as RoomTypes[];
     this.filterConfiguration();
   }
 
   onSubmit() {
-    // const { formStatus, treeStatus } = this.formService.validateUpdateForm(
-    //   this.useForm,
-    //   this.roomsData
-    // );
-    // this.treeValid = treeStatus;
+    const { formStatus, treeStatus } = this.formService.validateUpdateForm(
+      this.useForm,
+      this.roomsData
+    );
+    this.treeValid = treeStatus;
 
-    // if (!formStatus || !treeStatus) {
-    //   this.snackbarService.openSnackBarAsText(
-    //     formStatus
-    //       ? `At least 1 ${
-    //           this.configType == RATE_CONFIG_TYPE.pax ? 'Pax' : 'Rateplan'
-    //         } is required`
-    //       : 'Please Fix Form before submit',
-    //     '',
-    //     { panelClass: 'error' }
-    //   );
-    //   this.useForm.markAllAsTouched();
-    //   return;
-    // }
-    const testData = this.roomDataControls.getRawValue();
+    if (!formStatus || !treeStatus) {
+      this.snackbarService.openSnackBarAsText(
+        formStatus
+          ? `At least 1 ${
+              this.configType == RATE_CONFIG_TYPE.pax ? 'Pax' : 'Rateplan'
+            } is required`
+          : 'Please Fix Form before submit',
+        '',
+        { panelClass: 'error' }
+      );
+      this.useForm.markAllAsTouched();
+      return;
+    }
 
     this.loading = true;
     const data = UpdateRates.buildBulkUpdateRequest(
       this.useForm.getRawValue(),
       this.configType,
-      testData
+      this.roomsData
     );
-
-    console.log(testData);
 
     this.$subscription.add(
       this.channelManagerService

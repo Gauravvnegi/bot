@@ -1,10 +1,10 @@
-<div class="bulkupdate-wrapper" style="margin-top: 10px;">
+<div class="bulkupdate-wrapper" [formGroup]="useForm" style="margin-top: 10px;">
   <hospitality-bot-navigation-header
     [heading]="pageTitle"
     [routes]="navRoutes"
   ></hospitality-bot-navigation-header>
 
-  <div class="content-wrapper" [id]="fa.referenceId" [formGroup]="useForm">
+  <div class="content-wrapper" [id]="fa.referenceId">
     <hospitality-bot-bulk-update-form
       [allRestrictions]="ratesRestrictions"
       [isRoomsEmpty]="isRoomsEmpty"
@@ -18,7 +18,7 @@
     >
     <hospitality-bot-rates-nested-checkbox-tree
       class="full-width {{ treeValid ? 'valid-tree' : 'invalid-tree' }}"
-      [roomsData]="roomDataControls"
+      [roomsData]="roomsData"
       [controlNames]="{
         roomTypes: 'roomTypes'
       }"

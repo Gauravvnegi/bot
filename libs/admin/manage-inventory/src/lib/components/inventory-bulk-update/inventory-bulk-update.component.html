@@ -14,7 +14,7 @@
     <hospitality-bot-inventory-nested-checkbox-tree
       class="full-width"
       controlName="roomTypes"
-      [variants]="inventoryTreeListControl"
+      [variants]="inventoryTreeList"
       *ngIf="!isRoomsEmpty; else emptyTable"
     ></hospitality-bot-inventory-nested-checkbox-tree>
 
@@ -25,6 +25,7 @@
         preHide: true,
         postLabel: 'Save'
       }"
+      [disabled]="!isFormValid"
       (onPostAction)="onSubmit()"
       #fa
     >

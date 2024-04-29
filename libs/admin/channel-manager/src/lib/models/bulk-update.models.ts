@@ -1,11 +1,10 @@
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { Option } from '@hospitality-bot/admin/shared';
-import { PAX } from 'libs/admin/manage-rate/src/lib/constants/rates.const';
+import { Variant } from '../types/bulk-update.types';
 import {
   PricingDetails,
   RoomType,
 } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
-import { Variant } from '../types/bulk-update.types';
+import { PAX } from 'libs/admin/manage-rate/src/lib/constants/rates.const';
 
 export function makeRoomOption(...data) {
   return data.map((item) => {
@@ -18,169 +17,56 @@ export class CheckBoxTreeFactory {
     data,
     selectedRooms: string[],
     buildType: { isInventory: boolean }
-  ): FormArray {
+  ) {
     let filteredData = data.filter((item) =>
       selectedRooms.includes(item.value)
     );
-    const roomDataFromArray = new FormArray([]);
 
     filteredData = filteredData.length === 0 ? [...data] : [...filteredData];
     type ObjectType = typeof buildType.isInventory extends boolean
       ? Variant
       : RoomTypes;
 
-    filteredData.map((item, index) => {
-      const roomTypeFormGroup = new FormGroup({
-        id: new FormControl(item.id),
-        name: new FormControl(item.label),
-        isSelected: new FormControl(item.isSelected),
-        [buildType.isInventory ? 'channels' : 'variants']: new FormArray([]),
-        price: new FormControl(0),
-        isBase: new FormControl(item.isBaseRoomType),
-        available: new FormControl(0),
-      });
+    let tree: ObjectType[] = filteredData.map((item) => {
+      let buildData = {
+        id: item.value,
+        name: item.label,
+        isSelected: true,
+        [buildType.isInventory ? 'channels' : 'variants']: [],
+      };
 
       const getChannels = (parent) => {
         return parent['channels']?.map((item) => {
-          return new FormGroup({
-            id: new FormControl(item.value),
-            name: new FormControl(item.label),
-            isSelected: new FormControl(true),
-            price: new FormControl(0),
-          });
+          return {
+            id: item.value,
+            name: item.label,
+            isSelected: true,
+          };
         });
       };
 
       if (buildType.isInventory) {
-        if (item['channels'].length) {
-          const control = roomTypeFormGroup.get('channels') as FormArray;
-          control.controls.push(...getChannels(item));
-        }
+        buildData['channels'] = [...getChannels(item)];
       } else {
         for (let ratePlan of item['ratePlans']) {
-          //Ep , cp
-          const ratePlanGroup: FormGroup = new FormGroup({
-            id: new FormControl(ratePlan.value),
-            name: new FormControl(ratePlan.label),
-            isSelected: new FormControl(false),
-            isBase: new FormControl(ratePlan.isBase),
-            variablePrice: new FormControl(ratePlan.variablePrice),
-            price: new FormControl(0),
-
-            pax: new FormArray(
-              ratePlan['pax']
-                .filter((item) => item.value !== 'Single')
-                .map((paxItem: Pax, paxIndex: number) => {
-                  const control = new FormGroup({
-                    id: new FormControl(paxItem?.id),
-                    name: new FormControl(
-                      `${ratePlan.label} - ${paxItem.label}`
-                    ),
-                    isSelected: new FormControl(false),
-                    basePrice: new FormControl(
-                      calculateOccupancyPricing(
-                        paxItem.id,
-                        ratePlan.pricingDetails,
-                        ratePlan.variablePrice,
-                        ratePlan.type === 'CP (with breakfast)'
-                      )
-                    ),
-                    price: new FormControl(0),
-                  });
-
-                  return control;
-                })
-            ),
-          });
-
-          const control = roomTypeFormGroup.get('variants') as FormArray;
-          control.controls.push(ratePlanGroup);
-
-          //updated child
-          control?.controls?.forEach((variantControl) => {
-            variantControl.get('price')?.valueChanges?.subscribe((res) => {
-              const paxControl = variantControl.get('pax') as FormArray;
-              paxControl?.controls?.forEach((pax) => {
-                const price = +pax.get('basePrice').value + +res;
-                pax.get('price').patchValue(price);
-              });
-            });
-          });
-
-          //update siblings
-          const baseControl = control?.controls?.find(
-            (item) => item.get('isBase').value
-          );
-          baseControl?.get('price')?.valueChanges.subscribe((res) => {
-            control?.controls
-              .filter((control) => control !== baseControl)
-              .forEach((item) => {
-                const price = +item.get('variablePrice').value + +res;
-                item.get('price').patchValue(price);
-              });
+          buildData['variants'].push({
+            id: ratePlan.value,
+            name: ratePlan.label,
+            isSelected: true,
+            channels: getChannels(ratePlan),
+            pax:
+              ratePlan?.['pax']?.map((paxItem: Pax, paxInd: number) => ({
+                id: paxItem?.id,
+                name: `${ratePlan.label} - ${paxItem.label}`,
+                isSelected: true,
+              })) ?? [],
           });
         }
       }
 
-      //update base level value
-      if (item.isBase) {
-        const baseControl = (roomTypeFormGroup.get(
-          'variants'
-        ) as FormArray)?.controls?.find((item) => item.get('isBase').value);
-
-        baseControl?.get('price')?.valueChanges?.subscribe((res) => {
-          roomDataFromArray?.controls
-            ?.filter((item) => !item.get('isBase').value)
-            .forEach((item) => {
-              const variantControls = item.get('variants') as FormArray;
-
-              const baseControl = variantControls?.controls?.find(
-                (item) => item.get('isBase').value
-              );
-
-              const price = +baseControl.get('variablePrice').value + +res;
-              baseControl.get('price').patchValue(price);
-            });
-        });
-      }
-
-      roomDataFromArray.push(roomTypeFormGroup);
+      return buildData as ObjectType;
     }) as ObjectType[];
-
-    return roomDataFromArray;
-  }
-}
-
-function calculateOccupancyPricing(
-  id: number,
-  pricingDetails: {
-    paxDoubleOccupancy: number;
-    paxTripleOccupancy: number;
-    paxAdult: number;
-  },
-  variablePrice?: number,
-  isCpRatePlan?: boolean
-): number {
-  switch (id) {
-    case 2:
-      return !isCpRatePlan
-        ? pricingDetails['paxDoubleOccupancy']
-        : +pricingDetails['paxDoubleOccupancy'] + +variablePrice;
-
-    case 3:
-      return !isCpRatePlan
-        ? pricingDetails['paxTripleOccupancy']
-        : pricingDetails['paxTripleOccupancy'] + (id - 1) * +variablePrice;
-
-    default:
-      const price = !isCpRatePlan
-        ? (id - 3) * pricingDetails.paxAdult +
-          pricingDetails['paxTripleOccupancy']
-        : (id - 3) * pricingDetails.paxAdult +
-          pricingDetails['paxTripleOccupancy'] +
-          (id - 1) * variablePrice;
-
-      return price;
+    return tree;
   }
 }
 
@@ -295,7 +181,6 @@ export class Pax {
   value: string;
   isSelected?: boolean;
   id?: number;
-  price?: number;
   constructor(input: Pax) {
     this.label = input.label ?? '';
     this.value = input.value ?? '';

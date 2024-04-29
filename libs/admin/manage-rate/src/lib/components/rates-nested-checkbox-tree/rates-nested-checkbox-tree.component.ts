@@ -5,7 +5,6 @@ import {
   Variant,
 } from 'libs/admin/channel-manager/src/lib/types/bulk-update.types';
 import {
-  AbstractControl,
   ControlContainer,
   FormArray,
   FormBuilder,
@@ -19,9 +18,8 @@ import {
   styleUrls: ['./rates-nested-checkbox-tree.component.scss'],
 })
 export class RatesNestedCheckboxTreeComponent extends FormControl {
-  _roomsData: FormArray;
-
-  @Input() set roomsData(value: FormArray) {
+  private _roomsData: RoomTypes[];
+  @Input() set roomsData(value: RoomTypes[]) {
     this._roomsData = value;
     this.roomsData && this.patchTreeChanges();
   }
@@ -53,45 +51,35 @@ export class RatesNestedCheckboxTreeComponent extends FormControl {
   }
 
   patchTreeChanges() {
-    const selectedItems = this.roomsData.controls?.filter((item) =>
-      (item.get('variants') as FormArray).controls.some(
+    const selectedItems = this.roomsData?.filter((item) =>
+      item.variants.some(
         (ratePlan) =>
-          ratePlan.get('isSelected').value ||
-          (ratePlan.get('pax') as FormArray).controls.some(
-            (pax) => pax.get('isSelected').value
-          )
+          ratePlan.isSelected || ratePlan?.pax?.some((pax) => pax.isSelected)
       )
-    ) as AbstractControl[];
+    );
 
     this.manageControl();
-
     selectedItems?.forEach((item) => {
       const types = this.parentFG.controls[
         this.controlNames.roomTypes
       ] as FormArray;
 
-      (item.get('variants') as FormArray).controls
-        .filter(
-          (rp) =>
-            rp.get('isSelected').value ||
-            (rp.get('pax') as FormArray).controls.some(
-              (pax) => pax.get('isSelected').value
-            )
-        )
+      item.variants
+        .filter((rp) => rp.isSelected || rp?.pax?.some((pax) => pax.isSelected))
         .forEach((variant, index) => {
           // if (variant.isSelected) {
           types.controls.push(
             this.fb.group({
-              roomTypeId: item.get('id').value,
-              ratePlanId: variant.get('id').value,
+              roomTypeId: item.id,
+              ratePlanId: variant.id,
             })
           );
 
           types.patchValue([
             ...types.value,
             {
-              roomTypeId: item.get('id').value,
-              ratePlanId: variant.get('id').value,
+              roomTypeId: item.id,
+              ratePlanId: variant.id,
             },
           ]);
           // }

@@ -29,7 +29,7 @@ export class ChannelManagerFormService extends CommonChannelManagerFormService {
       (controlName) => controls[controlName].valid
     );
     const treeStatus = treeData.some((tree) => {
-      return tree?.variants?.some(
+      return tree.variants.some(
         (v) => v.isSelected || v.pax.some((pax) => pax.isSelected)
       );
     });

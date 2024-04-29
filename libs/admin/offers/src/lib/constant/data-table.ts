@@ -4,10 +4,10 @@ import { Cols } from '@hospitality-bot/admin/shared';
 export const cols: Cols[] = [
   {
     field: 'name',
-    header: 'Name / Applied on',
+    header: 'Name',
     sortType: 'string',
     width: '30%',
-    searchField: ['name', 'appliedOn'],
+    searchField: ['name'],
   },
   {
     field: 'packageCode',

@@ -62,7 +62,9 @@
                   ? controls.get('ratePlans').value
                   : controls.get('rooms').value
               "
-              [disabled]="field.disabled"
+              [disabled]="
+                (isDayBooking && field.name === 'ratePlanId') || field.disabled
+              "
               [loading]="field.options ? loadingRoomTypes[i] : false"
             ></hospitality-bot-select>
             <hospitality-bot-quick-select

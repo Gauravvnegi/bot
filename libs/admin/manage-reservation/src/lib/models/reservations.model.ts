@@ -594,7 +594,12 @@ export class SummaryData {
 
 export class BookingConfig {
   marketSegment: Option[] = [];
-  source: { label: string; value: string; type?: Option[] }[] = [];
+  source: {
+    label: string;
+    value: string;
+    type?: Option[];
+    default?: boolean;
+  }[] = [];
   type: Option[] = [];
   deserialize(input): this {
     this.marketSegment = input?.marketSegment.map((item) => ({
@@ -609,6 +614,7 @@ export class BookingConfig {
     this.source = input?.source.map((item: SourceResponse) => ({
       label: this.toCamelCase(item.name),
       value: item.name,
+      default: item?.default ?? false,
       type: item.type
         ? item.type.map((type) => ({
             label: type.label,

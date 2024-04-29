@@ -164,6 +164,7 @@
             label="Rate Plans"
             [props]="{ placeholder: 'Select' }"
             [options]="ratePlans"
+            [disabled]="isDayBooking"
           ></hospitality-bot-select>
           <hospitality-bot-multi-select
             *ngIf="!isDayBooking"

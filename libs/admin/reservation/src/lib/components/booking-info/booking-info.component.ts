@@ -421,6 +421,14 @@ export class BookingInfoComponent implements OnInit {
         });
       this.patchValue(this.sourceControl, this.sourceValue);
     }
+    if (!this.reservationId && this.sourceControl.invalid) {
+      this.configData.source.forEach((source) => {
+        if (source.default) {
+          this.patchValue(this.sourceControl, source.value);
+          this.initSourceDetails(source.value);
+        }
+      });
+    }
   }
 
   updateDateDifference() {

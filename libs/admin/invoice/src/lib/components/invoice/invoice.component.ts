@@ -101,7 +101,6 @@ export class InvoiceComponent implements OnInit {
 
   isValidDiscount = true;
 
-  addGST = false;
   addPayment = false;
   addRefund = false;
 
@@ -293,14 +292,12 @@ export class InvoiceComponent implements OnInit {
       arrivalDate: [0],
       departureDate: [0],
 
-      gstNumber: ['', Validators.required],
-      // contactName: ['', Validators.required],
-      // contactNumber: ['', Validators.required],
-      email: ['', Validators.required],
-      address: ['', Validators.required],
-      state: ['', Validators.required],
-      city: ['', Validators.required],
-      pin: ['', Validators.required],
+      gstNumber: [''],
+      email: [''],
+      address: [''],
+      state: [''],
+      city: [''],
+      pin: [''],
 
       additionalNote: [''],
       tableData: new FormArray([]),
@@ -332,7 +329,6 @@ export class InvoiceComponent implements OnInit {
 
     this.initFormDetails();
 
-    this.gstValidation(false);
     this.paymentValidation(false);
   }
 
@@ -394,12 +390,6 @@ export class InvoiceComponent implements OnInit {
           );
 
           this.selectedServiceIds = serviceIds;
-
-          // if GST details is present
-          if (data.gstNumber !== '') {
-            this.addGST = true;
-            this.gstValidation(true);
-          }
 
           // adding new table entry to patch data
           data.tableData.forEach((item, idx) => {
@@ -468,13 +458,6 @@ export class InvoiceComponent implements OnInit {
     if (rowFG.isMiscellaneous && !rowFG.isRealised) {
       return dMenu;
     }
-    // if (
-    //   this.hasDiscount(rowFG.itemId, rowFG.date) &&
-    //   !rowFG.isRealised &&
-    //   !rowFG?.reservationItemId
-    // ) {
-    //   return [...editDiscountMenu, ...dMenu];
-    // }
     if (rowFG.isRealised) {
       return allowanceMenu;
     } else {
@@ -519,47 +502,6 @@ export class InvoiceComponent implements OnInit {
     item.clearValidators();
     item.updateValueAndValidity();
     item.reset();
-  }
-
-  gstValidation(addValidation: boolean = true) {
-    const companyNameControl = this.useForm.get('companyName');
-
-    const gstNumberControl = this.useForm.get('gstNumber');
-    // const contactNameControl = this.useForm.get('contactName');
-    // const contactNumberControl = this.useForm.get('contactNumber');
-    const emailControl = this.useForm.get('email');
-    const addressControl = this.useForm.get('address');
-    const stateControl = this.useForm.get('state');
-    const cityControl = this.useForm.get('city');
-    const pinControl = this.useForm.get('pin');
-
-    [
-      gstNumberControl,
-      // contactNameControl,
-      // contactNumberControl,
-      emailControl,
-      addressControl,
-      stateControl,
-      cityControl,
-      pinControl,
-    ].forEach((item) => {
-      if (addValidation) item.setValidators([Validators.required]);
-      else {
-        item.clearValidators();
-        item.updateValueAndValidity();
-        item.reset();
-      }
-    });
-
-    if (addValidation) {
-      companyNameControl.setValidators([Validators.required]);
-      companyNameControl.updateValueAndValidity();
-      companyNameControl.markAsUntouched();
-    } else {
-      companyNameControl.clearValidators();
-      companyNameControl.updateValueAndValidity();
-      companyNameControl.markAsUntouched();
-    }
   }
 
   isTableInvalid(triggerMessage = true) {
@@ -1025,9 +967,6 @@ export class InvoiceComponent implements OnInit {
       additionalPath: `../preview-invoice/${this.reservationId}`,
       queryParams: queryParams,
     });
-    // this.router.navigate(['../preview-invoice', this.reservationId], {
-    //   relativeTo: this.route,
-    // });
   }
 
   prepareInvoice() {
@@ -1047,9 +986,6 @@ export class InvoiceComponent implements OnInit {
   }
 
   handleSave(): void {
-    // Commenting it as GST Code is commented as of now
-    // if (!this.addGST) this.gstValidation(false);
-
     this.markAsTouched(this.useForm);
     this.markAsTouched(this.tableFormArray);
 
@@ -1131,22 +1067,6 @@ export class InvoiceComponent implements OnInit {
       },
       this.reservationId
     );
-  }
-
-  onAddGST() {
-    if (this.addGST) {
-      this.removeDetails(
-        'Remove GST details',
-        'Are you sure you want to remove GST details?',
-        () => {
-          this.addGST = false;
-          this.gstValidation(false);
-        }
-      );
-    } else {
-      this.addGST = true;
-      this.gstValidation(true);
-    }
   }
 
   onAddPaymentDetails() {
@@ -1234,15 +1154,6 @@ export class InvoiceComponent implements OnInit {
     };
     return config;
   }
-
-  // get filteredDescriptionOptions() {
-  //   if (!this.selectedServiceIds?.size) return this.descriptionOptions;
-  //   return this.descriptionOptions.filter(
-  //     (item) =>
-  //       !this.selectedServiceIds.has(item.value) ||
-  //       item.value === this.focusedDescriptionId
-  //   );
-  // }
 
   /**
    * Getting All Services (Description)

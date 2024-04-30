@@ -292,12 +292,12 @@ export class InvoiceComponent implements OnInit {
       arrivalDate: [0],
       departureDate: [0],
 
-      gstNumber: ['', Validators.required],
-      email: ['', Validators.required],
-      address: ['', Validators.required],
-      state: ['', Validators.required],
-      city: ['', Validators.required],
-      pin: ['', Validators.required],
+      gstNumber: [''],
+      email: [''],
+      address: [''],
+      state: [''],
+      city: [''],
+      pin: [''],
 
       additionalNote: [''],
       tableData: new FormArray([]),

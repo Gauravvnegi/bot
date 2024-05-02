@@ -1,0 +1,83 @@
+<!-- <hospitality-bot-navigation-header [heading]="tableName"></hospitality-bot-navigation-header> -->
+
+<hospitality-bot-entity-tab-filter [config]="{
+    isSticky: true,
+    extraGap: 60,
+    scrollBoundary: 25,
+    isAllOutletTabFilter: false
+  }"></hospitality-bot-entity-tab-filter>
+<div [formGroup]="tableFG">
+  <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes" [isBack]="false">
+  </hospitality-bot-navigation-header>
+</div>
+<p-table #dt [styleClass]="tableConfig.styleClass" [resizableColumns]="isResizableColumns" [autoLayout]="isAutoLayout"
+  [loading]="loading" [columns]="cols" [value]="values" [paginator]="isPaginator" [rows]="rowsPerPage"
+  [showCurrentPageReport]="showCurrentPageReport" [rowsPerPageOptions]="rowsPerPageOptions" [(first)]="first"
+  [totalRecords]="totalRecords" [filterDelay]="0" [(selection)]="selectedRows" (onRowSelect)="onRowSelect($event)"
+  (onRowUnselect)="onRowUnselect($event)" (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
+  (sortFunction)="customSort($event)" [customSort]="isCustomSort" (onFilter)="onDataFilter()"
+  *ngIf="totalRecords; else emptyTable">
+  empty table
+  <ng-template pTemplate="emptymessage">
+    <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
+  </ng-template>
+  <!-- header -->
+  <ng-template pTemplate="header" let-columns #header>
+    <tr hospitality-bot-table-header [columns]="columns" [showCheckbox]="isSelectable"
+      (search)="handleFieldSearch($event)"></tr>
+  </ng-template>
+  <!-- body -->
+  <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+    <tr class="table-row" (click)="openDetailsPage(rowData.reservationId)">
+      <td class="table-row__checkbox">
+        <p-tableCheckbox [value]="rowData" [index]="rowIndex" (click)="onCheckboxClicked($event)"></p-tableCheckbox>
+      </td>
+      <td>
+        <div class="cell-content" *ngIf="rowData.pdfUrl; else emptyCell">
+          <div class="primary-text">
+            {{ rowData.pdfUrl }}
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="cell-content" *ngIf="rowData.isRefund; else emptyCell">
+          <div class="primary-text">
+            {{ rowData.isRefund }}
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="cell-content" *ngIf="rowData.invoiceDate; else emptyCell">
+          <div class="primary-text">
+            {{ rowData.invoiceDate | date: 'dd/MM/yyyy' }}
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="cell-content" *ngIf="rowData.reservationId; else emptyCell">
+          <div class="primary-text">
+            {{ rowData.reservationId}}
+          </div>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="summary">
+    <p-paginator #paginator [rows]="rowsPerPage" [totalRecords]="totalRecords" [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="paginate($event)" [currentPageReportTemplate]="reportTemplate"
+      showCurrentPageReport="true"></p-paginator>
+  </ng-template>
+</p-table>
+<ng-template #emptyCell>
+  <div class="emptyCell">&mdash;</div>
+</ng-template>
+
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table [isLoading]="loading" [content]="{
+      description: 'No Invoices found. ',
+      imageSrc: 'assets/images/empty-table-in-house.png'
+    }">
+    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+  </hospitality-bot-empty-table>
+</ng-template>

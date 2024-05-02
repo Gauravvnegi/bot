@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MainComponent } from './components/main/main.component';
 import { TransactionHistoryDataTableComponent } from './components/transaction-history-data-table/transaction-history-data-table.component';
+import { NewTestComponent } from './components/new-test/new-test.component';
 
 const appRoutes: Routes = [
   {
@@ -12,11 +13,16 @@ const appRoutes: Routes = [
         path: '',
         component: TransactionHistoryDataTableComponent,
       },
-      // {
-      //   // Remove Invoice from here already moved to invoice module
-      //   path: 'invoice',
-      //   component: InvoiceHistoryDataTableComponent,
-      // },
+      {
+        path: 'new-test',
+        component: MainComponent,
+        children: [
+          {
+            path: '',
+            component: NewTestComponent
+          }
+        ],
+      },
     ],
   },
 ];
@@ -26,5 +32,5 @@ const appRoutes: Routes = [
   exports: [RouterModule],
 })
 export class AdminFinanceRoutingModule {
-  static components = [MainComponent, TransactionHistoryDataTableComponent];
+  static components = [MainComponent, TransactionHistoryDataTableComponent, NewTestComponent];
 }

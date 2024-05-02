@@ -54,11 +54,12 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
+    // debugger;
     this.entityId = this.globalFilterService.entityId;
     this.listenForGlobalFilters();
   }
 
-  /**
+  /***
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
   listenForGlobalFilters(): void {

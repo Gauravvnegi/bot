@@ -15,6 +15,7 @@ export class ReservationService extends ApiService {
 
   isPmsBooking = new BehaviorSubject(false);
   getReservationDetails(reservationId): Observable<any> {
+    debugger;
     return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
   }
 
@@ -29,6 +30,7 @@ export class ReservationService extends ApiService {
   }
 
   updateLateCheckout(
+    
     reservationId: string,
     data: {
       chargedAmount: number;

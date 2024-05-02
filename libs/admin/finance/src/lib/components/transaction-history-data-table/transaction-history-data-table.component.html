@@ -1,63 +1,32 @@
-<hospitality-bot-entity-tab-filter
-  [config]="{
+<hospitality-bot-entity-tab-filter [config]="{
     isSticky: true,
     extraGap: 60,
     scrollBoundary: 25,
     isAllOutletTabFilter: false
-  }"
-  class="tab-filter"
-  (onEntityTabFilterChanges)="onEntityTabFilterChanges($event)"
-></hospitality-bot-entity-tab-filter>
+  }" class="tab-filter"
+  (onEntityTabFilterChanges)="onEntityTabFilterChanges($event)"></hospitality-bot-entity-tab-filter>
 <div [formGroup]="tableFG">
-  <hospitality-bot-navigation-header
-    [heading]="tableName"
-    [routes]="navRoutes"
-    [isBack]="false"
-  >
-    <hospitality-bot-export-list
-      [isDisable]="values.length === 0"
-      [additionalActionItems]="additionalActionItems"
-      (onDocumentActions)="onDocumentActions()"
-      [documentTypes]="documentTypes"
-      [documentActionTypes]="documentActionTypes"
-    ></hospitality-bot-export-list>
+  <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes" [isBack]="false">
+    <hospitality-bot-export-list [isDisable]="values.length === 0" [additionalActionItems]="additionalActionItems"
+      (onDocumentActions)="onDocumentActions()" [documentTypes]="documentTypes"
+      [documentActionTypes]="documentActionTypes"></hospitality-bot-export-list>
   </hospitality-bot-navigation-header>
 </div>
-<p-table
-  #dt
-  [styleClass]="tableConfig.styleClass"
-  [resizableColumns]="isResizableColumns"
-  [autoLayout]="isAutoLayout"
-  [loading]="loading"
-  [columns]="cols"
-  [value]="values"
-  [paginator]="isPaginator"
-  [rows]="rowsPerPage"
-  [showCurrentPageReport]="showCurrentPageReport"
-  [rowsPerPageOptions]="rowsPerPageOptions"
-  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-  [(first)]="first"
-  [totalRecords]="totalRecords"
-  [filterDelay]="0"
-  [(selection)]="selectedRows"
-  (onRowSelect)="onRowSelect($event)"
-  (onRowUnselect)="onRowUnselect($event)"
-  (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
-  (sortFunction)="customSort($event)"
-  [customSort]="isCustomSort"
-  (onFilter)="onDataFilter()"
-  *ngIf="!isEmpty; else emptyTable"
->
+<p-table #dt [styleClass]="tableConfig.styleClass" [resizableColumns]="isResizableColumns" [autoLayout]="isAutoLayout"
+  [loading]="loading" [columns]="cols" [value]="values" [paginator]="isPaginator" [rows]="rowsPerPage"
+  [showCurrentPageReport]="showCurrentPageReport" [rowsPerPageOptions]="rowsPerPageOptions"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(first)]="first"
+  [totalRecords]="totalRecords" [filterDelay]="0" [(selection)]="selectedRows" (onRowSelect)="onRowSelect($event)"
+  (onRowUnselect)="onRowUnselect($event)" (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
+  (sortFunction)="customSort($event)" [customSort]="isCustomSort" (onFilter)="onDataFilter()"
+  *ngIf="!isEmpty; else emptyTable">
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
       <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
 
-      <hospitality-bot-filter-chips
-        *ngIf="isQuickFilters"
-        [chips]="filterChips"
+      <hospitality-bot-filter-chips *ngIf="isQuickFilters" [chips]="filterChips"
         (onChange)="toggleQuickReplyFilter($event)"
-        [selectedChips]="selectedFilterChips"
-      ></hospitality-bot-filter-chips>
+        [selectedChips]="selectedFilterChips"></hospitality-bot-filter-chips>
     </div>
   </ng-template>
 
@@ -68,36 +37,20 @@
 
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns #header>
-    <tr
-      hospitality-bot-table-header
-      [columns]="columns"
-      [showCheckbox]="isSelectable"
-      (search)="handleFieldSearch($event)"
-    ></tr>
+    <tr hospitality-bot-table-header [columns]="columns" [showCheckbox]="isSelectable"
+      (search)="handleFieldSearch($event)"></tr>
   </ng-template>
   <!-- **************************************BODY********************************* -->
-  <ng-template
-    pTemplate="body"
-    let-rowData
-    let-columns="columns"
-    let-rowIndex="rowIndex"
-  >
+  <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
     <tr class="table-row" (click)="openDetailsPage(rowData.reservationId)">
       <td class="table-row__checkbox">
-        <p-tableCheckbox
-          [value]="rowData"
-          [index]="rowIndex"
-          (click)="onCheckboxClicked($event)"
-        ></p-tableCheckbox>
+        <p-tableCheckbox [value]="rowData" [index]="rowIndex" (click)="onCheckboxClicked($event)"></p-tableCheckbox>
       </td>
       <td>
-        <div
-          class="cell-content"
-          *ngIf="
+        <div class="cell-content" *ngIf="
             rowData.transactionId || rowData.reservationNumber;
             else emptyCell
-          "
-        >
+          ">
           <div class="primary-text">
             {{ rowData.transactionId || '-' }}
           </div>
@@ -115,14 +68,11 @@
       </td>
       <td>
         <div class="cell-content" *ngIf="rowData.status; else emptyCell">
-          <div
-            class="status-text"
-            [ngClass]="
+          <div class="status-text" [ngClass]="
               getStatusTextAndClass(rowData.paymentType, rowData.status).class
-            "
-          >
+            ">
             {{
-              getStatusTextAndClass(rowData.paymentType, rowData.status).text
+            getStatusTextAndClass(rowData.paymentType, rowData.status).text
             }}
           </div>
         </div>
@@ -159,15 +109,9 @@
   </ng-template>
   <!-- *********************************FOOTER******************************* -->
   <ng-template pTemplate="summary">
-    <p-paginator
-      #paginator
-      [rows]="rowsPerPage"
-      [totalRecords]="totalRecords"
-      [rowsPerPageOptions]="rowsPerPageOptions"
-      (onPageChange)="paginate($event)"
-      [currentPageReportTemplate]="reportTemplate"
-      showCurrentPageReport="true"
-    ></p-paginator>
+    <p-paginator #paginator [rows]="rowsPerPage" [totalRecords]="totalRecords" [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="paginate($event)" [currentPageReportTemplate]="reportTemplate"
+      showCurrentPageReport="true"></p-paginator>
   </ng-template>
 </p-table>
 
@@ -176,22 +120,15 @@
 </ng-template>
 
 <ng-template #emptyTable>
-  <hospitality-bot-empty-table
-    [isLoading]="loading"
-    [content]="{
+  <hospitality-bot-empty-table [isLoading]="loading" [content]="{
       description: 'No Transactions found. ',
       imageSrc: 'assets/images/empty-table-in-house.png'
-    }"
-  >
+    }">
     <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
   </hospitality-bot-empty-table>
 </ng-template>
 
 <ng-template #tabFilter>
-  <hospitality-bot-tab-group
-    [selectedIndex]="tabFilterIdx"
-    *ngIf="isTabFilters"
-    [listItems]="tabFilterItems"
-    (selectedTabChange)="onSelectedTabFilterChange($event)"
-  ></hospitality-bot-tab-group>
+  <hospitality-bot-tab-group [selectedIndex]="tabFilterIdx" *ngIf="isTabFilters" [listItems]="tabFilterItems"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"></hospitality-bot-tab-group>
 </ng-template>

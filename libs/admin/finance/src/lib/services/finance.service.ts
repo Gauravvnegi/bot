@@ -18,20 +18,12 @@ export class FinanceService extends ApiService {
 
   getInvoiceHistory(config?: QueryConfig): Observable<any> {
     return this.get(`/api/v1/invoices${config.params}`);
-    // .pipe(
-    //   map((res) => {
-    //     return invoiceHistoryRes;
-    //   })
-    // );;
+  
   }
 
   getTransactionHistory(config?: QueryConfig): Observable<any> {
     return this.get(`/api/v1/payment${config.params}`);
-    // .pipe(
-    //   map((res) => {
-    //     return transactionHistoryRes;
-    //   })
-    // );
+  
   }
 
   exportCSV(config: QueryConfig): Observable<any> {
